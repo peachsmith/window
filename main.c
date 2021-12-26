@@ -1,88 +1,46 @@
 #include <stdio.h>
-#include <SDL2/SDL.h>
+#include "example.h"
 
 int main(int argc, char **argv)
 {
-    printf("window example\n");
-
-    // Initialize SDL.
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+    // Initialize the underlying implementation.
+    if (!eg_initialize())
     {
-        fprintf(stderr, "failed to initialize SDL. error: %s\n", SDL_GetError());
         return 1;
     }
 
-    // Create the window.
-    // The Game Boy Advance had a screen resolution of 240 × 160 pixels.
-    // TODO: investigate SDL_WINDOW_ALLOW_HIGHDPI on Mac.
-    SDL_Window *win;
-    win = SDL_CreateWindow(
-        "Example Window",
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        240,
-        160,
-        SDL_WINDOW_SHOWN);
-
-    if (win == NULL)
+    // Create the application context.
+    eg_app *app = eg_create_app();
+    if (app == NULL)
     {
-        fprintf(stderr, "failed to create window. error: %s\n", SDL_GetError());
         SDL_Quit();
         return 1;
     }
 
-    // Create the renderer.
-    SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
-    if (ren == NULL)
+    // Begin the main loop.
+    while (!app->done)
     {
-        fprintf(stderr, "failed to create renderer. error: %s\n", SDL_GetError());
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-
-    // A rectangle to draw on the screen.
-    SDL_Rect r;
-    r.x = 10;
-    r.y = 10;
-    r.w = 20;
-    r.h = 20;
-
-    SDL_Event e;
-    int done = 0;
-    while (!done)
-    {
-        while (SDL_PollEvent(&e))
-        {
-            if (e.type == SDL_QUIT)
-            {
-                done = 1;
-            }
-        }
+        // Process OS events.
+        eg_process_events(app);
 
         // Clear the screen.
-        SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
-        SDL_RenderClear(ren);
+        eg_clear(app);
 
-        // Draw a rectangle.
-        SDL_SetRenderDrawColor(ren, 200, 220, 0, 255);
-        SDL_RenderFillRect(ren, &r);
+        // Draw the contents of the current frame.
+        eg_draw(app);
 
-        // Render content to the screen.
-        SDL_RenderPresent(ren);
+        // Render the content of the current frame to the screen.
+        eg_show(app);
 
         // Delay to regulate framerate.
-        SDL_Delay(64);
+        eg_delay();
     }
 
-    // Destroy the renderer.
-    SDL_DestroyRenderer(ren);
+    // Destroy the application context.
+    eg_destroy_app(app);
 
-    // Destroy the window.
-    SDL_DestroyWindow(win);
-
-    // Terminate SDL.
-    SDL_Quit();
+    // Terminate the underlying implementation.
+    eg_terminate();
 
     return 0;
 }

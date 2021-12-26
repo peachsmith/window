@@ -4,4 +4,4 @@ INCLUDE_DIR=-I$(SDL2_HOME)/include
 LINK_DIR=-L$(SDL2_HOME)/lib
 
 all:
-	clang $(INCLUDE_DIR) $(LINK_DIR) main.c -lSDL2 -lSDL2main
+	clang -Wall -Werror $(INCLUDE_DIR) $(LINK_DIR) main.c example.c -lSDL2 -lSDL2main
