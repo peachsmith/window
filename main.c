@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     eg_app *app = eg_create_app();
     if (app == NULL)
     {
-        SDL_Quit();
+        eg_terminate();
         return 1;
     }
 
