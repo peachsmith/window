@@ -3,11 +3,14 @@
 # The necessary SDL dll files must be present in the same directory as the
 # executable in order for it to run.
 
-all: a.exe
+# The include and lib directories must exist in the SDL2_HOME directory.
+INCLUDE_DIR=/I$(SDL2_HOME)\include
+LINK_DIR=/LIBPATH:"$(SDL2_HOME)\lib"
 
-objects:
-	cl /c /I"$(SDL2_HOME)\include" ..\main.c
-	cl /c /I"$(SDL2_HOME)\include" ..\example.c
+CC=cl
+CFLAGS=/W3 /WX
+SRC=..\main.c ..\example.c ..\input_handler.c
+LIBS="SDL2.lib" "SDL2main.lib" "kernel32.lib" "user32.lib" "shell32.lib"
 
-a.exe: objects
-	link main.obj example.obj "SDL2.lib" "SDL2main.lib" "kernel32.lib" "user32.lib" "shell32.lib" /LIBPATH:"$(SDL2_HOME)\lib" /SUBSYSTEM:CONSOLE -out:a.exe
+all:
+	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(SRC) /link $(LIBS) $(LINK_DIR) /SUBSYSTEM:CONSOLE -out:a.exe

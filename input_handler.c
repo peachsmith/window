@@ -1,5 +1,7 @@
 #include "example.h"
 
+#include <stdio.h>
+
 void my_input_handler(eg_app *app)
 {
     if (eg_consume_input(app, SDL_SCANCODE_UP))
