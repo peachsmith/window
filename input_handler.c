@@ -26,7 +26,7 @@ void my_input_handler(eg_app *app)
     if (eg_consume_input(app, SDL_SCANCODE_ESCAPE))
     {
         printf("The escape key was pressed. "
-        "The application should now terminate\n.");
+               "The application should now terminate\n.");
         app->done = 1;
     }
 }
