@@ -1,4 +1,6 @@
 #include "example.h"
+#include "input_handler.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -75,6 +77,18 @@ eg_app *eg_create_app()
     // Set the main loop sentinel value to 0.
     app->done = 0;
 
+    // Get the keyboard state.
+    app->keystates = SDL_GetKeyboardState(NULL);
+
+    // Initialize the key press flags to 0.
+    for (int i = 0; i < SDL_NUM_SCANCODES; i++)
+    {
+        app->key_captures[i] = 0;
+    }
+
+    // Set the initial input handler.
+    app->input_handler = my_input_handler;
+
     return app;
 }
 
@@ -97,7 +111,21 @@ void eg_process_events(eg_app *app)
         {
             app->done = 1;
         }
+
+        // Clear the key press capture flags.
+        if (app->e.type == SDL_KEYUP)
+        {
+            app->key_captures[app->e.key.keysym.scancode] = 0;
+        }
     }
+}
+
+void eg_handle_input(eg_app *app)
+{
+    // Currently, there is only one input handler for the application.
+    // Eventually, we will have the ability to dynamically add and remove
+    // input handlers during runtime.
+    app->input_handler(app);
 }
 
 void eg_clear(eg_app *app)
@@ -129,4 +157,47 @@ void eg_delay()
     // This is where the framerate can be regulated.
     // For now, we just use a 64 millisecond delay.
     SDL_Delay(64);
+}
+
+//----------------------------------------------------------------------------
+
+int eg_peek_input(eg_app *app, int code)
+{
+    if (code >= SDL_NUM_SCANCODES)
+    {
+        return 0;
+    }
+
+    if (app->keystates[code])
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+int eg_consume_input(eg_app *app, int code)
+{
+    if (code >= SDL_NUM_SCANCODES)
+    {
+        return 0;
+    }
+
+    if (app->key_captures[code])
+    {
+        return 0;
+    }
+
+    if (app->keystates[code])
+    {
+        app->key_captures[code] = 1;
+        return 1;
+    }
+
+    return 0;
+}
+
+void eg_test_func(eg_callback c, eg_app *app)
+{
+    c(app);
 }

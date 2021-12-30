@@ -23,6 +23,9 @@ int main(int argc, char **argv)
         // Process OS events.
         eg_process_events(app);
 
+        // Handle input.
+        eg_handle_input(app);
+
         // Clear the screen.
         eg_clear(app);
 
