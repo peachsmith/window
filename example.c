@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//----------------------------------------------------------------------------
+// core functions
+
 int eg_initialize()
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -77,6 +80,11 @@ eg_app *eg_create_app()
     // Set the main loop sentinel value to 0.
     app->done = 0;
 
+    // Since the desired framerate is 60 frames per second, we set the
+    // approximate milliseconds per frame to 16.
+    // This is the truncated result of 1000 / 16.
+    app->frame_len = 16;
+
     // Get the keyboard state.
     app->keystates = SDL_GetKeyboardState(NULL);
 
@@ -102,20 +110,24 @@ void eg_destroy_app(eg_app *app)
 
 void eg_process_events(eg_app *app)
 {
-    // According to the wiki, it is common practice to process
-    // all events in the event queue at the beginning of each
-    // iteration of the main loop.
-    while (SDL_PollEvent(&(app->e)))
+    // First, we get the current tick count for regulating framerate.
+    app->ticks = SDL_GetTicks64();
+
+    // According to the wiki, it is common practice to process all events in
+    // the event queue at the beginning of each iteration of the main loop.
+    // The SDL_PollEvent function also calls SDL_PumpEvents, which updates the
+    // keyboard state array.
+    while (SDL_PollEvent(&(app->event)))
     {
-        if (app->e.type == SDL_QUIT)
+        if (app->event.type == SDL_QUIT)
         {
             app->done = 1;
         }
 
         // Clear the key press capture flags.
-        if (app->e.type == SDL_KEYUP)
+        if (app->event.type == SDL_KEYUP)
         {
-            app->key_captures[app->e.key.keysym.scancode] = 0;
+            app->key_captures[app->event.key.keysym.scancode] = 0;
         }
     }
 }
@@ -128,38 +140,47 @@ void eg_handle_input(eg_app *app)
     app->input_handler(app);
 }
 
-void eg_clear(eg_app *app)
-{
-    // Set the draw color to black and clear the screen.
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 255);
-    SDL_RenderClear(app->renderer);
-}
-
 void eg_draw(eg_app *app)
 {
-    // Draw a rectangle.
+    // Clear the contents of the previous frame.
+    SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 255);
+    SDL_RenderClear(app->renderer);
+
+    // Prepare the contents of the current frame.
+
+    // For this example, we draw a green rectangle.
     SDL_Rect r;
     r.x = 10;
     r.y = 10;
     r.w = 20;
     r.h = 20;
-    SDL_SetRenderDrawColor(app->renderer, 200, 220, 0, 255);
+    SDL_SetRenderDrawColor(app->renderer, 30, 220, 20, 255);
     SDL_RenderFillRect(app->renderer, &r);
-}
 
-void eg_show(eg_app *app)
-{
+    // Show the contents of the current frame.
     SDL_RenderPresent(app->renderer);
 }
 
-void eg_delay()
+void eg_delay(eg_app *app)
 {
-    // This is where the framerate can be regulated.
-    // For now, we just use a 64 millisecond delay.
-    SDL_Delay(64);
+    // Get the approximate number of milliseconds since the beginning of the
+    // current iteration of the main loop.
+    Uint64 elapsed = SDL_GetTicks64() - app->ticks;
+
+    // If the frame length is greater than the elapsed milliseconds since the
+    // beginning of the frame, wait for the duration of the difference.
+    if (app->frame_len > elapsed)
+    {
+        // The SDL_Delay function expects a Uint32 as its argument.
+        // Converting from Uint64 to Uint32 will truncate the value, but the
+        // difference between the frame length and the elapsed milliseconds
+        // should never be greater than UINT32_MAX.
+        SDL_Delay((Uint32)(app->frame_len - elapsed));
+    }
 }
 
 //----------------------------------------------------------------------------
+// input handling functions
 
 int eg_peek_input(eg_app *app, int code)
 {

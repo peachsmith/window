@@ -23,12 +23,47 @@ typedef void (*eg_callback)(struct eg_app *);
 // definition of the eg_app struct
 struct eg_app
 {
+    // The window is an abstraction layer that SDL provides for the GUI
+    // capabilities of the underlying operating system.
     SDL_Window *window;
+
+    // The renderer is an abstraction layer that SDL provides for drawing
+    // graphical data to the screen.
     SDL_Renderer *renderer;
-    SDL_Event e;
+
+    // This field represents a system event. It's internal fields will be set
+    // by SDL_PollEvent during the event processing loop.
+    SDL_Event event;
+
+    // This pointer references an array containing flags that indicate
+    // if keys on the keyboard are pressed. It contains a Uint8 value for each
+    // key. If the value is 1, then the key is pressed. If the value is 0,
+    // then the key is not pressed.
     const Uint8 *keystates;
+
+    // This is the approximate number of milliseconds elapsed since the
+    // initialization of SDL.
+    Uint64 ticks;
+
+    // Frame length is the approximate number of milliseconds expected to
+    // elapse during each iteration of the main loop.
+    Uint64 frame_len;
+
+    // This is an array of flags to indicate that a key press has already been
+    // detected.
     unsigned char key_captures[SDL_NUM_SCANCODES];
+
+    // This flag is used as a sentinel value by the main loop.
+    // As long as this value is 0, the main loop should continue to execute.
+    // Once this flag is set to a non 0 value, any resources allocated by the
+    // application should be freed and the application should terminate
+    // gracefully.
     int done;
+
+    // This field is a work in progress.
+    // It will eventually contain a dynamic linked list of input handlers.
+    // This list will be a stack, and the top of the stack will contain the
+    // current input handler.
     eg_callback input_handler;
 };
 
@@ -82,15 +117,7 @@ void eg_process_events(eg_app *);
 void eg_handle_input(eg_app *);
 
 /**
- * Clears the contents of the screen.
- * 
- * Params:
- *   app* - a pointer to an app struct
- */
-void eg_clear(eg_app *);
-
-/**
- * Prepares graphical content for rendering.
+ * Draws the graphical contents of the current frame to the screen.
  * 
  * Params:
  *   app* - a pointer to an app struct
@@ -98,17 +125,12 @@ void eg_clear(eg_app *);
 void eg_draw(eg_app *);
 
 /**
- * Renders graphical content to the screen.
+ * Pauses execution of the main loop.
  * 
  * Params:
  *   app* - a pointer to an app struct
  */
-void eg_show(eg_app *);
-
-/**
- * Pauses execution of the main loop.
- */
-void eg_delay();
+void eg_delay(eg_app *);
 
 //----------------------------------------------------------------------------
 

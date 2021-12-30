@@ -26,17 +26,11 @@ int main(int argc, char **argv)
         // Handle input.
         eg_handle_input(app);
 
-        // Clear the screen.
-        eg_clear(app);
-
         // Draw the contents of the current frame.
         eg_draw(app);
 
-        // Render the content of the current frame to the screen.
-        eg_show(app);
-
         // Delay to regulate framerate.
-        eg_delay();
+        eg_delay(app);
     }
 
     // Destroy the application context.
