@@ -1,16 +1,21 @@
 #ifndef EXAMPLE_SDL_INTERFACE_H
 #define EXAMPLE_SDL_INTERFACE_H
 
-#include <SDL2/SDL.h>
-
 // This interface is a wrapper around SDL.
 // Since this is an example, all functions an data types will be prefixed
 // with eg (for exempli gratia).
+
+#include <SDL2/SDL.h>
 
 /**
  * This structure wraps the various SDL data types.
  */
 typedef struct eg_app eg_app;
+
+/**
+ * A node in a list of input handlers.
+ */
+typedef struct eg_input_handler eg_input_handler;
 
 /**
  * Performs some task.
@@ -60,12 +65,25 @@ struct eg_app
     // gracefully.
     int done;
 
-    // This field is a work in progress.
-    // It will eventually contain a dynamic linked list of input handlers.
-    // This list will be a stack, and the top of the stack will contain the
-    // current input handler.
-    eg_callback input_handler;
+    // The input handler stack is a dynamic linked list of input handlers.
+    // The input handler on the top of the stack is the only input handler
+    // that can perform any action at any given time.
+    eg_input_handler *input_handler_stack;
 };
+
+// definition of the eg_input_handler struct
+struct eg_input_handler
+{
+    // The callback performs some action in response to input events.
+    eg_callback callback;
+
+    // The previous handler will become the top when the node that references
+    // it is popped from the stack.
+    eg_input_handler *previous;
+};
+
+//----------------------------------------------------------------------------
+// core functions
 
 /**
  * Initializes the SDL library.
@@ -133,6 +151,7 @@ void eg_draw(eg_app *);
 void eg_delay(eg_app *);
 
 //----------------------------------------------------------------------------
+// input handling functions
 
 /**
  * Checks to see if an input is actuated.
@@ -159,7 +178,48 @@ int eg_peek_input(eg_app *app, int);
  */
 int eg_consume_input(eg_app *, int);
 
-// temporary test function
-void eg_test_func(eg_callback, eg_app *);
+/**
+ * Creates a new input handler.
+ * 
+ * Params:
+ *   eg_callback - a function that handles input
+ * 
+ * Returns:
+ *   eg_input_handler* - a pointer to a new input handler
+ */
+eg_input_handler *eg_create_input_handler(eg_callback);
+
+/**
+ * Frees the memory allocated for an input handler.
+ * 
+ * Params:
+ *   eg_input_handler* - a pointer to an input handler
+ */
+void eg_destroy_input_handler(eg_input_handler *);
+
+/**
+ * Pushes an input handler onto the top of the input handler stack.
+ * Once pushed, the new input handler will be the current handler as long as
+ * remains at the top.
+ * 
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_input_handler* - a pointer to an input handler.
+ */
+void eg_push_input_handler(eg_app *, eg_input_handler *);
+
+/**
+ * Pops an input handler off the top of the input handler stack.
+ * This function returns a pointer to the input handler that was removed from
+ * the stack. It does not free any memory. It is the repsonsibility of the
+ * caller to dispose of any input handlers popped from the stack.
+ * 
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ * 
+ * Returns:
+ *   eg_input_handler* - the handler that was removed from the stack
+ */
+eg_input_handler *eg_pop_input_handler(eg_app *);
 
 #endif
