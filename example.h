@@ -18,12 +18,20 @@ typedef struct eg_app eg_app;
 typedef struct eg_input_handler eg_input_handler;
 
 /**
+ * An entity is a thing that can interact with other things.
+ * 
+ */
+typedef struct eg_entity eg_entity;
+
+typedef void (*eg_entity_renderer)(eg_app *, eg_entity *);
+
+/**
  * Performs some task.
  * 
  * Params:
  *   eg_app* - a pointer to an app struct
  */
-typedef void (*eg_callback)(struct eg_app *);
+typedef void (*eg_callback)(eg_app *);
 
 // definition of the eg_app struct
 struct eg_app
@@ -69,6 +77,12 @@ struct eg_app
     // The input handler on the top of the stack is the only input handler
     // that can perform any action at any given time.
     eg_input_handler *input_handler_stack;
+
+    // A linked list of entities.
+    // Entities are updated and rendered in the opposite order from which they
+    // were added. The last entity added will be the first entity updated and
+    // rendered.
+    eg_entity *entities;
 };
 
 // definition of the eg_input_handler struct
@@ -80,6 +94,29 @@ struct eg_input_handler
     // The previous handler will become the top when the node that references
     // it is popped from the stack.
     eg_input_handler *previous;
+};
+
+// definition of the eg_entity struct
+struct eg_entity
+{
+    // The id field identifies the type of entity.
+    // This will be used later when the entity registry is implemented.
+    int id;
+
+    // horizontal position
+    int x_pos;
+
+    // vertical position
+    int y_pos;
+
+    // width
+    int width;
+
+    // height
+    int height;
+
+    eg_entity *next;
+    eg_entity *previous;
 };
 
 //----------------------------------------------------------------------------
@@ -221,5 +258,47 @@ void eg_push_input_handler(eg_app *, eg_input_handler *);
  *   eg_input_handler* - the handler that was removed from the stack
  */
 eg_input_handler *eg_pop_input_handler(eg_app *);
+
+//----------------------------------------------------------------------------
+// input handling functions
+
+/**
+ * Creates a new entity.
+ * 
+ * Returns:
+ *   eg_entity* - a pointer to a new entity
+ */
+eg_entity *eg_create_entity();
+
+/**
+ * Frees the memory allocated for an entity.
+ * 
+ * Params:
+ *   eg_entity* - the entity to be destroyed
+ */
+void eg_destroy_entity(eg_entity *);
+
+/**
+ * Adds an entity to the entity list.
+ * 
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_entity* - the entity to add
+ */
+void eg_add_entity(eg_app *, eg_entity *);
+
+/**
+ * Removes an entity from the entity list.
+ * This function returns a pointer to the entity that was removed. It does not
+ * free any memory allocated for the entity.
+ * 
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_entity* - the entity to remove
+ * 
+ * Returns:
+ *   eg_entity* - the entity that was removed
+ */
+eg_entity *eg_remove_entity(eg_app *, eg_entity *);
 
 #endif

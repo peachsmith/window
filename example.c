@@ -1,5 +1,5 @@
 #include "example.h"
-#include "input_handler.h"
+#include "input_demo.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -99,6 +99,8 @@ eg_app *eg_create_app()
         eg_create_input_handler(root_input_callback);
 
     app->input_handler_stack = root_handler;
+
+    app->entities = NULL;
 
     return app;
 }
@@ -282,4 +284,87 @@ eg_input_handler *eg_pop_input_handler(eg_app *app)
     app->input_handler_stack = app->input_handler_stack->previous;
 
     return current;
+}
+
+eg_entity *eg_create_entity()
+{
+    eg_entity *entity = NULL;
+
+    entity = (eg_entity *)malloc(sizeof(eg_entity));
+    if (entity == NULL)
+    {
+        return NULL;
+    }
+
+    // TODO: initialize the values.
+    entity->x_pos = 0;
+    entity->y_pos = 0;
+    entity->width = 0;
+    entity->height = 0;
+    entity->next = NULL;
+    entity->previous = NULL;
+
+    return entity;
+}
+
+void eg_destroy_entity(eg_entity *entity)
+{
+    free(entity);
+}
+
+void eg_add_entity(eg_app *app, eg_entity *entity)
+{
+    // If the entity list is empty, then simply point it to the newly added
+    // entity.
+    if (app->entities == NULL)
+    {
+        app->entities = entity;
+        return;
+    }
+
+    // Add the entity to the front of the list.
+    entity->next = app->entities;
+    app->entities->previous = entity;
+
+    // Update the entity list pointer in the app struct to point to the new
+    // entity.
+    app->entities = entity;
+}
+
+eg_entity *eg_remove_entity(eg_app *app, eg_entity *entity)
+{
+    // Get the entities before and after the current entity.
+    eg_entity *previous = entity->previous;
+    eg_entity *next = entity->next;
+
+    // Set the current entity's next and previous pointers to NULL to remove
+    // it from the list. For the remainder of this function, this entity will
+    // be referred to as the "removed entity".
+    entity->next = NULL;
+    entity->previous = NULL;
+
+    // If the next entity is not NULL, it's previous pointer receives the
+    // value of the removed entity's previous pointer.
+    if (next != NULL)
+    {
+        next->previous = previous;
+    }
+
+    // Only the first entity in the list should have a previous pointer with a
+    // value of NULL. If we're removing the first entity in the list, then we
+    // need to update the pointer in the app struct so the list isn't lost.
+    if (previous == NULL)
+    {
+        // The next entity becomes the first entity in the list.
+        // If the next pointer is NULL, then the entity list is now empty.
+        app->entities = next;
+
+        return entity;
+    }
+
+    // The removed entity's next pointer becomes the previous entity's next
+    // pointer.
+    previous->next = next;
+
+    return entity;
 }

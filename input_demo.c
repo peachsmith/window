@@ -1,4 +1,5 @@
-#include "input_handler.h"
+#include "input_demo.h"
+#include "entity_demo.h"
 
 #include <stdio.h>
 
@@ -24,6 +25,59 @@ void root_input_callback(eg_app *app)
         printf("right was pressed\n");
     }
 
+    // If the Q key is pressed, add the Q entity.
+    // If the shift key was also pressed, remove the Q entity.
+    if (eg_consume_input(app, SDL_SCANCODE_Q))
+    {
+        if (eg_peek_input(app, SDL_SCANCODE_LSHIFT) ||
+            eg_peek_input(app, SDL_SCANCODE_RSHIFT))
+        {
+            entity_demo_remove(app, ENTITY_ID_Q);
+        }
+        else if (!entity_demo_add(app, ENTITY_ID_Q))
+        {
+            app->done = 1;
+            return;
+        }
+    }
+
+    // If the W key is pressed, add the W entity.
+    // If the shift key was also pressed, remove the W entity.
+    if (eg_consume_input(app, SDL_SCANCODE_W))
+    {
+        if (eg_peek_input(app, SDL_SCANCODE_LSHIFT) ||
+            eg_peek_input(app, SDL_SCANCODE_RSHIFT))
+        {
+            entity_demo_remove(app, ENTITY_ID_W);
+        }
+        else if (!entity_demo_add(app, ENTITY_ID_W))
+        {
+            app->done = 1;
+            return;
+        }
+    }
+
+    // If the E key is pressed, add the E entity.
+    // If the shift key was also pressed, remove the E entity.
+    if (eg_consume_input(app, SDL_SCANCODE_E))
+    {
+        if (eg_peek_input(app, SDL_SCANCODE_LSHIFT) ||
+            eg_peek_input(app, SDL_SCANCODE_RSHIFT))
+        {
+            entity_demo_remove(app, ENTITY_ID_E);
+        }
+        else if (!entity_demo_add(app, ENTITY_ID_E))
+        {
+            app->done = 1;
+            return;
+        }
+    }
+
+    if (eg_consume_input(app, SDL_SCANCODE_P))
+    {
+        entity_demo_print(app);
+    }
+
     // If the N key is pressed, create a new input handler and push it onto
     // the stack. If we fail to create the new handler, then terminate the
     // application.
@@ -38,6 +92,7 @@ void root_input_callback(eg_app *app)
             return;
         }
         eg_push_input_handler(app, new_handler);
+        return;
     }
 
     // If the escape key is pressed, terminate the application.
