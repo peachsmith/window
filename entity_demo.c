@@ -31,6 +31,69 @@ static char id_to_char(int id)
     }
 }
 
+// populates an SDL_Rect with values from an entity.
+static void get_rect(SDL_Rect *r, eg_entity *e)
+{
+    r->x = e->x_pos;
+    r->y = e->y_pos;
+    r->w = e->width;
+    r->h = e->height;
+}
+
+//----------------------------------------------------------------------------
+// entity rendering functions
+
+// draws a red rectangle at the location of entity q
+static void render_q(eg_app *app, eg_entity *ent)
+{
+    SDL_Rect r;
+    get_rect(&r, ent);
+
+    SDL_SetRenderDrawColor(app->renderer, 0x02, 0x75, 0xD8, 255);
+    SDL_RenderFillRect(app->renderer, &r);
+}
+
+// draws a red rectangle at the location of entity w
+static void render_w(eg_app *app, eg_entity *ent)
+{
+    SDL_Rect r;
+    get_rect(&r, ent);
+
+    SDL_SetRenderDrawColor(app->renderer, 0x5C, 0xB8, 0x5C, 255);
+    SDL_RenderFillRect(app->renderer, &r);
+}
+
+// draws a red rectangle at the location of entity e
+static void render_e(eg_app *app, eg_entity *ent)
+{
+    SDL_Rect r;
+    get_rect(&r, ent);
+
+    SDL_SetRenderDrawColor(app->renderer, 0xD9, 0x53, 0x4F, 255);
+    SDL_RenderFillRect(app->renderer, &r);
+}
+
+//----------------------------------------------------------------------------
+// entity update functions
+
+// updates the state of the Q entity
+static void update_q(eg_app *app, eg_entity *ent)
+{
+    printf("this is the update q function\n");
+}
+
+// updates the state of the W entity
+static void update_w(eg_app *app, eg_entity *ent)
+{
+    printf("this is the update w function\n");
+}
+
+// updates the state of the E entity
+static void update_e(eg_app *app, eg_entity *ent)
+{
+    printf("this is the update e function\n");
+}
+
 int entity_demo_add(eg_app *app, int id)
 {
     eg_entity *ent = app->entities;
@@ -56,6 +119,38 @@ int entity_demo_add(eg_app *app, int id)
     }
 
     ent->id = id;
+
+    // The Q, W, and E entities will all have a width and height of 20.
+    ent->width = 20;
+    ent->height = 20;
+
+    // Set the render function.
+    switch (id)
+    {
+    case ENTITY_ID_Q:
+        ent->x_pos = 10;
+        ent->y_pos = 10;
+        ent->render = render_q;
+        ent->update = update_q;
+        break;
+
+    case ENTITY_ID_W:
+        ent->x_pos = 40;
+        ent->y_pos = 10;
+        ent->render = render_w;
+        ent->update = update_w;
+        break;
+
+    case ENTITY_ID_E:
+        ent->x_pos = 70;
+        ent->y_pos = 10;
+        ent->render = render_e;
+        ent->update = update_e;
+        break;
+
+    default:
+        break;
+    }
 
     eg_add_entity(app, ent);
 

@@ -23,7 +23,23 @@ typedef struct eg_input_handler eg_input_handler;
  */
 typedef struct eg_entity eg_entity;
 
-typedef void (*eg_entity_renderer)(eg_app *, eg_entity *);
+/**
+ * Draws an entity to the screen.
+ * 
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_entity* - the entity to render
+ */
+typedef void (*eg_renderer)(eg_app *, eg_entity *);
+
+/**
+ * Updates the state of an individual entity.
+ * 
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_entity* - the entity to render
+ */
+typedef void (*eg_updater)(eg_app *, eg_entity *);
 
 /**
  * Performs some task.
@@ -115,6 +131,12 @@ struct eg_entity
     // height
     int height;
 
+    // the rendering function
+    eg_renderer render;
+
+    // the update function
+    eg_updater update;
+
     eg_entity *next;
     eg_entity *previous;
 };
@@ -170,6 +192,14 @@ void eg_process_events(eg_app *);
  *   app* - a pointer to an app struct
  */
 void eg_handle_input(eg_app *);
+
+/**
+ * Updates the state of the application.
+ * 
+ * Params:
+ *   app* - a pointer to an app struct
+ */
+void eg_update(eg_app *);
 
 /**
  * Draws the graphical contents of the current frame to the screen.
@@ -260,7 +290,7 @@ void eg_push_input_handler(eg_app *, eg_input_handler *);
 eg_input_handler *eg_pop_input_handler(eg_app *);
 
 //----------------------------------------------------------------------------
-// input handling functions
+// entity functions
 
 /**
  * Creates a new entity.

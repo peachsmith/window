@@ -26,6 +26,9 @@ int main(int argc, char **argv)
         // Handle input.
         eg_handle_input(app);
 
+        // Update the state of the application.
+        eg_update(app);
+
         // Draw the contents of the current frame.
         eg_draw(app);
 

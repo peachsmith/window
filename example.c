@@ -107,6 +107,14 @@ eg_app *eg_create_app()
 
 void eg_destroy_app(eg_app *app)
 {
+    // Destroy the entities.
+    while (app->entities != NULL)
+    {
+        eg_entity *next = app->entities->next;
+        eg_destroy_entity(app->entities);
+        app->entities = next;
+    }
+
     // Destroy the input handlers.
     while (app->input_handler_stack != NULL)
     {
@@ -153,22 +161,35 @@ void eg_handle_input(eg_app *app)
     app->input_handler_stack->callback(app);
 }
 
+void eg_update(eg_app *app)
+{
+    eg_entity *ent = app->entities;
+    while (ent != NULL)
+    {
+        if (ent->update != NULL)
+        {
+            ent->update(app, ent);
+        }
+        ent = ent->next;
+    }
+}
+
 void eg_draw(eg_app *app)
 {
     // Clear the contents of the previous frame.
     SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 255);
     SDL_RenderClear(app->renderer);
 
-    // Prepare the contents of the current frame.
-
-    // For this example, we draw a green rectangle.
-    SDL_Rect r;
-    r.x = 10;
-    r.y = 10;
-    r.w = 20;
-    r.h = 20;
-    SDL_SetRenderDrawColor(app->renderer, 30, 220, 20, 255);
-    SDL_RenderFillRect(app->renderer, &r);
+    // Render each entity.
+    eg_entity *ent = app->entities;
+    while (ent != NULL)
+    {
+        if (ent->render != NULL)
+        {
+            ent->render(app, ent);
+        }
+        ent = ent->next;
+    }
 
     // Show the contents of the current frame.
     SDL_RenderPresent(app->renderer);
@@ -286,6 +307,9 @@ eg_input_handler *eg_pop_input_handler(eg_app *app)
     return current;
 }
 
+//----------------------------------------------------------------------------
+// entity functions
+
 eg_entity *eg_create_entity()
 {
     eg_entity *entity = NULL;
@@ -296,11 +320,12 @@ eg_entity *eg_create_entity()
         return NULL;
     }
 
-    // TODO: initialize the values.
     entity->x_pos = 0;
     entity->y_pos = 0;
     entity->width = 0;
     entity->height = 0;
+    entity->render = NULL;
+    entity->update = NULL;
     entity->next = NULL;
     entity->previous = NULL;
 
