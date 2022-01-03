@@ -37,7 +37,7 @@ typedef void (*eg_renderer)(eg_app *, eg_entity *);
  * 
  * Params:
  *   eg_app* - a pointer to an app struct
- *   eg_entity* - the entity to render
+ *   eg_entity* - the entity to update
  */
 typedef void (*eg_updater)(eg_app *, eg_entity *);
 
@@ -47,7 +47,7 @@ typedef void (*eg_updater)(eg_app *, eg_entity *);
  * Params:
  *   eg_app* - a pointer to an app struct
  */
-typedef void (*eg_callback)(eg_app *);
+typedef void (*eg_callback)(eg_app *, eg_entity *);
 
 // definition of the eg_app struct
 struct eg_app
@@ -92,7 +92,7 @@ struct eg_app
     // The input handler stack is a dynamic linked list of input handlers.
     // The input handler on the top of the stack is the only input handler
     // that can perform any action at any given time.
-    eg_input_handler *input_handler_stack;
+    eg_input_handler *input_handlers;
 
     // A linked list of entities.
     // Entities are updated and rendered in the opposite order from which they
@@ -110,6 +110,9 @@ struct eg_input_handler
     // The previous handler will become the top when the node that references
     // it is popped from the stack.
     eg_input_handler *previous;
+
+    // The entities that can be directly affected by input.
+    eg_entity *target;
 };
 
 // definition of the eg_entity struct
@@ -124,6 +127,12 @@ struct eg_entity
 
     // vertical position
     int y_pos;
+
+    // horizontal velocity
+    int x_vel;
+
+    // vertical velocity
+    int y_vel;
 
     // width
     int width;

@@ -1,28 +1,41 @@
 #include "input_demo.h"
 #include "entity_demo.h"
+#include "player_demo.h"
 
 #include <stdio.h>
 
-void root_input_callback(eg_app *app)
+void root_input_callback(eg_app *app, eg_entity *target)
 {
-    if (eg_consume_input(app, SDL_SCANCODE_UP))
+    if (eg_peek_input(app, SDL_SCANCODE_UP))
     {
-        printf("up was pressed\n");
+        if (target->y_vel >= -2)
+        {
+            target->y_vel -= 2;
+        }
     }
 
-    if (eg_consume_input(app, SDL_SCANCODE_DOWN))
+    if (eg_peek_input(app, SDL_SCANCODE_DOWN))
     {
-        printf("down was pressed\n");
+        if (target->y_vel <= 2)
+        {
+            target->y_vel += 2;
+        }
     }
 
     if (eg_peek_input(app, SDL_SCANCODE_LEFT))
     {
-        printf("left was pressed\n");
+        if (target->x_vel >= -2)
+        {
+            target->x_vel -= 2;
+        }
     }
 
     if (eg_peek_input(app, SDL_SCANCODE_RIGHT))
     {
-        printf("right was pressed\n");
+        if (target->x_vel <= 2)
+        {
+            target->x_vel += 2;
+        }
     }
 
     // If the Q key is pressed, add the Q entity.
@@ -104,7 +117,7 @@ void root_input_callback(eg_app *app)
     }
 }
 
-void second_input_callback(eg_app *app)
+void second_input_callback(eg_app *app, eg_entity *target)
 {
     if (eg_consume_input(app, SDL_SCANCODE_UP))
     {

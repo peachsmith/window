@@ -1,5 +1,8 @@
 #include "example.h"
+
+// demo headers
 #include "input_demo.h"
+#include "player_demo.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,7 +44,7 @@ eg_app *eg_create_app()
 
     // Create the window.
     app->window = SDL_CreateWindow(
-        "Example Window",
+        "Example",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         240,
@@ -94,13 +97,37 @@ eg_app *eg_create_app()
         app->key_captures[i] = 0;
     }
 
-    // Set the initial input handler.
+    app->entities = NULL;
+
+    // The following is an example of adding entities and input handling to
+    // an app. In this example, a player entity is created and controlled by
+    // the root input handler. The root input handler also has additional
+    // functionality for demonstrating an input handler's ability to create
+    // a new input handler, add it to the app, and relinquish control to it.
+    // Further details can be found in the files input_demo.h and
+    // player_demo.h.
+
+    // Create an example of a player entity.
+    eg_entity *player = player_demo_create();
+    if (player == NULL)
+    {
+        fprintf(stderr, "failed to create player\n");
+        eg_destroy_app(app);
+        return NULL;
+    }
+
+    // Add the player entity to the app.
+    eg_add_entity(app, player);
+
+    // Create the initial input handler.
     eg_input_handler *root_handler =
         eg_create_input_handler(root_input_callback);
 
-    app->input_handler_stack = root_handler;
+    // Set the player entity as the root input handler's target.
+    root_handler->target = player;
 
-    app->entities = NULL;
+    // Add the root input handler to the app.
+    eg_push_input_handler(app, root_handler);
 
     return app;
 }
@@ -116,11 +143,11 @@ void eg_destroy_app(eg_app *app)
     }
 
     // Destroy the input handlers.
-    while (app->input_handler_stack != NULL)
+    while (app->input_handlers != NULL)
     {
-        eg_input_handler *previous = app->input_handler_stack->previous;
-        eg_destroy_input_handler(app->input_handler_stack);
-        app->input_handler_stack = previous;
+        eg_input_handler *previous = app->input_handlers->previous;
+        eg_destroy_input_handler(app->input_handlers);
+        app->input_handlers = previous;
     }
 
     // Destroy the renderer, the window, then the wrapper structure.
@@ -155,10 +182,8 @@ void eg_process_events(eg_app *app)
 
 void eg_handle_input(eg_app *app)
 {
-    // Currently, there is only one input handler for the application.
-    // Eventually, we will have the ability to dynamically add and remove
-    // input handlers during runtime.
-    app->input_handler_stack->callback(app);
+    // Call the top input handler's callback function.
+    app->input_handlers->callback(app, app->input_handlers->target);
 }
 
 void eg_update(eg_app *app)
@@ -264,6 +289,7 @@ eg_input_handler *eg_create_input_handler(eg_callback callback)
 
     handler->previous = NULL;
     handler->callback = callback;
+    handler->target = NULL;
 
     return handler;
 }
@@ -276,33 +302,33 @@ void eg_destroy_input_handler(eg_input_handler *handler)
 void eg_push_input_handler(eg_app *app, eg_input_handler *handler)
 {
     // If the stack is empty, then the handler becomes the top of the stack.
-    if (app->input_handler_stack == NULL)
+    if (app->input_handlers == NULL)
     {
-        app->input_handler_stack = handler;
+        app->input_handlers = handler;
         return;
     }
 
     // Save the reference to the current handler in the new handler.
-    handler->previous = app->input_handler_stack;
+    handler->previous = app->input_handlers;
 
     // Set the application's current input handler to be the new handler.
-    app->input_handler_stack = handler;
+    app->input_handlers = handler;
 }
 
 eg_input_handler *eg_pop_input_handler(eg_app *app)
 {
     // If the stack is empty, then return without doing anything.
-    if (app->input_handler_stack == NULL)
+    if (app->input_handlers == NULL)
     {
         return NULL;
     }
 
     // Get the top of the input handler stack.
     // This will be returned so that it can be saved or destroyed.
-    eg_input_handler *current = app->input_handler_stack;
+    eg_input_handler *current = app->input_handlers;
 
     // The previous input handler now becomes the current input handler.
-    app->input_handler_stack = app->input_handler_stack->previous;
+    app->input_handlers = app->input_handlers->previous;
 
     return current;
 }
@@ -320,8 +346,11 @@ eg_entity *eg_create_entity()
         return NULL;
     }
 
+    entity->id = 0;
     entity->x_pos = 0;
     entity->y_pos = 0;
+    entity->x_vel = 0;
+    entity->y_vel = 0;
     entity->width = 0;
     entity->height = 0;
     entity->render = NULL;

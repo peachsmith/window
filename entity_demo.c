@@ -49,7 +49,7 @@ static void render_q(eg_app *app, eg_entity *ent)
     SDL_Rect r;
     get_rect(&r, ent);
 
-    SDL_SetRenderDrawColor(app->renderer, 0x02, 0x75, 0xD8, 255);
+    SDL_SetRenderDrawColor(app->renderer, 0x02, 0x75, 0xD8, 0xFF);
     SDL_RenderFillRect(app->renderer, &r);
 }
 
@@ -59,7 +59,7 @@ static void render_w(eg_app *app, eg_entity *ent)
     SDL_Rect r;
     get_rect(&r, ent);
 
-    SDL_SetRenderDrawColor(app->renderer, 0x5C, 0xB8, 0x5C, 255);
+    SDL_SetRenderDrawColor(app->renderer, 0x5C, 0xB8, 0x5C, 0xFF);
     SDL_RenderFillRect(app->renderer, &r);
 }
 
@@ -69,7 +69,7 @@ static void render_e(eg_app *app, eg_entity *ent)
     SDL_Rect r;
     get_rect(&r, ent);
 
-    SDL_SetRenderDrawColor(app->renderer, 0xD9, 0x53, 0x4F, 255);
+    SDL_SetRenderDrawColor(app->renderer, 0xD9, 0x53, 0x4F, 0xFF);
     SDL_RenderFillRect(app->renderer, &r);
 }
 
@@ -79,19 +79,19 @@ static void render_e(eg_app *app, eg_entity *ent)
 // updates the state of the Q entity
 static void update_q(eg_app *app, eg_entity *ent)
 {
-    printf("this is the update q function\n");
+    // printf("this is the update q function\n");
 }
 
 // updates the state of the W entity
 static void update_w(eg_app *app, eg_entity *ent)
 {
-    printf("this is the update w function\n");
+    // printf("this is the update w function\n");
 }
 
 // updates the state of the E entity
 static void update_e(eg_app *app, eg_entity *ent)
 {
-    printf("this is the update e function\n");
+    // printf("this is the update e function\n");
 }
 
 int entity_demo_add(eg_app *app, int id)
