@@ -42,6 +42,13 @@ eg_app *eg_create_app()
         return NULL;
     }
 
+    // Ensure that all pointers are NULL.
+    app->window = NULL;
+    app->renderer = NULL;
+    app->keystates = NULL;
+    app->entities = NULL;
+    app->input_handlers = NULL;
+
     // Create the window.
     app->window = SDL_CreateWindow(
         "Example",
@@ -96,8 +103,6 @@ eg_app *eg_create_app()
     {
         app->key_captures[i] = 0;
     }
-
-    app->entities = NULL;
 
     // The following is an example of adding entities and input handling to
     // an app. In this example, a player entity is created and controlled by
