@@ -1,9 +1,5 @@
 #include "example.h"
 
-// demo headers
-#include "input_demo.h"
-#include "player_demo.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -104,36 +100,6 @@ eg_app *eg_create_app()
         app->key_captures[i] = 0;
     }
 
-    // The following is an example of adding entities and input handling to
-    // an app. In this example, a player entity is created and controlled by
-    // the root input handler. The root input handler also has additional
-    // functionality for demonstrating an input handler's ability to create
-    // a new input handler, add it to the app, and relinquish control to it.
-    // Further details can be found in the files input_demo.h and
-    // player_demo.h.
-
-    // Create an example of a player entity.
-    eg_entity *player = player_demo_create();
-    if (player == NULL)
-    {
-        fprintf(stderr, "failed to create player\n");
-        eg_destroy_app(app);
-        return NULL;
-    }
-
-    // Add the player entity to the app.
-    eg_add_entity(app, player);
-
-    // Create the initial input handler.
-    eg_input_handler *root_handler =
-        eg_create_input_handler(root_input_callback);
-
-    // Set the player entity as the root input handler's target.
-    root_handler->target = player;
-
-    // Add the root input handler to the app.
-    eg_push_input_handler(app, root_handler);
-
     return app;
 }
 
@@ -196,9 +162,9 @@ void eg_update(eg_app *app)
     eg_entity *ent = app->entities;
     while (ent != NULL)
     {
-        if (ent->update != NULL)
+        if (app->registry[ent->id].update != NULL)
         {
-            ent->update(app, ent);
+            app->registry[ent->id].update(app, ent);
         }
         ent = ent->next;
     }
@@ -214,9 +180,9 @@ void eg_draw(eg_app *app)
     eg_entity *ent = app->entities;
     while (ent != NULL)
     {
-        if (ent->render != NULL)
+        if (app->registry[ent->id].render != NULL)
         {
-            ent->render(app, ent);
+            app->registry[ent->id].render(app, ent);
         }
         ent = ent->next;
     }
@@ -341,6 +307,19 @@ eg_input_handler *eg_pop_input_handler(eg_app *app)
 //----------------------------------------------------------------------------
 // entity functions
 
+eg_entity_type *eg_create_registry(int n)
+{
+    eg_entity_type *reg = (eg_entity_type *)
+        malloc(sizeof(eg_entity_type) * n);
+
+    if (reg == NULL)
+    {
+        return NULL;
+    }
+
+    return reg;
+}
+
 eg_entity *eg_create_entity()
 {
     eg_entity *entity = NULL;
@@ -356,10 +335,6 @@ eg_entity *eg_create_entity()
     entity->y_pos = 0;
     entity->x_vel = 0;
     entity->y_vel = 0;
-    entity->width = 0;
-    entity->height = 0;
-    entity->render = NULL;
-    entity->update = NULL;
     entity->next = NULL;
     entity->previous = NULL;
 

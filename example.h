@@ -1,9 +1,11 @@
 #ifndef EXAMPLE_SDL_INTERFACE_H
 #define EXAMPLE_SDL_INTERFACE_H
 
-// This interface is a wrapper around SDL.
+// This is the Example interface. It's essentially a wrapper around SDL.
 // Since this is an example, all functions an data types will be prefixed
 // with eg (for exempli gratia).
+// "Example" is a working title. A slightly more original name should be
+// used at some point in the future.
 
 #include <SDL2/SDL.h>
 
@@ -19,9 +21,13 @@ typedef struct eg_input_handler eg_input_handler;
 
 /**
  * An entity is a thing that can interact with other things.
- * 
  */
 typedef struct eg_entity eg_entity;
+
+/**
+ * Common information for all entities of a given type.
+ */
+typedef struct eg_entity_type eg_entity_type;
 
 /**
  * Draws an entity to the screen.
@@ -99,6 +105,10 @@ struct eg_app
     // were added. The last entity added will be the first entity updated and
     // rendered.
     eg_entity *entities;
+
+    // The entity registry is a collection of entity information common to all
+    // entities of a given type.
+    eg_entity_type *registry;
 };
 
 // definition of the eg_input_handler struct
@@ -118,36 +128,24 @@ struct eg_input_handler
 // definition of the eg_entity struct
 struct eg_entity
 {
-    // The id field identifies the type of entity.
-    // This will be used later when the entity registry is implemented.
-    int id;
+    int id; // identifies the entity type in the registry
 
-    // horizontal position
-    int x_pos;
-
-    // vertical position
-    int y_pos;
-
-    // horizontal velocity
-    int x_vel;
-
-    // vertical velocity
-    int y_vel;
-
-    // width
-    int width;
-
-    // height
-    int height;
-
-    // the rendering function
-    eg_renderer render;
-
-    // the update function
-    eg_updater update;
+    int x_pos; // horizontal position
+    int y_pos; // vertical position
+    int x_vel; // horizontal velocity
+    int y_vel; // vertical velocity
 
     eg_entity *next;
     eg_entity *previous;
+};
+
+struct eg_entity_type
+{
+    int id;
+    int width;
+    int height;
+    eg_renderer render;
+    eg_updater update;
 };
 
 //----------------------------------------------------------------------------
@@ -300,6 +298,17 @@ eg_input_handler *eg_pop_input_handler(eg_app *);
 
 //----------------------------------------------------------------------------
 // entity functions
+
+/**
+ * Allocates memory for an entity registry.
+ * 
+ * Params:
+ *   int - the number of entity types
+ * 
+ * Returns:
+ *   eg_entity_type* - a new entity registry
+ */
+eg_entity_type *eg_create_registry(int);
 
 /**
  * Creates a new entity.

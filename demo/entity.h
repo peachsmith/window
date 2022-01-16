@@ -1,5 +1,5 @@
-#ifndef EG_ENTITY_DEMO_H
-#define EG_ENTITY_DEMO_H
+#ifndef EG_DEMO_ENTITY_H
+#define EG_DEMO_ENTITY_H
 
 // This file contains utility functions for demonstrating entities.
 // For this demo, there are three types of entities defined: Q entity,
@@ -7,10 +7,29 @@
 
 #include "example.h"
 
-// entity IDs used for the entity demo code
-#define ENTITY_ID_Q 1
-#define ENTITY_ID_W 2
-#define ENTITY_ID_E 3
+/**
+ * Populates the entity type structs with information about the Q entity.
+ * 
+ * Params:
+ *   eg_entity_type* - the player's entity type definition
+ */
+void entity_demo_register_q(eg_entity_type*);
+
+/**
+ * Populates the entity type structs with information about the W entity.
+ * 
+ * Params:
+ *   eg_entity_type* - the player's entity type definition
+ */
+void entity_demo_register_w(eg_entity_type*);
+
+/**
+ * Populates the entity type structs with information about the E entity.
+ * 
+ * Params:
+ *   eg_entity_type* - the player's entity type definition
+ */
+void entity_demo_register_e(eg_entity_type*);
 
 /**
  * Adds a demo entity to the entity list.

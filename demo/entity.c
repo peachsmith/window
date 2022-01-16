@@ -1,4 +1,5 @@
-#include "entity_demo.h"
+#include "demo/entity.h"
+#include "demo/entity_list.h"
 
 #include <stdio.h>
 
@@ -17,13 +18,13 @@ static char id_to_char(int id)
 {
     switch (id)
     {
-    case ENTITY_ID_Q:
+    case ENTITY_TYPE_Q:
         return 'Q';
 
-    case ENTITY_ID_W:
+    case ENTITY_TYPE_W:
         return 'W';
 
-    case ENTITY_ID_E:
+    case ENTITY_TYPE_E:
         return 'E';
 
     default:
@@ -32,12 +33,12 @@ static char id_to_char(int id)
 }
 
 // populates an SDL_Rect with values from an entity.
-static void get_rect(SDL_Rect *r, eg_entity *e)
+static void get_rect(SDL_Rect *r, eg_app *app, eg_entity *e)
 {
     r->x = e->x_pos;
     r->y = e->y_pos;
-    r->w = e->width;
-    r->h = e->height;
+    r->w = app->registry[e->id].width;
+    r->h = app->registry[e->id].height;
 }
 
 //----------------------------------------------------------------------------
@@ -47,7 +48,7 @@ static void get_rect(SDL_Rect *r, eg_entity *e)
 static void render_q(eg_app *app, eg_entity *ent)
 {
     SDL_Rect r;
-    get_rect(&r, ent);
+    get_rect(&r, app, ent);
 
     SDL_SetRenderDrawColor(app->renderer, 0x02, 0x75, 0xD8, 0xFF);
     SDL_RenderFillRect(app->renderer, &r);
@@ -57,7 +58,7 @@ static void render_q(eg_app *app, eg_entity *ent)
 static void render_w(eg_app *app, eg_entity *ent)
 {
     SDL_Rect r;
-    get_rect(&r, ent);
+    get_rect(&r, app, ent);
 
     SDL_SetRenderDrawColor(app->renderer, 0x5C, 0xB8, 0x5C, 0xFF);
     SDL_RenderFillRect(app->renderer, &r);
@@ -67,7 +68,7 @@ static void render_w(eg_app *app, eg_entity *ent)
 static void render_e(eg_app *app, eg_entity *ent)
 {
     SDL_Rect r;
-    get_rect(&r, ent);
+    get_rect(&r, app, ent);
 
     SDL_SetRenderDrawColor(app->renderer, 0xD9, 0x53, 0x4F, 0xFF);
     SDL_RenderFillRect(app->renderer, &r);
@@ -94,6 +95,30 @@ static void update_e(eg_app *app, eg_entity *ent)
     // printf("this is the update e function\n");
 }
 
+void entity_demo_register_q(eg_entity_type *t)
+{
+    t->width = 20;
+    t->height = 20;
+    t->render = render_q;
+    t->update = update_q;
+}
+
+void entity_demo_register_w(eg_entity_type *t)
+{
+    t->width = 20;
+    t->height = 20;
+    t->render = render_w;
+    t->update = update_w;
+}
+
+void entity_demo_register_e(eg_entity_type *t)
+{
+    t->width = 20;
+    t->height = 20;
+    t->render = render_e;
+    t->update = update_e;
+}
+
 int entity_demo_add(eg_app *app, int id)
 {
     eg_entity *ent = app->entities;
@@ -118,34 +143,25 @@ int entity_demo_add(eg_app *app, int id)
         return 0;
     }
 
-    ent->id = id;
-
-    // The Q, W, and E entities will all have a width and height of 20.
-    ent->width = 20;
-    ent->height = 20;
-
     // Set the render function.
     switch (id)
     {
-    case ENTITY_ID_Q:
+    case ENTITY_TYPE_Q:
+        ent->id = ENTITY_TYPE_Q;
         ent->x_pos = 10;
         ent->y_pos = 10;
-        ent->render = render_q;
-        ent->update = update_q;
         break;
 
-    case ENTITY_ID_W:
+    case ENTITY_TYPE_W:
+        ent->id = ENTITY_TYPE_W;
         ent->x_pos = 40;
         ent->y_pos = 10;
-        ent->render = render_w;
-        ent->update = update_w;
         break;
 
-    case ENTITY_ID_E:
+    case ENTITY_TYPE_E:
+        ent->id = ENTITY_TYPE_E;
         ent->x_pos = 70;
         ent->y_pos = 10;
-        ent->render = render_e;
-        ent->update = update_e;
         break;
 
     default:

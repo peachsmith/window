@@ -1,6 +1,7 @@
-#include "input_demo.h"
-#include "entity_demo.h"
-#include "player_demo.h"
+#include "demo/input.h"
+#include "demo/entity.h"
+#include "demo/player.h"
+#include "demo/entity_list.h"
 
 #include <stdio.h>
 
@@ -45,9 +46,9 @@ void root_input_callback(eg_app *app, eg_entity *target)
         if (eg_peek_input(app, SDL_SCANCODE_LSHIFT) ||
             eg_peek_input(app, SDL_SCANCODE_RSHIFT))
         {
-            entity_demo_remove(app, ENTITY_ID_Q);
+            entity_demo_remove(app, ENTITY_TYPE_Q);
         }
-        else if (!entity_demo_add(app, ENTITY_ID_Q))
+        else if (!entity_demo_add(app, ENTITY_TYPE_Q))
         {
             app->done = 1;
             return;
@@ -61,9 +62,9 @@ void root_input_callback(eg_app *app, eg_entity *target)
         if (eg_peek_input(app, SDL_SCANCODE_LSHIFT) ||
             eg_peek_input(app, SDL_SCANCODE_RSHIFT))
         {
-            entity_demo_remove(app, ENTITY_ID_W);
+            entity_demo_remove(app, ENTITY_TYPE_W);
         }
-        else if (!entity_demo_add(app, ENTITY_ID_W))
+        else if (!entity_demo_add(app, ENTITY_TYPE_W))
         {
             app->done = 1;
             return;
@@ -77,9 +78,9 @@ void root_input_callback(eg_app *app, eg_entity *target)
         if (eg_peek_input(app, SDL_SCANCODE_LSHIFT) ||
             eg_peek_input(app, SDL_SCANCODE_RSHIFT))
         {
-            entity_demo_remove(app, ENTITY_ID_E);
+            entity_demo_remove(app, ENTITY_TYPE_E);
         }
-        else if (!entity_demo_add(app, ENTITY_ID_E))
+        else if (!entity_demo_add(app, ENTITY_TYPE_E))
         {
             app->done = 1;
             return;

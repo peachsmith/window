@@ -1,13 +1,7 @@
-#ifndef EG_INPUT_DEMO_H
-#define EG_INPUT_DEMO_H
+#ifndef EG_DEMO_INPUT_H
+#define EG_DEMO_INPUT_H
 
-// This file contains examples of input handler callback functions.
-// Each of these functions print out some message in response to pressing the
-// arrow keys.
-// The root_input_callback function will push a new input handler onto the
-// stack when the N key is pressed. This new handler will use the
-// second_input_callback function. The second_input_callback function will pop
-// itself from the stack when the escape key is pressed.
+// This file contains input handler callback functions.
 
 #include "example.h"
 

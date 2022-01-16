@@ -1,5 +1,8 @@
-#include <stdio.h>
+// This is a demonstrationg of using the Example interface.
+// The prepare function is defined and implemented in 
+
 #include "example.h"
+#include "demo/demo.h"
 
 int main(int argc, char **argv)
 {
@@ -13,6 +16,14 @@ int main(int argc, char **argv)
     eg_app *app = eg_create_app();
     if (app == NULL)
     {
+        eg_terminate();
+        return 1;
+    }
+
+    // Implement application behavior.
+    if (!prepare(app))
+    {
+        eg_destroy_app(app);
         eg_terminate();
         return 1;
     }
