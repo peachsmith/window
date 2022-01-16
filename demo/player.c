@@ -1,6 +1,7 @@
 #include "demo/player.h"
 #include "demo/entity_types.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 static void render_player(eg_app *app, eg_entity *player)
@@ -15,34 +16,81 @@ static void render_player(eg_app *app, eg_entity *player)
     SDL_RenderFillRect(app->renderer, &r);
 }
 
-static void update_player(eg_app *app, eg_entity *player)
+static void update_player(eg_app *app, eg_entity *player, int axis)
 {
-    // Update the player entity's horizontal and vertical position by adding
-    // the velocity.
-    player->x_pos += player->x_vel;
-    player->y_pos += player->y_vel;
-
-    // Implement a primitive form of inertia by increasing or deccreasing the
-    // velocity on each update until the velocity reaches 0.
-
-    if (player->x_vel > 0)
+    if (axis == EG_AXIS_X)
     {
-        player->x_vel--;
+        // Update horizontal position.
+        player->x_pos += player->x_vel;
+
+        // Perform horizontal inertia.
+        if (player->x_vel > 0)
+        {
+            player->x_vel--;
+        }
+
+        if (player->x_vel < 0)
+        {
+            player->x_vel++;
+        }
     }
-
-    if (player->x_vel < 0)
+    else if (axis == EG_AXIS_Y)
     {
-        player->x_vel++;
+        // Update vertical position.
+        player->y_pos += player->y_vel;
+
+        // Perform vertical inertia.
+        if (player->y_vel > 0)
+        {
+            player->y_vel--;
+        }
+
+        if (player->y_vel < 0)
+        {
+            player->y_vel++;
+        }
     }
+}
 
-    if (player->y_vel > 0)
+static void collide_player(
+    eg_app *app,
+    eg_entity *player,
+    eg_entity *other,
+    eg_collision_result *res)
+{
+    printf("the player has collided with %d in the %s direction\n", other->id, (res->direction == EG_AXIS_X ? "x" : "y"));
+
+    if (res->direction == EG_AXIS_X)
     {
-        player->y_vel--;
+        // Set the x velocity to 0.
+        player->x_vel = 0;
+
+        // Determine which was to adjust this entity's position.
+        if (res->dx0 >= res->dx1)
+        {
+            player->x_pos -= res->dx0;
+        }
+
+        if (res->dx0 < res->dx1)
+        {
+            player->x_pos += res->dx1;
+        }
     }
-
-    if (player->y_vel < 0)
+    else if (res->direction == EG_AXIS_Y)
     {
-        player->y_vel++;
+        // Set the x velocity to 0.
+        player->y_vel = 0;
+
+        // Determine which was to adjust this entity's position.
+        if (res->dy0 >= res->dy1)
+        {
+            player->y_pos -= res->dy0;
+        }
+
+        if (res->dy0 < res->dy1)
+        {
+            player->y_pos += res->dy1;
+        }
     }
 }
 
@@ -52,6 +100,7 @@ void player_demo_register(eg_entity_type *t)
     t->height = 20;
     t->render = render_player;
     t->update = update_player;
+    t->collide = collide_player;
 }
 
 eg_entity *player_demo_create()

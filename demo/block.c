@@ -16,8 +16,8 @@ static void render_block(eg_app *app, eg_entity *block)
 void block_demo_register(eg_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK;
-    t->width = 20;
-    t->height = 20;
+    t->width = 50;
+    t->height = 50;
     t->render = render_block;
     // There is currently no update function for the block entity.
 }

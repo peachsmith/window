@@ -9,6 +9,11 @@
 
 #include <SDL2/SDL.h>
 
+#include <stdint.h>
+
+#define EG_AXIS_X 1
+#define EG_AXIS_Y 2
+
 /**
  * This structure wraps the various SDL data types.
  */
@@ -30,6 +35,11 @@ typedef struct eg_entity eg_entity;
 typedef struct eg_entity_type eg_entity_type;
 
 /**
+ * Result of collision detection.
+ */
+typedef struct eg_collision_result eg_collision_result;
+
+/**
  * Draws an entity to the screen.
  * 
  * Params:
@@ -45,15 +55,27 @@ typedef void (*eg_renderer)(eg_app *, eg_entity *);
  *   eg_app* - a pointer to an app struct
  *   eg_entity* - the entity to update
  */
-typedef void (*eg_updater)(eg_app *, eg_entity *);
+typedef void (*eg_updater)(eg_app *, eg_entity *, int);
 
 /**
  * Performs some task.
  * 
  * Params:
  *   eg_app* - a pointer to an app struct
+ *   eg_entity* - an entity that may be affected by the task.
  */
 typedef void (*eg_callback)(eg_app *, eg_entity *);
+
+/**
+ * The behavior of one entity when it collides with another.
+ * 
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_entity* - the entity whose state may be updated
+ *   eg_entity* - the entity that affects the state of the first entity
+ */
+typedef void (*eg_collider)(eg_app *, eg_entity *, eg_entity *,
+                            eg_collision_result *);
 
 // definition of the eg_app struct
 struct eg_app
@@ -146,6 +168,17 @@ struct eg_entity_type
     int height;
     eg_renderer render;
     eg_updater update;
+    eg_collider collide;
+};
+
+struct eg_collision_result
+{
+    int direction;
+    int dx0;
+    int dx1;
+    int dy0;
+    int dy1;
+    int collided;
 };
 
 //----------------------------------------------------------------------------

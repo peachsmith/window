@@ -26,6 +26,21 @@ int prepare(eg_app *app)
     entity_demo_register_e(&reg[ENTITY_TYPE_E]);
     block_demo_register(&reg[ENTITY_TYPE_BLOCK]);
 
+    // TODO: move this after the input handler creation once the collision
+    // detection bugs are fixed.
+    // Create some blocks for demonstrating collision detection.
+    eg_entity *b0 = block_demo_create(100, 75);
+    // eg_entity *b1 = block_demo_create(130, 100);
+    // eg_entity *b2 = block_demo_create(130, 70);
+    if (b0 == NULL) //|| b1 == NULL || b2 == NULL)
+    {
+        return 0;
+    }
+
+    eg_add_entity(app, b0);
+    // eg_add_entity(app, b1);
+    // eg_add_entity(app, b2);
+
     // Create the player entity.
     eg_entity *player = player_demo_create();
     if (player == NULL)
@@ -53,18 +68,18 @@ int prepare(eg_app *app)
     // Add the root input handler to the app.
     eg_push_input_handler(app, root_handler);
 
-    // Create some blocks for demonstrating collision detection.
-    eg_entity *b0 = block_demo_create(100, 100);
-    eg_entity *b1 = block_demo_create(130, 100);
-    eg_entity *b2 = block_demo_create(130, 70);
-    if (b0 == NULL || b1 == NULL || b2 == NULL)
-    {
-        return 0;
-    }
+    // // Create some blocks for demonstrating collision detection.
+    // eg_entity *b0 = block_demo_create(100, 100);
+    // // eg_entity *b1 = block_demo_create(130, 100);
+    // // eg_entity *b2 = block_demo_create(130, 70);
+    // if (b0 == NULL) //|| b1 == NULL || b2 == NULL)
+    // {
+    //     return 0;
+    // }
 
-    eg_add_entity(app, b0);
-    eg_add_entity(app, b1);
-    eg_add_entity(app, b2);
+    // eg_add_entity(app, b0);
+    // // eg_add_entity(app, b1);
+    // // eg_add_entity(app, b2);
 
     return 1;
 }

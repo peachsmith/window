@@ -157,16 +157,163 @@ void eg_handle_input(eg_app *app)
     app->input_handlers->callback(app, app->input_handlers->target);
 }
 
+/**
+ * Bounding box collision detection.
+ * 
+ * @return int 
+ */
+// static void has_collided(int ax, int ay, int aw, int ah,
+//                          int bx, int by, int bw, int bh,
+//                          eg_collision_result *res)
+static void has_collided(
+    eg_app *app,
+    eg_entity *a,
+    eg_entity *b,
+    eg_collision_result *res)
+{
+    // Get the width and height of both entities.
+    int aw = app->registry[a->id].width;
+    int ah = app->registry[a->id].height;
+    int bw = app->registry[b->id].width;
+    int bh = app->registry[b->id].height;
+
+    // Get the x and y position of both entities.
+    // These will be the position of the left and right edges.
+    int a_left = a->x_pos;
+    int a_top = a->y_pos;
+    int b_left = b->x_pos;
+    int b_top = b->y_pos;
+
+    // Get the positions of the right and bottom edges.
+    int a_right = a_left + aw;
+    int a_bottom = a_top + ah;
+    int b_right = b_left + bw;
+    int b_bottom = b_top + bh;
+
+    // Clear the result data.
+    res->collided = 0;
+    res->dx0 = 0;
+    res->dx1 = 0;
+    res->dy0 = 0;
+    res->dy1 = 0;
+
+    // Check if the left edge of b is in between the left and right edges
+    // of a.
+    if (a_left < b_left && a_right > b_left)
+    {
+        res->dx0 = a_right - b_left;
+    }
+
+    // Check if the right edge of b is in between the left and right edges
+    // of a.
+    if (a_left < b_right && a_right > b_right)
+    {
+        res->dx1 = b_right - a_left;
+    }
+
+    // Check if the top edge of b is in between the top and bottom edges
+    // of a.
+    if (a_top < b_top && a_bottom > b_top)
+    {
+        res->dy0 = a_bottom - b_top;
+    }
+
+    // Check if the bottom edge of b is in between the top and bottom
+    // edges of a.
+    if (a_top < b_bottom && a_bottom > b_bottom)
+    {
+        res->dy1 = b_bottom - a_top;
+    }
+
+    // If the boundaries of the two entities overlap in both directions, then
+    // a there is a collision.
+    if ((res->dx0 > 0 || res->dx1 > 0) && (res->dy0 > 0 || res->dy1 > 0))
+    {
+        res->collided = 1;
+    }
+}
+
 void eg_update(eg_app *app)
 {
     eg_entity *ent = app->entities;
+    eg_entity *a = app->entities;
+
+    // Update state.
     while (ent != NULL)
     {
         if (app->registry[ent->id].update != NULL)
         {
-            app->registry[ent->id].update(app, ent);
+            app->registry[ent->id].update(app, ent, EG_AXIS_X);
         }
         ent = ent->next;
+    }
+
+    // horizontal collision detection
+    while (a != NULL)
+    {
+        eg_entity *b = a->next;
+        while (b != NULL)
+        {
+            eg_collision_result res;
+            res.direction = EG_AXIS_X;
+            has_collided(app, a, b, &res);
+            if (res.collided)
+            {
+                eg_collider cola = app->registry[a->id].collide;
+                eg_collider colb = app->registry[b->id].collide;
+                if (cola != NULL)
+                {
+                    cola(app, a, b, &res);
+                }
+                if (colb != NULL)
+                {
+                    colb(app, b, a, &res);
+                }
+            }
+            b = b->next;
+        }
+        a = a->next;
+    }
+
+    // Reset the entity list and collision pointers.
+    ent = app->entities;
+    a = app->entities;
+
+    // Update state.
+    while (ent != NULL)
+    {
+        if (app->registry[ent->id].update != NULL)
+        {
+            app->registry[ent->id].update(app, ent, EG_AXIS_Y);
+        }
+        ent = ent->next;
+    }
+
+    // horizontal collision detection
+    while (a != NULL)
+    {
+        eg_entity *b = a->next;
+        while (b != NULL)
+        {
+            eg_collision_result res;
+            res.direction = EG_AXIS_Y;
+            has_collided(app, a, b, &res);
+            if (res.collided)
+            {
+                eg_collider cola = app->registry[a->id].collide;
+                eg_collider colb = app->registry[b->id].collide;
+                if (cola != NULL)
+                {
+                    cola(app, a, b, &res);
+                }
+                if (colb != NULL)
+                {
+                    colb(app, b, a, &res);
+                }
+            }
+            b = b->next;
+        }
+        a = a->next;
     }
 }
 
@@ -324,6 +471,7 @@ eg_entity_type *eg_create_registry(int n)
         reg[i].height = 0;
         reg[i].render = NULL;
         reg[i].update = NULL;
+        reg[i].collide = NULL;
     }
 
     return reg;
