@@ -317,6 +317,15 @@ eg_entity_type *eg_create_registry(int n)
         return NULL;
     }
 
+    for (int i = 0; i < n; i++)
+    {
+        reg[i].id = 0;
+        reg[i].width = 0;
+        reg[i].height = 0;
+        reg[i].render = NULL;
+        reg[i].update = NULL;
+    }
+
     return reg;
 }
 

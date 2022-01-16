@@ -7,8 +7,9 @@
 #define ENTITY_TYPE_Q 1
 #define ENTITY_TYPE_W 2
 #define ENTITY_TYPE_E 3
+#define ENTITY_TYPE_BLOCK 4
 
 // This is the total number of entity types.
-#define ENTITY_TYPE_MAX 4
+#define ENTITY_TYPE_MAX 5
 
 #endif

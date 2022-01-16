@@ -1,17 +1,15 @@
 #include "demo/player.h"
+#include "demo/entity_types.h"
 
 #include <stdlib.h>
 
 static void render_player(eg_app *app, eg_entity *player)
 {
-    // Get the entity type from the registry.
-    
-
     SDL_Rect r;
     r.x = player->x_pos;
     r.y = player->y_pos;
-    r.w = app->registry[0].width;
-    r.h = app->registry[0].height;
+    r.w = app->registry[player->id].width;
+    r.h = app->registry[player->id].height;
 
     SDL_SetRenderDrawColor(app->renderer, 0xF0, 0xAD, 0x4E, 0xFF);
     SDL_RenderFillRect(app->renderer, &r);
@@ -48,7 +46,7 @@ static void update_player(eg_app *app, eg_entity *player)
     }
 }
 
-void player_demo_register(eg_entity_type* t)
+void player_demo_register(eg_entity_type *t)
 {
     t->width = 20;
     t->height = 20;
@@ -66,6 +64,7 @@ eg_entity *player_demo_create()
         return NULL;
     }
 
+    player->id = ENTITY_TYPE_PLAYER;
     player->x_pos = 50;
     player->y_pos = 50;
 

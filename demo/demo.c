@@ -2,6 +2,7 @@
 #include "demo/input.h"
 #include "demo/player.h"
 #include "demo/entity.h"
+#include "demo/block.h"
 #include "demo/entity_types.h"
 
 #include <stdio.h>
@@ -9,7 +10,7 @@
 int prepare(eg_app *app)
 {
     // Create the entity registry.
-    eg_entity_type* reg = eg_create_registry(ENTITY_TYPE_MAX);
+    eg_entity_type *reg = eg_create_registry(ENTITY_TYPE_MAX);
     if (reg == NULL)
     {
         fprintf(stderr, "failed to create entity registry\n");
@@ -23,6 +24,7 @@ int prepare(eg_app *app)
     entity_demo_register_q(&reg[ENTITY_TYPE_Q]);
     entity_demo_register_w(&reg[ENTITY_TYPE_W]);
     entity_demo_register_e(&reg[ENTITY_TYPE_E]);
+    block_demo_register(&reg[ENTITY_TYPE_BLOCK]);
 
     // Create the player entity.
     eg_entity *player = player_demo_create();
@@ -50,6 +52,19 @@ int prepare(eg_app *app)
 
     // Add the root input handler to the app.
     eg_push_input_handler(app, root_handler);
+
+    // Create some blocks for demonstrating collision detection.
+    eg_entity *b0 = block_demo_create(100, 100);
+    eg_entity *b1 = block_demo_create(130, 100);
+    eg_entity *b2 = block_demo_create(130, 70);
+    if (b0 == NULL || b1 == NULL || b2 == NULL)
+    {
+        return 0;
+    }
+
+    eg_add_entity(app, b0);
+    eg_add_entity(app, b1);
+    eg_add_entity(app, b2);
 
     return 1;
 }
