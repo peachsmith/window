@@ -75,7 +75,7 @@ typedef void (*eg_callback)(eg_app *, eg_entity *);
  *   eg_entity* - the entity that affects the state of the first entity
  */
 typedef void (*eg_collider)(eg_app *, eg_entity *, eg_entity *,
-                            eg_collision_result *);
+                            eg_collision_result *, int);
 
 // definition of the eg_app struct
 struct eg_app

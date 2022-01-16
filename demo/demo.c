@@ -25,21 +25,22 @@ int prepare(eg_app *app)
     entity_demo_register_w(&reg[ENTITY_TYPE_W]);
     entity_demo_register_e(&reg[ENTITY_TYPE_E]);
     block_demo_register(&reg[ENTITY_TYPE_BLOCK]);
+    block_demo_register_big(&reg[ENTITY_TYPE_BIG_BLOCK]);
 
-    // TODO: move this after the input handler creation once the collision
-    // detection bugs are fixed.
-    // Create some blocks for demonstrating collision detection.
-    eg_entity *b0 = block_demo_create(100, 75);
-    // eg_entity *b1 = block_demo_create(130, 100);
-    // eg_entity *b2 = block_demo_create(130, 70);
-    if (b0 == NULL) //|| b1 == NULL || b2 == NULL)
-    {
-        return 0;
-    }
+    // // TODO: move this after the input handler creation once the collision
+    // // detection bugs are fixed.
+    // // Create some blocks for demonstrating collision detection.
+    // eg_entity *b0 = block_demo_create(50, 75);
+    // eg_entity *b1 = block_demo_create_big(100, 75);
+    // // eg_entity *b1 = block_demo_create(130, 100);
+    // if (b0 == NULL || b1 == NULL)
+    // {
+    //     return 0;
+    // }
 
-    eg_add_entity(app, b0);
+    // eg_add_entity(app, b0);
     // eg_add_entity(app, b1);
-    // eg_add_entity(app, b2);
+    // // eg_add_entity(app, b2);
 
     // Create the player entity.
     eg_entity *player = player_demo_create();
@@ -48,6 +49,14 @@ int prepare(eg_app *app)
         fprintf(stderr, "failed to create player\n");
         return 0;
     }
+
+    // Add a small block.
+    eg_entity *b0 = block_demo_create(50, 75);
+    if (b0 == NULL)
+    {
+        return 0;
+    }
+    eg_add_entity(app, b0);
 
     // Add the player entity to the app.
     eg_add_entity(app, player);
@@ -68,18 +77,13 @@ int prepare(eg_app *app)
     // Add the root input handler to the app.
     eg_push_input_handler(app, root_handler);
 
-    // // Create some blocks for demonstrating collision detection.
-    // eg_entity *b0 = block_demo_create(100, 100);
-    // // eg_entity *b1 = block_demo_create(130, 100);
-    // // eg_entity *b2 = block_demo_create(130, 70);
-    // if (b0 == NULL) //|| b1 == NULL || b2 == NULL)
-    // {
-    //     return 0;
-    // }
-
-    // eg_add_entity(app, b0);
-    // // eg_add_entity(app, b1);
-    // // eg_add_entity(app, b2);
+    // Add a large block.
+    eg_entity *b1 = block_demo_create_big(100, 75);
+    if (b1 == NULL)
+    {
+        return 0;
+    }
+    eg_add_entity(app, b1);
 
     return 1;
 }

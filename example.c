@@ -162,9 +162,6 @@ void eg_handle_input(eg_app *app)
  * 
  * @return int 
  */
-// static void has_collided(int ax, int ay, int aw, int ah,
-//                          int bx, int by, int bw, int bh,
-//                          eg_collision_result *res)
 static void has_collided(
     eg_app *app,
     eg_entity *a,
@@ -256,14 +253,6 @@ static void has_collided(
     {
         res->collided = 1;
     }
-
-    // printf("collision result: a: %d, b: %d, dx0: %d dx1: %d, dy0: %d, dy1: %d\n",
-    //        a->id,
-    //        b->id,
-    //        res->dx0,
-    //        res->dx1,
-    //        res->dy0,
-    //        res->dy1);
 }
 
 void eg_update(eg_app *app)
@@ -296,11 +285,11 @@ void eg_update(eg_app *app)
                 eg_collider colb = app->registry[b->id].collide;
                 if (cola != NULL)
                 {
-                    cola(app, a, b, &res);
+                    cola(app, a, b, &res, 0);
                 }
                 if (colb != NULL)
                 {
-                    colb(app, b, a, &res);
+                    colb(app, b, a, &res, 1);
                 }
             }
             b = b->next;
@@ -337,11 +326,11 @@ void eg_update(eg_app *app)
                 eg_collider colb = app->registry[b->id].collide;
                 if (cola != NULL)
                 {
-                    cola(app, a, b, &res);
+                    cola(app, a, b, &res, 0);
                 }
                 if (colb != NULL)
                 {
-                    colb(app, b, a, &res);
+                    colb(app, b, a, &res, 1);
                 }
             }
             b = b->next;
