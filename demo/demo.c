@@ -2,7 +2,7 @@
 #include "demo/input.h"
 #include "demo/player.h"
 #include "demo/entity.h"
-#include "demo/entity_list.h"
+#include "demo/entity_types.h"
 
 #include <stdio.h>
 
@@ -15,7 +15,7 @@ int prepare(eg_app *app)
         fprintf(stderr, "failed to create entity registry\n");
         return 0;
     }
-    
+
     app->registry = reg;
 
     // Register the entity types.

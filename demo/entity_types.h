@@ -1,5 +1,5 @@
-#ifndef EG_DEMO_ENTITY_LIST_H
-#define EG_DEMO_ENTITY_LIST_H
+#ifndef EG_DEMO_ENTITY_TYPES_H
+#define EG_DEMO_ENTITY_TYPES_H
 
 // A lits of all entity types in the application
 

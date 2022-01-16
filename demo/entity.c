@@ -1,5 +1,5 @@
 #include "demo/entity.h"
-#include "demo/entity_list.h"
+#include "demo/entity_types.h"
 
 #include <stdio.h>
 
