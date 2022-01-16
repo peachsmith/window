@@ -58,7 +58,13 @@ static void collide_player(
     eg_entity *other,
     eg_collision_result *res)
 {
-    printf("the player has collided with %d in the %s direction\n", other->id, (res->direction == EG_AXIS_X ? "x" : "y"));
+    // printf("the player has collided with %d in the %s direction. dx0: %d dx1: %d, dy0: %d, dy1: %d\n",
+    //        other->id,
+    //        (res->direction == EG_AXIS_X ? "x" : "y"),
+    //        res->dx0,
+    //        res->dx1,
+    //        res->dy0,
+    //        res->dy1);
 
     if (res->direction == EG_AXIS_X)
     {
@@ -66,12 +72,11 @@ static void collide_player(
         player->x_vel = 0;
 
         // Determine which was to adjust this entity's position.
-        if (res->dx0 >= res->dx1)
+        if (res->dx0 <= res->dx1)
         {
             player->x_pos -= res->dx0;
         }
-
-        if (res->dx0 < res->dx1)
+        else
         {
             player->x_pos += res->dx1;
         }
@@ -82,12 +87,11 @@ static void collide_player(
         player->y_vel = 0;
 
         // Determine which was to adjust this entity's position.
-        if (res->dy0 >= res->dy1)
+        if (res->dy0 <= res->dy1)
         {
             player->y_pos -= res->dy0;
         }
-
-        if (res->dy0 < res->dy1)
+        else
         {
             player->y_pos += res->dy1;
         }

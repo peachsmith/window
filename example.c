@@ -197,40 +197,73 @@ static void has_collided(
     res->dy0 = 0;
     res->dy1 = 0;
 
-    // Check if the left edge of b is in between the left and right edges
-    // of a.
-    if (a_left < b_left && a_right > b_left)
+    int overlap_x = 0;
+    int overlap_y = 0;
+
+    // Check if the left edge of A is in between the left and right edges
+    // of b.
+    if (a_left > b_left && a_left < b_right)
     {
         res->dx0 = a_right - b_left;
-    }
-
-    // Check if the right edge of b is in between the left and right edges
-    // of a.
-    if (a_left < b_right && a_right > b_right)
-    {
         res->dx1 = b_right - a_left;
+        overlap_x = 1;
     }
 
-    // Check if the top edge of b is in between the top and bottom edges
-    // of a.
-    if (a_top < b_top && a_bottom > b_top)
+    // Check if the right edge of a is in between the left and right edges
+    // of B.
+    if (a_right > b_left && a_right < b_right)
+    {
+        res->dx0 = a_right - b_left;
+        res->dx1 = b_right - a_left;
+        overlap_x = 1;
+    }
+
+    // Check if B is inside of A.
+    if (b_left >= a_left && b_left <= a_right &&
+        b_right >= a_left && b_right <= a_right)
+    {
+        overlap_x = 1;
+    }
+
+    // Check if the top edge of A is in between the top and bottom edges
+    // of B.
+    if (a_top > b_top && a_top < b_bottom)
     {
         res->dy0 = a_bottom - b_top;
+        res->dy1 = b_bottom - a_top;
+        overlap_y = 1;
     }
 
-    // Check if the bottom edge of b is in between the top and bottom
-    // edges of a.
-    if (a_top < b_bottom && a_bottom > b_bottom)
+    // Check if the bottom edge of A is in between the top and bottom
+    // edges of B.
+    if (a_bottom > b_top && a_bottom < b_bottom)
     {
+        res->dy0 = a_bottom - b_top;
         res->dy1 = b_bottom - a_top;
+        overlap_y = 1;
+    }
+
+    // Check if B is inside of A.
+    if (b_top >= a_top && b_top <= a_bottom &&
+        b_bottom >= a_top && b_bottom <= a_bottom)
+    {
+        overlap_y = 1;
     }
 
     // If the boundaries of the two entities overlap in both directions, then
     // a there is a collision.
-    if ((res->dx0 > 0 || res->dx1 > 0) && (res->dy0 > 0 || res->dy1 > 0))
+    if (overlap_x && overlap_y)
     {
         res->collided = 1;
     }
+
+    // printf("collision result: a: %d, b: %d, dx0: %d dx1: %d, dy0: %d, dy1: %d\n",
+    //        a->id,
+    //        b->id,
+    //        res->dx0,
+    //        res->dx1,
+    //        res->dy0,
+    //        res->dy1);
 }
 
 void eg_update(eg_app *app)
