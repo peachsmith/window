@@ -4,12 +4,13 @@
 # executable in order for it to run.
 
 # The include and lib directories must exist in the SDL2_HOME directory.
-INCLUDE_DIR=/I$(SDL2_HOME)\include
+INCLUDE_DIR=/I$(SDL2_HOME)\include /I..
 LINK_DIR=/LIBPATH:"$(SDL2_HOME)\lib"
 
 CC=cl
 CFLAGS=/W3 /WX
-SRC=..\main.c ..\example.c ..\input_demo.c ..\entity_demo.c ..\player_demo.c
+# ..\main.c ..\example.c ..\input_demo.c ..\entity_demo.c ..\player_demo.c
+SRC= ..\*.c ..\demo*.c
 LIBS="SDL2.lib" "SDL2main.lib" "kernel32.lib" "user32.lib" "shell32.lib"
 
 all:
