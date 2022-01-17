@@ -121,6 +121,9 @@ void eg_destroy_app(eg_app *app)
         app->input_handlers = previous;
     }
 
+    // Destroy the entity registry.
+    eg_destroy_registry(app->registry);
+
     // Destroy the renderer, the window, then the wrapper structure.
     SDL_DestroyRenderer(app->renderer);
     SDL_DestroyWindow(app->window);
@@ -499,6 +502,16 @@ eg_entity_type *eg_create_registry(int n)
     return reg;
 }
 
+void eg_destroy_registry(eg_entity_type *reg)
+{
+    if (reg == NULL)
+    {
+        return;
+    }
+
+    free(reg);
+}
+
 eg_entity *eg_create_entity()
 {
     eg_entity *entity = NULL;
@@ -522,6 +535,11 @@ eg_entity *eg_create_entity()
 
 void eg_destroy_entity(eg_entity *entity)
 {
+    if (entity == NULL)
+    {
+        return;
+    }
+
     free(entity);
 }
 
