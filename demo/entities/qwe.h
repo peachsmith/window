@@ -13,7 +13,7 @@
  * Params:
  *   eg_entity_type* - the player's entity type definition
  */
-void entity_demo_register_q(eg_entity_type*);
+void entity_demo_register_q(eg_entity_type *);
 
 /**
  * Populates the entity type structs with information about the W entity.
@@ -21,7 +21,7 @@ void entity_demo_register_q(eg_entity_type*);
  * Params:
  *   eg_entity_type* - the player's entity type definition
  */
-void entity_demo_register_w(eg_entity_type*);
+void entity_demo_register_w(eg_entity_type *);
 
 /**
  * Populates the entity type structs with information about the E entity.
@@ -29,7 +29,7 @@ void entity_demo_register_w(eg_entity_type*);
  * Params:
  *   eg_entity_type* - the player's entity type definition
  */
-void entity_demo_register_e(eg_entity_type*);
+void entity_demo_register_e(eg_entity_type *);
 
 /**
  * Adds a demo entity to the entity list.

@@ -1,5 +1,5 @@
-#include "demo/block.h"
-#include "demo/entity_types.h"
+#include "demo/entities/block.h"
+#include "demo/entities/entity_types.h"
 
 static void render_block(eg_app *app, eg_entity *block)
 {
@@ -51,10 +51,10 @@ static void collide_block(
         {
             other->x_pos -= dx1;
         }
-        
+
         return;
     }
-    
+
     if (res->direction == EG_AXIS_Y)
     {
         // Set the x velocity to 0.

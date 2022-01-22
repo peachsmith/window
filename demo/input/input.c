@@ -1,7 +1,7 @@
-#include "demo/input.h"
-#include "demo/entity.h"
-#include "demo/player.h"
-#include "demo/entity_types.h"
+#include "demo/input/input.h"
+#include "demo/entities/qwe.h"
+#include "demo/entities/player.h"
+#include "demo/entities/entity_types.h"
 
 #include <stdio.h>
 

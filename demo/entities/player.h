@@ -13,7 +13,7 @@
  * Params:
  *   eg_entity_type* - the player's entity type definition
  */
-void player_demo_register(eg_entity_type*);
+void player_demo_register(eg_entity_type *);
 
 /**
  * Creates a player entity.
@@ -21,6 +21,6 @@ void player_demo_register(eg_entity_type*);
  * Returns:
  *   eg_entity* - a pointer to the new player entity.
  */
-eg_entity* player_demo_create();
+eg_entity *player_demo_create();
 
 #endif

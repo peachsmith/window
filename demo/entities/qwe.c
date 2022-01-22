@@ -1,5 +1,5 @@
-#include "demo/entity.h"
-#include "demo/entity_types.h"
+#include "demo/entities/qwe.h"
+#include "demo/entities/entity_types.h"
 
 #include <stdio.h>
 

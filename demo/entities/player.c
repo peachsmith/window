@@ -1,5 +1,5 @@
-#include "demo/player.h"
-#include "demo/entity_types.h"
+#include "demo/entities/player.h"
+#include "demo/entities/entity_types.h"
 
 #include <stdio.h>
 #include <stdlib.h>
