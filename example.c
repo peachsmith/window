@@ -162,8 +162,8 @@ void eg_handle_input(eg_app *app)
 
 /**
  * Bounding box collision detection.
- * 
- * @return int 
+ *
+ * @return int
  */
 static void has_collided(
     eg_app *app,
@@ -444,6 +444,11 @@ void eg_destroy_input_handler(eg_input_handler *handler)
 
 void eg_push_input_handler(eg_app *app, eg_input_handler *handler)
 {
+    if (handler == NULL)
+    {
+        return;
+    }
+
     // If the stack is empty, then the handler becomes the top of the stack.
     if (app->input_handlers == NULL)
     {
@@ -545,6 +550,11 @@ void eg_destroy_entity(eg_entity *entity)
 
 void eg_add_entity(eg_app *app, eg_entity *entity)
 {
+    if (app == NULL || entity == NULL)
+    {
+        return;
+    }
+
     // If the entity list is empty, then simply point it to the newly added
     // entity.
     if (app->entities == NULL)

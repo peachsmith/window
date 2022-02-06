@@ -10,7 +10,8 @@ static void render_block(eg_app *app, eg_entity *block)
     r.h = app->registry[block->id].height;
 
     SDL_SetRenderDrawColor(app->renderer, 0x02, 0x75, 0xD8, 0xFF);
-    SDL_RenderFillRect(app->renderer, &r);
+    // SDL_RenderFillRect(app->renderer, &r);
+    SDL_RenderDrawRect(app->renderer, &r);
 }
 
 static void collide_block(

@@ -13,7 +13,8 @@ static void render_player(eg_app *app, eg_entity *player)
     r.h = app->registry[player->id].height;
 
     SDL_SetRenderDrawColor(app->renderer, 0xF0, 0xAD, 0x4E, 0xFF);
-    SDL_RenderFillRect(app->renderer, &r);
+    // SDL_RenderFillRect(app->renderer, &r);
+    SDL_RenderDrawRect(app->renderer, &r);
 }
 
 static void update_player(eg_app *app, eg_entity *player, int axis)
