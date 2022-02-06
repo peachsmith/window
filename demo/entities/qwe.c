@@ -78,19 +78,19 @@ static void render_e(eg_app *app, eg_entity *ent)
 // entity update functions
 
 // updates the state of the Q entity
-static void update_q(eg_app *app, eg_entity *ent, int axis)
+static void update_q(eg_app *app, eg_entity *ent)
 {
     // printf("this is the update q function\n");
 }
 
 // updates the state of the W entity
-static void update_w(eg_app *app, eg_entity *ent, int axis)
+static void update_w(eg_app *app, eg_entity *ent)
 {
     // printf("this is the update w function\n");
 }
 
 // updates the state of the E entity
-static void update_e(eg_app *app, eg_entity *ent, int axis)
+static void update_e(eg_app *app, eg_entity *ent)
 {
     // printf("this is the update e function\n");
 }

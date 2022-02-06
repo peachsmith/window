@@ -1,5 +1,5 @@
 // This is a demonstrationg of using the Example interface.
-// The prepare function is defined and implemented in 
+// The prepare function is defined and implemented in
 
 #include "example.h"
 #include "demo/demo.h"

@@ -7,8 +7,8 @@
 static void render_player(eg_app *app, eg_entity *player)
 {
     SDL_Rect r;
-    r.x = player->x_pos;
-    r.y = player->y_pos;
+    r.x = player->x_pos - 10;
+    r.y = player->y_pos - 10;
     r.w = app->registry[player->id].width;
     r.h = app->registry[player->id].height;
 
@@ -17,39 +17,34 @@ static void render_player(eg_app *app, eg_entity *player)
     SDL_RenderDrawRect(app->renderer, &r);
 }
 
-static void update_player(eg_app *app, eg_entity *player, int axis)
+static void update_player(eg_app *app, eg_entity *player)
 {
-    if (axis == EG_AXIS_X)
+    // Update horizontal position.
+    player->x_pos += player->x_vel;
+
+    // Perform horizontal inertia.
+    if (player->x_vel > 0)
     {
-        // Update horizontal position.
-        player->x_pos += player->x_vel;
-
-        // Perform horizontal inertia.
-        if (player->x_vel > 0)
-        {
-            player->x_vel--;
-        }
-
-        if (player->x_vel < 0)
-        {
-            player->x_vel++;
-        }
+        player->x_vel--;
     }
-    else if (axis == EG_AXIS_Y)
+
+    if (player->x_vel < 0)
     {
-        // Update vertical position.
-        player->y_pos += player->y_vel;
+        player->x_vel++;
+    }
 
-        // Perform vertical inertia.
-        if (player->y_vel > 0)
-        {
-            player->y_vel--;
-        }
+    // Update vertical position.
+    player->y_pos += player->y_vel;
 
-        if (player->y_vel < 0)
-        {
-            player->y_vel++;
-        }
+    // Perform vertical inertia.
+    if (player->y_vel > 0)
+    {
+        player->y_vel--;
+    }
+
+    if (player->y_vel < 0)
+    {
+        player->y_vel++;
     }
 }
 

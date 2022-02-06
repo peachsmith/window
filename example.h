@@ -11,9 +11,6 @@
 
 #include <stdint.h>
 
-#define EG_AXIS_X 1
-#define EG_AXIS_Y 2
-
 /**
  * This structure wraps the various SDL data types.
  */
@@ -55,7 +52,7 @@ typedef void (*eg_renderer)(eg_app *, eg_entity *);
  *   eg_app* - a pointer to an app struct
  *   eg_entity* - the entity to update
  */
-typedef void (*eg_updater)(eg_app *, eg_entity *, int);
+typedef void (*eg_updater)(eg_app *, eg_entity *);
 
 /**
  * Performs some task.
