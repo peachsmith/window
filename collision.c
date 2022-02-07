@@ -237,6 +237,7 @@ int eg_ray_v_rect(
     float dy = (float)d->y;
 
     // Detect division by zero.
+    // TODO: handle this properly.
     if (dx == 0)
     {
         dx = FLT_MAX;
