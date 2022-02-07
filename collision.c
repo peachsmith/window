@@ -1,4 +1,5 @@
 #include "collision.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <float.h>
 
@@ -201,7 +202,7 @@ must be sorted, such that near < far.
  *   eg_point* - the origin point of the ray
  *   eg_point* - the direction vector of the ray
  *   eg_rect* - the rectangle
- *   eg_quot* - distance to intersection
+ *   float* - distance to intersection
  *   eg_point* - contact point
  *   eg_point* - contact normal
  */
@@ -218,11 +219,6 @@ int eg_ray_v_rect(
         return 0;
     }
 
-    // eg_quot near_x;
-    // eg_quot near_y;
-    // eg_quot far_x;
-    // eg_quot far_y;
-
     float near_x;
     float near_y;
     float far_x;
@@ -236,15 +232,55 @@ int eg_ray_v_rect(
     float dx = (float)d->x;
     float dy = (float)d->y;
 
+    // Flags to detect division by 0.
+    // When we encounter a division by 0, we assume the result is a value of
+    // negative or positive infinity based on the sign of the dividend.
+    int near_x_inf = 0;
+    int near_y_inf = 0;
+    int far_x_inf = 0;
+    int far_y_inf = 0;
+
     // Detect division by zero.
     // TODO: handle this properly.
     if (dx == 0)
     {
+        near_x_inf = 1;
+        far_x_inf = 1;
+
+        if ((r->p.x - p->x) < 0)
+        {
+            near_x_inf = -1;
+        }
+
+        if ((r->p.x + r->w - p->x) < 0)
+        {
+            far_x_inf = -1;
+        }
+
+        printf("divide by 0 (x axis) near_x: %d*infinity, far_x: %d*infinity\n",
+               near_x_inf,
+               far_x_inf);
         dx = FLT_MAX;
     }
 
-    if (d->y == 0)
+    if (dy == 0)
     {
+        near_y_inf = 1;
+        far_y_inf = 1;
+
+        if ((r->p.y - p->y) < 0)
+        {
+            near_y_inf = -1;
+        }
+
+        if ((r->p.y + r->h - p->y) < 0)
+        {
+            far_y_inf = -1;
+        }
+
+        printf("divide by 0 (y axis) near_y: %d*infinity, far_y: %d*infinity\n",
+               near_y_inf,
+               far_y_inf);
         dy = FLT_MAX;
     }
 
