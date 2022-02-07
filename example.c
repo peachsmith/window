@@ -314,9 +314,9 @@ void eg_update(eg_app *app)
             .h = app->registry[block->id].height};
         eg_point p = {.x = player->x_pos, .y = player->y_pos};
         eg_point d = {.x = mouse_x - p.x, .y = mouse_y - p.y};
-        eg_point cp; // contact point
-        eg_point cn; // contact normal
-        float t;
+        eg_point cp;                                      // contact point
+        eg_point cn = {.x = 0xDEADBEEF, .y = 0xDEADBEEF}; // contact normal
+        float t; // shortest time to collision (not real time)
 
         if (eg_ray_v_rect(&p, &d, &target, &t, &cp, &cn))
         {
@@ -337,6 +337,27 @@ void eg_update(eg_app *app)
                 cp.y,
                 cp.x + cn.x * 20,
                 cp.y + cn.y * 20);
+
+            if (cn.x > 1 || cn.x < -1 || cn.y > 1 || cn.y < -1)
+            {
+                fprintf(stderr, "[ERROR] invalid contact normal: (%X, %X), "
+                                "contact point: (%d, %d), "
+                                "t: %.2f, "
+                                "P: (%d, %d), "
+                                "D: (%d, %d)\n",
+                        cn.x,
+                        cn.y,
+                        cp.x,
+                        cp.y,
+                        t,
+                        p.x,
+                        p.y,
+                        d.x,
+                        d.y);
+
+                SDL_Delay(2000);
+                app->done = 1;
+            }
 
             // Set the draw color to yellow for drawing the ray.
             SDL_SetRenderDrawColor(app->renderer, 255, 255, 0, 255);
