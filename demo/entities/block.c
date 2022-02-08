@@ -18,7 +18,8 @@ static void collide_block(
     eg_app *app,
     eg_entity *block,
     eg_entity *other,
-    eg_collision_result *res,
+    eg_overlap *res,
+    eg_t_res *t_res,
     int is_b)
 {
     // Get the distance between the edges of this entity and the other entity.
@@ -38,31 +39,66 @@ static void collide_block(
         dy1 = -dy1;
     }
 
-    // Set the x velocity to 0.
-    other->x_vel = 0;
-
-    // Determine which way to adjust this entity's position.
-    if (res->dx0 <= res->dx1)
+    // Determine which direction to resolve the collision.
+    if (t_res->cn.x == -1)
     {
+        // left
+        other->x_vel = 0;
+        // other->x_pos -= dx1;
         other->x_pos += dx0;
     }
-    else
+
+    if (t_res->cn.x == 1)
     {
+        // right
+        other->x_vel = 0;
+        // other->x_pos += dx0;
         other->x_pos -= dx1;
     }
 
-    // Set the x velocity to 0.
-    other->y_vel = 0;
-
-    // Determine which was to adjust this entity's position.
-    if (res->dy0 <= res->dy1)
+    if (t_res->cn.y == -1)
     {
+        // up
+        other->y_vel = 0;
+        // other->y_pos -= dy1;
         other->y_pos += dy0;
     }
-    else
+
+    if (t_res->cn.y == 1)
     {
+        // down
+        other->y_vel = 0;
+        // other->y_pos += dy0;
         other->y_pos -= dy1;
     }
+
+    // Set the x velocity to 0.
+    // Relocated within contact normal logic.
+    // other->x_vel = 0;
+
+    // Determine which way to adjust this entity's position.
+    // if (res->dx0 <= res->dx1)
+    // {
+    //     other->x_pos += dx0;
+    // }
+    // else
+    // {
+    //     other->x_pos -= dx1;
+    // }
+
+    // Set the x velocity to 0.
+    // Relocated within contact normal logic.
+    // other->y_vel = 0;
+
+    // Determine which was to adjust this entity's position.
+    // if (res->dy0 <= res->dy1)
+    // {
+    //     other->y_pos += dy0;
+    // }
+    // else
+    // {
+    //     other->y_pos -= dy1;
+    // }
 }
 
 void block_demo_register(eg_entity_type *t)

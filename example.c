@@ -164,13 +164,14 @@ void eg_handle_input(eg_app *app)
 /**
  * Bounding box collision detection.
  *
- * @return int
+ * Returns:
+ *   int - 1 if the two rectangles overlap, otherwise 0
  */
-static void has_collided(
+static int is_overlapped(
     eg_app *app,
     eg_entity *a,
     eg_entity *b,
-    eg_collision_result *res)
+    eg_overlap *res)
 {
     // Get the width and height of both entities.
     int aw = app->registry[a->id].width;
@@ -256,7 +257,10 @@ static void has_collided(
     if (overlap_x && overlap_y)
     {
         res->collided = 1;
+        return 1;
     }
+
+    return 0;
 }
 
 void eg_update(eg_app *app)
@@ -265,162 +269,13 @@ void eg_update(eg_app *app)
     // TODO: remove this once collision detection is done.
     SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 255);
     SDL_RenderClear(app->renderer);
-    // int mouse_x, mouse_y;
-    // Uint32 mouse_buttons;
-    // mouse_buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
-
-    // SDL_Rect mouse_rect = {
-    //     .x = mouse_x - 10,
-    //     .y = mouse_y - 10,
-    //     .w = 20,
-    //     .h = 20};
-
-    // SDL_SetRenderDrawColor(app->renderer, 0, 255, 0, 255);
-    // SDL_RenderDrawRect(app->renderer, &mouse_rect);
-    // eg_entity *player = NULL;
-    // eg_entity *block = NULL;
-    //--------------------------------------------------------
 
     eg_entity *ent = app->entities;
     eg_entity *a = app->entities;
 
-    // // Update state.
-    // while (ent != NULL)
-    // {
-    //     //---------------------------------------------
-    //     // Get the references to the player and the block.
-    //     // if (ent->id == 0)
-    //     // {
-    //     //     player = ent;
-    //     // }
-    //     // else if (ent->id == 5)
-    //     // {
-    //     //     block = ent;
-    //     // }
-    //     //---------------------------------------------
-
-    //     if (app->registry[ent->id].update != NULL)
-    //     {
-    //         app->registry[ent->id].update(app, ent);
-    //     }
-    //     ent = ent->next;
-    // }
-
-    // if (player != NULL && block != NULL)
-    // {
-    //     // In this example, the origin point P will be the player's position.
-    //     // The destination point Q will be the mouse cursor's position.
-    //     // The direction vector D is Q - P.
-    //     eg_point p = {.x = player->x_pos, .y = player->y_pos};
-    //     eg_point d = {.x = mouse_x - p.x, .y = mouse_y - p.y};
-
-    //     // The target rectangle is the area occupied by the block entity.
-    //     eg_rect target = {
-    //         .p = {.x = block->x_pos, .y = block->y_pos},
-    //         .w = app->registry[block->id].width,
-    //         .h = app->registry[block->id].height};
-
-    //     // We initialize the contact normal with magic numbers so we can
-    //     // detect perfect corner collisions. A valid contact normal will
-    //     // only have components with values of -1, 0, or 1.
-    //     eg_t_res res = {.cn = {.x = 0xDEADBEEF, .y = 0xDEADBEEF}};
-
-    //     if (eg_ray_v_rect(&p, &d, &target, &res))
-    //     {
-    //         // Set the draw color to cyan for drawing the contact point.
-    //         SDL_SetRenderDrawColor(app->renderer, 0, 255, 255, 255);
-
-    //         // Draw the contact point.
-    //         SDL_Rect c_rect = {.x = res.cp.x - 5, .y = res.cp.y - 5, .w = 10, .h = 10};
-    //         SDL_RenderFillRect(app->renderer, &c_rect);
-
-    //         // Set the draw color to red for drawing the contact point.
-    //         SDL_SetRenderDrawColor(app->renderer, 255, 0, 0, 255);
-
-    //         // Draw the contact normal.
-    //         SDL_RenderDrawLine(
-    //             app->renderer,
-    //             res.cp.x,
-    //             res.cp.y,
-    //             res.cp.x + res.cn.x * 20,
-    //             res.cp.y + res.cn.y * 20);
-
-    //         // Detect perfect corner collisions.
-    //         if (res.cn.x > 1 || res.cn.x < -1 || res.cn.y > 1 || res.cn.y < -1)
-    //         {
-    //             fprintf(stderr, "[ERROR] invalid contact normal: (%X, %X), "
-    //                             "contact point: (%d, %d), "
-    //                             "t: %.2f, "
-    //                             "P: (%d, %d), "
-    //                             "D: (%d, %d)\n",
-    //                     res.cn.x,
-    //                     res.cn.y,
-    //                     res.cp.x,
-    //                     res.cp.y,
-    //                     res.t,
-    //                     p.x,
-    //                     p.y,
-    //                     d.x,
-    //                     d.y);
-    //         }
-
-    //         // Set the draw color to yellow for drawing the ray.
-    //         SDL_SetRenderDrawColor(app->renderer, 255, 255, 0, 255);
-    //     }
-
-    //     SDL_RenderDrawLine(
-    //         app->renderer,
-    //         p.x,
-    //         p.y,
-    //         mouse_x,
-    //         mouse_y);
-    // }
-
-    // collision detection
-    while (a != NULL)
-    {
-        eg_entity *b = a->next;
-        while (b != NULL)
-        {
-
-            // eg_collision_result res;
-            // has_collided(app, a, b, &res);
-            // if (res.collided)
-            // {
-            //     eg_collider cola = app->registry[a->id].collide;
-            //     eg_collider colb = app->registry[b->id].collide;
-            //     if (cola != NULL)
-            //     {
-            //         cola(app, a, b, &res, 0);
-            //     }
-            //     if (colb != NULL)
-            //     {
-            //         colb(app, b, a, &res, 1);
-            //     }
-            // }
-            eg_t_res res = {.cn = {.x = 0xDEADBEEF, .y = 0xDEADBEEF}};
-            eg_check_col(app, a, b, &res);
-
-            b = b->next;
-        }
-        a = a->next;
-    }
-
     // Update state.
     while (ent != NULL)
     {
-        //---------------------------------------------
-        // Get the references to the player and the block.
-        // if (ent->id == 0)
-        // {
-        //     player = ent;
-        // }
-        // else if (ent->id == 5)
-        // {
-        //     block = ent;
-        // }
-        //---------------------------------------------
-
         if (app->registry[ent->id].update != NULL)
         {
             app->registry[ent->id].update(app, ent);
@@ -428,8 +283,39 @@ void eg_update(eg_app *app)
         ent = ent->next;
     }
 
-    // TODO: remove this once collision detection is done.
-    // Draw a line from one rect to another
+    // collision detection
+    while (a != NULL)
+    {
+        eg_entity *b = a->next;
+        while (b != NULL)
+        {
+            // If a and b overlap, then calculate the contact point and
+            // contact normal to assist with resolution.
+            eg_overlap ovl;
+            eg_t_res res = {.cn = {.x = 2, .y = 2}};
+            eg_collider cola;
+            eg_collider colb;
+            if (is_overlapped(app, a, b, &ovl))
+            {
+                if (eg_check_past_col(app, a, b, &res))
+                {
+                    cola = app->registry[a->id].collide;
+                    colb = app->registry[b->id].collide;
+                    if (cola != NULL)
+                    {
+                        cola(app, a, b, &ovl, &res, 0);
+                    }
+                    if (colb != NULL)
+                    {
+                        colb(app, b, a, &ovl, &res, 1);
+                    }
+                }
+            }
+
+            b = b->next;
+        }
+        a = a->next;
+    }
 }
 
 void eg_draw(eg_app *app)

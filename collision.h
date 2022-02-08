@@ -7,29 +7,6 @@
 // In the future, it may be kept in its own file, or it may be incorporated
 // into the core source file.
 
-// A point represents the x and y coordinates in 2D space.
-typedef struct eg_point
-{
-    int x;
-    int y;
-} eg_point;
-
-// A rectangle.
-typedef struct eg_rect
-{
-    eg_point p; // location of top left corner
-    int w;
-    int h;
-} eg_rect;
-
-// The result of testing a ray for intersection with a target rectangle.
-typedef struct eg_t_res
-{
-    eg_point cp; // contact point
-    eg_point cn; // contact normal
-    float t;     // t such that P(t) = CP
-} eg_t_res;
-
 /**
  * Determines if a ray intersects a rectangle.
  *
@@ -52,7 +29,13 @@ int eg_ray_v_rect(
     eg_rect *r,
     eg_t_res *res);
 
-int eg_check_col(
+// int eg_check_col(
+//     eg_app *,
+//     eg_entity *,
+//     eg_entity *,
+//     eg_t_res *);
+
+int eg_check_past_col(
     eg_app *,
     eg_entity *,
     eg_entity *,

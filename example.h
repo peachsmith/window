@@ -34,11 +34,40 @@ typedef struct eg_entity_type eg_entity_type;
 /**
  * Result of collision detection.
  */
-typedef struct eg_collision_result eg_collision_result;
+typedef struct eg_overlap eg_overlap;
+
+//----------------------------------------------------------------------------
+// BEGIN Collision Detection Types
+
+// A point represents the x and y coordinates in 2D space.
+typedef struct eg_point
+{
+    int x;
+    int y;
+} eg_point;
+
+// A rectangle.
+typedef struct eg_rect
+{
+    int x;
+    int y;
+    int w;
+    int h;
+} eg_rect;
+
+// The result of testing a ray for intersection with a target rectangle.
+typedef struct eg_t_res
+{
+    eg_point cp; // contact point
+    eg_point cn; // contact normal
+    float t;     // t such that P(t) = CP
+} eg_t_res;
+// END Collision Detection Types
+//----------------------------------------------------------------------------
 
 /**
  * Draws an entity to the screen.
- * 
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   eg_entity* - the entity to render
@@ -47,7 +76,7 @@ typedef void (*eg_renderer)(eg_app *, eg_entity *);
 
 /**
  * Updates the state of an individual entity.
- * 
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   eg_entity* - the entity to update
@@ -56,7 +85,7 @@ typedef void (*eg_updater)(eg_app *, eg_entity *);
 
 /**
  * Performs some task.
- * 
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   eg_entity* - an entity that may be affected by the task.
@@ -65,14 +94,14 @@ typedef void (*eg_callback)(eg_app *, eg_entity *);
 
 /**
  * The behavior of one entity when it collides with another.
- * 
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   eg_entity* - the entity whose state may be updated
  *   eg_entity* - the entity that affects the state of the first entity
  */
 typedef void (*eg_collider)(eg_app *, eg_entity *, eg_entity *,
-                            eg_collision_result *, int);
+                            eg_overlap *, eg_t_res *, int);
 
 // definition of the eg_app struct
 struct eg_app
@@ -168,7 +197,7 @@ struct eg_entity_type
     eg_collider collide;
 };
 
-struct eg_collision_result
+struct eg_overlap
 {
     int direction;
     int dx0;
@@ -185,7 +214,7 @@ struct eg_collision_result
  * Initializes the SDL library.
  * This should be called once before allocating any resources or using any
  * other functions in this interface.
- * 
+ *
  * Returns:
  *   int - 1 on success, or 0 on failure
  */
@@ -200,7 +229,7 @@ void eg_terminate();
 
 /**
  * Creates a new instance of the app struct.
- * 
+ *
  * Returns:
  *   app* - a pointer to an app struct
  */
@@ -208,7 +237,7 @@ eg_app *eg_create_app();
 
 /**
  * Frees the memory allocated for an app struct.
- * 
+ *
  * Params:
  *   app* - a pointer to an app struct
  */
@@ -216,7 +245,7 @@ void eg_destroy_app(eg_app *);
 
 /**
  * Processes all events in the event queue.
- * 
+ *
  * Params:
  *   app* - a pointer to an app struct
  */
@@ -224,7 +253,7 @@ void eg_process_events(eg_app *);
 
 /**
  * Handles input.
- * 
+ *
  * Params:
  *   app* - a pointer to an app struct
  */
@@ -232,7 +261,7 @@ void eg_handle_input(eg_app *);
 
 /**
  * Updates the state of the application.
- * 
+ *
  * Params:
  *   app* - a pointer to an app struct
  */
@@ -240,7 +269,7 @@ void eg_update(eg_app *);
 
 /**
  * Draws the graphical contents of the current frame to the screen.
- * 
+ *
  * Params:
  *   app* - a pointer to an app struct
  */
@@ -248,7 +277,7 @@ void eg_draw(eg_app *);
 
 /**
  * Pauses execution of the main loop.
- * 
+ *
  * Params:
  *   app* - a pointer to an app struct
  */
@@ -262,7 +291,7 @@ void eg_delay(eg_app *);
  * As long as the input is actuated, this function will return 1. This is used
  * for handling input events where some task must be performed for as long as
  * the input is actuated.
- * 
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   int - the scancode of the key to check
@@ -275,7 +304,7 @@ int eg_peek_input(eg_app *app, int);
  * All subsequent calls to this function will return 0 until the state of
  * the input in question is reset. This is used for handling input events
  * where a task must be performed a single time for a single input actuation.
- * 
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   int - the scancode of the key to check
@@ -284,10 +313,10 @@ int eg_consume_input(eg_app *, int);
 
 /**
  * Creates a new input handler.
- * 
+ *
  * Params:
  *   eg_callback - a function that handles input
- * 
+ *
  * Returns:
  *   eg_input_handler* - a pointer to a new input handler
  */
@@ -295,7 +324,7 @@ eg_input_handler *eg_create_input_handler(eg_callback);
 
 /**
  * Frees the memory allocated for an input handler.
- * 
+ *
  * Params:
  *   eg_input_handler* - a pointer to an input handler
  */
@@ -305,7 +334,7 @@ void eg_destroy_input_handler(eg_input_handler *);
  * Pushes an input handler onto the top of the input handler stack.
  * Once pushed, the new input handler will be the current handler as long as
  * remains at the top.
- * 
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   eg_input_handler* - a pointer to an input handler.
@@ -317,10 +346,10 @@ void eg_push_input_handler(eg_app *, eg_input_handler *);
  * This function returns a pointer to the input handler that was removed from
  * the stack. It does not free any memory. It is the repsonsibility of the
  * caller to dispose of any input handlers popped from the stack.
- * 
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
- * 
+ *
  * Returns:
  *   eg_input_handler* - the handler that was removed from the stack
  */
@@ -331,10 +360,10 @@ eg_input_handler *eg_pop_input_handler(eg_app *);
 
 /**
  * Allocates memory for an entity registry.
- * 
+ *
  * Params:
  *   int - the number of entity types
- * 
+ *
  * Returns:
  *   eg_entity_type* - a new entity registry
  */
@@ -342,7 +371,7 @@ eg_entity_type *eg_create_registry(int);
 
 /**
  * Frees the memory allocated for an entity registry.
- * 
+ *
  * Params:
  *   eg_entity_type* - the entity registry to be destroyed
  */
@@ -350,7 +379,7 @@ void eg_destroy_registry(eg_entity_type *);
 
 /**
  * Creates a new entity.
- * 
+ *
  * Returns:
  *   eg_entity* - a pointer to a new entity
  */
@@ -358,7 +387,7 @@ eg_entity *eg_create_entity();
 
 /**
  * Frees the memory allocated for an entity.
- * 
+ *
  * Params:
  *   eg_entity* - the entity to be destroyed
  */
@@ -366,7 +395,8 @@ void eg_destroy_entity(eg_entity *);
 
 /**
  * Adds an entity to the entity list.
- * 
+ * The last entity added is the first entity in the list.
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   eg_entity* - the entity to add
@@ -377,11 +407,11 @@ void eg_add_entity(eg_app *, eg_entity *);
  * Removes an entity from the entity list.
  * This function returns a pointer to the entity that was removed. It does not
  * free any memory allocated for the entity.
- * 
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   eg_entity* - the entity to remove
- * 
+ *
  * Returns:
  *   eg_entity* - the entity that was removed
  */

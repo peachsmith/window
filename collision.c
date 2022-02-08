@@ -103,12 +103,12 @@ int eg_ray_v_rect(
         near_x_dz = 1;
         far_x_dz = 1;
 
-        if ((r->p.x - p->x) < 0)
+        if ((r->x - p->x) < 0)
         {
             near_x_dz = -1;
         }
 
-        if ((r->p.x + r->w - p->x) < 0)
+        if ((r->x + r->w - p->x) < 0)
         {
             far_x_dz = -1;
         }
@@ -119,12 +119,12 @@ int eg_ray_v_rect(
         near_y_dz = 1;
         far_y_dz = 1;
 
-        if ((r->p.y - p->y) < 0)
+        if ((r->y - p->y) < 0)
         {
             near_y_dz = -1;
         }
 
-        if ((r->p.y + r->h - p->y) < 0)
+        if ((r->y + r->h - p->y) < 0)
         {
             far_y_dz = -1;
         }
@@ -159,7 +159,7 @@ int eg_ray_v_rect(
     }
     else
     {
-        near_x = ((float)(r->p.x) - p->x) / dx;
+        near_x = ((float)(r->x) - p->x) / dx;
     }
 
     // near_y
@@ -169,7 +169,7 @@ int eg_ray_v_rect(
     }
     else
     {
-        near_y = ((float)(r->p.y) - p->y) / dy;
+        near_y = ((float)(r->y) - p->y) / dy;
     }
 
     // far_x
@@ -179,7 +179,7 @@ int eg_ray_v_rect(
     }
     else
     {
-        far_x = ((float)(r->p.x) + r->w - p->x) / dx;
+        far_x = ((float)(r->x) + r->w - p->x) / dx;
     }
 
     // far_y
@@ -189,7 +189,7 @@ int eg_ray_v_rect(
     }
     else
     {
-        far_y = ((float)(r->p.y) + r->h - p->y) / dy;
+        far_y = ((float)(r->y) + r->h - p->y) / dy;
     }
 
     //--------------------------------------------------------------------
@@ -321,7 +321,122 @@ int eg_ray_v_rect(
     return 1;
 }
 
-int eg_check_col(
+// int eg_check_col(
+//     eg_app *app,
+//     eg_entity *a,
+//     eg_entity *b,
+//     eg_t_res *res)
+// {
+//     if (app == NULL || a == NULL || b == NULL || res == NULL)
+//     {
+//         return 0;
+//     }
+
+//     // Check for velocity.
+//     // Currently, this function only works for a moving a and a static b.
+//     // TODO: handle collision between two static entities.
+//     // TODO: handle collision between two moving entities.
+//     if (a->x_vel == 0 && a->y_vel == 0)
+//     {
+//         return 0;
+//     }
+
+//     // width and height of a
+//     int aw = app->registry[a->id].width;
+//     int ah = app->registry[a->id].height;
+
+//     // Create an expanded target rectangle.
+//     eg_rect target = {
+//         .x = b->x_pos - (aw / 2),
+//         .y = b->y_pos - (ah / 2),
+//         .w = app->registry[b->id].width + aw,
+//         .h = app->registry[b->id].height + ah};
+
+//     // The origin point P is the center point of a.
+//     eg_point p = {
+//         .x = a->x_pos + aw / 2,
+//         .y = a->y_pos + ah / 2};
+
+//     // The direction vector D is the velocity of a.
+//     eg_point d = {.x = a->x_vel, .y = a->y_vel};
+
+//     if (eg_ray_v_rect(&p, &d, &target, res))
+//     {
+//         // Draw the target rectangle in red.
+//         // The dimensions should be the width and height of the target entity
+//         // plus the width and height of the source entity.
+//         SDL_Rect tmp = {.x = target.x, .y = target.y, .w = target.w, .h = target.h};
+//         SDL_SetRenderDrawColor(app->renderer, 255, 0, 0, 255);
+//         SDL_RenderDrawRect(app->renderer, &tmp);
+
+//         // Draw the contact point CP in cyan.
+//         SDL_SetRenderDrawColor(app->renderer, 0, 255, 255, 255);
+//         SDL_Rect c_rect = {.x = res->cp.x - 5, .y = res->cp.y - 5, .w = 10, .h = 10};
+//         SDL_RenderFillRect(app->renderer, &c_rect);
+
+//         // Draw the contact normal CN in magenta.
+//         SDL_SetRenderDrawColor(app->renderer, 255, 0, 255, 255);
+//         SDL_RenderDrawLine(
+//             app->renderer,
+//             res->cp.x,
+//             res->cp.y,
+//             res->cp.x + res->cn.x * 20,
+//             res->cp.y + res->cn.y * 20);
+
+//         // Draw the direction vector D in orange.
+//         SDL_SetRenderDrawColor(app->renderer, 200, 180, 30, 255);
+//         SDL_RenderDrawLine(
+//             app->renderer,
+//             p.x,
+//             p.y,
+//             d.x,
+//             d.y);
+
+//         // Print the collision detection data.
+//         // printf("collision D: (%d, %d) CP: (%d, %d) CN: (%d, %d) t: %.2f \n",
+//         //        d.x,
+//         //        d.y,
+//         //        res->cp.x,
+//         //        res->cp.y,
+//         //        res->cn.x,
+//         //        res->cn.y,
+//         //        res->t);
+
+//         printf("collision P: (%d, %d) RP: (%d, %d) RS: (%d, %d) source: (%d, %d) t: %.2f\n",
+//                p.x,
+//                p.y,
+//                target.x,
+//                target.y,
+//                target.w,
+//                target.h,
+//                aw,
+//                ah,
+//                res->t);
+
+//         // Adjust the x and y velocities based on the contact normal.
+//         // In the case of a platformer, either the x or y velocity will be
+//         // adjusted, but probably not both.
+//         // int xv = a->x_vel;
+//         // int yv = a->y_vel;
+
+//         // if (res->cn.x)
+//         // {
+//         //     a->x_vel = 0;
+//         // }
+
+//         // if (res->cn.y)
+//         // {
+//         //     a->y_vel = 0;
+//         // }
+//         // printf("old v: (%d, %d) new v: (%d, %d)\n", xv, yv, a->x_vel, a->y_vel);
+
+//         return 1;
+//     }
+
+//     return 0;
+// }
+
+int eg_check_past_col(
     eg_app *app,
     eg_entity *a,
     eg_entity *b,
@@ -347,18 +462,21 @@ int eg_check_col(
 
     // Create an expanded target rectangle.
     eg_rect target = {
-        .p = {
-            .x = b->x_pos - (aw / 2),
-            .y = b->y_pos - (ah / 2)},
+        .x = b->x_pos - (aw / 2),
+        .y = b->y_pos - (ah / 2),
         .w = app->registry[b->id].width + aw,
         .h = app->registry[b->id].height + ah};
 
     // The origin point P is the center point of a.
+    // We subtract the velocity to get the position of the rectangle before
+    // the velocity was applied.
     eg_point p = {
-        .x = a->x_pos + aw / 2,
-        .y = a->y_pos + ah / 2};
+        .x = (a->x_pos - a->x_vel) + aw / 2,
+        .y = (a->y_pos - a->y_vel) + ah / 2};
 
     // The direction vector D is the velocity of a.
+    // Since the origin point P is the previous position of a before applying
+    // velocity, the actual position of a is P + D.
     eg_point d = {.x = a->x_vel, .y = a->y_vel};
 
     if (eg_ray_v_rect(&p, &d, &target, res))
@@ -366,7 +484,7 @@ int eg_check_col(
         // Draw the target rectangle in red.
         // The dimensions should be the width and height of the target entity
         // plus the width and height of the source entity.
-        SDL_Rect tmp = {.x = target.p.x, .y = target.p.y, .w = target.w, .h = target.h};
+        SDL_Rect tmp = {.x = target.x, .y = target.y, .w = target.w, .h = target.h};
         SDL_SetRenderDrawColor(app->renderer, 255, 0, 0, 255);
         SDL_RenderDrawRect(app->renderer, &tmp);
 
@@ -390,8 +508,8 @@ int eg_check_col(
             app->renderer,
             p.x,
             p.y,
-            d.x,
-            d.y);
+            p.x + d.x * 10,
+            p.y + d.y * 10);
 
         // Print the collision detection data.
         // printf("collision D: (%d, %d) CP: (%d, %d) CN: (%d, %d) t: %.2f \n",
@@ -403,11 +521,13 @@ int eg_check_col(
         //        res->cn.y,
         //        res->t);
 
-        printf("collision P: (%d, %d) RP: (%d, %d) RS: (%d, %d) source: (%d, %d) t: %.2f\n",
+        printf("collision P: (%d, %d) D: (%d, %d) RP: (%d, %d) RS: (%d, %d) source: (%d, %d) t: %.2f\n",
                p.x,
                p.y,
-               target.p.x,
-               target.p.y,
+               d.x,
+               d.y,
+               target.x,
+               target.y,
                target.w,
                target.h,
                aw,
