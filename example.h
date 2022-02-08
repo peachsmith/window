@@ -207,6 +207,13 @@ struct eg_overlap
     int collided;
 };
 
+typedef struct eg_col_res
+{
+    eg_overlap ovl;
+    eg_t_res col;
+    eg_entity *b;
+} eg_col_res;
+
 //----------------------------------------------------------------------------
 // core functions
 

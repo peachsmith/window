@@ -51,25 +51,32 @@ int prepare(eg_app *app)
     // This array is static memory that is locally scoped to this function.
     // The contents of this array are dynamic memory that will be freed
     // during application disposal.
-    eg_entity *blocks[11];
+    eg_entity *blocks[18];
 
     int x_start = 30;
     int y_start = 40;
 
     // vertical column of blocks
     blocks[0] = block_demo_create(x_start, y_start);
-    blocks[1] = block_demo_create(x_start, y_start + 15);
-    blocks[2] = block_demo_create(x_start, y_start + 30);
-    blocks[3] = block_demo_create(x_start, y_start + 45);
+    blocks[1] = block_demo_create(x_start, y_start + 12);
+    blocks[2] = block_demo_create(x_start, y_start + 24);
+    blocks[3] = block_demo_create(x_start, y_start + 36);
 
     // horizontal row of blocks
-    blocks[4] = block_demo_create(x_start + 15, y_start + 45);
-    blocks[5] = block_demo_create(x_start + 30, y_start + 45);
-    blocks[6] = block_demo_create(x_start + 45, y_start + 45);
-    blocks[7] = block_demo_create(x_start + 60, y_start + 45);
-    blocks[8] = block_demo_create(x_start + 75, y_start + 45);
-    blocks[9] = block_demo_create(x_start + 90, y_start + 45);
-    blocks[10] = block_demo_create(x_start + 105, y_start + 45);
+    blocks[4] = block_demo_create(x_start + 12, y_start + 36);
+    blocks[5] = block_demo_create(x_start + 24, y_start + 36);
+    blocks[6] = block_demo_create(x_start + 36, y_start + 36);
+    blocks[7] = block_demo_create(x_start + 48, y_start + 36);
+    blocks[8] = block_demo_create(x_start + 60, y_start + 36);
+    blocks[9] = block_demo_create(x_start + 72, y_start + 36);
+    blocks[10] = block_demo_create(x_start + 84, y_start + 36);
+    blocks[11] = block_demo_create(x_start + 96, y_start + 36);
+    blocks[12] = block_demo_create(x_start + 108, y_start + 36);
+    blocks[13] = block_demo_create(x_start + 120, y_start + 36);
+    blocks[14] = block_demo_create(x_start + 120, y_start + 48);
+    blocks[15] = block_demo_create(x_start + 120, y_start + 60);
+    blocks[16] = block_demo_create(x_start + 120, y_start + 72);
+    blocks[17] = block_demo_create(x_start + 120, y_start + 84);
 
     // Add some of the blocks here and some of them later to prove that
     // the order in which entities are added doesn't affect their collision.
@@ -121,6 +128,13 @@ int prepare(eg_app *app)
     eg_add_entity(app, blocks[8]);
     eg_add_entity(app, blocks[9]);
     eg_add_entity(app, blocks[10]);
+    eg_add_entity(app, blocks[11]);
+    eg_add_entity(app, blocks[12]);
+    eg_add_entity(app, blocks[13]);
+    eg_add_entity(app, blocks[14]);
+    eg_add_entity(app, blocks[15]);
+    eg_add_entity(app, blocks[16]);
+    eg_add_entity(app, blocks[17]);
 
     return 1;
 }

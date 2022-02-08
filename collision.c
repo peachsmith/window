@@ -313,10 +313,28 @@ int eg_ray_v_rect(
             res->cn.y = -1;
         }
     }
-    // else
-    // {
-    //     printf("perfect corner collision near_x: %.2f, near_y: %.2f\n", near_x, near_y);
-    // }
+    else
+    {
+        // printf("perfect corner collision near_x: %.4f, near_y: %.4f\n", near_x, near_y);
+        // return 0;
+        if (dx < 0)
+        {
+            res->cn.x = 1;
+        }
+        else
+        {
+            res->cn.x = -1;
+        }
+
+        if (dy < 0)
+        {
+            res->cn.y = 1;
+        }
+        else
+        {
+            res->cn.y = -1;
+        }
+    }
 
     return 1;
 }
@@ -529,7 +547,7 @@ int eg_check_past_col(
             res->cp.y + res->cn.y * 20);
 
         // Draw the direction vector D in orange.
-        SDL_SetRenderDrawColor(app->renderer, 200, 180, 30, 255);
+        SDL_SetRenderDrawColor(app->renderer, 0, 255, 100, 255);
         SDL_RenderDrawLine(
             app->renderer,
             p.x,

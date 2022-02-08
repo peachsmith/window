@@ -9,7 +9,7 @@ void root_input_callback(eg_app *app, eg_entity *target)
 {
     if (eg_peek_input(app, SDL_SCANCODE_UP))
     {
-        if (target->y_vel >= -2)
+        if (target->y_vel >= -4)
         {
             target->y_vel -= 2;
         }
@@ -17,7 +17,7 @@ void root_input_callback(eg_app *app, eg_entity *target)
 
     if (eg_peek_input(app, SDL_SCANCODE_DOWN))
     {
-        if (target->y_vel <= 2)
+        if (target->y_vel <= 4)
         {
             target->y_vel += 2;
         }
@@ -25,7 +25,7 @@ void root_input_callback(eg_app *app, eg_entity *target)
 
     if (eg_peek_input(app, SDL_SCANCODE_LEFT))
     {
-        if (target->x_vel >= -2)
+        if (target->x_vel >= -4)
         {
             target->x_vel -= 2;
         }
@@ -33,7 +33,7 @@ void root_input_callback(eg_app *app, eg_entity *target)
 
     if (eg_peek_input(app, SDL_SCANCODE_RIGHT))
     {
-        if (target->x_vel <= 2)
+        if (target->x_vel <= 4)
         {
             target->x_vel += 2;
         }

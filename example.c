@@ -90,7 +90,7 @@ eg_app *eg_create_app()
     // Since the desired framerate is 60 frames per second, we set the
     // approximate milliseconds per frame to 16.
     // This is the truncated result of 1000 / 16.
-    app->frame_len = 16;
+    app->frame_len = 64; // 16;
 
     // Get the keyboard state.
     app->keystates = SDL_GetKeyboardState(NULL);
@@ -283,39 +283,127 @@ void eg_update(eg_app *app)
         ent = ent->next;
     }
 
+    // Create a dynamic array of collision results.
+    // This array can be reused on each iteration of the main collision
+    // detection loop.
+    int col_cap = 10;     // collision result list capacity
+    eg_col_res *col_ress; // collision result list
+    col_ress = (eg_col_res *)malloc(sizeof(eg_col_res) * col_cap);
+    if (col_ress == NULL)
+    {
+        fprintf(stderr, "failed to create collision result list\n");
+        app->done = 1;
+        return;
+    }
+
     // collision detection
     while (a != NULL)
     {
-        eg_entity *b = a->next;
+        // TEMP count and sort collisions
+        int ovl_count = 0; // overlap count
+        int col_count = 0; // collision count
+
+        eg_entity *b = app->entities; // a->next;
         while (b != NULL)
         {
             // If a and b overlap, then calculate the contact point and
             // contact normal to assist with resolution.
             eg_overlap ovl;
             eg_t_res res = {.cn = {.x = 2, .y = 2}};
-            eg_collider cola;
-            eg_collider colb;
-            if (is_overlapped(app, a, b, &ovl))
+            // eg_collider cola;
+            // eg_collider colb;
+
+            if (b->id != 0 && is_overlapped(app, a, b, &ovl))
             {
+                ovl_count++;
                 if (eg_check_past_col(app, a, b, &res))
                 {
-                    cola = app->registry[a->id].collide;
-                    colb = app->registry[b->id].collide;
-                    if (cola != NULL)
+                    if (col_count >= col_cap)
                     {
-                        cola(app, a, b, &ovl, &res, 0);
+                        int new_cap = col_cap + col_cap / 2;
+                        eg_col_res *new_ress = (eg_col_res *)realloc(col_ress, new_cap);
+                        if (new_ress == NULL)
+                        {
+                            fprintf(stderr, "failed to reallocate collision result list\n");
+                            app->done = 1;
+                            free(col_ress);
+                            return;
+                        }
+                        col_ress = new_ress;
+                        col_cap = new_cap;
                     }
-                    if (colb != NULL)
-                    {
-                        colb(app, b, a, &ovl, &res, 1);
-                    }
+                    col_ress[col_count].col = res;
+                    col_ress[col_count].ovl = ovl;
+                    col_ress[col_count++].b = b;
+                    // cola = app->registry[a->id].collide;
+                    // colb = app->registry[b->id].collide;
+                    // if (cola != NULL)
+                    // {
+                    //     cola(app, a, b, &ovl, &res, 0);
+                    // }
+                    // if (colb != NULL)
+                    // {
+                    //     colb(app, b, a, &ovl, &res, 1);
+                    // }
                 }
             }
 
             b = b->next;
         }
+        if (col_count > 0)
+        {
+            // Sort collision results.
+            int sorted = 0;
+            while (!sorted)
+            {
+                sorted = 1;
+                for (int i = 0; i < col_count; i++)
+                {
+                    eg_col_res tmp;
+                    if (i < col_count - 1)
+                    {
+                        if (col_ress[i].col.t > col_ress[i + 1].col.t)
+                        {
+                            sorted = 0;
+                            tmp = col_ress[i];
+                            col_ress[i] = col_ress[i + 1];
+                            col_ress[i + 1] = tmp;
+                        }
+                    }
+                }
+            }
+
+            // printf("overlaps: %d, collisions: %d, results: { ", ovl_count, col_count);
+            for (int i = 0; i < 1; i++)//col_count; i++)
+            {
+                // printf("%.2f", col_ress[i].col.t);
+
+                eg_collider cola = app->registry[a->id].collide;
+                eg_collider colb = app->registry[col_ress[i].b->id].collide;
+                if (cola != NULL)
+                {
+                    cola(app, a, col_ress[i].b, &(col_ress[i].ovl), &(col_ress[i].col), 0);
+                }
+                if (colb != NULL)
+                {
+                    colb(app, col_ress[i].b, a, &(col_ress[i].ovl), &(col_ress[i].col), 1);
+                }
+
+                // if (i < col_count - 1)
+                // {
+                //     printf(", ");
+                // }
+                // else
+                // {
+                //     printf(" }\n");
+                // }
+            }
+        }
         a = a->next;
     }
+
+    // Destroy the collision detection result array.
+    free(col_ress);
 }
 
 void eg_draw(eg_app *app)

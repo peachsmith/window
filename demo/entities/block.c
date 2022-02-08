@@ -36,9 +36,9 @@ static void collide_block(
     // In a collision between entities A and B, if this entity is entity B,
     // then we negate its deltas, so that the position of the other entity
     // will be adjusted correctly.
+    // If this is entity A, we negate the contact normal.
     if (is_b)
     {
-        printf("block is b\n");
         dx0 = -dx0;
         dx1 = -dx1;
         dy0 = -dy0;
@@ -46,17 +46,24 @@ static void collide_block(
     }
     else
     {
-        printf("block is a\n");
         cnx = -cnx;
         cny = -cny;
     }
+
+    // if (cnx > 1 || cnx < -1 || cny > 1 || cny < -1)
+    // {
+    //     printf("perfect corner collision with old logic t: %.4f\n", t_res->t);
+    // }
+    // else if (cnx != 0 && cny != 0)
+    // {
+    //     printf("perfect corner collision with new logic cn: (%d, %d), d0: (%d, %d)\n", cnx, cny, dx0, dy0);
+    // }
 
     // Determine which direction to resolve the collision.
     if (cnx == -1)
     {
         // left
         other->x_vel = 0;
-        // other->x_pos -= dx1;
         other->x_pos += dx0;
     }
 
@@ -64,7 +71,6 @@ static void collide_block(
     {
         // right
         other->x_vel = 0;
-        // other->x_pos += dx0;
         other->x_pos -= dx1;
     }
 
@@ -72,7 +78,6 @@ static void collide_block(
     {
         // up
         other->y_vel = 0;
-        // other->y_pos -= dy1;
         other->y_pos += dy0;
     }
 
@@ -80,37 +85,8 @@ static void collide_block(
     {
         // down
         other->y_vel = 0;
-        // other->y_pos += dy0;
         other->y_pos -= dy1;
     }
-
-    // Set the x velocity to 0.
-    // Relocated within contact normal logic.
-    // other->x_vel = 0;
-
-    // Determine which way to adjust this entity's position.
-    // if (res->dx0 <= res->dx1)
-    // {
-    //     other->x_pos += dx0;
-    // }
-    // else
-    // {
-    //     other->x_pos -= dx1;
-    // }
-
-    // Set the x velocity to 0.
-    // Relocated within contact normal logic.
-    // other->y_vel = 0;
-
-    // Determine which was to adjust this entity's position.
-    // if (res->dy0 <= res->dy1)
-    // {
-    //     other->y_pos += dy0;
-    // }
-    // else
-    // {
-    //     other->y_pos -= dy1;
-    // }
 }
 
 void block_demo_register(eg_entity_type *t)
