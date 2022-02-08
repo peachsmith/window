@@ -1,6 +1,8 @@
 #include "demo/entities/block.h"
 #include "demo/entities/entity_types.h"
 
+#include <stdio.h>
+
 static void render_block(eg_app *app, eg_entity *block)
 {
     SDL_Rect r;
@@ -28,19 +30,29 @@ static void collide_block(
     int dy0 = res->dy0;
     int dy1 = res->dy1;
 
+    int cnx = t_res->cn.x;
+    int cny = t_res->cn.y;
+
     // In a collision between entities A and B, if this entity is entity B,
     // then we negate its deltas, so that the position of the other entity
     // will be adjusted correctly.
     if (is_b)
     {
+        printf("block is b\n");
         dx0 = -dx0;
         dx1 = -dx1;
         dy0 = -dy0;
         dy1 = -dy1;
     }
+    else
+    {
+        printf("block is a\n");
+        cnx = -cnx;
+        cny = -cny;
+    }
 
     // Determine which direction to resolve the collision.
-    if (t_res->cn.x == -1)
+    if (cnx == -1)
     {
         // left
         other->x_vel = 0;
@@ -48,7 +60,7 @@ static void collide_block(
         other->x_pos += dx0;
     }
 
-    if (t_res->cn.x == 1)
+    if (cnx == 1)
     {
         // right
         other->x_vel = 0;
@@ -56,7 +68,7 @@ static void collide_block(
         other->x_pos -= dx1;
     }
 
-    if (t_res->cn.y == -1)
+    if (cny == -1)
     {
         // up
         other->y_vel = 0;
@@ -64,7 +76,7 @@ static void collide_block(
         other->y_pos += dy0;
     }
 
-    if (t_res->cn.y == 1)
+    if (cny == 1)
     {
         // down
         other->y_vel = 0;
@@ -104,8 +116,8 @@ static void collide_block(
 void block_demo_register(eg_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK;
-    t->width = 15;
-    t->height = 15;
+    t->width = 12;
+    t->height = 12;
     t->render = render_block;
     t->collide = collide_block;
 }
