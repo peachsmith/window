@@ -161,108 +161,6 @@ void eg_handle_input(eg_app *app)
     app->input_handlers->callback(app, app->input_handlers->target);
 }
 
-/**
- * Bounding box collision detection.
- *
- * Returns:
- *   int - 1 if the two rectangles overlap, otherwise 0
- */
-static int is_overlapped(
-    eg_app *app,
-    eg_entity *a,
-    eg_entity *b,
-    eg_overlap *res)
-{
-    // Get the width and height of both entities.
-    int aw = app->registry[a->id].width;
-    int ah = app->registry[a->id].height;
-    int bw = app->registry[b->id].width;
-    int bh = app->registry[b->id].height;
-
-    // Get the x and y position of both entities.
-    // These will be the position of the left and right edges.
-    int a_left = a->x_pos;
-    int a_top = a->y_pos;
-    int b_left = b->x_pos;
-    int b_top = b->y_pos;
-
-    // Get the positions of the right and bottom edges.
-    int a_right = a_left + aw;
-    int a_bottom = a_top + ah;
-    int b_right = b_left + bw;
-    int b_bottom = b_top + bh;
-
-    // Clear the result data.
-    res->collided = 0;
-    res->dx0 = 0;
-    res->dx1 = 0;
-    res->dy0 = 0;
-    res->dy1 = 0;
-
-    int overlap_x = 0;
-    int overlap_y = 0;
-
-    // Check if the left edge of A is in between the left and right edges
-    // of b.
-    if (a_left > b_left && a_left < b_right)
-    {
-        res->dx0 = a_right - b_left;
-        res->dx1 = b_right - a_left;
-        overlap_x = 1;
-    }
-
-    // Check if the right edge of a is in between the left and right edges
-    // of B.
-    if (a_right > b_left && a_right < b_right)
-    {
-        res->dx0 = a_right - b_left;
-        res->dx1 = b_right - a_left;
-        overlap_x = 1;
-    }
-
-    // Check if B is inside of A.
-    if (b_left >= a_left && b_left <= a_right &&
-        b_right >= a_left && b_right <= a_right)
-    {
-        overlap_x = 1;
-    }
-
-    // Check if the top edge of A is in between the top and bottom edges
-    // of B.
-    if (a_top > b_top && a_top < b_bottom)
-    {
-        res->dy0 = a_bottom - b_top;
-        res->dy1 = b_bottom - a_top;
-        overlap_y = 1;
-    }
-
-    // Check if the bottom edge of A is in between the top and bottom
-    // edges of B.
-    if (a_bottom > b_top && a_bottom < b_bottom)
-    {
-        res->dy0 = a_bottom - b_top;
-        res->dy1 = b_bottom - a_top;
-        overlap_y = 1;
-    }
-
-    // Check if B is inside of A.
-    if (b_top >= a_top && b_top <= a_bottom &&
-        b_bottom >= a_top && b_bottom <= a_bottom)
-    {
-        overlap_y = 1;
-    }
-
-    // If the boundaries of the two entities overlap in both directions, then
-    // a there is a collision.
-    if (overlap_x && overlap_y)
-    {
-        res->collided = 1;
-        return 1;
-    }
-
-    return 0;
-}
-
 void eg_update(eg_app *app)
 {
     //--------------------------------------------------------
@@ -271,7 +169,7 @@ void eg_update(eg_app *app)
     SDL_RenderClear(app->renderer);
 
     eg_entity *ent = app->entities;
-    eg_entity *a = app->entities;
+    eg_entity *source = app->entities;
 
     // Update state.
     while (ent != NULL)
@@ -297,33 +195,52 @@ void eg_update(eg_app *app)
     }
 
     // Collision Detection Loop.
+    // The main collision detection loop checks each element of the entity
+    // list with all toher elements of the entity list.
+    // On each iteration of the main collision detection loop, the current
+    // element from the entity list is called the source.
+    // On each iteration of the inner loop, the current entity being checked
+    // against the source is called the target. When dealing with functions
+    // that refer top their entity arguments as A and B, A is the source and
+    // B is the target.
+    //
     // This has three main stages:
     //  1. detect collisions
     //  2. sort collisions
     //  3. resolve collisions
-    while (a != NULL)
+    while (source != NULL)
     {
         int ovl_count = 0;
         int col_count = 0;
 
         // Detect the collisions.
-        eg_entity *b = app->entities; // original value: a->next;
-        while (b != NULL)
+        eg_entity *target = app->entities; // original value: a->next;
+        while (target != NULL)
         {
             // If a and b overlap, then calculate the contact point and
             // contact normal to assist with resolution.
             eg_overlap ovl;
-            eg_t_res res = {.cn = {.x = 2, .y = 2}};
-            // eg_collider cola;
-            // eg_collider colb;
+            eg_rect ar = {
+                .x = source->x_pos,
+                .y = source->y_pos,
+                .w = app->registry[source->id].width,
+                .h = app->registry[source->id].height,
+            };
+            eg_rect br = {
+                .x = target->x_pos,
+                .y = target->y_pos,
+                .w = app->registry[target->id].width,
+                .h = app->registry[target->id].height,
+            };
+            eg_ray_res res = {.cn = {.x = 2, .y = 2}};
 
             // NOTE:
             // We have a temporary check for entity ID 0.
             // We're currently only using the player entity for collisions detection.
-            if (b->id != 0 && is_overlapped(app, a, b, &ovl))
+            if (target->id != 0 && is_overlapped(&ar, &br, &ovl))
             {
                 ovl_count++;
-                if (eg_check_past_col(app, a, b, &res))
+                if (eg_check_past_col(app, source, target, &res))
                 {
                     // Add the collision result to the array.
                     if (col_count >= col_cap)
@@ -340,21 +257,11 @@ void eg_update(eg_app *app)
                     }
                     col_ress[col_count].ovl = ovl;
                     col_ress[col_count].col = res;
-                    col_ress[col_count++].b = b;
-                    // cola = app->registry[a->id].collide;
-                    // colb = app->registry[b->id].collide;
-                    // if (cola != NULL)
-                    // {
-                    //     cola(app, a, b, &ovl, &res, 0);
-                    // }
-                    // if (colb != NULL)
-                    // {
-                    //     colb(app, b, a, &ovl, &res, 1);
-                    // }
+                    col_ress[col_count++].target = target;
                 }
             }
 
-            b = b->next;
+            target = target->next;
         }
 
         // Sort the collisions.
@@ -423,31 +330,42 @@ void eg_update(eg_app *app)
         // Resolve the collisions.
         for (int i = 0; i < col_count; i++)
         {
-            // NOTE: since we're overwriting the existing overlap
-            // result, we may not need to save it.
-            eg_overlap ovl; // = col_ress[i].ovl;
-            eg_t_res col; // = col_ress[i].col;
-            eg_entity *target = col_ress[i].b;
+            eg_entity *a = source;
+            eg_entity *b = col_ress[i].target;
+            eg_overlap ovl;
+            eg_rect ar = {
+                .x = a->x_pos,
+                .y = a->y_pos,
+                .w = app->registry[a->id].width,
+                .h = app->registry[a->id].height,
+            };
+            eg_rect br = {
+                .x = b->x_pos,
+                .y = b->y_pos,
+                .w = app->registry[b->id].width,
+                .h = app->registry[b->id].height,
+            };
+            eg_ray_res col = {.cn = {.x = 2, .y = 2}};
 
-            if (is_overlapped(app, a, target, &ovl))
+            if (is_overlapped(&ar, &br, &ovl))
             {
-                if (eg_check_past_col(app, a, target, &col))
+                if (eg_check_past_col(app, a, b, &col))
                 {
                     eg_collider cola = app->registry[a->id].collide;
-                    eg_collider colb = app->registry[target->id].collide;
+                    eg_collider colb = app->registry[b->id].collide;
                     if (cola != NULL)
                     {
-                        cola(app, a, target, &ovl, &col, 0);
+                        cola(app, a, b, &ovl, &col, 0);
                     }
                     if (colb != NULL)
                     {
-                        colb(app, target, a, &ovl, &col, 1);
+                        colb(app, b, a, &ovl, &col, 1);
                     }
                 }
             }
         }
 
-        a = a->next;
+        source = source->next;
     }
 
     // Destroy the collision detection result array.

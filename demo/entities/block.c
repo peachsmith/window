@@ -21,7 +21,7 @@ static void collide_block(
     eg_entity *block,
     eg_entity *other,
     eg_overlap *res,
-    eg_t_res *t_res,
+    eg_ray_res *t_res,
     int is_b)
 {
     // Get the distance between the edges of this entity and the other entity.

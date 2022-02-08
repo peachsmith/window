@@ -32,38 +32,30 @@ typedef struct eg_entity eg_entity;
 typedef struct eg_entity_type eg_entity_type;
 
 /**
- * Result of collision detection.
+ * Result of rectangle overlap calculation.
  */
 typedef struct eg_overlap eg_overlap;
 
-//----------------------------------------------------------------------------
-// BEGIN Collision Detection Types
+/**
+ * A point represents the x and y coordinates in 2D space.
+ */
+typedef struct eg_point eg_point;
 
-// A point represents the x and y coordinates in 2D space.
-typedef struct eg_point
-{
-    int x;
-    int y;
-} eg_point;
+/**
+ * A rectangle in this context, is a quadrilateral whose sides are parallel
+ * to the x and y axes.
+ */
+typedef struct eg_rect eg_rect;
 
-// A rectangle.
-typedef struct eg_rect
-{
-    int x;
-    int y;
-    int w;
-    int h;
-} eg_rect;
+/**
+ * The result of testing for the intersection of a ray with a rectangle.
+ */
+typedef struct eg_ray_res eg_ray_res;
 
-// The result of testing a ray for intersection with a target rectangle.
-typedef struct eg_t_res
-{
-    eg_point cp; // contact point
-    eg_point cn; // contact normal
-    float t;     // t such that P(t) = CP
-} eg_t_res;
-// END Collision Detection Types
-//----------------------------------------------------------------------------
+/**
+ * The result of collision detection.
+ */
+typedef struct eg_col_res eg_col_res;
 
 /**
  * Draws an entity to the screen.
@@ -101,7 +93,7 @@ typedef void (*eg_callback)(eg_app *, eg_entity *);
  *   eg_entity* - the entity that affects the state of the first entity
  */
 typedef void (*eg_collider)(eg_app *, eg_entity *, eg_entity *,
-                            eg_overlap *, eg_t_res *, int);
+                            eg_overlap *, eg_ray_res *, int);
 
 // definition of the eg_app struct
 struct eg_app
@@ -197,22 +189,49 @@ struct eg_entity_type
     eg_collider collide;
 };
 
+struct eg_point
+{
+    int x;
+    int y;
+};
+
+struct eg_rect
+{
+    int x;
+    int y;
+    int w;
+    int h;
+};
+
+struct eg_ray_res
+{
+    eg_point cp; // contact point
+    eg_point cn; // contact normal
+    float t;     // t such that P(t) = CP
+};
+
 struct eg_overlap
 {
-    int direction;
+    // The fields dx0, dx1, dy0, and dy1 are referred to as the deltas.
+    // They represent the differences between the positions of the sides
+    // of two rectangles.
+    // Given two rectangles A and B:
+    // dx0 is difference between the right side of A and the left side of B.
+    // dx1 is difference between the right side of B and the left side of A.
+    // dy0 is difference between the bottom side of A and the top side of B.
+    // dy1 is difference between the bottom side of B and the top side of A.
     int dx0;
     int dx1;
     int dy0;
     int dy1;
-    int collided;
 };
 
-typedef struct eg_col_res
+struct eg_col_res
 {
     eg_overlap ovl;
-    eg_t_res col;
-    eg_entity *b;
-} eg_col_res;
+    eg_ray_res col;
+    eg_entity *target;
+};
 
 //----------------------------------------------------------------------------
 // core functions

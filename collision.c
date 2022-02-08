@@ -4,6 +4,63 @@
 #include <float.h>
 
 /**
+ * Draws various elements of a collision event on the screen.
+ * This function is intended for debugging purposes.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_rect* - reference to the target rectangle
+ *   eg_t_res* - a reference to a collision result struct
+ *   eg_point* - a reference to an origin point
+ *   eg_point* - a reference to a direction vector
+ */
+static void draw_collision(
+    eg_app *app,
+    eg_rect *r,
+    eg_ray_res *res,
+    eg_point *p,
+    eg_point *d)
+{
+    // Draw the target rectangle in red.
+    // The dimensions should be the width and height of the target entity
+    // plus the width and height of the source entity.
+    SDL_Rect target_bounds = {
+        .x = r->x,
+        .y = r->y,
+        .w = r->w,
+        .h = r->h};
+    SDL_SetRenderDrawColor(app->renderer, 255, 0, 0, 255);
+    SDL_RenderDrawRect(app->renderer, &target_bounds);
+
+    // Draw the contact point CP in cyan.
+    SDL_SetRenderDrawColor(app->renderer, 0, 255, 255, 255);
+    SDL_Rect cp_rect = {
+        .x = res->cp.x - 5,
+        .y = res->cp.y - 5,
+        .w = 10,
+        .h = 10};
+    SDL_RenderFillRect(app->renderer, &cp_rect);
+
+    // Draw the contact normal CN in magenta.
+    SDL_SetRenderDrawColor(app->renderer, 255, 0, 255, 255);
+    SDL_RenderDrawLine(
+        app->renderer,
+        res->cp.x,
+        res->cp.y,
+        res->cp.x + res->cn.x * 20,
+        res->cp.y + res->cn.y * 20);
+
+    // Draw the direction vector D in green.
+    SDL_SetRenderDrawColor(app->renderer, 0, 255, 100, 255);
+    SDL_RenderDrawLine(
+        app->renderer,
+        p->x,
+        p->y,
+        p->x + d->x * 10,
+        p->y + d->y * 10);
+}
+
+/**
  * Determines if a ray intersects a rectangle.
  * It is based on the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.
  *
@@ -71,11 +128,11 @@
  *   eg_rect* - the target rectangle
  *   eg_t_res* - results of intersection detection
  */
-int eg_ray_v_rect(
+static int ray_v_rect(
     eg_point *p,
     eg_point *d,
     eg_rect *r,
-    eg_t_res *res)
+    eg_ray_res *res)
 {
     if (p == NULL || d == NULL || r == NULL)
     {
@@ -315,151 +372,29 @@ int eg_ray_v_rect(
     }
     else
     {
-        // printf("perfect corner collision near_x: %.4f, near_y: %.4f\n", near_x, near_y);
-        // return 0;
-        if (dx < 0)
-        {
-            res->cn.x = 1;
-        }
-        else
-        {
-            res->cn.x = -1;
-        }
-
-        if (dy < 0)
-        {
-            res->cn.y = 1;
-        }
-        else
-        {
-            res->cn.y = -1;
-        }
+        // If we reached this point, we have a perfect corner collision.
+        // In this case, the contact normal is not a true normal.
+        // We set both x and y to 1 or -1 so that the caller of this
+        // function can detect corner collisions and handle them.
+        res->cn.x = dx < 0 ? 1 : -1;
+        res->cn.y = dy < 0 ? 1 : -1;
     }
 
     return 1;
 }
 
-// int eg_check_col(
-//     eg_app *app,
-//     eg_entity *a,
-//     eg_entity *b,
-//     eg_t_res *res)
-// {
-//     if (app == NULL || a == NULL || b == NULL || res == NULL)
-//     {
-//         return 0;
-//     }
-
-//     // Check for velocity.
-//     // Currently, this function only works for a moving a and a static b.
-//     // TODO: handle collision between two static entities.
-//     // TODO: handle collision between two moving entities.
-//     if (a->x_vel == 0 && a->y_vel == 0)
-//     {
-//         return 0;
-//     }
-
-//     // width and height of a
-//     int aw = app->registry[a->id].width;
-//     int ah = app->registry[a->id].height;
-
-//     // Create an expanded target rectangle.
-//     eg_rect target = {
-//         .x = b->x_pos - (aw / 2),
-//         .y = b->y_pos - (ah / 2),
-//         .w = app->registry[b->id].width + aw,
-//         .h = app->registry[b->id].height + ah};
-
-//     // The origin point P is the center point of a.
-//     eg_point p = {
-//         .x = a->x_pos + aw / 2,
-//         .y = a->y_pos + ah / 2};
-
-//     // The direction vector D is the velocity of a.
-//     eg_point d = {.x = a->x_vel, .y = a->y_vel};
-
-//     if (eg_ray_v_rect(&p, &d, &target, res))
-//     {
-//         // Draw the target rectangle in red.
-//         // The dimensions should be the width and height of the target entity
-//         // plus the width and height of the source entity.
-//         SDL_Rect tmp = {.x = target.x, .y = target.y, .w = target.w, .h = target.h};
-//         SDL_SetRenderDrawColor(app->renderer, 255, 0, 0, 255);
-//         SDL_RenderDrawRect(app->renderer, &tmp);
-
-//         // Draw the contact point CP in cyan.
-//         SDL_SetRenderDrawColor(app->renderer, 0, 255, 255, 255);
-//         SDL_Rect c_rect = {.x = res->cp.x - 5, .y = res->cp.y - 5, .w = 10, .h = 10};
-//         SDL_RenderFillRect(app->renderer, &c_rect);
-
-//         // Draw the contact normal CN in magenta.
-//         SDL_SetRenderDrawColor(app->renderer, 255, 0, 255, 255);
-//         SDL_RenderDrawLine(
-//             app->renderer,
-//             res->cp.x,
-//             res->cp.y,
-//             res->cp.x + res->cn.x * 20,
-//             res->cp.y + res->cn.y * 20);
-
-//         // Draw the direction vector D in orange.
-//         SDL_SetRenderDrawColor(app->renderer, 200, 180, 30, 255);
-//         SDL_RenderDrawLine(
-//             app->renderer,
-//             p.x,
-//             p.y,
-//             d.x,
-//             d.y);
-
-//         // Print the collision detection data.
-//         // printf("collision D: (%d, %d) CP: (%d, %d) CN: (%d, %d) t: %.2f \n",
-//         //        d.x,
-//         //        d.y,
-//         //        res->cp.x,
-//         //        res->cp.y,
-//         //        res->cn.x,
-//         //        res->cn.y,
-//         //        res->t);
-
-//         printf("collision P: (%d, %d) RP: (%d, %d) RS: (%d, %d) source: (%d, %d) t: %.2f\n",
-//                p.x,
-//                p.y,
-//                target.x,
-//                target.y,
-//                target.w,
-//                target.h,
-//                aw,
-//                ah,
-//                res->t);
-
-//         // Adjust the x and y velocities based on the contact normal.
-//         // In the case of a platformer, either the x or y velocity will be
-//         // adjusted, but probably not both.
-//         // int xv = a->x_vel;
-//         // int yv = a->y_vel;
-
-//         // if (res->cn.x)
-//         // {
-//         //     a->x_vel = 0;
-//         // }
-
-//         // if (res->cn.y)
-//         // {
-//         //     a->y_vel = 0;
-//         // }
-//         // printf("old v: (%d, %d) new v: (%d, %d)\n", xv, yv, a->x_vel, a->y_vel);
-
-//         return 1;
-//     }
-
-//     return 0;
-// }
-
 int eg_check_past_col(
     eg_app *app,
     eg_entity *a,
     eg_entity *b,
-    eg_t_res *res)
+    eg_ray_res *res)
 {
+    eg_entity *source; // source entity A
+    eg_entity *target; // target entity B
+    eg_point p;        // origin point P
+    eg_point d;        // direction vector D
+    eg_rect r;         // target rectangle R
+
     if (app == NULL || a == NULL || b == NULL || res == NULL)
     {
         return 0;
@@ -476,99 +411,144 @@ int eg_check_past_col(
         return 0;
     }
 
-    int swapped = 0;
-    eg_entity *source = a;
-    eg_entity *target = b;
+    source = a;
+    target = b;
 
-    // If b has velocity but a does not, then swap them.
+    // If target entity B has velocity but source entity A does not, then
+    // we swap the source and the target. This is just switching pointers
+    // in the scope of this function. The actual memory that is referenced
+    // remains unchanged.
     if (a->x_vel == 0 && a->y_vel == 0 && (b->x_vel != 0 || b->y_vel != 0))
     {
         source = b;
         target = a;
-        swapped = 1;
     }
 
-    // width and height of a
+    // Get the width and height of source entity A.
     int aw = app->registry[source->id].width;
     int ah = app->registry[source->id].height;
 
-    // Create an expanded target rectangle.
-    eg_rect target_rect = {
-        .x = target->x_pos - (aw / 2),
-        .y = target->y_pos - (ah / 2),
-        .w = app->registry[target->id].width + aw,
-        .h = app->registry[target->id].height + ah};
+    // Create a rectangle representing the boundaries of target entity B.
+    // Since the origin point of the ray
+    r.x = target->x_pos - (aw / 2);
+    r.y = target->y_pos - (ah / 2);
+    r.w = app->registry[target->id].width + aw;
+    r.h = app->registry[target->id].height + ah;
 
-    // The origin point P is the center point of a.
+    // The origin point P is the center point of source entity A.
     // We subtract the velocity to get the position of the rectangle before
     // the velocity was applied.
-    eg_point p = {
-        .x = (source->x_pos - source->x_vel) + aw / 2,
-        .y = (source->y_pos - source->y_vel) + ah / 2};
+    p.x = (source->x_pos - source->x_vel) + aw / 2;
+    p.y = (source->y_pos - source->y_vel) + ah / 2;
 
-    // The direction vector D is the velocity of a.
+    // The direction vector D is the velocity of source entity A.
     // Since the origin point P is the previous position of a before applying
-    // velocity, the actual position of a is P + D.
-    // If we swapped the source and target entities, then we need to negate
-    // the velocity.
-    eg_point d = {
-        .x = source->x_vel,  // * (swapped ? -1 : 1),
-        .y = source->y_vel}; // * (swapped ? -1 : 1)};
+    // velocity, the actual position of source entity A is P + D.
+    d.x = source->x_vel;
+    d.y = source->y_vel;
 
-    if (eg_ray_v_rect(&p, &d, &target_rect, res))
+    if (ray_v_rect(&p, &d, &r, res))
     {
-        // Draw the target rectangle in red.
-        // The dimensions should be the width and height of the target entity
-        // plus the width and height of the source entity.
-        SDL_Rect tmp = {
-            .x = target_rect.x,
-            .y = target_rect.y,
-            .w = target_rect.w,
-            .h = target_rect.h};
-        SDL_SetRenderDrawColor(app->renderer, 255, 0, 0, 255);
-        SDL_RenderDrawRect(app->renderer, &tmp);
+        // Draw the collision event information.
+        draw_collision(app, &r, res, &p, &d);
 
-        // Draw the contact point CP in cyan.
-        SDL_SetRenderDrawColor(app->renderer, 0, 255, 255, 255);
-        SDL_Rect cp_rect = {
-            .x = res->cp.x - 5,
-            .y = res->cp.y - 5,
-            .w = 10,
-            .h = 10};
-        SDL_RenderFillRect(app->renderer, &cp_rect);
+        return 1;
+    }
 
-        // Draw the contact normal CN in magenta.
-        SDL_SetRenderDrawColor(app->renderer, 255, 0, 255, 255);
-        SDL_RenderDrawLine(
-            app->renderer,
-            res->cp.x,
-            res->cp.y,
-            res->cp.x + res->cn.x * 20,
-            res->cp.y + res->cn.y * 20);
+    return 0;
+}
 
-        // Draw the direction vector D in orange.
-        SDL_SetRenderDrawColor(app->renderer, 0, 255, 100, 255);
-        SDL_RenderDrawLine(
-            app->renderer,
-            p.x,
-            p.y,
-            p.x + d.x * 10,
-            p.y + d.y * 10);
+int is_overlapped(
+    eg_rect *a,
+    eg_rect *b,
+    eg_overlap *res)
+{
+    // Get the width and height of both entities.
+    int aw = a->w;
+    int ah = a->h;
+    int bw = b->w;
+    int bh = b->h;
 
-        // printf("collision P: (%d, %d) D: (%d, %d) RP: (%d, %d) "
-        //        "RS: (%d, %d) source: (%d, %d) t: %.2f\n",
-        //        p.x,
-        //        p.y,
-        //        d.x,
-        //        d.y,
-        //        target_rect.x,
-        //        target_rect.y,
-        //        target_rect.w,
-        //        target_rect.h,
-        //        aw,
-        //        ah,
-        //        res->t);
+    // Get the x and y position of both entities.
+    // These will be the position of the left and right edges.
+    int a_left = a->x;
+    int a_top = a->y;
+    int b_left = b->x;
+    int b_top = b->y;
 
+    // Get the positions of the right and bottom edges.
+    int a_right = a_left + aw;
+    int a_bottom = a_top + ah;
+    int b_right = b_left + bw;
+    int b_bottom = b_top + bh;
+
+    // Clear the result data.
+    // dx0 is difference between the right side of A and the left side of B.
+    // dx1 is difference between the right side of B and the left side of A.
+    // dy0 is difference between the bottom side of A and the top side of B.
+    // dy1 is difference between the bottom side of B and the top side of A.
+    res->dx0 = 0;
+    res->dx1 = 0;
+    res->dy0 = 0;
+    res->dy1 = 0;
+
+    int overlap_x = 0;
+    int overlap_y = 0;
+
+    // Check if the left edge of A is in between the left and right edges
+    // of b.
+    if (a_left > b_left && a_left < b_right)
+    {
+        res->dx0 = a_right - b_left;
+        res->dx1 = b_right - a_left;
+        overlap_x = 1;
+    }
+
+    // Check if the right edge of a is in between the left and right edges
+    // of B.
+    if (a_right > b_left && a_right < b_right)
+    {
+        res->dx0 = a_right - b_left;
+        res->dx1 = b_right - a_left;
+        overlap_x = 1;
+    }
+
+    // Check if B is inside of A.
+    if (b_left >= a_left && b_left <= a_right &&
+        b_right >= a_left && b_right <= a_right)
+    {
+        overlap_x = 1;
+    }
+
+    // Check if the top edge of A is in between the top and bottom edges
+    // of B.
+    if (a_top > b_top && a_top < b_bottom)
+    {
+        res->dy0 = a_bottom - b_top;
+        res->dy1 = b_bottom - a_top;
+        overlap_y = 1;
+    }
+
+    // Check if the bottom edge of A is in between the top and bottom
+    // edges of B.
+    if (a_bottom > b_top && a_bottom < b_bottom)
+    {
+        res->dy0 = a_bottom - b_top;
+        res->dy1 = b_bottom - a_top;
+        overlap_y = 1;
+    }
+
+    // Check if B is inside of A.
+    if (b_top >= a_top && b_top <= a_bottom &&
+        b_bottom >= a_top && b_bottom <= a_bottom)
+    {
+        overlap_y = 1;
+    }
+
+    // If the boundaries of the two entities overlap in both directions, then
+    // a there is a collision.
+    if (overlap_x && overlap_y)
+    {
         return 1;
     }
 

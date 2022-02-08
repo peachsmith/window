@@ -8,37 +8,40 @@
 // into the core source file.
 
 /**
- * Determines if a ray intersects a rectangle.
+ * Determines if a collision has occurred based two entities.
+ * This function only considers a collision to have occurred if one of the
+ * entities has a velocity vector with at least one non zero component.
  *
- * Given an origin point P, a direction vector D, and a target rectangle R,
- * the goal of this function is to determine if the line segment formed by
- * direction vector D intersects with the sides of R.
- *
- * The fourth argument is a reference to a eg_t_res struct. This contains the
- * contact point, contact normal, and t value such that P(t) = CP.
+ * Known Issues
+ * ------------
+ * There is a chance that on a row or column of target rectangles, a source
+ * rectangle may have its position adjusted much too far.
  *
  * Params:
- *   eg_point* - the origin point of the ray
- *   eg_point* - the direction vector of the ray
- *   eg_rect* - the rectangle
- *   eg_t_res* - results of intersection detection
+ *   eg_app* - a pointer to an app struct
+ *   eg_entity* - the source entity
+ *   eg_entity* - the target entity
+ *   eg_t-res* - a pointer to the collision result struct
  */
-int eg_ray_v_rect(
-    eg_point *p,
-    eg_point *d,
-    eg_rect *r,
-    eg_t_res *res);
-
-// int eg_check_col(
-//     eg_app *,
-//     eg_entity *,
-//     eg_entity *,
-//     eg_t_res *);
-
 int eg_check_past_col(
-    eg_app *,
-    eg_entity *,
-    eg_entity *,
-    eg_t_res *);
+    eg_app *app,
+    eg_entity *a,
+    eg_entity *b,
+    eg_ray_res *res);
+
+/**
+ * Determines if two rectangles overlap.
+ * The third argument is a pointer to an eg_overlap struct.
+ * This will receive the results of the overlap calculations.
+ *
+ * Params:
+ *   eg_rect* - a reference to a rect
+ *   eg_rect* - a reference to another rect
+ *   eg_overlap* - a reference to the overlap calculation result struct
+ */
+int is_overlapped(
+    eg_rect *a,
+    eg_rect *b,
+    eg_overlap *res);
 
 #endif
