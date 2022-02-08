@@ -7,8 +7,8 @@
 static void render_player(eg_app *app, eg_entity *player)
 {
     SDL_Rect r;
-    r.x = player->x_pos - 10;
-    r.y = player->y_pos - 10;
+    r.x = player->x_pos;
+    r.y = player->y_pos;
     r.w = app->registry[player->id].width;
     r.h = app->registry[player->id].height;
 

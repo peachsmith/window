@@ -136,9 +136,9 @@ int eg_ray_v_rect(
     // The components of far point F are far_x and far_y.
     //
     // In the event of a division by 0, we assign the intersection point
-    // component a value of FLT_MAX or FLT_MIN depending on the sign of the
+    // component a value of FLT_MAX or -FLT_MAX depending on the sign of the
     // dividend. If the dividend is positive, the component will be FLT_MAX.
-    // If the dividend is negative, the component will be FLT_MIN.
+    // If the dividend is negative, the component will be -FLT_MAX.
     //
     // When not dividing by 0, the intersection point components can be
     // calculated like so:
@@ -155,7 +155,7 @@ int eg_ray_v_rect(
     // near_x
     if (near_x_dz)
     {
-        near_x = near_x_dz > 0 ? FLT_MAX : FLT_MIN;
+        near_x = near_x_dz > 0 ? FLT_MAX : -FLT_MAX;
     }
     else
     {
@@ -165,7 +165,7 @@ int eg_ray_v_rect(
     // near_y
     if (near_y_dz)
     {
-        near_y = near_y_dz > 0 ? FLT_MAX : FLT_MIN;
+        near_y = near_y_dz > 0 ? FLT_MAX : -FLT_MAX;
     }
     else
     {
@@ -175,7 +175,7 @@ int eg_ray_v_rect(
     // far_x
     if (far_x_dz)
     {
-        far_x = far_x_dz > 0 ? FLT_MAX : FLT_MIN;
+        far_x = far_x_dz > 0 ? FLT_MAX : -FLT_MAX;
     }
     else
     {
@@ -185,7 +185,7 @@ int eg_ray_v_rect(
     // far_y
     if (far_y_dz)
     {
-        far_y = far_y_dz > 0 ? FLT_MAX : FLT_MIN;
+        far_y = far_y_dz > 0 ? FLT_MAX : -FLT_MAX;
     }
     else
     {
@@ -313,10 +313,126 @@ int eg_ray_v_rect(
             res->cn.y = -1;
         }
     }
-    else
-    {
-        printf("perfect corner collision near_x: %.2f, near_y: %.2f\n", near_x, near_y);
-    }
+    // else
+    // {
+    //     printf("perfect corner collision near_x: %.2f, near_y: %.2f\n", near_x, near_y);
+    // }
 
     return 1;
+}
+
+int eg_check_col(
+    eg_app *app,
+    eg_entity *a,
+    eg_entity *b,
+    eg_t_res *res)
+{
+    if (app == NULL || a == NULL || b == NULL || res == NULL)
+    {
+        return 0;
+    }
+
+    // Check for velocity.
+    // Currently, this function only works for a moving a and a static b.
+    // TODO: handle collision between two static entities.
+    // TODO: handle collision between two moving entities.
+    if (a->x_vel == 0 && a->y_vel == 0)
+    {
+        return 0;
+    }
+
+    // width and height of a
+    int aw = app->registry[a->id].width;
+    int ah = app->registry[a->id].height;
+
+    // Create an expanded target rectangle.
+    eg_rect target = {
+        .p = {
+            .x = b->x_pos - (aw / 2),
+            .y = b->y_pos - (ah / 2)},
+        .w = app->registry[b->id].width + aw,
+        .h = app->registry[b->id].height + ah};
+
+    // The origin point P is the center point of a.
+    eg_point p = {
+        .x = a->x_pos + aw / 2,
+        .y = a->y_pos + ah / 2};
+
+    // The direction vector D is the velocity of a.
+    eg_point d = {.x = a->x_vel, .y = a->y_vel};
+
+    if (eg_ray_v_rect(&p, &d, &target, res))
+    {
+        // Draw the target rectangle in red.
+        // The dimensions should be the width and height of the target entity
+        // plus the width and height of the source entity.
+        SDL_Rect tmp = {.x = target.p.x, .y = target.p.y, .w = target.w, .h = target.h};
+        SDL_SetRenderDrawColor(app->renderer, 255, 0, 0, 255);
+        SDL_RenderDrawRect(app->renderer, &tmp);
+
+        // Draw the contact point CP in cyan.
+        SDL_SetRenderDrawColor(app->renderer, 0, 255, 255, 255);
+        SDL_Rect c_rect = {.x = res->cp.x - 5, .y = res->cp.y - 5, .w = 10, .h = 10};
+        SDL_RenderFillRect(app->renderer, &c_rect);
+
+        // Draw the contact normal CN in magenta.
+        SDL_SetRenderDrawColor(app->renderer, 255, 0, 255, 255);
+        SDL_RenderDrawLine(
+            app->renderer,
+            res->cp.x,
+            res->cp.y,
+            res->cp.x + res->cn.x * 20,
+            res->cp.y + res->cn.y * 20);
+
+        // Draw the direction vector D in orange.
+        SDL_SetRenderDrawColor(app->renderer, 200, 180, 30, 255);
+        SDL_RenderDrawLine(
+            app->renderer,
+            p.x,
+            p.y,
+            d.x,
+            d.y);
+
+        // Print the collision detection data.
+        // printf("collision D: (%d, %d) CP: (%d, %d) CN: (%d, %d) t: %.2f \n",
+        //        d.x,
+        //        d.y,
+        //        res->cp.x,
+        //        res->cp.y,
+        //        res->cn.x,
+        //        res->cn.y,
+        //        res->t);
+
+        printf("collision P: (%d, %d) RP: (%d, %d) RS: (%d, %d) source: (%d, %d) t: %.2f\n",
+               p.x,
+               p.y,
+               target.p.x,
+               target.p.y,
+               target.w,
+               target.h,
+               aw,
+               ah,
+               res->t);
+
+        // Adjust the x and y velocities based on the contact normal.
+        // In the case of a platformer, either the x or y velocity will be
+        // adjusted, but probably not both.
+        // int xv = a->x_vel;
+        // int yv = a->y_vel;
+
+        // if (res->cn.x)
+        // {
+        //     a->x_vel = 0;
+        // }
+
+        // if (res->cn.y)
+        // {
+        //     a->y_vel = 0;
+        // }
+        // printf("old v: (%d, %d) new v: (%d, %d)\n", xv, yv, a->x_vel, a->y_vel);
+
+        return 1;
+    }
+
+    return 0;
 }

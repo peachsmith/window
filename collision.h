@@ -1,6 +1,8 @@
 #ifndef TEMP_EG_COLLISION_H
 #define TEMP_EG_COLLISION_H
 
+#include "example.h"
+
 // This is a temporary interface for collision detection.
 // In the future, it may be kept in its own file, or it may be incorporated
 // into the core source file.
@@ -49,5 +51,11 @@ int eg_ray_v_rect(
     eg_point *d,
     eg_rect *r,
     eg_t_res *res);
+
+int eg_check_col(
+    eg_app *,
+    eg_entity *,
+    eg_entity *,
+    eg_t_res *);
 
 #endif
