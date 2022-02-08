@@ -90,7 +90,7 @@ eg_app *eg_create_app()
     // Since the desired framerate is 60 frames per second, we set the
     // approximate milliseconds per frame to 16.
     // This is the truncated result of 1000 / 16.
-    app->frame_len = 64; // 16;
+    app->frame_len = 16;
 
     // Get the keyboard state.
     app->keystates = SDL_GetKeyboardState(NULL);
@@ -296,14 +296,18 @@ void eg_update(eg_app *app)
         return;
     }
 
-    // collision detection
+    // Collision Detection Loop.
+    // This has three main stages:
+    //  1. detect collisions
+    //  2. sort collisions
+    //  3. resolve collisions
     while (a != NULL)
     {
-        // TEMP count and sort collisions
-        int ovl_count = 0; // overlap count
-        int col_count = 0; // collision count
+        int ovl_count = 0;
+        int col_count = 0;
 
-        eg_entity *b = app->entities; // a->next;
+        // Detect the collisions.
+        eg_entity *b = app->entities; // original value: a->next;
         while (b != NULL)
         {
             // If a and b overlap, then calculate the contact point and
@@ -313,27 +317,29 @@ void eg_update(eg_app *app)
             // eg_collider cola;
             // eg_collider colb;
 
+            // NOTE:
+            // We have a temporary check for entity ID 0.
+            // We're currently only using the player entity for collisions detection.
             if (b->id != 0 && is_overlapped(app, a, b, &ovl))
             {
                 ovl_count++;
                 if (eg_check_past_col(app, a, b, &res))
                 {
+                    // Add the collision result to the array.
                     if (col_count >= col_cap)
                     {
-                        int new_cap = col_cap + col_cap / 2;
+                        int new_cap = col_count + col_count / 2;
                         eg_col_res *new_ress = (eg_col_res *)realloc(col_ress, new_cap);
                         if (new_ress == NULL)
                         {
                             fprintf(stderr, "failed to reallocate collision result list\n");
-                            app->done = 1;
                             free(col_ress);
+                            app->done = 1;
                             return;
                         }
-                        col_ress = new_ress;
-                        col_cap = new_cap;
                     }
-                    col_ress[col_count].col = res;
                     col_ress[col_count].ovl = ovl;
+                    col_ress[col_count].col = res;
                     col_ress[col_count++].b = b;
                     // cola = app->registry[a->id].collide;
                     // colb = app->registry[b->id].collide;
@@ -350,55 +356,97 @@ void eg_update(eg_app *app)
 
             b = b->next;
         }
-        if (col_count > 0)
+
+        // Sort the collisions.
+        int sorted = 0;
+        while (!sorted)
         {
-            // Sort collision results.
-            int sorted = 0;
-            while (!sorted)
+            sorted = 1;
+            for (int i = 0; i < col_count; i++)
             {
-                sorted = 1;
-                for (int i = 0; i < col_count; i++)
+                eg_col_res tmp;
+                if (i < col_count - 1)
                 {
-                    eg_col_res tmp;
-                    if (i < col_count - 1)
+                    float t0 = col_ress[i].col.t;
+                    float t1 = col_ress[i + 1].col.t;
+                    eg_point cn0 = col_ress[i].col.cn;
+                    eg_point cn1 = col_ress[i + 1].col.cn;
+
+                    // Check the contact normals.
+                    // If both the x and y components of a contact normal
+                    // are non zero, then it is considered "greater" than
+                    // a true contact normal.
+                    int corner = 0;
+                    if (cn0.x && cn0.y && (!cn1.x || !cn1.y))
                     {
-                        if (col_ress[i].col.t > col_ress[i + 1].col.t)
-                        {
-                            sorted = 0;
-                            tmp = col_ress[i];
-                            col_ress[i] = col_ress[i + 1];
-                            col_ress[i + 1] = tmp;
-                        }
+                        corner = 1;
+                    }
+
+                    // Check if we have two possible perfect corner collisions
+                    // for one source. Hopefully, this never happens.
+                    // It should only be possible if two targets overlap in
+                    // just the right way.
+                    if (cn0.x && cn0.y && cn1.x && cn1.y)
+                    {
+                        printf("[WARN] two corner collisions for one source\n");
+                    }
+
+                    if (t0 > t1 || (t0 == t1 && corner))
+                    {
+                        sorted = 0;
+                        tmp = col_ress[i];
+                        col_ress[i] = col_ress[i + 1];
+                        col_ress[i + 1] = tmp;
                     }
                 }
             }
+        }
 
-            // printf("overlaps: %d, collisions: %d, results: { ", ovl_count, col_count);
-            for (int i = 0; i < 1; i++)//col_count; i++)
+        // TEMP: print the possible collisions.
+        if (col_count > 0)
+        {
+            printf("possible collisions: { ");
+            for (int i = 0; i < col_count; i++)
             {
-                // printf("%.2f", col_ress[i].col.t);
-
-                eg_collider cola = app->registry[a->id].collide;
-                eg_collider colb = app->registry[col_ress[i].b->id].collide;
-                if (cola != NULL)
+                printf("{%.2f, (%d, %d)}", col_ress[i].col.t, col_ress[i].col.cn.x, col_ress[i].col.cn.y);
+                if (i < col_count - 1)
                 {
-                    cola(app, a, col_ress[i].b, &(col_ress[i].ovl), &(col_ress[i].col), 0);
+                    printf(", ");
                 }
-                if (colb != NULL)
+                else
                 {
-                    colb(app, col_ress[i].b, a, &(col_ress[i].ovl), &(col_ress[i].col), 1);
+                    printf(" }\n");
                 }
-
-                // if (i < col_count - 1)
-                // {
-                //     printf(", ");
-                // }
-                // else
-                // {
-                //     printf(" }\n");
-                // }
             }
         }
+
+        // Resolve the collisions.
+        for (int i = 0; i < col_count; i++)
+        {
+            // NOTE: since we're overwriting the existing overlap
+            // result, we may not need to save it.
+            eg_overlap ovl; // = col_ress[i].ovl;
+            eg_t_res col; // = col_ress[i].col;
+            eg_entity *target = col_ress[i].b;
+
+            if (is_overlapped(app, a, target, &ovl))
+            {
+                if (eg_check_past_col(app, a, target, &col))
+                {
+                    eg_collider cola = app->registry[a->id].collide;
+                    eg_collider colb = app->registry[target->id].collide;
+                    if (cola != NULL)
+                    {
+                        cola(app, a, target, &ovl, &col, 0);
+                    }
+                    if (colb != NULL)
+                    {
+                        colb(app, target, a, &ovl, &col, 1);
+                    }
+                }
+            }
+        }
+
         a = a->next;
     }
 

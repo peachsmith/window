@@ -50,15 +50,6 @@ static void collide_block(
         cny = -cny;
     }
 
-    // if (cnx > 1 || cnx < -1 || cny > 1 || cny < -1)
-    // {
-    //     printf("perfect corner collision with old logic t: %.4f\n", t_res->t);
-    // }
-    // else if (cnx != 0 && cny != 0)
-    // {
-    //     printf("perfect corner collision with new logic cn: (%d, %d), d0: (%d, %d)\n", cnx, cny, dx0, dy0);
-    // }
-
     // Determine which direction to resolve the collision.
     if (cnx == -1)
     {
