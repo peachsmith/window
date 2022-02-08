@@ -68,18 +68,14 @@
  * Params:
  *   eg_point* - the origin point of the ray
  *   eg_point* - the direction vector of the ray
- *   eg_rect* - the rectangle
- *   float* - distance to intersection (output)
- *   eg_point* - contact point (output)
- *   eg_point* - contact normal (output)
+ *   eg_rect* - the target rectangle
+ *   eg_t_res* - results of intersection detection
  */
 int eg_ray_v_rect(
     eg_point *p,
     eg_point *d,
     eg_rect *r,
-    float *t,
-    eg_point *c_point,
-    eg_point *c_normal)
+    eg_t_res *res)
 {
     if (p == NULL || d == NULL || r == NULL)
     {
@@ -277,12 +273,12 @@ int eg_ray_v_rect(
     // 3. The contact normal CN
 
     // The t value has already been calculated, so we just set it here.
-    *t = t_near;
+    res->t = t_near;
 
     // Calculate the contact point CP.
     // P(t) = D * t + P
-    c_point->x = (int)(dx * t_near + p->x);
-    c_point->y = (int)(dy * t_near + p->y);
+    res->cp.x = (int)(dx * t_near + p->x);
+    res->cp.y = (int)(dy * t_near + p->y);
 
     // Determine the contact normal CN.
     // Note that if near_x == near_y, then we have a perfect corner collision
@@ -293,13 +289,13 @@ int eg_ray_v_rect(
         // If near_x > near_y and Dx > 0, then CN is (1, 0)
         if (dx < 0)
         {
-            c_normal->x = 1;
-            c_normal->y = 0;
+            res->cn.x = 1;
+            res->cn.y = 0;
         }
         else
         {
-            c_normal->x = -1;
-            c_normal->y = 0;
+            res->cn.x = -1;
+            res->cn.y = 0;
         }
     }
     else if (near_x < near_y)
@@ -308,14 +304,18 @@ int eg_ray_v_rect(
         // If near_x < near_y and Dy > 0, then CN is (0, -1)
         if (dy < 0)
         {
-            c_normal->x = 0;
-            c_normal->y = 1;
+            res->cn.x = 0;
+            res->cn.y = 1;
         }
         else
         {
-            c_normal->x = 0;
-            c_normal->y = -1;
+            res->cn.x = 0;
+            res->cn.y = -1;
         }
+    }
+    else
+    {
+        printf("perfect corner collision near_x: %.2f, near_y: %.2f\n", near_x, near_y);
     }
 
     return 1;

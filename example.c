@@ -308,23 +308,30 @@ void eg_update(eg_app *app)
 
     if (player != NULL && block != NULL)
     {
+        // In this example, the origin point P will be the player's position.
+        // The destination point Q will be the mouse cursor's position.
+        // The direction vector D is Q - P.
+        eg_point p = {.x = player->x_pos, .y = player->y_pos};
+        eg_point d = {.x = mouse_x - p.x, .y = mouse_y - p.y};
+
+        // The target rectangle is the area occupied by the block entity.
         eg_rect target = {
             .p = {.x = block->x_pos, .y = block->y_pos},
             .w = app->registry[block->id].width,
             .h = app->registry[block->id].height};
-        eg_point p = {.x = player->x_pos, .y = player->y_pos};
-        eg_point d = {.x = mouse_x - p.x, .y = mouse_y - p.y};
-        eg_point cp;                                      // contact point
-        eg_point cn = {.x = 0xDEADBEEF, .y = 0xDEADBEEF}; // contact normal
-        float t; // shortest time to collision (not real time)
 
-        if (eg_ray_v_rect(&p, &d, &target, &t, &cp, &cn))
+        // We initialize the contact normal with magic numbers so we can
+        // detect perfect corner collisions. A valid contact normal will
+        // only have components with values of -1, 0, or 1.
+        eg_t_res res = {.cn = {.x = 0xDEADBEEF, .y = 0xDEADBEEF}};
+
+        if (eg_ray_v_rect(&p, &d, &target, &res))
         {
             // Set the draw color to cyan for drawing the contact point.
             SDL_SetRenderDrawColor(app->renderer, 0, 255, 255, 255);
 
             // Draw the contact point.
-            SDL_Rect c_rect = {.x = cp.x - 5, .y = cp.y - 5, .w = 10, .h = 10};
+            SDL_Rect c_rect = {.x = res.cp.x - 5, .y = res.cp.y - 5, .w = 10, .h = 10};
             SDL_RenderFillRect(app->renderer, &c_rect);
 
             // Set the draw color to red for drawing the contact point.
@@ -333,30 +340,28 @@ void eg_update(eg_app *app)
             // Draw the contact normal.
             SDL_RenderDrawLine(
                 app->renderer,
-                cp.x,
-                cp.y,
-                cp.x + cn.x * 20,
-                cp.y + cn.y * 20);
+                res.cp.x,
+                res.cp.y,
+                res.cp.x + res.cn.x * 20,
+                res.cp.y + res.cn.y * 20);
 
-            if (cn.x > 1 || cn.x < -1 || cn.y > 1 || cn.y < -1)
+            // Detect perfect corner collisions.
+            if (res.cn.x > 1 || res.cn.x < -1 || res.cn.y > 1 || res.cn.y < -1)
             {
                 fprintf(stderr, "[ERROR] invalid contact normal: (%X, %X), "
                                 "contact point: (%d, %d), "
                                 "t: %.2f, "
                                 "P: (%d, %d), "
                                 "D: (%d, %d)\n",
-                        cn.x,
-                        cn.y,
-                        cp.x,
-                        cp.y,
-                        t,
+                        res.cn.x,
+                        res.cn.y,
+                        res.cp.x,
+                        res.cp.y,
+                        res.t,
                         p.x,
                         p.y,
                         d.x,
                         d.y);
-
-                SDL_Delay(2000);
-                app->done = 1;
             }
 
             // Set the draw color to yellow for drawing the ray.
