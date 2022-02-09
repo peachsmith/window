@@ -166,14 +166,9 @@ static int ray_v_rect(
         int near_div = r->x - p->x;
         int far_div = r->x + r->w - p->x;
 
-        // if (near_div == 0)
-        // {
-        //     printf("near_div == 0 in x axis\n");
-        // }
-
+        // spurious collision
         if (far_div == 0)
         {
-            // printf("far_div == 0 in x axis\n");
             return 0;
         }
 
@@ -196,14 +191,9 @@ static int ray_v_rect(
         int near_div = r->y - p->y;
         int far_div = r->y + r->h - p->y;
 
-        // if (near_div == 0)
-        // {
-        //     printf("near_div == 0 in y axis\n");
-        // }
-
+        // spurious collision
         if (far_div == 0)
         {
-            // printf("far_div == 0 in y axis\n");
             return 0;
         }
 
@@ -364,17 +354,6 @@ static int ray_v_rect(
         return 0;
     }
 
-    // if (near_x_dz || near_y_dz || far_x_dz || far_y_dz)
-    // {
-    //     printf("dz: %d, %d, %d, %d t_near: %.4f, t_far: %.4f\n",
-    //            near_x_dz,
-    //            near_y_dz,
-    //            far_x_dz,
-    //            far_y_dz,
-    //            t_near,
-    //            t_far);
-    // }
-
     //--------------------------------------------------------------------
     // Calculate and set the output values.
     // We want to determine three things:
@@ -433,20 +412,6 @@ static int ray_v_rect(
         res->cn.y = dy < 0 ? 1 : -1;
     }
 
-    // printf("%2d %2d %2d %2d ", near_x_dz, near_y_dz, far_x_dz, far_y_dz);
-
-    // printf("P: (%d, %d) D: (%d, %d) RP: (%d, %d) RP+RS: (%d, %d) t_near: (%.4f) t_far: (%.4f)\n",
-    //        p->x,
-    //        p->y,
-    //        d->x,
-    //        d->y,
-    //        r->x,
-    //        r->y,
-    //        r->x + r->w,
-    //        r->h + r->h,
-    //        t_near,
-    //        t_far);
-
     return 1;
 }
 
@@ -456,11 +421,9 @@ int eg_swept_aabb(
     eg_entity *b,
     eg_ray_res *res)
 {
-    eg_entity *source; // source entity A
-    eg_entity *target; // target entity B
-    eg_point p;        // origin point P
-    eg_point d;        // direction vector D
-    eg_rect r;         // target rectangle R
+    eg_point p; // origin point P
+    eg_point d; // direction vector D
+    eg_rect r;  // target rectangle R
 
     if (app == NULL || a == NULL || b == NULL || res == NULL)
     {
@@ -478,37 +441,24 @@ int eg_swept_aabb(
         return 0;
     }
 
-    source = a;
-    target = b;
-
-    // If target entity B has velocity but source entity A does not, then
-    // we swap the source and the target. This is just switching pointers
-    // in the scope of this function. The actual memory that is referenced
-    // remains unchanged.
-    if (a->x_vel == 0 && a->y_vel == 0 && (b->x_vel != 0 || b->y_vel != 0))
-    {
-        source = b;
-        target = a;
-    }
-
     // Get the width and height of source entity A.
-    int aw = app->registry[source->id].width;
-    int ah = app->registry[source->id].height;
+    int aw = app->registry[a->id].width;
+    int ah = app->registry[a->id].height;
 
     // Create a rectangle representing the boundaries of target entity B.
     // Since the origin point of the ray
-    r.x = target->x_pos - (aw / 2);
-    r.y = target->y_pos - (ah / 2);
-    r.w = app->registry[target->id].width + aw;
-    r.h = app->registry[target->id].height + ah;
+    r.x = b->x_pos - (aw / 2);
+    r.y = b->y_pos - (ah / 2);
+    r.w = app->registry[b->id].width + aw;
+    r.h = app->registry[b->id].height + ah;
 
     // The origin point P is the center point of source entity A.
-    p.x = source->x_pos + aw / 2;
-    p.y = source->y_pos + ah / 2;
+    p.x = a->x_pos + aw / 2;
+    p.y = a->y_pos + ah / 2;
 
     // The direction vector D is the velocity of source entity A.
-    d.x = source->x_vel;
-    d.y = source->y_vel;
+    d.x = a->x_vel;
+    d.y = a->y_vel;
 
     if (ray_v_rect(&p, &d, &r, res))
     {

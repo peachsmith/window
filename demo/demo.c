@@ -53,7 +53,7 @@ int prepare(eg_app *app)
     // during application disposal.
     eg_entity *blocks[18];
 
-    int x_start = 30;
+    int x_start = 50;
     int y_start = 40;
 
     // vertical column of blocks
@@ -97,7 +97,7 @@ int prepare(eg_app *app)
         return 0;
     }
 
-    player->x_pos = 80;
+    player->x_pos = 100;
     player->y_pos = 30;
 
     // Add the player entity to the app.
