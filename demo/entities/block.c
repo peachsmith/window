@@ -50,33 +50,26 @@ static void collide_block(
         cny = -cny;
     }
 
-    // Determine which direction to resolve the collision.
-    if (cnx == -1)
+    // The collision resolution correction factor formula is pulled from
+    // the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.
+
+    // Correction factor.
+    float t1 = 1 - t_res->t;
+
+    if (cnx)
     {
-        // left
-        other->x_vel = 0;
-        other->x_pos += dx0;
+        int absx = other->x_vel > 0 ? other->x_vel : -(other->x_vel);
+        float correction = cnx * absx * t1;
+        other->x_vel += (int)correction;
+        printf(" (t: %.4f, 1-t: %.4f, correction: %.4f) \n", t_res->t, 1 - t_res->t, correction);
     }
 
-    if (cnx == 1)
+    if (cny)
     {
-        // right
-        other->x_vel = 0;
-        other->x_pos -= dx1;
-    }
-
-    if (cny == -1)
-    {
-        // up
-        other->y_vel = 0;
-        other->y_pos += dy0;
-    }
-
-    if (cny == 1)
-    {
-        // down
-        other->y_vel = 0;
-        other->y_pos -= dy1;
+        int absy = other->y_vel > 0 ? other->y_vel : -(other->y_vel);
+        float correction = cny * absy * t1;
+        other->y_vel += (int)correction;
+        printf(" (t: %.4f, 1-t: %.4f, correction: %.4f) \n", t_res->t, 1 - t_res->t, correction);
     }
 }
 

@@ -16,6 +16,8 @@
  * ------------
  * There is a chance that on a row or column of target rectangles, a source
  * rectangle may have its position adjusted much too far.
+ * When moving parallel to a target rectangle while flush with the side,
+ * a collision may detected despite no overlap.
  *
  * Params:
  *   eg_app* - a pointer to an app struct

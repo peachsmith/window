@@ -438,8 +438,10 @@ int eg_check_past_col(
     // The origin point P is the center point of source entity A.
     // We subtract the velocity to get the position of the rectangle before
     // the velocity was applied.
-    p.x = (source->x_pos - source->x_vel) + aw / 2;
-    p.y = (source->y_pos - source->y_vel) + ah / 2;
+    // p.x = (source->x_pos - source->x_vel) + aw / 2;
+    // p.y = (source->y_pos - source->y_vel) + ah / 2;
+    p.x = source->x_pos + aw / 2;
+    p.y = source->y_pos + ah / 2;
 
     // The direction vector D is the velocity of source entity A.
     // Since the origin point P is the previous position of a before applying

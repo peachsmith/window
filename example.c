@@ -171,15 +171,15 @@ void eg_update(eg_app *app)
     eg_entity *ent = app->entities;
     eg_entity *source = app->entities;
 
-    // Update state.
-    while (ent != NULL)
-    {
-        if (app->registry[ent->id].update != NULL)
-        {
-            app->registry[ent->id].update(app, ent);
-        }
-        ent = ent->next;
-    }
+    // // Update state.
+    // while (ent != NULL)
+    // {
+    //     if (app->registry[ent->id].update != NULL)
+    //     {
+    //         app->registry[ent->id].update(app, ent);
+    //     }
+    //     ent = ent->next;
+    // }
 
     // Create a dynamic array of collision results.
     // This array can be reused on each iteration of the main collision
@@ -234,14 +234,14 @@ void eg_update(eg_app *app)
             };
             eg_ray_res res = {.cn = {.x = 2, .y = 2}};
 
-            // NOTE:
-            // We have a temporary check for entity ID 0.
-            // We're currently only using the player entity for collisions detection.
-            if (target->id != 0 && is_overlapped(&ar, &br, &ovl))
+            // TODO: figure out how to skip checking collision of an entity
+            // with itself.
+            if (target->id != 0) // && is_overlapped(&ar, &br, &ovl))
             {
                 ovl_count++;
                 if (eg_check_past_col(app, source, target, &res))
                 {
+                    is_overlapped(&ar, &br, &ovl);
                     // Add the collision result to the array.
                     if (col_count >= col_cap)
                     {
@@ -310,32 +310,33 @@ void eg_update(eg_app *app)
         }
 
         // TEMP: print the possible collisions.
-        if (col_count > 0)
-        {
-            printf("possible collisions: { ");
-            for (int i = 0; i < col_count; i++)
-            {
-                printf("{%.2f, (%d, %d)}", col_ress[i].col.t, col_ress[i].col.cn.x, col_ress[i].col.cn.y);
-                if (i < col_count - 1)
-                {
-                    printf(", ");
-                }
-                else
-                {
-                    printf(" }\n");
-                }
-            }
-        }
+        // if (col_count > 0)
+        // {
+        //     printf("possible collisions: { ");
+        //     for (int i = 0; i < col_count; i++)
+        //     {
+        //         printf("{%.2f, (%d, %d)}", col_ress[i].col.t, col_ress[i].col.cn.x, col_ress[i].col.cn.y);
+        //         if (i < col_count - 1)
+        //         {
+        //             printf(", ");
+        //         }
+        //         else
+        //         {
+        //             printf(" }\n");
+        //         }
+        //     }
+        // }
 
         // Resolve the collisions.
+        int resolve_count = 0;
         for (int i = 0; i < col_count; i++)
         {
             eg_entity *a = source;
             eg_entity *b = col_ress[i].target;
             eg_overlap ovl;
             eg_rect ar = {
-                .x = a->x_pos,
-                .y = a->y_pos,
+                .x = a->x_pos + a->x_vel,
+                .y = a->y_pos + a->y_vel,
                 .w = app->registry[a->id].width,
                 .h = app->registry[a->id].height,
             };
@@ -361,6 +362,7 @@ void eg_update(eg_app *app)
                     {
                         colb(app, b, a, &ovl, &col, 1);
                     }
+                    resolve_count++;
                 }
             }
         }
@@ -370,6 +372,16 @@ void eg_update(eg_app *app)
 
     // Destroy the collision detection result array.
     free(col_ress);
+
+    // Update state.
+    while (ent != NULL)
+    {
+        if (app->registry[ent->id].update != NULL)
+        {
+            app->registry[ent->id].update(app, ent);
+        }
+        ent = ent->next;
+    }
 }
 
 void eg_draw(eg_app *app)
