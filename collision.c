@@ -155,17 +155,28 @@ static int ray_v_rect(
     // The values stored in the dz flags indicate the sign of the dividend.
     // A dz value of 1 indicates division of a positive dividen by 0, and a
     // dz value of -1 indicates division of a negative dividend by 0.
+    // When attempting to divide by 0, if the dividend of the t_far component
+    // is 0, then we do not consider a collision to have occurred.
+    // TODO: figure out and explain why a far dividend of 0 means no collision.
     if (dx == 0)
     {
         near_x_dz = 1;
         far_x_dz = 1;
 
-        if ((r->x - p->x) < 0)
+        int near_div = r->x - p->x;
+        int far_div = r->x + r->w - p->x;
+
+        if (far_div == 0)
+        {
+            return 0;
+        }
+
+        if (near_div < 0)
         {
             near_x_dz = -1;
         }
 
-        if ((r->x + r->w - p->x) < 0)
+        if (far_div < 0)
         {
             far_x_dz = -1;
         }
@@ -176,12 +187,20 @@ static int ray_v_rect(
         near_y_dz = 1;
         far_y_dz = 1;
 
-        if ((r->y - p->y) < 0)
+        int near_div = r->y - p->y;
+        int far_div = r->y + r->h - p->y;
+
+        if (far_div == 0)
+        {
+            return 0;
+        }
+
+        if (near_div < 0)
         {
             near_y_dz = -1;
         }
 
-        if ((r->y + r->h - p->y) < 0)
+        if (far_div < 0)
         {
             far_y_dz = -1;
         }
@@ -322,6 +341,17 @@ static int ray_v_rect(
         return 0;
     }
 
+    // if (near_x_dz || near_y_dz || far_x_dz || far_y_dz)
+    // {
+    //     printf("dz: %d, %d, %d, %d t_near: %.4f, t_far: %.4f\n",
+    //            near_x_dz,
+    //            near_y_dz,
+    //            far_x_dz,
+    //            far_y_dz,
+    //            t_near,
+    //            t_far);
+    // }
+
     //--------------------------------------------------------------------
     // Calculate and set the output values.
     // We want to determine three things:
@@ -380,6 +410,20 @@ static int ray_v_rect(
         res->cn.y = dy < 0 ? 1 : -1;
     }
 
+    // printf("%2d %2d %2d %2d ", near_x_dz, near_y_dz, far_x_dz, far_y_dz);
+
+    // printf("P: (%d, %d) D: (%d, %d) RP: (%d, %d) RP+RS: (%d, %d) t_near: (%.4f) t_far: (%.4f)\n",
+    //        p->x,
+    //        p->y,
+    //        d->x,
+    //        d->y,
+    //        r->x,
+    //        r->y,
+    //        r->x + r->w,
+    //        r->h + r->h,
+    //        t_near,
+    //        t_far);
+
     return 1;
 }
 
@@ -436,21 +480,25 @@ int eg_check_past_col(
     r.h = app->registry[target->id].height + ah;
 
     // The origin point P is the center point of source entity A.
-    // We subtract the velocity to get the position of the rectangle before
-    // the velocity was applied.
-    // p.x = (source->x_pos - source->x_vel) + aw / 2;
-    // p.y = (source->y_pos - source->y_vel) + ah / 2;
     p.x = source->x_pos + aw / 2;
     p.y = source->y_pos + ah / 2;
 
     // The direction vector D is the velocity of source entity A.
-    // Since the origin point P is the previous position of a before applying
-    // velocity, the actual position of source entity A is P + D.
     d.x = source->x_vel;
     d.y = source->y_vel;
 
     if (ray_v_rect(&p, &d, &r, res))
     {
+        // printf("P: (%d, %d), RP: (%d, %d), RP+RS: (%d, %d) D: (%d, %d)\n",
+        //        p.x,
+        //        p.y,
+        //        r.x,
+        //        r.y,
+        //        r.x + r.w,
+        //        r.y + r.h,
+        //        d.x,
+        //        d.y);
+
         // Draw the collision event information.
         draw_collision(app, &r, res, &p, &d);
 

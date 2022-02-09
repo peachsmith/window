@@ -61,7 +61,7 @@ static void collide_block(
         int absx = other->x_vel > 0 ? other->x_vel : -(other->x_vel);
         float correction = cnx * absx * t1;
         other->x_vel += (int)correction;
-        printf(" (t: %.4f, 1-t: %.4f, correction: %.4f) \n", t_res->t, 1 - t_res->t, correction);
+        // printf(" (t: %.4f, 1-t: %.4f, correction: %.4f) \n", t_res->t, 1 - t_res->t, correction);
     }
 
     if (cny)
@@ -69,7 +69,7 @@ static void collide_block(
         int absy = other->y_vel > 0 ? other->y_vel : -(other->y_vel);
         float correction = cny * absy * t1;
         other->y_vel += (int)correction;
-        printf(" (t: %.4f, 1-t: %.4f, correction: %.4f) \n", t_res->t, 1 - t_res->t, correction);
+        // printf(" (t: %.4f, 1-t: %.4f, correction: %.4f) \n", t_res->t, 1 - t_res->t, correction);
     }
 }
 

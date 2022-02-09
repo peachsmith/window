@@ -221,8 +221,8 @@ void eg_update(eg_app *app)
             // contact normal to assist with resolution.
             eg_overlap ovl;
             eg_rect ar = {
-                .x = source->x_pos,
-                .y = source->y_pos,
+                .x = source->x_pos + source->x_vel,
+                .y = source->y_pos + source->y_vel,
                 .w = app->registry[source->id].width,
                 .h = app->registry[source->id].height,
             };
@@ -241,7 +241,19 @@ void eg_update(eg_app *app)
                 ovl_count++;
                 if (eg_check_past_col(app, source, target, &res))
                 {
-                    is_overlapped(&ar, &br, &ovl);
+                    if (!is_overlapped(&ar, &br, &ovl))
+                    {
+                        if (source->id == 0)
+                        {
+                            printf("purported collision, but NO SIRREE!\n");
+                        }
+                    }
+
+                    // if (source->id == 0)
+                    // {
+                    //     printf("collision detected\n");
+                    // }
+
                     // Add the collision result to the array.
                     if (col_count >= col_cap)
                     {
@@ -255,7 +267,6 @@ void eg_update(eg_app *app)
                             return;
                         }
                     }
-                    col_ress[col_count].ovl = ovl;
                     col_ress[col_count].col = res;
                     col_ress[col_count++].target = target;
                 }
@@ -333,7 +344,7 @@ void eg_update(eg_app *app)
         {
             eg_entity *a = source;
             eg_entity *b = col_ress[i].target;
-            eg_overlap ovl;
+            eg_overlap ovl = {.dx0 = 0, .dx1 = 0, .dy0 = 0, .dy1 = 0};
             eg_rect ar = {
                 .x = a->x_pos + a->x_vel,
                 .y = a->y_pos + a->y_vel,
