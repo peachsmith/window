@@ -168,18 +168,21 @@ void eg_update(eg_app *app)
     SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 255);
     SDL_RenderClear(app->renderer);
 
-    eg_entity *ent = app->entities;
-    eg_entity *source = app->entities;
-
-    // // Update state.
-    // while (ent != NULL)
-    // {
-    //     if (app->registry[ent->id].update != NULL)
-    //     {
-    //         app->registry[ent->id].update(app, ent);
-    //     }
-    //     ent = ent->next;
-    // }
+    //--------------------------------------------------------
+    // BEGIN Collision Detection
+    // TODO: move all of the collision detection code into its own interface.
+    // The collision detection checks each element of the entity list with
+    // all otherr elements of the entity list.
+    // On each iteration of the main collision detection loop, the current
+    // element from the entity list is called the source.
+    // On each iteration of the inner loop, the current entity being checked
+    // against the source is called the target. When dealing with functions
+    // that refer top their entity arguments as A and B, A is the source and
+    // B is the target.
+    // Each iteration of the main collision detection loop has three stages:
+    //  1. detect collisions
+    //  2. sort collisions
+    //  3. resolve collisions
 
     // Create a dynamic array of collision results.
     // This array can be reused on each iteration of the main collision
@@ -194,31 +197,17 @@ void eg_update(eg_app *app)
         return;
     }
 
-    // Collision Detection Loop.
-    // The main collision detection loop checks each element of the entity
-    // list with all toher elements of the entity list.
-    // On each iteration of the main collision detection loop, the current
-    // element from the entity list is called the source.
-    // On each iteration of the inner loop, the current entity being checked
-    // against the source is called the target. When dealing with functions
-    // that refer top their entity arguments as A and B, A is the source and
-    // B is the target.
-    //
-    // This has three main stages:
-    //  1. detect collisions
-    //  2. sort collisions
-    //  3. resolve collisions
+    // main collision detection loop
+    eg_entity *source = app->entities;
     while (source != NULL)
     {
         int ovl_count = 0;
         int col_count = 0;
 
-        // Detect the collisions.
+        // Stage 1: Collision Detection
         eg_entity *target = app->entities; // original value: a->next;
         while (target != NULL)
         {
-            // If a and b overlap, then calculate the contact point and
-            // contact normal to assist with resolution.
             eg_overlap ovl;
             eg_rect ar = {
                 .x = source->x_pos + source->x_vel,
@@ -239,20 +228,18 @@ void eg_update(eg_app *app)
             if (target->id != 0) // && is_overlapped(&ar, &br, &ovl))
             {
                 ovl_count++;
-                if (eg_check_past_col(app, source, target, &res))
+                if (eg_swept_aabb(app, source, target, &res))
                 {
                     if (!is_overlapped(&ar, &br, &ovl))
                     {
                         if (source->id == 0)
                         {
-                            printf("purported collision, but NO SIRREE!\n");
+                            printf("[WARN] spurious collision. t: %4f, CN: (%d, %d)\n",
+                                   res.t,
+                                   res.cn.x,
+                                   res.cn.y);
                         }
                     }
-
-                    // if (source->id == 0)
-                    // {
-                    //     printf("collision detected\n");
-                    // }
 
                     // Add the collision result to the array.
                     if (col_count >= col_cap)
@@ -275,7 +262,7 @@ void eg_update(eg_app *app)
             target = target->next;
         }
 
-        // Sort the collisions.
+        // Stage 2: Collision Sorting
         int sorted = 0;
         while (!sorted)
         {
@@ -320,25 +307,7 @@ void eg_update(eg_app *app)
             }
         }
 
-        // TEMP: print the possible collisions.
-        // if (col_count > 0)
-        // {
-        //     printf("possible collisions: { ");
-        //     for (int i = 0; i < col_count; i++)
-        //     {
-        //         printf("{%.2f, (%d, %d)}", col_ress[i].col.t, col_ress[i].col.cn.x, col_ress[i].col.cn.y);
-        //         if (i < col_count - 1)
-        //         {
-        //             printf(", ");
-        //         }
-        //         else
-        //         {
-        //             printf(" }\n");
-        //         }
-        //     }
-        // }
-
-        // Resolve the collisions.
+        // Stage 3: Collision Resolution
         int resolve_count = 0;
         for (int i = 0; i < col_count; i++)
         {
@@ -359,22 +328,19 @@ void eg_update(eg_app *app)
             };
             eg_ray_res col = {.cn = {.x = 2, .y = 2}};
 
-            if (is_overlapped(&ar, &br, &ovl))
+            if (eg_swept_aabb(app, a, b, &col))
             {
-                if (eg_check_past_col(app, a, b, &col))
+                eg_collider cola = app->registry[a->id].collide;
+                eg_collider colb = app->registry[b->id].collide;
+                if (cola != NULL)
                 {
-                    eg_collider cola = app->registry[a->id].collide;
-                    eg_collider colb = app->registry[b->id].collide;
-                    if (cola != NULL)
-                    {
-                        cola(app, a, b, &ovl, &col, 0);
-                    }
-                    if (colb != NULL)
-                    {
-                        colb(app, b, a, &ovl, &col, 1);
-                    }
-                    resolve_count++;
+                    cola(app, a, b, &ovl, &col, 0);
                 }
+                if (colb != NULL)
+                {
+                    colb(app, b, a, &ovl, &col, 1);
+                }
+                resolve_count++;
             }
         }
 
@@ -383,8 +349,11 @@ void eg_update(eg_app *app)
 
     // Destroy the collision detection result array.
     free(col_ress);
+    // END Collision Detection
+    //--------------------------------------------------------
 
     // Update state.
+    eg_entity *ent = app->entities;
     while (ent != NULL)
     {
         if (app->registry[ent->id].update != NULL)

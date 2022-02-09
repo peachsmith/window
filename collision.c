@@ -166,8 +166,14 @@ static int ray_v_rect(
         int near_div = r->x - p->x;
         int far_div = r->x + r->w - p->x;
 
+        // if (near_div == 0)
+        // {
+        //     printf("near_div == 0 in x axis\n");
+        // }
+
         if (far_div == 0)
         {
+            // printf("far_div == 0 in x axis\n");
             return 0;
         }
 
@@ -190,8 +196,14 @@ static int ray_v_rect(
         int near_div = r->y - p->y;
         int far_div = r->y + r->h - p->y;
 
+        // if (near_div == 0)
+        // {
+        //     printf("near_div == 0 in y axis\n");
+        // }
+
         if (far_div == 0)
         {
+            // printf("far_div == 0 in y axis\n");
             return 0;
         }
 
@@ -341,6 +353,17 @@ static int ray_v_rect(
         return 0;
     }
 
+    // Prevent spurious collisions due to the source rectangle sitting flush
+    // with the target rectangle behind it.
+    //
+    //  +---------++---------+
+    //  | target  || source  |
+    //  +---------++---------+
+    if (t_near <= -1)
+    {
+        return 0;
+    }
+
     // if (near_x_dz || near_y_dz || far_x_dz || far_y_dz)
     // {
     //     printf("dz: %d, %d, %d, %d t_near: %.4f, t_far: %.4f\n",
@@ -427,7 +450,7 @@ static int ray_v_rect(
     return 1;
 }
 
-int eg_check_past_col(
+int eg_swept_aabb(
     eg_app *app,
     eg_entity *a,
     eg_entity *b,
@@ -489,48 +512,6 @@ int eg_check_past_col(
 
     if (ray_v_rect(&p, &d, &r, res))
     {
-        // printf("P: (%d, %d), RP: (%d, %d), RP+RS: (%d, %d) D: (%d, %d)\n",
-        //        p.x,
-        //        p.y,
-        //        r.x,
-        //        r.y,
-        //        r.x + r.w,
-        //        r.y + r.h,
-        //        d.x,
-        //        d.y);
-
-        // Attempt to detect spurious collisions due to the source entity
-        // sitting flush with the target entity.
-        // If the contact normal has a non zero y component, we check the
-        // height. If the contact normal has a non zero x component, we
-        // check the width.
-        // If both the x and y components of the contact normal have a non
-        // zero value, we skip this check since we have a perfect corner
-        // collision.
-        // TODO: figure out if Ah / 2 + Bh / 2 is the correct condition.
-        // larger or smaller values may also indicate a spurious collision.
-        if (res->cn.x && !(res->cn.y))
-        {
-            // Check the width.
-            int w = app->registry[a->id].width / 2 +
-                    app->registry[b->id].width / 2;
-            if ((int)(res->t) == -w)
-            {
-                return 0;
-            }
-        }
-
-        if (res->cn.y && !(res->cn.x))
-        {
-            // Check the height.
-            int h = app->registry[a->id].height / 2 +
-                    app->registry[b->id].height / 2;
-            if ((int)(res->t) == -h)
-            {
-                return 0;
-            }
-        }
-
         // Draw the collision event information.
         draw_collision(app, &r, res, &p, &d);
 

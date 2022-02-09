@@ -50,8 +50,8 @@ static void update_player(eg_app *app, eg_entity *player)
 
 void player_demo_register(eg_entity_type *t)
 {
-    t->width = 30;
-    t->height = 20;
+    t->width = 20;
+    t->height = 32;
     t->render = render_player;
     t->update = update_player;
 }

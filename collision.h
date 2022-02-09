@@ -8,16 +8,12 @@
 // into the core source file.
 
 /**
- * Determines if a collision has occurred based two entities.
- * This function only considers a collision to have occurred if one of the
- * entities has a velocity vector with at least one non zero component.
+ * Determines if a collision will occur between a moving source entity A and
+ * a static target entity B. This uses an implementation of Swept AABB, which
+ * assumes that all rectangles are axis-aligned.
  *
- * Known Issues
- * ------------
- * There is a chance that on a row or column of target rectangles, a source
- * rectangle may have its position adjusted much too far.
- * When moving parallel to a target rectangle while flush with the side,
- * a collision may detected despite no overlap.
+ * If A is static and B is moving, then this function treats A as if it were
+ * the target and B as if it were the source.
  *
  * Params:
  *   eg_app* - a pointer to an app struct
@@ -25,7 +21,7 @@
  *   eg_entity* - the target entity
  *   eg_t-res* - a pointer to the collision result struct
  */
-int eg_check_past_col(
+int eg_swept_aabb(
     eg_app *app,
     eg_entity *a,
     eg_entity *b,
