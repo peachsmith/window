@@ -499,6 +499,38 @@ int eg_check_past_col(
         //        d.x,
         //        d.y);
 
+        // Attempt to detect spurious collisions due to the source entity
+        // sitting flush with the target entity.
+        // If the contact normal has a non zero y component, we check the
+        // height. If the contact normal has a non zero x component, we
+        // check the width.
+        // If both the x and y components of the contact normal have a non
+        // zero value, we skip this check since we have a perfect corner
+        // collision.
+        // TODO: figure out if Ah / 2 + Bh / 2 is the correct condition.
+        // larger or smaller values may also indicate a spurious collision.
+        if (res->cn.x && !(res->cn.y))
+        {
+            // Check the width.
+            int w = app->registry[a->id].width / 2 +
+                    app->registry[b->id].width / 2;
+            if ((int)(res->t) == -w)
+            {
+                return 0;
+            }
+        }
+
+        if (res->cn.y && !(res->cn.x))
+        {
+            // Check the height.
+            int h = app->registry[a->id].height / 2 +
+                    app->registry[b->id].height / 2;
+            if ((int)(res->t) == -h)
+            {
+                return 0;
+            }
+        }
+
         // Draw the collision event information.
         draw_collision(app, &r, res, &p, &d);
 
