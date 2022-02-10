@@ -1,5 +1,6 @@
 #include "demo/entities/block.h"
 #include "demo/entities/entity_types.h"
+#include "demo/collision/collision.h"
 
 #include <stdio.h>
 
@@ -19,53 +20,26 @@ static void collide_block(
     eg_app *app,
     eg_entity *block,
     eg_entity *other,
-    eg_overlap *res,
     eg_ray_res *t_res,
     int is_b)
 {
-    // Get the distance between the edges of this entity and the other entity.
-    int dx0 = res->dx0;
-    int dx1 = res->dx1;
-    int dy0 = res->dy0;
-    int dy1 = res->dy1;
-
-    int cnx = t_res->cn.x;
-    int cny = t_res->cn.y;
-
-    // In a collision between entities A and B, if this entity is entity B,
-    // then we negate its deltas, so that the position of the other entity
-    // will be adjusted correctly.
-    // If this is entity A, we negate the contact normal.
-    if (is_b)
-    {
-        dx0 = -dx0;
-        dx1 = -dx1;
-        dy0 = -dy0;
-        dy1 = -dy1;
-    }
-    else
-    {
-        cnx = -cnx;
-        cny = -cny;
-    }
-
     // The collision resolution correction factor formula is pulled from
     // the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.
 
     // Correction factor.
     float t1 = 1 - t_res->t;
 
-    if (cnx)
+    if (t_res->cn.x)
     {
         int absx = other->x_vel > 0 ? other->x_vel : -(other->x_vel);
-        float correction = cnx * absx * t1;
+        float correction = t_res->cn.x * absx * t1;
         other->x_vel += (int)correction;
     }
 
-    if (cny)
+    if (t_res->cn.y)
     {
         int absy = other->y_vel > 0 ? other->y_vel : -(other->y_vel);
-        float correction = cny * absy * t1;
+        float correction = t_res->cn.y * absy * t1;
         other->y_vel += (int)correction;
     }
 }

@@ -19,34 +19,11 @@ static void detect_collisions(
 
     while (target != NULL)
     {
-        eg_overlap ovl;
-        eg_rect ar = {
-            .x = source->x_pos + source->x_vel,
-            .y = source->y_pos + source->y_vel,
-            .w = app->registry[source->id].width,
-            .h = app->registry[source->id].height,
-        };
-        eg_rect br = {
-            .x = target->x_pos,
-            .y = target->y_pos,
-            .w = app->registry[target->id].width,
-            .h = app->registry[target->id].height,
-        };
-        eg_ray_res res = {.cn = {.x = 2, .y = 2}};
+        eg_ray_res res;
 
+        // Use swept AABB to determine if the two entities will collide.
         if (eg_swept_aabb(app, source, target, &res))
         {
-            if (!is_overlapped(&ar, &br, &ovl))
-            {
-                if (source->id == 0)
-                {
-                    printf("[WARN] spurious collision. t: %4f, CN: (%d, %d)\n",
-                           res.t,
-                           res.cn.x,
-                           res.cn.y);
-                }
-            }
-
             // Add the collision result to the array.
             eg_col_res col_res = {.col = res, .target = target};
             col_push_result(*cols, &col_res);
@@ -159,22 +136,29 @@ void handle_collisions(eg_app *app)
         // Stage 3: Collision Resolution
         for (int i = 0; i < cols->count; i++)
         {
-            eg_entity *a = source;
-            eg_entity *b = cols->data[i].target;
-            eg_overlap ovl = {.dx0 = 0, .dx1 = 0, .dy0 = 0, .dy1 = 0};
-            eg_ray_res col = {.cn = {.x = 2, .y = 2}};
+            eg_entity *a;     // source entity A
+            eg_entity *b;     // target entity B
+            eg_ray_res col;   // swept AABB result
+            eg_collider cola; // source collision callback
+            eg_collider colb; // target collision callback
+
+            a = source;
+            b = cols->data[i].target;
 
             if (eg_swept_aabb(app, a, b, &col))
             {
-                eg_collider cola = app->registry[a->id].collide;
-                eg_collider colb = app->registry[b->id].collide;
+                // Call the source entity's collision function.
+                cola = app->registry[a->id].collide;
                 if (cola != NULL)
                 {
-                    cola(app, a, b, &ovl, &col, 0);
+                    cola(app, a, b, &col, 0);
                 }
+
+                // Call the target entity's collision function.
+                colb = app->registry[b->id].collide;
                 if (colb != NULL)
                 {
-                    colb(app, b, a, &ovl, &col, 1);
+                    colb(app, b, a, &col, 1);
                 }
             }
         }

@@ -34,46 +34,67 @@ typedef struct eg_entity_type eg_entity_type;
 /**
  * Result of rectangle overlap calculation.
  */
-typedef struct eg_overlap eg_overlap;
+typedef struct eg_overlap
+{
+    // The fields dx0, dx1, dy0, and dy1 are referred to as the deltas.
+    // They represent the differences between the positions of the sides
+    // of two rectangles.
+    // Given two rectangles A and B:
+    // dx0 is difference between the right side of A and the left side of B.
+    // dx1 is difference between the right side of B and the left side of A.
+    // dy0 is difference between the bottom side of A and the top side of B.
+    // dy1 is difference between the bottom side of B and the top side of A.
+    int dx0;
+    int dx1;
+    int dy0;
+    int dy1;
+} eg_overlap;
 
 /**
  * A point represents the x and y coordinates in 2D space.
  */
-typedef struct eg_point eg_point;
+typedef struct eg_point
+{
+    int x;
+    int y;
+} eg_point;
 
 /**
  * A rectangle in this context, is a quadrilateral whose sides are parallel
  * to the x and y axes.
  */
-typedef struct eg_rect eg_rect;
+typedef struct eg_rect
+{
+    int x;
+    int y;
+    int w;
+    int h;
+} eg_rect;
 
 /**
  * The result of testing for the intersection of a ray with a rectangle.
  */
-typedef struct eg_ray_res eg_ray_res;
+typedef struct eg_ray_res
+{
+    eg_point cp; // contact point
+    eg_point cn; // contact normal
+    float t;     // t such that P(t) = CP
+} eg_ray_res;
 
 /**
  * The result of collision detection.
  */
-typedef struct eg_col_res eg_col_res;
+typedef struct eg_col_res
+{
+    eg_ray_res col;
+    eg_entity *target;
+} eg_col_res;
 
 /**
- * Draws an entity to the screen.
+ * A function that can get all its required input from an app struct.
  *
- * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_entity* - the entity to render
  */
-typedef void (*eg_renderer)(eg_app *, eg_entity *);
-
-/**
- * Updates the state of an individual entity.
- *
- * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_entity* - the entity to update
- */
-typedef void (*eg_updater)(eg_app *, eg_entity *);
+typedef void (*eg_func)(eg_app *);
 
 /**
  * Performs some task.
@@ -92,8 +113,12 @@ typedef void (*eg_callback)(eg_app *, eg_entity *);
  *   eg_entity* - the entity whose state may be updated
  *   eg_entity* - the entity that affects the state of the first entity
  */
-typedef void (*eg_collider)(eg_app *, eg_entity *, eg_entity *,
-                            eg_overlap *, eg_ray_res *, int);
+typedef void (*eg_collider)(
+    eg_app *,
+    eg_entity *,
+    eg_entity *,
+    eg_ray_res *,
+    int);
 
 // definition of the eg_app struct
 struct eg_app
@@ -138,7 +163,7 @@ struct eg_app
     // The input handler stack is a dynamic linked list of input handlers.
     // The input handler on the top of the stack is the only input handler
     // that can perform any action at any given time.
-    eg_input_handler *input_handlers;
+    eg_input_handler *input;
 
     // A linked list of entities.
     // Entities are updated and rendered in the opposite order from which they
@@ -150,8 +175,8 @@ struct eg_app
     // entities of a given type.
     eg_entity_type *registry;
 
-    // Handles collisions between entities.
-    void (*handle_collisions)(eg_app *);
+    eg_func update;
+    eg_func draw;
 };
 
 // definition of the eg_input_handler struct
@@ -187,54 +212,9 @@ struct eg_entity_type
     int id;
     int width;
     int height;
-    eg_renderer render;
-    eg_updater update;
+    eg_callback render;
+    eg_callback update;
     eg_collider collide;
-};
-
-struct eg_point
-{
-    int x;
-    int y;
-};
-
-struct eg_rect
-{
-    int x;
-    int y;
-    int w;
-    int h;
-};
-
-struct eg_ray_res
-{
-    eg_point cp; // contact point
-    eg_point cn; // contact normal
-    float t;     // t such that P(t) = CP
-};
-
-struct eg_overlap
-{
-    // The fields dx0, dx1, dy0, and dy1 are referred to as the deltas.
-    // They represent the differences between the positions of the sides
-    // of two rectangles.
-    // Given two rectangles A and B:
-    // dx0 is difference between the right side of A and the left side of B.
-    // dx1 is difference between the right side of B and the left side of A.
-    // dy0 is difference between the bottom side of A and the top side of B.
-    // dy1 is difference between the bottom side of B and the top side of A.
-    int dx0;
-    int dx1;
-    int dy0;
-    int dy1;
-};
-
-// TODO: figure out a better way to collect collision results
-struct eg_col_res
-{
-    eg_overlap ovl;
-    eg_ray_res col;
-    eg_entity *target;
 };
 
 //----------------------------------------------------------------------------
@@ -282,30 +262,6 @@ void eg_destroy_app(eg_app *);
 void eg_process_events(eg_app *);
 
 /**
- * Handles input.
- *
- * Params:
- *   app* - a pointer to an app struct
- */
-void eg_handle_input(eg_app *);
-
-/**
- * Updates the state of the application.
- *
- * Params:
- *   app* - a pointer to an app struct
- */
-void eg_update(eg_app *);
-
-/**
- * Draws the graphical contents of the current frame to the screen.
- *
- * Params:
- *   app* - a pointer to an app struct
- */
-void eg_draw(eg_app *);
-
-/**
  * Pauses execution of the main loop.
  *
  * Params:
@@ -346,11 +302,12 @@ int eg_consume_input(eg_app *, int);
  *
  * Params:
  *   eg_callback - a function that handles input
+ *   eg_entity* - a reference to a target entity
  *
  * Returns:
  *   eg_input_handler* - a pointer to a new input handler
  */
-eg_input_handler *eg_create_input_handler(eg_callback);
+eg_input_handler *eg_create_input_handler(eg_callback, eg_entity *);
 
 /**
  * Frees the memory allocated for an input handler.

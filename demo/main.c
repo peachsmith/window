@@ -34,14 +34,11 @@ int main(int argc, char **argv)
         // Process OS events.
         eg_process_events(app);
 
-        // Handle input.
-        eg_handle_input(app);
-
         // Update the state of the application.
-        eg_update(app);
+        app->update(app);
 
         // Draw the contents of the current frame.
-        eg_draw(app);
+        app->draw(app);
 
         // Delay to regulate framerate.
         eg_delay(app);

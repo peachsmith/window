@@ -25,6 +25,16 @@ void eg_terminate()
     SDL_Quit();
 }
 
+// default update function
+static void default_update(eg_app *app)
+{
+}
+
+// default draw function
+static void default_draw(eg_app *app)
+{
+}
+
 eg_app *eg_create_app()
 {
     eg_app *app = NULL;
@@ -43,7 +53,9 @@ eg_app *eg_create_app()
     app->renderer = NULL;
     app->keystates = NULL;
     app->entities = NULL;
-    app->input_handlers = NULL;
+    app->input = NULL;
+    app->update = default_update;
+    app->draw = default_draw;
 
     // Create the window.
     app->window = SDL_CreateWindow(
@@ -87,8 +99,8 @@ eg_app *eg_create_app()
     app->done = 0;
 
     // Since the desired framerate is 60 frames per second, we set the
-    // approximate milliseconds per frame to 16.
-    // This is the truncated result of 1000 / 16.
+    // approximate milliseconds per frame to 16. This is the truncated result
+    // of 1000 / 16.
     app->frame_len = 16;
 
     // Get the keyboard state.
@@ -114,11 +126,11 @@ void eg_destroy_app(eg_app *app)
     }
 
     // Destroy the input handlers.
-    while (app->input_handlers != NULL)
+    while (app->input != NULL)
     {
-        eg_input_handler *previous = app->input_handlers->previous;
-        eg_destroy_input_handler(app->input_handlers);
-        app->input_handlers = previous;
+        eg_input_handler *previous = app->input->previous;
+        eg_destroy_input_handler(app->input);
+        app->input = previous;
     }
 
     // Destroy the entity registry.
@@ -152,56 +164,6 @@ void eg_process_events(eg_app *app)
             app->key_captures[app->event.key.keysym.scancode] = 0;
         }
     }
-}
-
-void eg_handle_input(eg_app *app)
-{
-    // Call the top input handler's callback function.
-    app->input_handlers->callback(app, app->input_handlers->target);
-}
-
-void eg_update(eg_app *app)
-{
-    // Clear the screen here so we can render debug information while
-    // updating application state.
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 255);
-    SDL_RenderClear(app->renderer);
-
-    if (app->handle_collisions != NULL)
-    {
-        app->handle_collisions(app);
-    }
-
-    // Update state.
-    eg_entity *ent = app->entities;
-    while (ent != NULL)
-    {
-        if (app->registry[ent->id].update != NULL)
-        {
-            app->registry[ent->id].update(app, ent);
-        }
-        ent = ent->next;
-    }
-}
-
-void eg_draw(eg_app *app)
-{
-    // The contents of the previous frame have been cleared in the
-    // eg_update function.
-
-    // Render each entity.
-    eg_entity *ent = app->entities;
-    while (ent != NULL)
-    {
-        if (app->registry[ent->id].render != NULL)
-        {
-            app->registry[ent->id].render(app, ent);
-        }
-        ent = ent->next;
-    }
-
-    // Show the contents of the current frame.
-    SDL_RenderPresent(app->renderer);
 }
 
 void eg_delay(eg_app *app)
@@ -261,7 +223,7 @@ int eg_consume_input(eg_app *app, int code)
     return 0;
 }
 
-eg_input_handler *eg_create_input_handler(eg_callback callback)
+eg_input_handler *eg_create_input_handler(eg_callback callback, eg_entity *target)
 {
     eg_input_handler *handler = NULL;
 
@@ -273,7 +235,7 @@ eg_input_handler *eg_create_input_handler(eg_callback callback)
 
     handler->previous = NULL;
     handler->callback = callback;
-    handler->target = NULL;
+    handler->target = target;
 
     return handler;
 }
@@ -285,39 +247,39 @@ void eg_destroy_input_handler(eg_input_handler *handler)
 
 void eg_push_input_handler(eg_app *app, eg_input_handler *handler)
 {
-    if (handler == NULL)
+    if (app == NULL || handler == NULL)
     {
         return;
     }
 
     // If the stack is empty, then the handler becomes the top of the stack.
-    if (app->input_handlers == NULL)
+    if (app->input == NULL)
     {
-        app->input_handlers = handler;
+        app->input = handler;
         return;
     }
 
     // Save the reference to the current handler in the new handler.
-    handler->previous = app->input_handlers;
+    handler->previous = app->input;
 
     // Set the application's current input handler to be the new handler.
-    app->input_handlers = handler;
+    app->input = handler;
 }
 
 eg_input_handler *eg_pop_input_handler(eg_app *app)
 {
     // If the stack is empty, then return without doing anything.
-    if (app->input_handlers == NULL)
+    if (app == NULL || app->input == NULL)
     {
         return NULL;
     }
 
     // Get the top of the input handler stack.
     // This will be returned so that it can be saved or destroyed.
-    eg_input_handler *current = app->input_handlers;
+    eg_input_handler *current = app->input;
 
     // The previous input handler now becomes the current input handler.
-    app->input_handlers = app->input_handlers->previous;
+    app->input = app->input->previous;
 
     return current;
 }
@@ -415,6 +377,11 @@ void eg_add_entity(eg_app *app, eg_entity *entity)
 
 eg_entity *eg_remove_entity(eg_app *app, eg_entity *entity)
 {
+    if (app == NULL || entity == NULL)
+    {
+        return NULL;
+    }
+
     // Get the entities before and after the current entity.
     eg_entity *previous = entity->previous;
     eg_entity *next = entity->next;

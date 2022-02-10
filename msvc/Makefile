@@ -10,7 +10,7 @@ LINK_DIR=/LIBPATH:"$(SDL2_HOME)\lib"
 CC=cl
 CFLAGS=/W3 /WX
 # ..\main.c ..\example.c ..\input_demo.c ..\entity_demo.c ..\player_demo.c
-SRC= ..\*.c ..\demo\*.c ..\demo\entities\*.c ..\demo\input\*.c ..\demo\collision\*.c
+SRC= ..\*.c ..\demo\*.c ..\demo\entities\*.c ..\demo\input\*.c ..\demo\collision\*.c ..\demo\scenes\*.c
 LIBS="SDL2.lib" "SDL2main.lib" "kernel32.lib" "user32.lib" "shell32.lib"
 
 all:

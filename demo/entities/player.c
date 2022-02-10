@@ -56,7 +56,7 @@ void player_demo_register(eg_entity_type *t)
     t->update = update_player;
 }
 
-eg_entity *player_demo_create()
+eg_entity *player_demo_create(int x, int y)
 {
     eg_entity *player = NULL;
 
@@ -67,8 +67,8 @@ eg_entity *player_demo_create()
     }
 
     player->id = ENTITY_TYPE_PLAYER;
-    player->x_pos = 50;
-    player->y_pos = 50;
+    player->x_pos = x;
+    player->y_pos = y;
 
     return player;
 }

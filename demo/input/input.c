@@ -99,7 +99,7 @@ void root_input_callback(eg_app *app, eg_entity *target)
     {
         printf("pushing a new input handler onto the stack...\n");
         eg_input_handler *new_handler =
-            eg_create_input_handler(second_input_callback);
+            eg_create_input_handler(second_input_callback, NULL);
         if (new_handler == NULL)
         {
             app->done = 1;
