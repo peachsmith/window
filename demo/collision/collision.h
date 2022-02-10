@@ -1,11 +1,21 @@
-#ifndef TEMP_EG_COLLISION_H
-#define TEMP_EG_COLLISION_H
+#ifndef EG_DEMO_COLLISION_H
+#define EG_DEMO_COLLISION_H
 
 #include "example.h"
 
-// This is a temporary interface for collision detection.
-// In the future, it may be kept in its own file, or it may be incorporated
-// into the core source file.
+// a helper type for a dynamic array of collision results
+typedef struct collision_list
+{
+    int cap;
+    int count;
+    eg_col_res *data;
+} collision_list;
+
+// utility functions for the collision_list type
+collision_list *col_create_list();
+void col_destroy_list(collision_list *);
+void col_clear_list(collision_list *);
+int col_push_result(collision_list *, eg_col_res *);
 
 /**
  * Determines if a collision will occur between a moving source entity A and
@@ -41,5 +51,13 @@ int is_overlapped(
     eg_rect *a,
     eg_rect *b,
     eg_overlap *res);
+
+/**
+ * Detects and handles collisions between all entities in an application.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ */
+void handle_collisions(eg_app *app);
 
 #endif

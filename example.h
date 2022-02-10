@@ -149,6 +149,9 @@ struct eg_app
     // The entity registry is a collection of entity information common to all
     // entities of a given type.
     eg_entity_type *registry;
+
+    // Handles collisions between entities.
+    void (*handle_collisions)(eg_app *);
 };
 
 // definition of the eg_input_handler struct
@@ -226,6 +229,7 @@ struct eg_overlap
     int dy1;
 };
 
+// TODO: figure out a better way to collect collision results
 struct eg_col_res
 {
     eg_overlap ovl;

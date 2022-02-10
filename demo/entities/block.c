@@ -12,7 +12,6 @@ static void render_block(eg_app *app, eg_entity *block)
     r.h = app->registry[block->id].height;
 
     SDL_SetRenderDrawColor(app->renderer, 0x02, 0x75, 0xD8, 0xFF);
-    // SDL_RenderFillRect(app->renderer, &r);
     SDL_RenderDrawRect(app->renderer, &r);
 }
 
@@ -61,7 +60,6 @@ static void collide_block(
         int absx = other->x_vel > 0 ? other->x_vel : -(other->x_vel);
         float correction = cnx * absx * t1;
         other->x_vel += (int)correction;
-        // printf("X (t: %.4f, 1-t: %.4f, correction: %.4f) \n", t_res->t, t1, correction);
     }
 
     if (cny)
@@ -69,7 +67,6 @@ static void collide_block(
         int absy = other->y_vel > 0 ? other->y_vel : -(other->y_vel);
         float correction = cny * absy * t1;
         other->y_vel += (int)correction;
-        // printf("Y (t: %.4f, 1-t: %.4f, correction: %.4f) \n", t_res->t, t1, correction);
     }
 }
 

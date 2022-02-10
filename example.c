@@ -1,5 +1,4 @@
 #include "example.h"
-#include "collision.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -163,240 +162,15 @@ void eg_handle_input(eg_app *app)
 
 void eg_update(eg_app *app)
 {
-    //--------------------------------------------------------
-    // TODO: remove this once collision detection is done.
+    // Clear the screen here so we can render debug information while
+    // updating application state.
     SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 255);
     SDL_RenderClear(app->renderer);
 
-    //--------------------------------------------------------
-    // BEGIN Collision Detection
-    // TODO: move all of the collision detection code into its own interface.
-    // TODO: create interface for collision result list.
-    // The collision detection checks each element of the entity list with
-    // all otherr elements of the entity list.
-    // On each iteration of the main collision detection loop, the current
-    // element from the entity list is called the source.
-    // On each iteration of the inner loop, the current entity being checked
-    // against the source is called the target. When dealing with functions
-    // that refer top their entity arguments as A and B, A is the source and
-    // B is the target.
-    // Each iteration of the main collision detection loop has three stages:
-    //  1. detect collisions
-    //  2. sort collisions
-    //  3. resolve collisions
-
-    // Create a dynamic array of collision results.
-    // This array can be reused on each iteration of the main collision
-    // detection loop.
-    int col_cap = 10;     // collision result list capacity
-    eg_col_res *col_ress; // collision result list
-    col_ress = (eg_col_res *)malloc(sizeof(eg_col_res) * col_cap);
-    if (col_ress == NULL)
+    if (app->handle_collisions != NULL)
     {
-        fprintf(stderr, "failed to create collision result list\n");
-        app->done = 1;
-        return;
+        app->handle_collisions(app);
     }
-
-    // main collision detection loop
-    eg_entity *source = app->entities;
-    while (source != NULL)
-    {
-        // int ovl_count = 0;
-        int col_count = 0;
-
-        // Stage 1: Collision Detection
-        eg_entity *target = source->previous;
-        while (target != NULL)
-        {
-            eg_overlap ovl;
-            eg_rect ar = {
-                .x = source->x_pos + source->x_vel,
-                .y = source->y_pos + source->y_vel,
-                .w = app->registry[source->id].width,
-                .h = app->registry[source->id].height,
-            };
-            eg_rect br = {
-                .x = target->x_pos,
-                .y = target->y_pos,
-                .w = app->registry[target->id].width,
-                .h = app->registry[target->id].height,
-            };
-            eg_ray_res res = {.cn = {.x = 2, .y = 2}};
-
-            if (eg_swept_aabb(app, source, target, &res))
-            {
-                if (!is_overlapped(&ar, &br, &ovl))
-                {
-                    if (source->id == 0)
-                    {
-                        printf("[WARN] spurious collision. t: %4f, CN: (%d, %d)\n",
-                               res.t,
-                               res.cn.x,
-                               res.cn.y);
-                    }
-                }
-
-                // Add the collision result to the array.
-                if (col_count >= col_cap)
-                {
-                    int new_cap = col_count + col_count / 2;
-                    eg_col_res *new_ress = (eg_col_res *)realloc(col_ress, new_cap);
-                    if (new_ress == NULL)
-                    {
-                        fprintf(stderr, "failed to reallocate collision result list\n");
-                        free(col_ress);
-                        app->done = 1;
-                        return;
-                    }
-                }
-                col_ress[col_count].col = res;
-                col_ress[col_count++].target = target;
-            }
-
-            target = target->previous;
-        }
-
-        target = source->next;
-        while (target != NULL)
-        {
-            eg_overlap ovl;
-            eg_rect ar = {
-                .x = source->x_pos + source->x_vel,
-                .y = source->y_pos + source->y_vel,
-                .w = app->registry[source->id].width,
-                .h = app->registry[source->id].height,
-            };
-            eg_rect br = {
-                .x = target->x_pos,
-                .y = target->y_pos,
-                .w = app->registry[target->id].width,
-                .h = app->registry[target->id].height,
-            };
-            eg_ray_res res = {.cn = {.x = 2, .y = 2}};
-
-            if (eg_swept_aabb(app, source, target, &res))
-            {
-                if (!is_overlapped(&ar, &br, &ovl))
-                {
-                    if (source->id == 0)
-                    {
-                        printf("[WARN] spurious collision. t: %4f, CN: (%d, %d)\n",
-                               res.t,
-                               res.cn.x,
-                               res.cn.y);
-                    }
-                }
-
-                // Add the collision result to the array.
-                if (col_count >= col_cap)
-                {
-                    int new_cap = col_count + col_count / 2;
-                    eg_col_res *new_ress = (eg_col_res *)realloc(col_ress, new_cap);
-                    if (new_ress == NULL)
-                    {
-                        fprintf(stderr, "failed to reallocate collision result list\n");
-                        free(col_ress);
-                        app->done = 1;
-                        return;
-                    }
-                }
-                col_ress[col_count].col = res;
-                col_ress[col_count++].target = target;
-            }
-
-            target = target->next;
-        }
-
-        // Stage 2: Collision Sorting
-        int sorted = 0;
-        while (!sorted)
-        {
-            sorted = 1;
-            for (int i = 0; i < col_count; i++)
-            {
-                eg_col_res tmp;
-                if (i < col_count - 1)
-                {
-                    float t0 = col_ress[i].col.t;
-                    float t1 = col_ress[i + 1].col.t;
-                    eg_point cn0 = col_ress[i].col.cn;
-                    eg_point cn1 = col_ress[i + 1].col.cn;
-
-                    // Check the contact normals.
-                    // If both the x and y components of a contact normal
-                    // are non zero, then it is considered "greater" than
-                    // a true contact normal.
-                    int corner = 0;
-                    if (cn0.x && cn0.y && (!cn1.x || !cn1.y))
-                    {
-                        corner = 1;
-                    }
-
-                    // Check if we have two possible perfect corner collisions
-                    // for one source. Hopefully, this never happens.
-                    // It should only be possible if two targets overlap in
-                    // just the right way.
-                    if (cn0.x && cn0.y && cn1.x && cn1.y)
-                    {
-                        printf("[WARN] two corner collisions for one source\n");
-                    }
-
-                    if (t0 > t1 || (t0 == t1 && corner))
-                    {
-                        sorted = 0;
-                        tmp = col_ress[i];
-                        col_ress[i] = col_ress[i + 1];
-                        col_ress[i + 1] = tmp;
-                    }
-                }
-            }
-        }
-
-        // Stage 3: Collision Resolution
-        int resolve_count = 0;
-        for (int i = 0; i < col_count; i++)
-        {
-            eg_entity *a = source;
-            eg_entity *b = col_ress[i].target;
-            eg_overlap ovl = {.dx0 = 0, .dx1 = 0, .dy0 = 0, .dy1 = 0};
-            eg_rect ar = {
-                .x = a->x_pos + a->x_vel,
-                .y = a->y_pos + a->y_vel,
-                .w = app->registry[a->id].width,
-                .h = app->registry[a->id].height,
-            };
-            eg_rect br = {
-                .x = b->x_pos,
-                .y = b->y_pos,
-                .w = app->registry[b->id].width,
-                .h = app->registry[b->id].height,
-            };
-            eg_ray_res col = {.cn = {.x = 2, .y = 2}};
-
-            if (eg_swept_aabb(app, a, b, &col))
-            {
-                eg_collider cola = app->registry[a->id].collide;
-                eg_collider colb = app->registry[b->id].collide;
-                if (cola != NULL)
-                {
-                    cola(app, a, b, &ovl, &col, 0);
-                }
-                if (colb != NULL)
-                {
-                    colb(app, b, a, &ovl, &col, 1);
-                }
-                resolve_count++;
-            }
-        }
-
-        source = source->next;
-    }
-
-    // Destroy the collision detection result array.
-    free(col_ress);
-    // END Collision Detection
-    //--------------------------------------------------------
 
     // Update state.
     eg_entity *ent = app->entities;
@@ -412,10 +186,8 @@ void eg_update(eg_app *app)
 
 void eg_draw(eg_app *app)
 {
-    // Clear the contents of the previous frame.
-    // TODO: uncomment this once collision detection is done.
-    // SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 255);
-    // SDL_RenderClear(app->renderer);
+    // The contents of the previous frame have been cleared in the
+    // eg_update function.
 
     // Render each entity.
     eg_entity *ent = app->entities;
