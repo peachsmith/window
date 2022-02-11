@@ -203,7 +203,7 @@ eg_impl *eg_create_impl();
 void eg_destroy_impl(eg_impl *);
 void eg_clear_screen(eg_app *);
 void eg_render_screen(eg_app *);
-void eg_set_color(eg_app *, int, int, int, int);
+void eg_set_color(eg_app *, uint32_t);
 void eg_draw_line(eg_app *, eg_point *, eg_point *);
 void eg_draw_rect(eg_app *, eg_rect *, int);
 void eg_process_events(eg_app *);

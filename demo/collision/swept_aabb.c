@@ -1,4 +1,5 @@
 #include "demo/collision/collision.h"
+#include "colors.h"
 #include <float.h>
 
 /**
@@ -31,11 +32,11 @@ static void draw_collision(
     target_bounds.y = r->y;
     target_bounds.w = r->w;
     target_bounds.h = r->h;
-    eg_set_color(app, 255, 0, 0, 255);
+    eg_set_color(app, EG_COLOR_8); // 255, 0, 0, 255);
     eg_draw_rect(app, &target_bounds, 0);
 
     // Draw the contact point CP in cyan.
-    eg_set_color(app, 0, 255, 255, 255);
+    eg_set_color(app, EG_COLOR_14); // EG_COLO); // 0, 255, 255, 255);
     cp_rect.x = res->cp.x - 5;
     cp_rect.y = res->cp.y - 5;
     cp_rect.w = 10;
@@ -43,7 +44,7 @@ static void draw_collision(
     eg_draw_rect(app, &cp_rect, 1);
 
     // Draw the contact normal CN in magenta.
-    eg_set_color(app, 255, 0, 255, 255);
+    eg_set_color(app, EG_COLOR_5); // 255, 0, 255, 255);
     p0.x = res->cp.x;
     p0.y = res->cp.y;
     p1.x = res->cp.x + res->cn.x * 20;
@@ -51,7 +52,7 @@ static void draw_collision(
     eg_draw_line(app, &p0, &p1);
 
     // Draw the direction vector D in green.
-    eg_set_color(app, 0, 255, 100, 255);
+    eg_set_color(app, EG_COLOR_18); // 0, 255, 100, 255);
     p0.x = p->x;
     p0.y = p->y;
     p1.x = p->x + d->x * 10;

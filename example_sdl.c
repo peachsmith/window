@@ -172,12 +172,22 @@ void eg_render_screen(eg_app *app)
     SDL_RenderPresent(impl->renderer);
 }
 
-void eg_set_color(eg_app *app, int r, int g, int b, int a)
+void eg_set_color(eg_app *app, uint32_t color)
 {
     if (app == NULL || app->impl == NULL)
     {
         return;
     }
+
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
+    Uint8 a;
+
+    b = (Uint8)(color & 0xFF);
+    g = (Uint8)((color >> 8) & 0xFF);
+    r = (Uint8)((color >> 16) & 0xFF);
+    a = (Uint8)((color >> 24) & 0xFF);
 
     eg_impl *impl = app->impl;
     SDL_SetRenderDrawColor(impl->renderer, r, g, b, a);
