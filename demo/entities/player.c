@@ -6,15 +6,14 @@
 
 static void render_player(eg_app *app, eg_entity *player)
 {
-    SDL_Rect r;
+    eg_rect r;
     r.x = player->x_pos;
     r.y = player->y_pos;
     r.w = app->registry[player->id].width;
     r.h = app->registry[player->id].height;
 
-    SDL_SetRenderDrawColor(app->renderer, 0xF0, 0xAD, 0x4E, 0xFF);
-    // SDL_RenderFillRect(app->renderer, &r);
-    SDL_RenderDrawRect(app->renderer, &r);
+    eg_set_color(app, 0xF0, 0xAD, 0x4E, 0xFF);
+    eg_draw_rect(app, &r, 0);
 }
 
 static void update_player(eg_app *app, eg_entity *player)

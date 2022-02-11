@@ -7,10 +7,10 @@
  * Gets the character representation of a demo entity id.
  * The returned character should be either 'Q', 'W', or 'E'. If an unexpected
  * id is received, 'X' is returned.
- * 
+ *
  * Params:
  *   int - the id of the demo entity
- * 
+ *
  * Returns:
  *   char - a single character representation of the id
  */
@@ -32,8 +32,8 @@ static char id_to_char(int id)
     }
 }
 
-// populates an SDL_Rect with values from an entity.
-static void get_rect(SDL_Rect *r, eg_app *app, eg_entity *e)
+// populates an eg_rect with values from an entity.
+static void get_rect(eg_rect *r, eg_app *app, eg_entity *e)
 {
     r->x = e->x_pos;
     r->y = e->y_pos;
@@ -47,31 +47,31 @@ static void get_rect(SDL_Rect *r, eg_app *app, eg_entity *e)
 // draws a red rectangle at the location of entity q
 static void render_q(eg_app *app, eg_entity *ent)
 {
-    SDL_Rect r;
+    eg_rect r;
     get_rect(&r, app, ent);
 
-    SDL_SetRenderDrawColor(app->renderer, 0x02, 0x75, 0xD8, 0xFF);
-    SDL_RenderFillRect(app->renderer, &r);
+    eg_set_color(app, 0x02, 0x75, 0xD8, 0xFF);
+    eg_draw_rect(app, &r, 1);
 }
 
 // draws a red rectangle at the location of entity w
 static void render_w(eg_app *app, eg_entity *ent)
 {
-    SDL_Rect r;
+    eg_rect r;
     get_rect(&r, app, ent);
 
-    SDL_SetRenderDrawColor(app->renderer, 0x5C, 0xB8, 0x5C, 0xFF);
-    SDL_RenderFillRect(app->renderer, &r);
+    eg_set_color(app, 0x5C, 0xB8, 0x5C, 0xFF);
+    eg_draw_rect(app, &r, 1);
 }
 
 // draws a red rectangle at the location of entity e
 static void render_e(eg_app *app, eg_entity *ent)
 {
-    SDL_Rect r;
+    eg_rect r;
     get_rect(&r, app, ent);
 
-    SDL_SetRenderDrawColor(app->renderer, 0xD9, 0x53, 0x4F, 0xFF);
-    SDL_RenderFillRect(app->renderer, &r);
+    eg_set_color(app, 0xD9, 0x53, 0x4F, 0xFF);
+    eg_draw_rect(app, &r, 1);
 }
 
 //----------------------------------------------------------------------------

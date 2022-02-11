@@ -39,78 +39,36 @@ eg_app *eg_create_app()
 {
     eg_app *app = NULL;
 
-    // Allocate memory for the eg_app struct.
+    // Create the app struct.
     app = (eg_app *)malloc(sizeof(eg_app));
-
-    // Verify memory allocation.
     if (app == NULL)
     {
         return NULL;
     }
 
-    // Ensure that all pointers are NULL.
-    app->window = NULL;
-    app->renderer = NULL;
-    app->keystates = NULL;
+    // Ensure that all pointers are NULL or have a default value.
+    app->impl = NULL;
     app->entities = NULL;
     app->input = NULL;
     app->update = default_update;
     app->draw = default_draw;
 
-    // Create the window.
-    app->window = SDL_CreateWindow(
-        "Example",
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        240,
-        160,
-        SDL_WINDOW_SHOWN);
-
-    // Verify window creation.
-    if (app->window == NULL)
+    // Create the implementation struct.
+    app->impl = eg_create_impl();
+    if (app->impl == NULL)
     {
-        fprintf(
-            stderr,
-            "failed to create window. error: %s\n",
-            SDL_GetError());
         free(app);
         return NULL;
     }
-
-    // Create the renderer.
-    app->renderer = SDL_CreateRenderer(
-        app->window,
-        -1,
-        SDL_RENDERER_ACCELERATED);
-
-    // Verify renderer creation.
-    if (app->renderer == NULL)
-    {
-        fprintf(
-            stderr,
-            "failed to create renderer. error: %s\n",
-            SDL_GetError());
-        SDL_DestroyWindow(app->window);
-        free(app);
-        return NULL;
-    }
-
-    // Set the main loop sentinel value to 0.
-    app->done = 0;
-
-    // Since the desired framerate is 60 frames per second, we set the
-    // approximate milliseconds per frame to 16. This is the truncated result
-    // of 1000 / 16.
-    app->frame_len = 16;
-
-    // Get the keyboard state.
-    app->keystates = SDL_GetKeyboardState(NULL);
 
     // Initialize the key press flags to 0.
     for (int i = 0; i < SDL_NUM_SCANCODES; i++)
     {
         app->key_captures[i] = 0;
     }
+
+    // Set the main loop sentinel value to 0.
+    app->done = 0;
 
     return app;
 }
@@ -136,52 +94,9 @@ void eg_destroy_app(eg_app *app)
     // Destroy the entity registry.
     eg_destroy_registry(app->registry);
 
-    // Destroy the renderer, the window, then the wrapper structure.
-    SDL_DestroyRenderer(app->renderer);
-    SDL_DestroyWindow(app->window);
+    // Destroy the implementation.
+    eg_destroy_impl(app->impl);
     free(app);
-}
-
-void eg_process_events(eg_app *app)
-{
-    // First, we get the current tick count for regulating framerate.
-    app->ticks = SDL_GetTicks64();
-
-    // According to the wiki, it is common practice to process all events in
-    // the event queue at the beginning of each iteration of the main loop.
-    // The SDL_PollEvent function also calls SDL_PumpEvents, which updates the
-    // keyboard state array.
-    while (SDL_PollEvent(&(app->event)))
-    {
-        if (app->event.type == SDL_QUIT)
-        {
-            app->done = 1;
-        }
-
-        // Clear the key press capture flags.
-        if (app->event.type == SDL_KEYUP)
-        {
-            app->key_captures[app->event.key.keysym.scancode] = 0;
-        }
-    }
-}
-
-void eg_delay(eg_app *app)
-{
-    // Get the approximate number of milliseconds since the beginning of the
-    // current iteration of the main loop.
-    Uint64 elapsed = SDL_GetTicks64() - app->ticks;
-
-    // If the frame length is greater than the elapsed milliseconds since the
-    // beginning of the frame, wait for the duration of the difference.
-    if (app->frame_len > elapsed)
-    {
-        // The SDL_Delay function expects a Uint32 as its argument.
-        // Converting from Uint64 to Uint32 will truncate the value, but the
-        // difference between the frame length and the elapsed milliseconds
-        // should never be greater than UINT32_MAX.
-        SDL_Delay((Uint32)(app->frame_len - elapsed));
-    }
 }
 
 //----------------------------------------------------------------------------
@@ -189,38 +104,12 @@ void eg_delay(eg_app *app)
 
 int eg_peek_input(eg_app *app, int code)
 {
-    if (code >= SDL_NUM_SCANCODES)
-    {
-        return 0;
-    }
-
-    if (app->keystates[code])
-    {
-        return 1;
-    }
-
-    return 0;
+    return eg_peek_key(app, code);
 }
 
 int eg_consume_input(eg_app *app, int code)
 {
-    if (code >= SDL_NUM_SCANCODES)
-    {
-        return 0;
-    }
-
-    if (app->key_captures[code])
-    {
-        return 0;
-    }
-
-    if (app->keystates[code])
-    {
-        app->key_captures[code] = 1;
-        return 1;
-    }
-
-    return 0;
+    return eg_consume_key(app, code);
 }
 
 eg_input_handler *eg_create_input_handler(eg_callback callback, eg_entity *target)

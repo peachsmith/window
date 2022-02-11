@@ -18,8 +18,7 @@
 static void update(eg_app *app)
 {
     // Clear the screen.
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 255);
-    SDL_RenderClear(app->renderer);
+    eg_clear_screen(app);
 
     // Handle input.
     if (app->input != NULL)
@@ -62,7 +61,7 @@ static void draw(eg_app *app)
     }
 
     // Show the contents of the current frame.
-    SDL_RenderPresent(app->renderer);
+    eg_render_screen(app);
 }
 
 int prepare(eg_app *app)

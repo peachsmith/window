@@ -6,14 +6,14 @@
 
 static void render_block(eg_app *app, eg_entity *block)
 {
-    SDL_Rect r;
+    eg_rect r;
     r.x = block->x_pos;
     r.y = block->y_pos;
     r.w = app->registry[block->id].width;
     r.h = app->registry[block->id].height;
 
-    SDL_SetRenderDrawColor(app->renderer, 0x02, 0x75, 0xD8, 0xFF);
-    SDL_RenderDrawRect(app->renderer, &r);
+    eg_set_color(app, 0x02, 0x75, 0xD8, 0xFF);
+    eg_draw_rect(app, &r, 0);
 }
 
 static void collide_block(

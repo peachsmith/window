@@ -1,5 +1,5 @@
-#ifndef EXAMPLE_SDL_INTERFACE_H
-#define EXAMPLE_SDL_INTERFACE_H
+#ifndef EG_MAIN_API_H
+#define EG_MAIN_API_H
 
 // This is the Example interface. It's essentially a wrapper around SDL.
 // Since this is an example, all functions an data types will be prefixed
@@ -10,6 +10,10 @@
 #include <SDL2/SDL.h>
 
 #include <stdint.h>
+
+// wrapper around SDL stuff
+// TODO: add comments and rename things
+typedef struct eg_impl eg_impl;
 
 /**
  * This structure wraps the various SDL data types.
@@ -123,31 +127,7 @@ typedef void (*eg_collider)(
 // definition of the eg_app struct
 struct eg_app
 {
-    // The window is an abstraction layer that SDL provides for the GUI
-    // capabilities of the underlying operating system.
-    SDL_Window *window;
-
-    // The renderer is an abstraction layer that SDL provides for drawing
-    // graphical data to the screen.
-    SDL_Renderer *renderer;
-
-    // This field represents a system event. It's internal fields will be set
-    // by SDL_PollEvent during the event processing loop.
-    SDL_Event event;
-
-    // This pointer references an array containing flags that indicate
-    // if keys on the keyboard are pressed. It contains a Uint8 value for each
-    // key. If the value is 1, then the key is pressed. If the value is 0,
-    // then the key is not pressed.
-    const Uint8 *keystates;
-
-    // This is the approximate number of milliseconds elapsed since the
-    // initialization of SDL.
-    Uint64 ticks;
-
-    // Frame length is the approximate number of milliseconds expected to
-    // elapse during each iteration of the main loop.
-    Uint64 frame_len;
+    eg_impl *impl;
 
     // This is an array of flags to indicate that a key press has already been
     // detected.
@@ -218,6 +198,20 @@ struct eg_entity_type
 };
 
 //----------------------------------------------------------------------------
+// SDL functions
+eg_impl *eg_create_impl();
+void eg_destroy_impl(eg_impl *);
+void eg_clear_screen(eg_app *);
+void eg_render_screen(eg_app *);
+void eg_set_color(eg_app *, int, int, int, int);
+void eg_draw_line(eg_app *, eg_point *, eg_point *);
+void eg_draw_rect(eg_app *, eg_rect *, int);
+void eg_process_events(eg_app *);
+void eg_delay(eg_app *);
+int eg_peek_key(eg_app *, int);
+int eg_consume_key(eg_app *, int);
+
+//----------------------------------------------------------------------------
 // core functions
 
 /**
@@ -252,22 +246,6 @@ eg_app *eg_create_app();
  *   app* - a pointer to an app struct
  */
 void eg_destroy_app(eg_app *);
-
-/**
- * Processes all events in the event queue.
- *
- * Params:
- *   app* - a pointer to an app struct
- */
-void eg_process_events(eg_app *);
-
-/**
- * Pauses execution of the main loop.
- *
- * Params:
- *   app* - a pointer to an app struct
- */
-void eg_delay(eg_app *);
 
 //----------------------------------------------------------------------------
 // input handling functions

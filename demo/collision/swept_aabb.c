@@ -19,43 +19,44 @@ static void draw_collision(
     eg_point *p,
     eg_point *d)
 {
+    eg_rect target_bounds;
+    eg_rect cp_rect;
+    eg_point p0;
+    eg_point p1;
+
     // Draw the target rectangle in red.
     // The dimensions should be the width and height of the target entity
     // plus the width and height of the source entity.
-    SDL_Rect target_bounds = {
-        .x = r->x,
-        .y = r->y,
-        .w = r->w,
-        .h = r->h};
-    SDL_SetRenderDrawColor(app->renderer, 255, 0, 0, 255);
-    SDL_RenderDrawRect(app->renderer, &target_bounds);
+    target_bounds.x = r->x;
+    target_bounds.y = r->y;
+    target_bounds.w = r->w;
+    target_bounds.h = r->h;
+    eg_set_color(app, 255, 0, 0, 255);
+    eg_draw_rect(app, &target_bounds, 0);
 
     // Draw the contact point CP in cyan.
-    SDL_SetRenderDrawColor(app->renderer, 0, 255, 255, 255);
-    SDL_Rect cp_rect = {
-        .x = res->cp.x - 5,
-        .y = res->cp.y - 5,
-        .w = 10,
-        .h = 10};
-    SDL_RenderFillRect(app->renderer, &cp_rect);
+    eg_set_color(app, 0, 255, 255, 255);
+    cp_rect.x = res->cp.x - 5;
+    cp_rect.y = res->cp.y - 5;
+    cp_rect.w = 10;
+    cp_rect.h = 10;
+    eg_draw_rect(app, &cp_rect, 1);
 
     // Draw the contact normal CN in magenta.
-    SDL_SetRenderDrawColor(app->renderer, 255, 0, 255, 255);
-    SDL_RenderDrawLine(
-        app->renderer,
-        res->cp.x,
-        res->cp.y,
-        res->cp.x + res->cn.x * 20,
-        res->cp.y + res->cn.y * 20);
+    eg_set_color(app, 255, 0, 255, 255);
+    p0.x = res->cp.x;
+    p0.y = res->cp.y;
+    p1.x = res->cp.x + res->cn.x * 20;
+    p1.y = res->cp.y + res->cn.y * 20;
+    eg_draw_line(app, &p0, &p1);
 
     // Draw the direction vector D in green.
-    SDL_SetRenderDrawColor(app->renderer, 0, 255, 100, 255);
-    SDL_RenderDrawLine(
-        app->renderer,
-        p->x,
-        p->y,
-        p->x + d->x * 10,
-        p->y + d->y * 10);
+    eg_set_color(app, 0, 255, 100, 255);
+    p0.x = p->x;
+    p0.y = p->y;
+    p1.x = p->x + d->x * 10;
+    p1.y = p->y + d->y * 10;
+    eg_draw_line(app, &p0, &p1);
 }
 
 /**
