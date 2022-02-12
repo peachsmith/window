@@ -84,7 +84,8 @@ int prepare(eg_app *app)
     entity_demo_register_w(&reg[ENTITY_TYPE_W]);
     entity_demo_register_e(&reg[ENTITY_TYPE_E]);
     block_demo_register(&reg[ENTITY_TYPE_BLOCK]);
-    block_demo_register_big(&reg[ENTITY_TYPE_BIG_BLOCK]);
+    block_demo_register_big(&reg[ENTITY_TYPE_BLOCK_BIG]);
+    block_demo_register_long(&reg[ENTITY_TYPE_BLOCK_LONG]);
 
     load_scene_0(app);
 

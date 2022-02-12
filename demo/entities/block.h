@@ -2,49 +2,36 @@
 #define EG_DEMO_BLOCK_H
 
 // A block is an example of a solid object.
+// It is typically a static rectangle. A block's only interaction with other
+// entities is to prevent them from passing through itself.
+// Each type of block has a create function and a register function.
 
 #include "example.h"
 
 /**
  * Populates an entity type struct with information about the block entity
  * type.
- * 
+ *
  * Params:
  *   eg_entity_type* - the block entity type definition
  */
-void block_demo_register(eg_entity_type*);
+void block_demo_register(eg_entity_type *);
 
 /**
- * Populates an entity type struct with information about the big block entity
- * type.
- * 
- * Params:
- *   eg_entity_type* - the block entity type definition
- */
-void block_demo_register_big(eg_entity_type*);
-
-/**
- * Creates a block entity.
- * 
+ * Creates a new block entity.
+ *
  * Params:
  *   int - the x position
  *   int - the y position
- * 
- * Returns:
- *   eg_entity* - a pointer to the new block entity.
  */
-eg_entity* block_demo_create(int, int);
+eg_entity *block_demo_create(int, int);
 
-/**
- * Creates a big block entity.
- * 
- * Params:
- *   int - the x position
- *   int - the y position
- * 
- * Returns:
- *   eg_entity* - a pointer to the new big block entity.
- */
-eg_entity* block_demo_create_big(int, int);
+// register and create functions for a large, square block.
+void block_demo_register_big(eg_entity_type *);
+eg_entity *block_demo_create_big(int, int);
+
+// register and create functions for a long, rectangular block.
+void block_demo_register_long(eg_entity_type *);
+eg_entity *block_demo_create_long(int, int);
 
 #endif

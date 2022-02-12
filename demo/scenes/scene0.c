@@ -38,7 +38,7 @@ void load_scene_0(eg_app *app)
     eg_input_handler *root_handler;
 
     // Starting position for building a sequence of blocks.
-    int x_start = 20;
+    int x_start = 10;
     int y_start = 30;
 
     // Add some of the blocks here and some of them later to prove that
@@ -73,6 +73,9 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create(x_start + 120, y_start + 60));
     eg_add_entity(app, block_demo_create(x_start + 120, y_start + 72));
     eg_add_entity(app, block_demo_create(x_start + 120, y_start + 84));
+
+    // A long, horizontal block.
+    eg_add_entity(app, block_demo_create_long(x_start + 120, y_start + 96));
 
     // Create the initial input handler and add it to the app.
     root_callback = root_input_callback;

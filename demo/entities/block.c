@@ -54,15 +54,6 @@ void block_demo_register(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-void block_demo_register_big(eg_entity_type *t)
-{
-    t->id = ENTITY_TYPE_BIG_BLOCK;
-    t->width = 52;
-    t->height = 52;
-    t->render = render_block;
-    t->collide = collide_block;
-}
-
 eg_entity *block_demo_create(int x, int y)
 {
     eg_entity *block = NULL;
@@ -80,6 +71,15 @@ eg_entity *block_demo_create(int x, int y)
     return block;
 }
 
+void block_demo_register_big(eg_entity_type *t)
+{
+    t->id = ENTITY_TYPE_BLOCK_BIG;
+    t->width = 52;
+    t->height = 52;
+    t->render = render_block;
+    t->collide = collide_block;
+}
+
 eg_entity *block_demo_create_big(int x, int y)
 {
     eg_entity *block = NULL;
@@ -90,7 +90,33 @@ eg_entity *block_demo_create_big(int x, int y)
         return NULL;
     }
 
-    block->id = ENTITY_TYPE_BIG_BLOCK;
+    block->id = ENTITY_TYPE_BLOCK_BIG;
+    block->x_pos = x;
+    block->y_pos = y;
+
+    return block;
+}
+
+void block_demo_register_long(eg_entity_type *t)
+{
+    t->id = ENTITY_TYPE_BLOCK_LONG;
+    t->width = 100;
+    t->height = 16;
+    t->render = render_block;
+    t->collide = collide_block;
+}
+
+eg_entity *block_demo_create_long(int x, int y)
+{
+    eg_entity *block = NULL;
+
+    block = eg_create_entity();
+    if (block == NULL)
+    {
+        return NULL;
+    }
+
+    block->id = ENTITY_TYPE_BLOCK_LONG;
     block->x_pos = x;
     block->y_pos = y;
 
