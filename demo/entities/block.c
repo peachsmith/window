@@ -43,6 +43,27 @@ static void collide_block(
         float correction = t_res->cn.y * absy * t1;
         other->y_vel += (int)correction;
     }
+
+    // Clear the jump flag.
+    // Only do this if the entity collided with the block from above.
+    // TODO: give proper names to flags and design a system to use flags
+    // in correct contexts.
+    //
+    // TODO: there is a scenario where the other entity may have its y
+    // velocity adjusted incorrectly, resulting in clipping through a block.
+    // Steps to reproduce:
+    // 1. Press and hold the left arrow key to keep the player pressed
+    //    against a vertical wall.
+    // 2. While holding left, press and hold the right arrow key.
+    // 3. While holding the left and right arrow keys, press and hold space.
+    // 4. While holding right and space, release the left arrow key.
+    //
+    // TODO: holding the left and right arrow keys simultaneously prevents
+    // jumping. This may be related to the above clipping bug.
+    if (t_res->cn.y < 0 && !t_res->cn.x)
+    {
+        eg_clear_flag(other, 0);
+    }
 }
 
 void block_demo_register(eg_entity_type *t)
