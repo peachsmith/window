@@ -11,6 +11,10 @@
 
 #include <stdint.h>
 
+// default screen dimensions based on the Game Boy Advance.
+#define EG_DEFAULT_SCREEN_WIDTH 240
+#define EG_DEFAULT_SCREEN_HEIGHT 160
+
 // wrapper around SDL stuff
 // TODO: add comments and rename things
 typedef struct eg_impl eg_impl;
@@ -94,6 +98,12 @@ typedef struct eg_col_res
     eg_entity *target;
 } eg_col_res;
 
+typedef struct eg_camera
+{
+    int x;
+    int y;
+} eg_camera;
+
 /**
  * A function that can get all its required input from an app struct.
  *
@@ -155,6 +165,16 @@ struct eg_app
     // entities of a given type.
     eg_entity_type *registry;
 
+    eg_camera cam;
+
+    // TEMP: camera boundaries for debugging
+    int cl;
+    int cr;
+    int ct;
+    int cb;
+    int screen_width;
+    int screen_height;
+
     eg_func update;
     eg_func draw;
 };
@@ -199,7 +219,7 @@ struct eg_entity_type
 
 //----------------------------------------------------------------------------
 // SDL functions
-eg_impl *eg_create_impl();
+eg_impl *eg_create_impl(int, int);
 void eg_destroy_impl(eg_impl *);
 void eg_clear_screen(eg_app *);
 void eg_render_screen(eg_app *);

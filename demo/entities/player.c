@@ -19,8 +19,26 @@ static void render_player(eg_app *app, eg_entity *player)
 
 static void update_player(eg_app *app, eg_entity *player)
 {
+    // UNDER CONSTRUCTION:
+    // implementing camera boundaries
+    int w = app->registry[player->id].width;
+    int h = app->registry[player->id].height;
+
     // Update horizontal position.
-    player->x_pos += player->x_vel;
+    if (player->x_pos + w >= app->cr && player->x_vel > 0)
+    {
+        player->x_pos = app->cr - w;
+        app->cam.x -= player->x_vel;
+    }
+    else if (player->x_pos <= app->cl && player->x_vel < 0)
+    {
+        player->x_pos = app->cl;
+        app->cam.x -= player->x_vel;
+    }
+    else
+    {
+        player->x_pos += player->x_vel;
+    }
 
     // Perform horizontal inertia.
     if (player->x_vel > 0)
@@ -34,7 +52,20 @@ static void update_player(eg_app *app, eg_entity *player)
     }
 
     // Update vertical position.
-    player->y_pos += player->y_vel;
+    if (player->y_pos + h >= app->cb && player->y_vel > 0)
+    {
+        player->y_pos = app->cb - h;
+        app->cam.y -= player->y_vel;
+    }
+    else if (player->y_pos <= app->ct && player->y_vel < 0)
+    {
+        player->y_pos = app->ct;
+        app->cam.y -= player->y_vel;
+    }
+    else
+    {
+        player->y_pos += player->y_vel;
+    }
 
     // Perform vertical inertia.
     if (player->y_vel > 0)

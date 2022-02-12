@@ -54,7 +54,9 @@ eg_app *eg_create_app()
     app->draw = default_draw;
 
     // Create the implementation struct.
-    app->impl = eg_create_impl();
+    app->impl = eg_create_impl(
+        EG_DEFAULT_SCREEN_WIDTH,
+        EG_DEFAULT_SCREEN_HEIGHT);
     if (app->impl == NULL)
     {
         free(app);
@@ -69,6 +71,18 @@ eg_app *eg_create_app()
 
     // Set the main loop sentinel value to 0.
     app->done = 0;
+
+    // Set the camera position to (0, 0).
+    app->cam.x = 0;
+    app->cam.y = 0;
+
+    // TEMP: camera boudnaries for debugging.
+    app->cl = 50;
+    app->cr = 180;
+    app->ct = 20;
+    app->cb = 140;
+    app->screen_width = EG_DEFAULT_SCREEN_WIDTH;
+    app->screen_height = EG_DEFAULT_SCREEN_HEIGHT;
 
     return app;
 }

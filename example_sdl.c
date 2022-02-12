@@ -15,7 +15,7 @@ struct eg_impl
     Uint64 frame_len;
 };
 
-eg_impl *eg_create_impl()
+eg_impl *eg_create_impl(int screen_width, int screen_height)
 {
     eg_impl *impl;
     SDL_Window *window;
@@ -34,8 +34,8 @@ eg_impl *eg_create_impl()
         "Example",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        240,
-        160,
+        screen_width,
+        screen_height,
         SDL_WINDOW_SHOWN);
     if (window == NULL)
     {

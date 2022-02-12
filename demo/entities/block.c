@@ -8,8 +8,8 @@
 static void render_block(eg_app *app, eg_entity *block)
 {
     eg_rect r;
-    r.x = block->x_pos;
-    r.y = block->y_pos;
+    r.x = block->x_pos + app->cam.x;
+    r.y = block->y_pos + app->cam.y;
     r.w = app->registry[block->id].width;
     r.h = app->registry[block->id].height;
 

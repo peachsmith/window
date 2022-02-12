@@ -446,9 +446,11 @@ int eg_swept_aabb(
     int ah = app->registry[a->id].height;
 
     // Create a rectangle representing the boundaries of target entity B.
-    // Since the origin point of the ray
-    r.x = b->x_pos - (aw / 2);
-    r.y = b->y_pos - (ah / 2);
+    // To construct the target boundary, we add half of the source width to
+    // the target width, and half of the source height to the target height.
+    // We also add the camera position.
+    r.x = b->x_pos + app->cam.x - (aw / 2);
+    r.y = b->y_pos + app->cam.y - (ah / 2);
     r.w = app->registry[b->id].width + aw;
     r.h = app->registry[b->id].height + ah;
 
