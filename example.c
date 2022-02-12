@@ -238,6 +238,7 @@ eg_entity *eg_create_entity()
     entity->y_pos = 0;
     entity->x_vel = 0;
     entity->y_vel = 0;
+    entity->flags = 0;
     entity->next = NULL;
     entity->previous = NULL;
 
@@ -319,4 +320,80 @@ eg_entity *eg_remove_entity(eg_app *app, eg_entity *entity)
     previous->next = next;
 
     return entity;
+}
+
+int eg_check_flag(eg_entity *e, int f)
+{
+    // The flag index must be in the range [0, 7] since we're only dealing
+    // with 8 bits.
+    if (f < 0 || f > 8)
+    {
+        return 0;
+    }
+
+    // Convert the flag index to a bit value.
+    uint8_t bit = (uint8_t)(1 << f);
+
+    // Check if the flag is set.
+    if (e->flags & bit)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+void eg_set_flag(eg_entity *e, int f)
+{
+    // The flag index must be in the range [0, 7] since we're only dealing
+    // with 8 bits.
+    if (f < 0 || f > 8)
+    {
+        return;
+    }
+
+    // Convert the flag index to a bit value.
+    uint8_t bit = (uint8_t)(1 << f);
+
+    // Set the flag.
+    e->flags |= bit;
+}
+
+void eg_clear_flag(eg_entity *e, int f)
+{
+    // The flag index must be in the range [0, 7] since we're only dealing
+    // with 8 bits.
+    if (f < 0 || f > 8)
+    {
+        return;
+    }
+
+    // Convert the flag index to a bit value.
+    uint8_t bit = (uint8_t)(1 << f);
+
+    // Clear the flag.
+    e->flags &= ~bit;
+}
+
+void eg_toggle_flag(eg_entity *e, int f)
+{
+    // The flag index must be in the range [0, 7] since we're only dealing
+    // with 8 bits.
+    if (f < 0 || f > 8)
+    {
+        return;
+    }
+
+    // Convert the flag index to a bit value.
+    uint8_t bit = (uint8_t)(1 << f);
+
+    // If the flag is already set, then clear it.
+    if (e->flags & bit)
+    {
+        e->flags &= ~bit;
+        return;
+    }
+
+    // Set the flag.
+    e->flags |= bit;
 }

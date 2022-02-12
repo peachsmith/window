@@ -198,10 +198,11 @@ struct eg_entity
 {
     int id; // identifies the entity type in the registry
 
-    int x_pos; // horizontal position
-    int y_pos; // vertical position
-    int x_vel; // horizontal velocity
-    int y_vel; // vertical velocity
+    int x_pos;     // horizontal position
+    int y_pos;     // vertical position
+    int x_vel;     // horizontal velocity
+    int y_vel;     // vertical velocity
+    uint8_t flags; // flags
 
     eg_entity *next;
     eg_entity *previous;
@@ -401,5 +402,44 @@ void eg_add_entity(eg_app *, eg_entity *);
  *   eg_entity* - the entity that was removed
  */
 eg_entity *eg_remove_entity(eg_app *, eg_entity *);
+
+/**
+ * Checks the value of an entity's flag.
+ *
+ * Params:
+ *   eg_entity* - a reference to an entity whose flags will be checked
+ *   int - the index of the flag to check, ranging from 0 to 7.
+ *
+ * Returns:
+ *   int - 1 if the flag is set or 0 if the flag is not set.
+ */
+int eg_check_flag(eg_entity *e, int f);
+
+/**
+ * Sets a flag on an entity.
+ *
+ * Params:
+ *   eg_entity* - a reference to an entity whose flag will be set
+ *   int - the index of the flag to set, ranging from 0 to 7.
+ */
+void eg_set_flag(eg_entity *e, int f);
+
+/**
+ * Clears a flag on an entity.
+ *
+ * Params:
+ *   eg_entity* - a reference to an entity whose flag will be cleared
+ *   int - the index of the flag to clear, ranging from 0 to 7.
+ */
+void eg_clear_flag(eg_entity *e, int f);
+
+/**
+ * Toggles a flag on an entity.
+ *
+ * Params:
+ *   eg_entity* - a reference to an entity whose flag will be toggled
+ *   int - the index of the flag to toggle, ranging from 0 to 7.
+ */
+void eg_toggle_flag(eg_entity *e, int f);
 
 #endif

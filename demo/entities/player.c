@@ -67,7 +67,7 @@ static void update_player(eg_app *app, eg_entity *player)
     }
 
     // Apply gravity.
-    if (player->y_vel < 2)
+    if (player->y_vel < 4)
     {
         player->y_vel++;
     }
