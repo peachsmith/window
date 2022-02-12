@@ -141,12 +141,18 @@ void handle_collisions(eg_app *app)
             eg_ray_res col;   // swept AABB result
             eg_collider cola; // source collision callback
             eg_collider colb; // target collision callback
+            // eg_overlap;       // overlap for collision verification.
+            // eg_rect ra;
+            // eg_rect rb;
 
             a = source;
             b = cols->data[i].target;
 
             if (eg_swept_aabb(app, a, b, &col))
             {
+                // Verify the collision.
+
+
                 // Call the source entity's collision function.
                 cola = app->registry[a->id].collide;
                 if (cola != NULL)

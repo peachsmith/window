@@ -3,64 +3,6 @@
 #include <float.h>
 
 /**
- * Draws various elements of a collision event on the screen.
- * This function is intended for debugging purposes.
- *
- * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_rect* - reference to the target rectangle
- *   eg_t_res* - a reference to a collision result struct
- *   eg_point* - a reference to an origin point
- *   eg_point* - a reference to a direction vector
- */
-// static void draw_collision(
-//     eg_app *app,
-//     eg_rect *r,
-//     eg_ray_res *res,
-//     eg_point *p,
-//     eg_point *d)
-// {
-//     eg_rect target_bounds;
-//     eg_rect cp_rect;
-//     eg_point p0;
-//     eg_point p1;
-
-//     // Draw the target rectangle in red.
-//     // The dimensions should be the width and height of the target entity
-//     // plus the width and height of the source entity.
-//     target_bounds.x = r->x;
-//     target_bounds.y = r->y;
-//     target_bounds.w = r->w;
-//     target_bounds.h = r->h;
-//     eg_set_color(app, EG_COLOR_RED);
-//     eg_draw_rect(app, &target_bounds, 0);
-
-//     // Draw the contact point CP in cyan.
-//     eg_set_color(app, EG_COLOR_CYAN);
-//     cp_rect.x = res->cp.x - 5;
-//     cp_rect.y = res->cp.y - 5;
-//     cp_rect.w = 10;
-//     cp_rect.h = 10;
-//     eg_draw_rect(app, &cp_rect, 1);
-
-//     // Draw the contact normal CN in a pink.
-//     eg_set_color(app, EG_COLOR_PINK);
-//     p0.x = res->cp.x;
-//     p0.y = res->cp.y;
-//     p1.x = res->cp.x + res->cn.x * 20;
-//     p1.y = res->cp.y + res->cn.y * 20;
-//     eg_draw_line(app, &p0, &p1);
-
-//     // Draw the direction vector D in green.
-//     eg_set_color(app, EG_COLOR_SEA_GREEN);
-//     p0.x = p->x;
-//     p0.y = p->y;
-//     p1.x = p->x + d->x * 10;
-//     p1.y = p->y + d->y * 10;
-//     eg_draw_line(app, &p0, &p1);
-// }
-
-/**
  * Determines if a ray intersects a rectangle.
  * It is based on the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.
  *
@@ -465,7 +407,7 @@ int eg_swept_aabb(
     if (ray_v_rect(&p, &d, &r, res))
     {
         // Draw the collision event information.
-        // draw_collision(app, &r, res, &p, &d);
+        eg_draw_collision(app, &r, res, &p, &d);
 
         return 1;
     }
