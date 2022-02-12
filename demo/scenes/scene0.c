@@ -38,8 +38,8 @@ void load_scene_0(eg_app *app)
     eg_input_handler *root_handler;
 
     // Starting position for building a sequence of blocks.
-    int x_start = 50;
-    int y_start = 40;
+    int x_start = 20;
+    int y_start = 30;
 
     // Add some of the blocks here and some of them later to prove that
     // the order in which entities are added doesn't affect their collision.
@@ -58,7 +58,7 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create(x_start + 60, y_start + 36));
 
     // Create the player entity and add it to the app.
-    player = player_demo_create(100, 30);
+    player = player_demo_create(80, 10);
     eg_add_entity(app, player);
 
     // Add the rest of the horizontal row.
