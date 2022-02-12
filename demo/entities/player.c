@@ -19,8 +19,7 @@ static void render_player(eg_app *app, eg_entity *player)
 
 static void update_player(eg_app *app, eg_entity *player)
 {
-    // UNDER CONSTRUCTION:
-    // implementing camera boundaries
+    // Get the width and height of the player.
     int w = app->registry[player->id].width;
     int h = app->registry[player->id].height;
 
@@ -67,13 +66,8 @@ static void update_player(eg_app *app, eg_entity *player)
         player->y_pos += player->y_vel;
     }
 
-    // Perform vertical inertia.
-    if (player->y_vel > 0)
-    {
-        player->y_vel--;
-    }
-
-    if (player->y_vel < 0)
+    // Apply gravity.
+    if (player->y_vel < 2)
     {
         player->y_vel++;
     }

@@ -2,7 +2,6 @@
 #include "demo/input/input.h"
 #include "demo/entities/player.h"
 #include "demo/entities/block.h"
-#include "demo/entities/qwe.h"
 #include "demo/entities/entity_types.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
@@ -115,9 +114,6 @@ int prepare(eg_app *app)
 
     // Register the entity types.
     player_demo_register(&reg[ENTITY_TYPE_PLAYER]);
-    entity_demo_register_q(&reg[ENTITY_TYPE_Q]);
-    entity_demo_register_w(&reg[ENTITY_TYPE_W]);
-    entity_demo_register_e(&reg[ENTITY_TYPE_E]);
     block_demo_register(&reg[ENTITY_TYPE_BLOCK]);
     block_demo_register_big(&reg[ENTITY_TYPE_BLOCK_BIG]);
     block_demo_register_long(&reg[ENTITY_TYPE_BLOCK_LONG]);
