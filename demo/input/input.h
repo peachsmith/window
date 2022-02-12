@@ -6,14 +6,6 @@
 #include "example.h"
 
 /**
- * A utility function for invoking the input handlers.
- *
- * Params:
- *   eg_app* - a pointer to an app struct
- */
-void handle_input(eg_app *);
-
-/**
  * The root input handler callback.
  * This is the default input handler for the application. It should be the
  * first input handler pushed onto the input handler stack.

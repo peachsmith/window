@@ -57,9 +57,6 @@ static void collide_block(
     // 2. While holding left, press and hold the right arrow key.
     // 3. While holding the left and right arrow keys, press and hold space.
     // 4. While holding right and space, release the left arrow key.
-    //
-    // TODO: holding the left and right arrow keys simultaneously prevents
-    // jumping. This may be related to the above clipping bug.
     if (t_res->cn.y < 0 && !t_res->cn.x)
     {
         eg_clear_flag(other, 0);

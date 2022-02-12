@@ -19,6 +19,8 @@ static void render_player(eg_app *app, eg_entity *player)
 
 static void update_player(eg_app *app, eg_entity *player)
 {
+    // printf("player velocity: (%d, %d)\n", player->x_vel, player->y_vel);
+
     // Get the width and height of the player.
     int w = app->registry[player->id].width;
     int h = app->registry[player->id].height;

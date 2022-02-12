@@ -25,7 +25,7 @@ void root_input_callback(eg_app *app, eg_entity *target)
     }
 
     // jumping
-    if (eg_peek_input(app, SDL_SCANCODE_SPACE))
+    if (eg_consume_input(app, SDL_SCANCODE_SPACE))
     {
         if (!eg_check_flag(target, 0))
         {

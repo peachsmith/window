@@ -63,7 +63,7 @@ static void draw(eg_app *app)
     // TEMP: draw the camera boundaries.
     eg_point l0, l1, r0, r1, t0, t1, b0, b1;
 
-    eg_set_color(app, EG_COLOR_YELLOW);
+    eg_set_color(app, EG_COLOR_MAUVE);
 
     // left boundary
     l0.x = app->cl;
