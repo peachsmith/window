@@ -30,9 +30,9 @@ static void update_player(eg_app *app, eg_entity *player)
         player->x_pos = app->cr - w;
         app->cam.x -= player->x_vel;
     }
-    else if (player->x_pos <= app->cl && player->x_vel < 0)
+    else if (player->x_pos <= app->cl + 1 && player->x_vel < 0)
     {
-        player->x_pos = app->cl;
+        player->x_pos = app->cl + 1;
         app->cam.x -= player->x_vel;
     }
     else
@@ -57,9 +57,9 @@ static void update_player(eg_app *app, eg_entity *player)
         player->y_pos = app->cb - h;
         app->cam.y -= player->y_vel;
     }
-    else if (player->y_pos <= app->ct && player->y_vel < 0)
+    else if (player->y_pos <= app->ct + 1 && player->y_vel < 0)
     {
-        player->y_pos = app->ct;
+        player->y_pos = app->ct + 1;
         app->cam.y -= player->y_vel;
     }
     else
