@@ -51,7 +51,7 @@ static void render_q(eg_app *app, eg_entity *ent)
     eg_rect r;
     get_rect(&r, app, ent);
 
-    eg_set_color(app, EG_COLOR_11); // 0x02, 0x75, 0xD8, 0xFF);
+    eg_set_color(app, EG_COLOR_BLUE);
     eg_draw_rect(app, &r, 1);
 }
 
@@ -61,7 +61,7 @@ static void render_w(eg_app *app, eg_entity *ent)
     eg_rect r;
     get_rect(&r, app, ent);
 
-    eg_set_color(app, EG_COLOR_20); // 0x5C, 0xB8, 0x5C, 0xFF);
+    eg_set_color(app, EG_COLOR_CHARTEUSE);
     eg_draw_rect(app, &r, 1);
 }
 
@@ -71,7 +71,7 @@ static void render_e(eg_app *app, eg_entity *ent)
     eg_rect r;
     get_rect(&r, app, ent);
 
-    eg_set_color(app, EG_COLOR_8); // 0xD9, 0x53, 0x4F, 0xFF);
+    eg_set_color(app, EG_COLOR_RED);
     eg_draw_rect(app, &r, 1);
 }
 

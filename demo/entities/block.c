@@ -13,7 +13,7 @@ static void render_block(eg_app *app, eg_entity *block)
     r.w = app->registry[block->id].width;
     r.h = app->registry[block->id].height;
 
-    eg_set_color(app, EG_COLOR_13); // 0x02, 0x75, 0xD8, 0xFF);
+    eg_set_color(app, EG_COLOR_LIGHT_BLUE);
     eg_draw_rect(app, &r, 0);
 }
 

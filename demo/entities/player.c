@@ -13,7 +13,7 @@ static void render_player(eg_app *app, eg_entity *player)
     r.w = app->registry[player->id].width;
     r.h = app->registry[player->id].height;
 
-    eg_set_color(app, EG_COLOR_7); //0xF0, 0xAD, 0x4E, 0xFF);
+    eg_set_color(app, EG_COLOR_ORANGE);
     eg_draw_rect(app, &r, 0);
 }
 
