@@ -30,6 +30,9 @@ static void collide_block(
     // Correction factor.
     float t1 = 1 - t_res->t;
 
+    // Print the velocity before correction.
+    // printf("old v: (%d, %d) ", other->x_vel, other->y_vel);
+
     if (t_res->cn.x)
     {
         int absx = other->x_vel > 0 ? other->x_vel : -(other->x_vel);
@@ -43,6 +46,9 @@ static void collide_block(
         float correction = t_res->cn.y * absy * t1;
         other->y_vel += (int)correction;
     }
+
+    // Print the velocity after correction.
+    // printf("new v: (%d, %d)\n", other->x_vel, other->y_vel);
 
     // Clear the jump flag.
     // Only do this if the entity collided with the block from above.

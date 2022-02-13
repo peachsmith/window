@@ -19,11 +19,11 @@ static void render_player(eg_app *app, eg_entity *player)
 
 static void update_player(eg_app *app, eg_entity *player)
 {
-    printf("player velocity: (%d, %d)\n", player->x_vel, player->y_vel);
+    // printf("player velocity: (%d, %d)\n", player->x_vel, player->y_vel);
 
     // Get the width and height of the player.
     int w = app->registry[player->id].width;
-    int h = app->registry[player->id].height;
+    // int h = app->registry[player->id].height;
 
     // Update horizontal position.
     if (player->x_pos + w >= app->cr && player->x_vel > 0)
@@ -53,20 +53,20 @@ static void update_player(eg_app *app, eg_entity *player)
     }
 
     // Update vertical position.
-    if (player->y_pos + h >= app->cb && player->y_vel > 0)
-    {
-        player->y_pos = app->cb - h;
-        app->cam.y -= player->y_vel;
-    }
-    else if (player->y_pos <= app->ct + 1 && player->y_vel < 0)
-    {
-        player->y_pos = app->ct + 1;
-        app->cam.y -= player->y_vel;
-    }
-    else
-    {
+    // if (player->y_pos + h >= app->cb && player->y_vel > 0)
+    // {
+    //     player->y_pos = app->cb - h;
+    //     app->cam.y -= player->y_vel;
+    // }
+    // else if (player->y_pos <= app->ct + 1 && player->y_vel < 0)
+    // {
+    //     player->y_pos = app->ct + 1;
+    //     app->cam.y -= player->y_vel;
+    // }
+    // else
+    // {
         player->y_pos += player->y_vel;
-    }
+    // }
 
     // Apply gravity.
     if (player->y_vel < 4)

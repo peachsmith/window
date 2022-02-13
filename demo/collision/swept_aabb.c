@@ -404,13 +404,46 @@ int eg_swept_aabb(
     d.x = a->x_vel;
     d.y = a->y_vel;
 
+    // printf("[DEBUG] RP: (%d, %d) RP+RS: (%d, %d), D: (%d, %d) P: (%d, %d)\n",
+    //        r.x, r.y,
+    //        r.x + r.w, r.y + r.h,
+    //        d.x, d.y,
+    //        p.x, p.y);
+
     if (ray_v_rect(&p, &d, &r, res))
     {
         // Draw the collision event information.
-        eg_draw_collision(app, &r, res, &p, &d);
+        // eg_draw_collision(app, &r, res, &p, &d);
+        if (d.y < -8) // && d.x < 0)
+        {
+            // printf("[DEBUG] RP: (%d, %d) RP+RS: (%d, %d), D: (%d, %d) P: (%d, %d)\n",
+            //        r.x, r.y,
+            //        r.x + r.w, r.y + r.h,
+            //        d.x, d.y,
+            //        p.x, p.y);
+        }
 
         return 1;
     }
 
     return 0;
 }
+
+/*
+
+[DEBUG] RP: (110, 38) RP+RS: (142, 82), D: (2, -11) P: (110, 50)
+[DEBUG] RP: (110, 26) RP+RS: (142, 70), D: (2, -11) P: (110, 50)
+[DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (2, -11) P: (110, 50)
+[DEBUG] RP: (110, 38) RP+RS: (142, 82), D: (2, -11) P: (110, 50)
+[DEBUG] RP: (110, 38) RP+RS: (142, 82), D: (2, -10) P: (110, 39)
+[DEBUG] RP: (110, 26) RP+RS: (142, 70), D: (2, -10) P: (110, 39)
+[DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (2, -10) P: (110, 39)
+[DEBUG] RP: (110, 38) RP+RS: (142, 82), D: (2, -10) P: (110, 39)
+[DEBUG] RP: (110, 26) RP+RS: (142, 70), D: (2, -9) P: (110, 29)
+[DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (2, -9) P: (110, 29)
+[DEBUG] RP: (110, 26) RP+RS: (142, 70), D: (2, -9) P: (110, 29)
+
+[DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (-2, -11) P: (110, 50)
+[DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (-2, -11) P: (110, 50)
+
+*/
