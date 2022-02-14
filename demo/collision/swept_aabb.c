@@ -423,6 +423,18 @@ int eg_swept_aabb(
             //        p.x, p.y);
         }
 
+        // Verify that a collision is actually possible.
+        // TODO: incorporate this logic earlier in the process.
+        if (d.x < 0 && r.x >= p.x)
+        {
+            return 0;
+        }
+
+        if (d.x > 0 && r.x + r.w <= p.x)
+        {
+            return 0;
+        }
+
         return 1;
     }
 

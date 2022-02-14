@@ -56,3 +56,8 @@ dkms.conf
 
 # Mac metadata
 .DS_Store
+
+# test executables
+test
+test.exe
+
