@@ -5,15 +5,15 @@
 
 int main(int argc, char **argv)
 {
-    // eg_initialize();
-
-    // [DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (2, -11) P: (110, 50)
-    // [DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (-2, -11) P: (110, 50)
-
-    // Scenario:
-    // The source entity is to the left of the target.
-    // The source entity's right side is flush with the target entity's
-    // left side.
+    // Scenarios:
+    // 1. The source entity is to the left of the target, moving right.
+    // 2. The source entity is to the left of the target, moving left.
+    // 3. The source entity is to the right of the target, moving left.
+    // 4. The source entity is to the right of the target, moving right.
+    // 5. The source entity is above the target, moving down.
+    // 6. The source entity is above the target, moving up.
+    // 7. The source entity is below the target, moving up.
+    // 8. The source entity is below the target, moving down.
 
     eg_app app;
     eg_entity source;
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     // p.y = a->y_pos + ah / 2;
 
     source.id = ENTITY_TYPE_PLAYER;
-    source.x_pos = 100;
+    source.x_pos = 0;
     source.y_pos = 34;
 
     target.id = ENTITY_TYPE_BLOCK;
@@ -56,6 +56,18 @@ int main(int argc, char **argv)
 
     int test_count = 0;
     int col_count = 0;
+
+    //------------------------------------------------------
+    // BEGIN Scenario 1
+    // The source entity is to the left of the target, moving right.
+
+    // Set x position of source to be to the left of the target.
+    //                            Rx >= Px
+    // target_pos - source_width / 2 >= source_pos + source_width / 2
+    // 120        - 10               >= source_pos + 10
+    //                           110 >= source_pos + 10
+    //                           100 >= source_pos
+    source.x_pos = 100;
 
     // For any positive x velocity,
     // all y velocities SHOULD result in a collision.
@@ -71,21 +83,31 @@ int main(int argc, char **argv)
         }
     }
 
-    printf("[TEST] EXPECTED %d collisions, found %d collisions\n",
-           test_count,
-           col_count);
+    if (test_count == col_count)
+    {
+        printf("[PASS] EXPECTED %d collisions, found %d collisions\n",
+               test_count,
+               col_count);
+    }
+    else
+    {
+        printf("[FAIL] EXPECTED %d collisions, found %d collisions\n",
+               test_count,
+               col_count);
+    }
 
+    // Reset test counters.
     test_count = 0;
     col_count = 0;
+
+    //------------------------------------------------------
+    // BEGIN Scenario 2
+    // The source entity is to the left of the target, moving left.
 
     // For any negative x velocity,
     // all y velocities should NOT result in a collision.
     // We will test y velocities from -50 to 50.
-    // for (int j = 1; j < 100; j++)
-    // {
-    //     test_count = 0;
-    //     col_count = 0;
-    source.x_vel = -3;
+    source.x_vel = -2;
     for (int i = 0; i <= 100; i++)
     {
         test_count++;
@@ -93,16 +115,250 @@ int main(int argc, char **argv)
         if (eg_swept_aabb(&app, &source, &target, &res))
         {
             col_count++;
-            // printf("[ERROR] D: (%d, %d)\n",
-            //        source.x_vel,
-            //        source.y_vel);
         }
     }
-    printf("[TEST] EXPECTED 0 collisions, found %d collisions for D: (%d, %d)\n",
-           col_count, source.x_vel, source.y_vel);
-    // }
 
-    // eg_terminate();
+    if (col_count == 0)
+    {
+        printf("[PASS] EXPECTED 0 collisions, found %d collisions for D: (%d, %d)\n",
+               col_count, source.x_vel, source.y_vel);
+    }
+    else
+    {
+        printf("[FAIL] EXPECTED 0 collisions, found %d collisions for D: (%d, %d)\n",
+               col_count, source.x_vel, source.y_vel);
+    }
+
+    // Reset test counters.
+    test_count = 0;
+    col_count = 0;
+
+    //------------------------------------------------------
+    // BEGIN Scenario 3
+    // The source entity is to the right of the target, moving left.
+
+    // Set x position of source to be to the right of the target.
+    //                                                     Rx + Rw <= Px
+    // target_pos - source_width / 2 + source_width + target_width <= source_pos + source_width / 2
+    // 120        - 10               + 20           + 12           <= source_pos + 10
+    //                                                         142 <= source_pos + 10
+    //                                                         132 <= source_pos
+    source.x_pos = 132;
+
+    // For any negative x velocity,
+    // all y velocities SHOULD result in a collision.
+    // We will test y velocities from -50 to 50.
+    source.x_vel = -2;
+    for (int i = 0; i <= 100; i++)
+    {
+        test_count++;
+        source.y_vel = -50 + i;
+        if (eg_swept_aabb(&app, &source, &target, &res))
+        {
+            col_count++;
+        }
+    }
+
+    if (test_count == col_count)
+    {
+        printf("[PASS] EXPECTED %d collisions, found %d collisions\n",
+               test_count,
+               col_count);
+    }
+    else
+    {
+        printf("[FAIL] EXPECTED %d collisions, found %d collisions\n",
+               test_count,
+               col_count);
+    }
+
+    // Reset test counters.
+    test_count = 0;
+    col_count = 0;
+
+    //------------------------------------------------------
+    // BEGIN Scenario 4
+    // The source entity is to the right of the target, moving right.
+
+    // For any positive x velocity,
+    // all y velocities should NOT result in a collision.
+    // We will test y velocities from -50 to 50.
+    source.x_vel = 2;
+    for (int i = 0; i <= 100; i++)
+    {
+        test_count++;
+        source.y_vel = -50 + i;
+        if (eg_swept_aabb(&app, &source, &target, &res))
+        {
+            col_count++;
+        }
+    }
+
+    if (col_count == 0)
+    {
+        printf("[PASS] EXPECTED 0 collisions, found %d collisions for D: (%d, %d)\n",
+               col_count, source.x_vel, source.y_vel);
+    }
+    else
+    {
+        printf("[FAIL] EXPECTED 0 collisions, found %d collisions for D: (%d, %d)\n",
+               col_count, source.x_vel, source.y_vel);
+    }
+
+    // Reset test counters.
+    test_count = 0;
+    col_count = 0;
+
+    //------------------------------------------------------
+    // BEGIN Scenario 5
+    // The source entity is above the target, moving down.
+
+    // Set the source x position to match the target x position.
+    source.x_pos = target.x_pos;
+
+    // Set y position of source to be to above of the target.
+    //                             Ry <= Py
+    // target_pos - source_height / 2 <= source_pos + source_height / 2
+    // 30         - 16                <= source_pos + 16
+    //                             14 <= source_pos + 16
+    //                             -2 <= source_pos
+    source.y_pos = -2;
+
+    // For any positive y velocity,
+    // all x velocities SHOULD result in a collision.
+    // We will test x velocities from -50 to 50.
+    source.y_vel = 2;
+    for (int i = 0; i <= 100; i++)
+    {
+        test_count++;
+        source.x_vel = -50 + i;
+        if (eg_swept_aabb(&app, &source, &target, &res))
+        {
+            col_count++;
+        }
+    }
+
+    if (test_count == col_count)
+    {
+        printf("[PASS] EXPECTED %d collisions, found %d collisions\n",
+               test_count,
+               col_count);
+    }
+    else
+    {
+        printf("[FAIL] EXPECTED %d collisions, found %d collisions\n",
+               test_count,
+               col_count);
+    }
+
+    // Reset test counters.
+    test_count = 0;
+    col_count = 0;
+
+    //------------------------------------------------------
+    // BEGIN Scenario 6
+    // The source entity is above the target, moving up.
+
+    // For any negative y velocity,
+    // all x velocities should NOT result in a collision.
+    // We will test x velocities from -50 to 50.
+    source.y_vel = -2;
+    for (int i = 0; i <= 100; i++)
+    {
+        test_count++;
+        source.x_vel = -50 + i;
+        if (eg_swept_aabb(&app, &source, &target, &res))
+        {
+            col_count++;
+        }
+    }
+
+    if (col_count == 0)
+    {
+        printf("[PASS] EXPECTED 0 collisions, found %d collisions for D: (%d, %d)\n",
+               col_count, source.x_vel, source.y_vel);
+    }
+    else
+    {
+        printf("[FAIL] EXPECTED 0 collisions, found %d collisions for D: (%d, %d)\n",
+               col_count, source.x_vel, source.y_vel);
+    }
+
+    // Reset test counters.
+    test_count = 0;
+    col_count = 0;
+
+    //------------------------------------------------------
+    // BEGIN Scenario 7
+    // The source entity is below the target, moving up.
+
+    // Set y position of source to be below the target.
+    //                                                     Ry + Rh <= Py
+    // target_pos - source_height / 2 + source_height + target_height <= source_pos + source_heigh / 2
+    // 30         - 16                + 32            + 12            <= source_pos + 16
+    //                                                             58 <= source_pos + 16
+    //                                                             42 <= source_pos
+    source.y_pos = 42;
+
+    // For any negative y velocity,
+    // all x velocities SHOULD result in a collision.
+    // We will test x velocities from -50 to 50.
+    source.y_vel = -2;
+    for (int i = 0; i <= 100; i++)
+    {
+        test_count++;
+        source.x_vel = -50 + i;
+        if (eg_swept_aabb(&app, &source, &target, &res))
+        {
+            col_count++;
+        }
+    }
+
+    if (test_count == col_count)
+    {
+        printf("[PASS] EXPECTED %d collisions, found %d collisions\n",
+               test_count,
+               col_count);
+    }
+    else
+    {
+        printf("[FAIL] EXPECTED %d collisions, found %d collisions\n",
+               test_count,
+               col_count);
+    }
+
+    // Reset test counters.
+    test_count = 0;
+    col_count = 0;
+
+    //------------------------------------------------------
+    // BEGIN Scenario 8
+    // The source entity is below the target, moving down.
+
+    // For any positive y velocity,
+    // all x velocities should NOT result in a collision.
+    // We will test x velocities from -50 to 50.
+    source.y_vel = 2;
+    for (int i = 0; i <= 100; i++)
+    {
+        test_count++;
+        source.x_vel = -50 + i;
+        if (eg_swept_aabb(&app, &source, &target, &res))
+        {
+            col_count++;
+        }
+    }
+
+    if (col_count == 0)
+    {
+        printf("[PASS] EXPECTED 0 collisions, found %d collisions for D: (%d, %d)\n",
+               col_count, source.x_vel, source.y_vel);
+    }
+    else
+    {
+        printf("[FAIL] EXPECTED 0 collisions, found %d collisions for D: (%d, %d)\n",
+               col_count, source.x_vel, source.y_vel);
+    }
 
     return 0;
 }

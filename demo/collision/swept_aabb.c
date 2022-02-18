@@ -81,6 +81,36 @@ static int ray_v_rect(
         return 0;
     }
 
+    // Verify that a collision is possible before performing
+
+    // source to the left of the target
+    // moving left
+    if (d->x < 0 && r->x >= p->x)
+    {
+        return 0;
+    }
+
+    // source to the right of the target
+    // moving right
+    if (d->x > 0 && r->x + r->w <= p->x)
+    {
+        return 0;
+    }
+
+    // source above of the target
+    // moving up
+    if (d->y < 0 && r->y >= p->y)
+    {
+        return 0;
+    }
+
+    // source below the target
+    // moving down
+    if (d->y > 0 && r->y + r->h <= p->y)
+    {
+        return 0;
+    }
+
     // Direction vector components.
     float dx = (float)d->x;
     float dy = (float)d->y;
@@ -404,58 +434,10 @@ int eg_swept_aabb(
     d.x = a->x_vel;
     d.y = a->y_vel;
 
-    // printf("[DEBUG] RP: (%d, %d) RP+RS: (%d, %d), D: (%d, %d) P: (%d, %d)\n",
-    //        r.x, r.y,
-    //        r.x + r.w, r.y + r.h,
-    //        d.x, d.y,
-    //        p.x, p.y);
-
     if (ray_v_rect(&p, &d, &r, res))
     {
-        // Draw the collision event information.
-        // eg_draw_collision(app, &r, res, &p, &d);
-        if (d.y < -8) // && d.x < 0)
-        {
-            // printf("[DEBUG] RP: (%d, %d) RP+RS: (%d, %d), D: (%d, %d) P: (%d, %d)\n",
-            //        r.x, r.y,
-            //        r.x + r.w, r.y + r.h,
-            //        d.x, d.y,
-            //        p.x, p.y);
-        }
-
-        // Verify that a collision is actually possible.
-        // TODO: incorporate this logic earlier in the process.
-        if (d.x < 0 && r.x >= p.x)
-        {
-            return 0;
-        }
-
-        if (d.x > 0 && r.x + r.w <= p.x)
-        {
-            return 0;
-        }
-
         return 1;
     }
 
     return 0;
 }
-
-/*
-
-[DEBUG] RP: (110, 38) RP+RS: (142, 82), D: (2, -11) P: (110, 50)
-[DEBUG] RP: (110, 26) RP+RS: (142, 70), D: (2, -11) P: (110, 50)
-[DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (2, -11) P: (110, 50)
-[DEBUG] RP: (110, 38) RP+RS: (142, 82), D: (2, -11) P: (110, 50)
-[DEBUG] RP: (110, 38) RP+RS: (142, 82), D: (2, -10) P: (110, 39)
-[DEBUG] RP: (110, 26) RP+RS: (142, 70), D: (2, -10) P: (110, 39)
-[DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (2, -10) P: (110, 39)
-[DEBUG] RP: (110, 38) RP+RS: (142, 82), D: (2, -10) P: (110, 39)
-[DEBUG] RP: (110, 26) RP+RS: (142, 70), D: (2, -9) P: (110, 29)
-[DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (2, -9) P: (110, 29)
-[DEBUG] RP: (110, 26) RP+RS: (142, 70), D: (2, -9) P: (110, 29)
-
-[DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (-2, -11) P: (110, 50)
-[DEBUG] RP: (110, 14) RP+RS: (142, 58), D: (-2, -11) P: (110, 50)
-
-*/

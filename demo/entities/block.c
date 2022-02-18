@@ -30,9 +30,6 @@ static void collide_block(
     // Correction factor.
     float t1 = 1 - t_res->t;
 
-    // Print the velocity before correction.
-    // printf("old v: (%d, %d) ", other->x_vel, other->y_vel);
-
     if (t_res->cn.x)
     {
         int absx = other->x_vel > 0 ? other->x_vel : -(other->x_vel);
@@ -47,35 +44,10 @@ static void collide_block(
         other->y_vel += (int)correction;
     }
 
-    // Print the velocity after correction.
-    // printf("new v: (%d, %d)\n", other->x_vel, other->y_vel);
-
     // Clear the jump flag.
     // Only do this if the entity collided with the block from above.
     // TODO: give proper names to flags and design a system to use flags
     // in correct contexts.
-    //
-    // TODO: there is a scenario where the other entity may have its y
-    // velocity adjusted incorrectly, resulting in clipping through a block.
-    // Steps to reproduce:
-    // 1. Press and hold the left arrow key to keep the player pressed
-    //    against a vertical wall.
-    // 2. While holding left, press and hold the right arrow key.
-    // 3. While holding the left and right arrow keys, press and hold space.
-    // 4. While holding right and space, release the left arrow key.
-    // This appears to occur due to the sorting of the collisions and the
-    // velocity vector that exists as a result of this key combination.
-    //
-    // The following is a sequence of player velocity vectors when this bug
-    // occurrs. While the left, right, and space keys are held, the velocity
-    // is (0, 0). Upon releasing the right arrow key, the velocity should be
-    // (-2, -11). However, the collision correction factor is applied, causing
-    // the velocity to be (-2, 8), which jetisons the player entity through
-    // the block below.
-    // velocity: (0, 0)  left, right, and space are all held
-    // velocity: (-2, 8) right is released. velocity should be (0, -11)
-    // velocity: (-3, 8)
-    // velocity: (-1, 8)
     if (t_res->cn.y < 0 && !t_res->cn.x)
     {
         eg_clear_flag(other, 0);

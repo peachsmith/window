@@ -16,4 +16,8 @@ LIBS=-lSDL2 -lSDL2main
 
 all:
 	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(LINK_DIR) $(SRC) $(LIBS)
+
+
+.PHONY: test
+test:
 	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(LINK_DIR) $(TESTSRC) $(LIBS) -o test
