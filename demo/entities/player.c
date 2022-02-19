@@ -1,6 +1,5 @@
 #include "demo/entities/player.h"
 #include "demo/entities/entity_types.h"
-#include "colors.h"
 
 #include <stdio.h>
 #include <stdlib.h>

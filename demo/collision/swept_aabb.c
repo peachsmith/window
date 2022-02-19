@@ -1,5 +1,4 @@
 #include "demo/collision/collision.h"
-#include "colors.h"
 #include <float.h>
 
 /**

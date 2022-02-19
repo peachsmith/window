@@ -4,26 +4,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// defined in example_impl.c.
+int eg_impl_init();
+void eg_impl_term();
+eg_impl *eg_impl_create(int, int);
+void eg_impl_destroy(eg_impl *);
+int eg_impl_peek_key(eg_app *app, int v);
+int eg_impl_consume_key(eg_app *app, int v);
+
 //----------------------------------------------------------------------------
 // core functions
 
 int eg_initialize()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
-    {
-        fprintf(
-            stderr,
-            "failed to initialize SDL. error: %s\n",
-            SDL_GetError());
-        return 0;
-    }
-
-    return 1;
+    return eg_impl_init();
 }
 
 void eg_terminate()
 {
-    SDL_Quit();
+    eg_impl_term();
 }
 
 // default update function
@@ -55,7 +54,7 @@ eg_app *eg_create_app()
     app->draw = default_draw;
 
     // Create the implementation struct.
-    app->impl = eg_create_impl(
+    app->impl = eg_impl_create(
         EG_DEFAULT_SCREEN_WIDTH,
         EG_DEFAULT_SCREEN_HEIGHT);
     if (app->impl == NULL)
@@ -65,7 +64,7 @@ eg_app *eg_create_app()
     }
 
     // Initialize the key press flags to 0.
-    for (int i = 0; i < SDL_NUM_SCANCODES; i++)
+    for (int i = 0; i < EG_MAX_KEYCODE; i++)
     {
         app->key_captures[i] = 0;
     }
@@ -110,7 +109,7 @@ void eg_destroy_app(eg_app *app)
     eg_destroy_registry(app->registry);
 
     // Destroy the implementation.
-    eg_destroy_impl(app->impl);
+    eg_impl_destroy(app->impl);
     free(app);
 }
 
@@ -119,12 +118,12 @@ void eg_destroy_app(eg_app *app)
 
 int eg_peek_input(eg_app *app, int code)
 {
-    return eg_peek_key(app, code);
+    return eg_impl_peek_key(app, code);
 }
 
 int eg_consume_input(eg_app *app, int code)
 {
-    return eg_consume_key(app, code);
+    return eg_impl_consume_key(app, code);
 }
 
 eg_input_handler *eg_create_input_handler(eg_callback callback, eg_entity *target)

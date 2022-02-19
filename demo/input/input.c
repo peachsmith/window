@@ -7,7 +7,7 @@
 void root_input_callback(eg_app *app, eg_entity *target)
 {
     // left movement
-    if (eg_peek_input(app, SDL_SCANCODE_LEFT))
+    if (eg_peek_input(app, EG_KEYCODE_LEFT))
     {
         if (target->x_vel >= -2)
         {
@@ -16,7 +16,7 @@ void root_input_callback(eg_app *app, eg_entity *target)
     }
 
     // right movement
-    if (eg_peek_input(app, SDL_SCANCODE_RIGHT))
+    if (eg_peek_input(app, EG_KEYCODE_RIGHT))
     {
         if (target->x_vel <= 2)
         {
@@ -25,7 +25,7 @@ void root_input_callback(eg_app *app, eg_entity *target)
     }
 
     // jumping
-    if (eg_consume_input(app, SDL_SCANCODE_SPACE))
+    if (eg_consume_input(app, EG_KEYCODE_SPACE))
     {
         if (!eg_check_flag(target, 0))
         {
@@ -35,7 +35,7 @@ void root_input_callback(eg_app *app, eg_entity *target)
     }
 
     // TEMP: Reset the state of various things.
-    if (eg_consume_input(app, SDL_SCANCODE_R))
+    if (eg_consume_input(app, EG_KEYCODE_R))
     {
         // Reset the target entity (the player).
         target->x_pos = 80;
@@ -50,7 +50,7 @@ void root_input_callback(eg_app *app, eg_entity *target)
     }
 
     // If the escape key is pressed, terminate the application.
-    if (eg_consume_input(app, SDL_SCANCODE_ESCAPE))
+    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
     {
         printf("The escape key was pressed. "
                "The application should now terminate.\n");

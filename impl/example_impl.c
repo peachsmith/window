@@ -1,8 +1,36 @@
 #include "example.h"
+
+// SDL is used for things like creating windows and handling input.
 #include <SDL2/SDL.h>
 
 #include <stdio.h>
 #include <stdlib.h>
+
+// keyboard functions defined in keyboard.c
+SDL_Scancode eg_impl_get_sdl_scancode(eg_keycode k);
+eg_keycode eg_impl_get_eg_keycode(SDL_Scancode sc);
+void eg_impl_init_keyboard();
+
+int eg_impl_init()
+{
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+    {
+        fprintf(
+            stderr,
+            "failed to initialize SDL. error: %s\n",
+            SDL_GetError());
+        return 0;
+    }
+
+    eg_impl_init_keyboard();
+
+    return 1;
+}
+
+void eg_impl_term()
+{
+    SDL_Quit();
+}
 
 // complete definition of the eg_impl type
 struct eg_impl
@@ -15,7 +43,7 @@ struct eg_impl
     Uint64 frame_len;
 };
 
-eg_impl *eg_create_impl(int screen_width, int screen_height)
+eg_impl *eg_impl_create(int screen_width, int screen_height)
 {
     eg_impl *impl;
     SDL_Window *window;
@@ -80,7 +108,7 @@ eg_impl *eg_create_impl(int screen_width, int screen_height)
     return impl;
 }
 
-void eg_destroy_impl(eg_impl *impl)
+void eg_impl_destroy(eg_impl *impl)
 {
     if (impl == NULL)
     {
@@ -118,11 +146,14 @@ void eg_process_events(eg_app *app)
         // Clear the key press capture flags.
         if (impl->event.type == SDL_KEYUP)
         {
-            app->key_captures[impl->event.key.keysym.scancode] = 0;
+            eg_keycode k = eg_impl_get_eg_keycode(impl->event.key.keysym.scancode);
+            app->key_captures[k] = 0;
         }
     }
 }
 
+// TODO: refactor this to eg_impl_delay after implementing begin_frame and
+// end_frame
 void eg_delay(eg_app *app)
 {
     if (app == NULL || app->impl == NULL)
@@ -172,6 +203,8 @@ void eg_render_screen(eg_app *app)
     SDL_RenderPresent(impl->renderer);
 }
 
+// Public API function
+// TODO: refactor this to eg_impl_set_color and wrap it
 void eg_set_color(eg_app *app, uint32_t color)
 {
     if (app == NULL || app->impl == NULL)
@@ -193,6 +226,8 @@ void eg_set_color(eg_app *app, uint32_t color)
     SDL_SetRenderDrawColor(impl->renderer, r, g, b, a);
 }
 
+// Public API function
+// TODO: refactor this to eg_impl_draw_line and wrap it
 void eg_draw_line(eg_app *app, eg_point *a, eg_point *b)
 {
     if (app == NULL || app->impl == NULL)
@@ -209,6 +244,8 @@ void eg_draw_line(eg_app *app, eg_point *a, eg_point *b)
         b->y);
 }
 
+// Public API function
+// TODO: refactor this to eg_impl_draw_rect and wrap it
 void eg_draw_rect(eg_app *app, eg_rect *r, int filled)
 {
     if (app == NULL || app->impl == NULL)
@@ -233,7 +270,7 @@ void eg_draw_rect(eg_app *app, eg_rect *r, int filled)
     SDL_RenderDrawRect(impl->renderer, &sr);
 }
 
-int eg_peek_key(eg_app *app, int v)
+int eg_impl_peek_key(eg_app *app, int v)
 {
     if (app == NULL || app->impl == NULL)
     {
@@ -242,12 +279,14 @@ int eg_peek_key(eg_app *app, int v)
 
     eg_impl *impl = app->impl;
 
-    if (v >= SDL_NUM_SCANCODES)
+    SDL_Scancode sc = eg_impl_get_sdl_scancode(v);
+
+    if (sc >= SDL_NUM_SCANCODES || sc <= SDL_SCANCODE_UNKNOWN)
     {
         return 0;
     }
 
-    if (impl->keystates[v])
+    if (impl->keystates[sc])
     {
         return 1;
     }
@@ -255,7 +294,7 @@ int eg_peek_key(eg_app *app, int v)
     return 0;
 }
 
-int eg_consume_key(eg_app *app, int v)
+int eg_impl_consume_key(eg_app *app, int v)
 {
     if (app == NULL || app->impl == NULL)
     {
@@ -264,7 +303,9 @@ int eg_consume_key(eg_app *app, int v)
 
     eg_impl *impl = app->impl;
 
-    if (v >= SDL_NUM_SCANCODES)
+    SDL_Scancode sc = eg_impl_get_sdl_scancode(v);
+
+    if (sc >= SDL_NUM_SCANCODES || sc <= SDL_SCANCODE_UNKNOWN)
     {
         return 0;
     }
@@ -274,7 +315,7 @@ int eg_consume_key(eg_app *app, int v)
         return 0;
     }
 
-    if (impl->keystates[v])
+    if (impl->keystates[sc])
     {
         app->key_captures[v] = 1;
         return 1;

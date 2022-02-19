@@ -1,13 +1,14 @@
-#ifndef EG_MAIN_API_H
-#define EG_MAIN_API_H
+#ifndef EG_PUBLIC_API_H
+#define EG_PUBLIC_API_H
 
-// This is the Example interface. It's essentially a wrapper around SDL.
+// This is the Example interface.
 // Since this is an example, all functions an data types will be prefixed
 // with eg (for exempli gratia).
 // "Example" is a working title. A slightly more original name should be
 // used at some point in the future.
 
-#include <SDL2/SDL.h>
+#include "keyboard.h"
+#include "colors.h"
 
 #include <stdint.h>
 
@@ -15,14 +16,19 @@
 #define EG_DEFAULT_SCREEN_WIDTH 240
 #define EG_DEFAULT_SCREEN_HEIGHT 160
 
-// wrapper around SDL stuff
-// TODO: add comments and rename things
-typedef struct eg_impl eg_impl;
-
 /**
- * This structure wraps the various SDL data types.
+ * This structure represents the state of an application.
+ * Only one of these should be created in a given program.
+ *
  */
 typedef struct eg_app eg_app;
+
+/**
+ * The underlying implementation of the framework.
+ * This handles things like windows and input handling.
+ *
+ */
+typedef struct eg_impl eg_impl;
 
 /**
  * A node in a list of input handlers.
@@ -141,7 +147,7 @@ struct eg_app
 
     // This is an array of flags to indicate that a key press has already been
     // detected.
-    unsigned char key_captures[SDL_NUM_SCANCODES];
+    unsigned char key_captures[EG_MAX_KEYCODE];
 
     // This flag is used as a sentinel value by the main loop.
     // As long as this value is 0, the main loop should continue to execute.
@@ -168,6 +174,7 @@ struct eg_app
     eg_camera cam;
 
     // TEMP: camera boundaries for debugging
+    // TODO: organize camera struct
     int cl;
     int cr;
     int ct;
@@ -219,24 +226,21 @@ struct eg_entity_type
 };
 
 //----------------------------------------------------------------------------
-// SDL functions
-eg_impl *eg_create_impl(int, int);
-void eg_destroy_impl(eg_impl *);
+void eg_process_events(eg_app *);
 void eg_clear_screen(eg_app *);
 void eg_render_screen(eg_app *);
-void eg_set_color(eg_app *, uint32_t);
-void eg_draw_line(eg_app *, eg_point *, eg_point *);
-void eg_draw_rect(eg_app *, eg_rect *, int);
-void eg_process_events(eg_app *);
 void eg_delay(eg_app *);
 int eg_peek_key(eg_app *, int);
 int eg_consume_key(eg_app *, int);
+void eg_set_color(eg_app *, uint32_t);
+void eg_draw_line(eg_app *, eg_point *, eg_point *);
+void eg_draw_rect(eg_app *, eg_rect *, int);
 
 //----------------------------------------------------------------------------
 // core functions
 
 /**
- * Initializes the SDL library.
+ * Initializes the framework.
  * This should be called once before allocating any resources or using any
  * other functions in this interface.
  *
@@ -246,7 +250,7 @@ int eg_consume_key(eg_app *, int);
 int eg_initialize();
 
 /**
- * Terminates the SDL library.
+ * Terminates the framework.
  * This should be called after freeing all other resources that were allocated
  * during execution.
  */

@@ -1,7 +1,6 @@
 #include "demo/entities/block.h"
 #include "demo/entities/entity_types.h"
 #include "demo/collision/collision.h"
-#include "colors.h"
 
 #include <stdio.h>
 

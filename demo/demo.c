@@ -5,7 +5,6 @@
 #include "demo/entities/entity_types.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
-#include "colors.h"
 
 #include <stdio.h>
 

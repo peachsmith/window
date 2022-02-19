@@ -29,6 +29,7 @@ int main(int argc, char **argv)
     }
 
     // Begin the main loop.
+    // TODO: refactor this to use begin_frame and end_frame
     while (!app->done)
     {
         // Process OS events.
