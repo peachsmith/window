@@ -33,8 +33,7 @@ int main(int argc, char **argv)
     // TODO: refactor this to use begin_frame and end_frame
     while (!app->done)
     {
-        // Process OS events.
-        eg_process_events(app);
+        eg_begin_frame(app);
 
         // Update the state of the application.
         app->update(app);
@@ -42,8 +41,7 @@ int main(int argc, char **argv)
         // Draw the contents of the current frame.
         app->draw(app);
 
-        // Delay to regulate framerate.
-        eg_delay(app);
+        eg_end_frame(app);
     }
 
     // Destroy the application context.

@@ -120,7 +120,7 @@ void eg_impl_destroy(eg_impl *impl)
     free(impl);
 }
 
-void eg_process_events(eg_app *app)
+void eg_impl_process_events(eg_app *app)
 {
     if (app == NULL || app->impl == NULL)
     {
@@ -138,23 +138,24 @@ void eg_process_events(eg_app *app)
     // keyboard state array.
     while (SDL_PollEvent(&(impl->event)))
     {
+        // If the window was closed, exit the application.
         if (impl->event.type == SDL_QUIT)
         {
             app->done = 1;
         }
 
-        // Clear the key press capture flags.
+        // If a key was released, convert the SDL_Scancode into an eg_keycode
+        // and set the corresponding key capture flag to 0.
         if (impl->event.type == SDL_KEYUP)
         {
-            eg_keycode k = eg_impl_get_eg_keycode(impl->event.key.keysym.scancode);
+            SDL_Scancode sc = impl->event.key.keysym.scancode;
+            eg_keycode k = eg_impl_get_eg_keycode(sc);
             app->key_captures[k] = 0;
         }
     }
 }
 
-// TODO: refactor this to eg_impl_delay after implementing begin_frame and
-// end_frame
-void eg_delay(eg_app *app)
+void eg_impl_delay(eg_app *app)
 {
     if (app == NULL || app->impl == NULL)
     {
@@ -179,7 +180,7 @@ void eg_delay(eg_app *app)
     }
 }
 
-void eg_clear_screen(eg_app *app)
+void eg_impl_clear_screen(eg_app *app)
 {
     if (app == NULL || app->impl == NULL)
     {
@@ -192,7 +193,7 @@ void eg_clear_screen(eg_app *app)
     SDL_RenderClear(impl->renderer);
 }
 
-void eg_render_screen(eg_app *app)
+void eg_impl_render_screen(eg_app *app)
 {
     if (app == NULL || app->impl == NULL)
     {

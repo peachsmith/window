@@ -9,8 +9,12 @@ int eg_impl_init();
 void eg_impl_term();
 eg_impl *eg_impl_create(int, int);
 void eg_impl_destroy(eg_impl *);
-int eg_impl_peek_key(eg_app *app, int v);
-int eg_impl_consume_key(eg_app *app, int v);
+void eg_impl_process_events(eg_app *);
+int eg_impl_delay(eg_app *);
+void eg_impl_clear_screen(eg_app *);
+void eg_impl_render_screen(eg_app *);
+int eg_impl_peek_key(eg_app *, int);
+int eg_impl_consume_key(eg_app *, int);
 
 //----------------------------------------------------------------------------
 // core functions
@@ -110,7 +114,21 @@ void eg_destroy_app(eg_app *app)
 
     // Destroy the implementation.
     eg_impl_destroy(app->impl);
+
+    // Free the memory allocated for the application struct.
     free(app);
+}
+
+void eg_begin_frame(eg_app *app)
+{
+    eg_impl_process_events(app);
+    eg_impl_clear_screen(app);
+}
+
+void eg_end_frame(eg_app *app)
+{
+    eg_impl_render_screen(app);
+    eg_impl_delay(app);
 }
 
 //----------------------------------------------------------------------------

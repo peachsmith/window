@@ -16,9 +16,6 @@
  */
 static void update(eg_app *app)
 {
-    // Clear the screen.
-    eg_clear_screen(app);
-
     // Handle input.
     if (app->input != NULL)
     {
@@ -93,9 +90,6 @@ static void draw(eg_app *app)
     b1.x = app->screen_width;
     b1.y = app->cb;
     eg_draw_line(app, &b0, &b1);
-
-    // Show the contents of the current frame.
-    eg_render_screen(app);
 }
 
 int prepare(eg_app *app)

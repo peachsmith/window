@@ -226,12 +226,7 @@ struct eg_entity_type
 };
 
 //----------------------------------------------------------------------------
-void eg_process_events(eg_app *);
-void eg_clear_screen(eg_app *);
-void eg_render_screen(eg_app *);
-void eg_delay(eg_app *);
-int eg_peek_key(eg_app *, int);
-int eg_consume_key(eg_app *, int);
+// drawing functions
 void eg_set_color(eg_app *, uint32_t);
 void eg_draw_line(eg_app *, eg_point *, eg_point *);
 void eg_draw_rect(eg_app *, eg_rect *, int);
@@ -271,6 +266,12 @@ eg_app *eg_create_app();
  *   app* - a pointer to an app struct
  */
 void eg_destroy_app(eg_app *);
+
+// TODO: add doc comments
+void eg_begin_frame(eg_app *);
+
+// TODO: add doc comments
+void eg_end_frame(eg_app *);
 
 //----------------------------------------------------------------------------
 // input handling functions
