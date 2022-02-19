@@ -77,7 +77,7 @@ int main(int argc, char **argv)
     {
         test_count++;
         source.y_vel = -50 + i;
-        if (eg_swept_aabb(&app, &source, &target, &res))
+        if (demo_swept_aabb(&app, &source, &target, &res))
         {
             col_count++;
         }
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
     {
         test_count++;
         source.y_vel = -50 + i;
-        if (eg_swept_aabb(&app, &source, &target, &res))
+        if (demo_swept_aabb(&app, &source, &target, &res))
         {
             col_count++;
         }
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
     {
         test_count++;
         source.y_vel = -50 + i;
-        if (eg_swept_aabb(&app, &source, &target, &res))
+        if (demo_swept_aabb(&app, &source, &target, &res))
         {
             col_count++;
         }
@@ -188,7 +188,7 @@ int main(int argc, char **argv)
     {
         test_count++;
         source.y_vel = -50 + i;
-        if (eg_swept_aabb(&app, &source, &target, &res))
+        if (demo_swept_aabb(&app, &source, &target, &res))
         {
             col_count++;
         }
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
     {
         test_count++;
         source.x_vel = -50 + i;
-        if (eg_swept_aabb(&app, &source, &target, &res))
+        if (demo_swept_aabb(&app, &source, &target, &res))
         {
             col_count++;
         }
@@ -267,7 +267,7 @@ int main(int argc, char **argv)
     {
         test_count++;
         source.x_vel = -50 + i;
-        if (eg_swept_aabb(&app, &source, &target, &res))
+        if (demo_swept_aabb(&app, &source, &target, &res))
         {
             col_count++;
         }
@@ -308,7 +308,7 @@ int main(int argc, char **argv)
     {
         test_count++;
         source.x_vel = -50 + i;
-        if (eg_swept_aabb(&app, &source, &target, &res))
+        if (demo_swept_aabb(&app, &source, &target, &res))
         {
             col_count++;
         }
@@ -343,7 +343,7 @@ int main(int argc, char **argv)
     {
         test_count++;
         source.x_vel = -50 + i;
-        if (eg_swept_aabb(&app, &source, &target, &res))
+        if (demo_swept_aabb(&app, &source, &target, &res))
         {
             col_count++;
         }

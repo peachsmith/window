@@ -1,6 +1,6 @@
 #include "demo/collision/collision.h"
 
-int is_overlapped(
+int demo_is_overlapped(
     eg_rect *a,
     eg_rect *b,
     eg_overlap *res)

@@ -387,7 +387,7 @@ static int ray_v_rect(
     return 1;
 }
 
-int eg_swept_aabb(
+int demo_swept_aabb(
     eg_app *app,
     eg_entity *a,
     eg_entity *b,

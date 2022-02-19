@@ -22,7 +22,7 @@ static void detect_collisions(
         eg_ray_res res;
 
         // Use swept AABB to determine if the two entities will collide.
-        if (eg_swept_aabb(app, source, target, &res))
+        if (demo_swept_aabb(app, source, target, &res))
         {
             // Add the collision result to the array.
             eg_col_res col_res = {.col = res, .target = target};
@@ -83,7 +83,7 @@ static int greater(eg_col_res *a, eg_col_res *b)
     return 0;
 }
 
-void handle_collisions(eg_app *app)
+void demo_handle_collisions(eg_app *app)
 {
     // The collision detection has three stages:
     // Stage 1: Collision Detection
@@ -145,7 +145,7 @@ void handle_collisions(eg_app *app)
             a = source;
             b = cols->data[i].target;
 
-            if (eg_swept_aabb(app, a, b, &col))
+            if (demo_swept_aabb(app, a, b, &col))
             {
                 // Call the source entity's collision function.
                 cola = app->registry[a->id].collide;

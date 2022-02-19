@@ -226,12 +226,6 @@ struct eg_entity_type
 };
 
 //----------------------------------------------------------------------------
-// drawing functions
-void eg_set_color(eg_app *, uint32_t);
-void eg_draw_line(eg_app *, eg_point *, eg_point *);
-void eg_draw_rect(eg_app *, eg_rect *, int);
-
-//----------------------------------------------------------------------------
 // core functions
 
 /**
@@ -267,11 +261,62 @@ eg_app *eg_create_app();
  */
 void eg_destroy_app(eg_app *);
 
-// TODO: add doc comments
+/**
+ * Initiates the current frame.
+ * This should be called at the beginning of each iteration of the main loop.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ */
 void eg_begin_frame(eg_app *);
 
-// TODO: add doc comments
+/**
+ * Concludes the current frame.
+ * This should be called at the end of each iteration of the main loop.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ */
 void eg_end_frame(eg_app *);
+
+//----------------------------------------------------------------------------
+// drawing functions
+
+/**
+ * Sets the current draw color.
+ * The color is a 32-bit unsigned integer in the format 0xAARRGGBB. For
+ * example, the color teal is represented as 0xFF387080.
+ * After calling this function, all subsequent drawing functions will use the
+ * color specified until this function is called again with a different color.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_color - a color
+ */
+void eg_set_color(eg_app *, eg_color);
+
+/**
+ * Draws a line connecting two points.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_point* - a pointer to the starting point of the line
+ *   eg_point* - a pointer to the ending point of the line
+ */
+void eg_draw_line(eg_app *, eg_point *, eg_point *);
+
+/**
+ * Draws a rectangle.
+ * The third argument is an integer that specifies whether or not to fill the
+ * rectangle. If 1 is passed, then the rectangle is filled, if 0 is passed,
+ * the rectangle is not filled.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_rect* - a pointer to a rectangle
+ *   int - fill flag. 1 if the rectangle should be filled, otherwise 0
+ */
+void eg_draw_rect(eg_app *, eg_rect *, int);
 
 //----------------------------------------------------------------------------
 // input handling functions
@@ -446,23 +491,5 @@ void eg_clear_flag(eg_entity *e, int f);
  *   int - the index of the flag to toggle, ranging from 0 to 7.
  */
 void eg_toggle_flag(eg_entity *e, int f);
-
-/**
- * Draws various elements of a collision event on the screen.
- * This function is intended for debugging purposes.
- *
- * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_rect* - reference to the target rectangle
- *   eg_t_res* - a reference to a collision result struct
- *   eg_point* - a reference to an origin point
- *   eg_point* - a reference to a direction vector
- */
-void eg_draw_collision(
-    eg_app *app,
-    eg_rect *r,
-    eg_ray_res *res,
-    eg_point *p,
-    eg_point *d);
 
 #endif

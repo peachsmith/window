@@ -12,6 +12,6 @@
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-int prepare(eg_app*);
+int demo_prepare(eg_app*);
 
 #endif

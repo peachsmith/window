@@ -31,7 +31,7 @@ int col_push_result(collision_list *, eg_col_res *);
  *   eg_entity* - the target entity
  *   eg_t-res* - a pointer to the collision result struct
  */
-int eg_swept_aabb(
+int demo_swept_aabb(
     eg_app *app,
     eg_entity *a,
     eg_entity *b,
@@ -47,7 +47,7 @@ int eg_swept_aabb(
  *   eg_rect* - a reference to another rect
  *   eg_overlap* - a reference to the overlap calculation result struct
  */
-int is_overlapped(
+int demo_is_overlapped(
     eg_rect *a,
     eg_rect *b,
     eg_overlap *res);
@@ -58,6 +58,6 @@ int is_overlapped(
  * Params:
  *   eg_app* - a pointer to an app struct
  */
-void handle_collisions(eg_app *app);
+void demo_handle_collisions(eg_app *app);
 
 #endif

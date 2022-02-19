@@ -9,8 +9,7 @@ LINK_DIR=-L$(SDL2_HOME)/lib
 
 CC=clang # This can be switched out for gcc.
 CFLAGS=-Wall -Werror
-# example.c main.c input_demo.c entity_demo.c player_demo.c
-SRC=*.c impl/*.c demo/main.c demo/demo.c demo/entities/*.c demo/input/*.c demo/collision/*.c demo/scenes/*.c
+SRC=*.c impl/*.c demo/main.c demo/demo.c demo/util/*.c demo/entities/*.c demo/input/*.c demo/collision/*.c demo/scenes/*.c
 TESTSRC=*.c impl/*.c demo/test.c demo/entities/*.c demo/input/*.c demo/collision/*.c demo/scenes/*.c
 LIBS=-lSDL2 -lSDL2main
 

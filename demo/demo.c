@@ -23,7 +23,7 @@ static void update(eg_app *app)
     }
 
     // Handle collisions.
-    handle_collisions(app);
+    demo_handle_collisions(app);
 
     // Update state.
     eg_entity *ent = app->entities;
@@ -92,7 +92,7 @@ static void draw(eg_app *app)
     eg_draw_line(app, &b0, &b1);
 }
 
-int prepare(eg_app *app)
+int demo_prepare(eg_app *app)
 {
     // Create the entity registry.
     eg_entity_type *reg = eg_create_registry(ENTITY_TYPE_MAX);

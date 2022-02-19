@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+typedef uint32_t eg_color;
+
 // This list of colors was downloaded from lospec.com/palette-list.
 // It is a list of 24 hexadecimal numbers in the format ARGB.
 // Near the end of the list, there were too many different shades of green,

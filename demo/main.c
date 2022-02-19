@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     }
 
     // Implement application behavior.
-    if (!prepare(app))
+    if (!demo_prepare(app))
     {
         eg_destroy_app(app);
         eg_terminate();
@@ -30,7 +30,6 @@ int main(int argc, char **argv)
     }
 
     // Begin the main loop.
-    // TODO: refactor this to use begin_frame and end_frame
     while (!app->done)
     {
         eg_begin_frame(app);
