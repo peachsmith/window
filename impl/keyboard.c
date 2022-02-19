@@ -114,7 +114,7 @@ static const SDL_Scancode sdl_scancode_table[EG_MAX_KEYCODE + 1] = {
     SDL_SCANCODE_RGUI,
     SDL_SCANCODE_NONUSBACKSLASH,
     SDL_SCANCODE_APPLICATION,
-    EG_MAX_KEYCODE};
+    SDL_NUM_SCANCODES};
 
 // eg_keycode lookup table.
 // This is used for converting SDL_Scancode values into eg_keycode values.
@@ -137,7 +137,7 @@ eg_keycode eg_impl_get_eg_keycode(SDL_Scancode sc)
 {
     if (sc < SDL_SCANCODE_UNKNOWN || sc >= SDL_NUM_SCANCODES)
     {
-        return SDL_SCANCODE_UNKNOWN;
+        return EG_KEYCODE_UNKNOWN;
     }
 
     return eg_keycode_table[sc];
@@ -149,7 +149,7 @@ void eg_impl_init_keyboard()
     // Populate the eg_keycode lookup table.
     for (int i = 0; i < SDL_NUM_SCANCODES + 1; i++)
     {
-        eg_keycode_table[i] = SDL_SCANCODE_UNKNOWN;
+        eg_keycode_table[i] = EG_KEYCODE_UNKNOWN;
     }
 
     eg_keycode_table[SDL_SCANCODE_UNKNOWN] = EG_KEYCODE_UNKNOWN;

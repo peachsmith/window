@@ -1,5 +1,6 @@
 #include "demo/collision/collision.h"
 #include <float.h>
+#include <stdlib.h>
 
 /**
  * Determines if a ray intersects a rectangle.
