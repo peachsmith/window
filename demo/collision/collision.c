@@ -19,13 +19,13 @@ static void detect_collisions(
 
     while (target != NULL)
     {
-        eg_ray_res res;
+        eg_collision res;
 
         // Use swept AABB to determine if the two entities will collide.
         if (demo_swept_aabb(app, source, target, &res))
         {
             // Add the collision result to the array.
-            eg_col_res col_res = {.col = res, .target = target};
+            col_res col_res = {.col = res, .target = target};
             col_push_result(*cols, &col_res);
         }
 
@@ -37,10 +37,10 @@ static void detect_collisions(
  * A comparator function for sorting a list of collision results.
  *
  * Params:
- *   eg_col_res* - a reference to a collision result
- *   eg_col_res* - a reference to another collision result
+ *   col_res* - a reference to a collision result
+ *   col_res* - a reference to another collision result
  */
-static int greater(eg_col_res *a, eg_col_res *b)
+static int greater(col_res *a, col_res *b)
 {
     float t0;     // t value of entity a
     float t1;     // t value of entity b
@@ -119,7 +119,7 @@ void demo_handle_collisions(eg_app *app)
             sorted = 1;
             for (int i = 0; i < cols->count; i++)
             {
-                eg_col_res tmp;
+                col_res tmp;
                 if (i < cols->count - 1)
                 {
                     if (greater(&(cols->data[i]), &(cols->data[i + 1])))
@@ -138,7 +138,7 @@ void demo_handle_collisions(eg_app *app)
         {
             eg_entity *a;     // source entity A
             eg_entity *b;     // target entity B
-            eg_ray_res col;   // swept AABB result
+            eg_collision col; // swept AABB result
             eg_collider cola; // source collision callback
             eg_collider colb; // target collision callback
 

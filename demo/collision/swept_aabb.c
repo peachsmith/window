@@ -74,7 +74,7 @@ static int ray_v_rect(
     eg_point *p,
     eg_point *d,
     eg_rect *r,
-    eg_ray_res *res)
+    eg_collision *res)
 {
     if (p == NULL || d == NULL || r == NULL)
     {
@@ -391,7 +391,7 @@ int demo_swept_aabb(
     eg_app *app,
     eg_entity *a,
     eg_entity *b,
-    eg_ray_res *res)
+    eg_collision *res)
 {
     eg_point p; // origin point P
     eg_point d; // direction vector D

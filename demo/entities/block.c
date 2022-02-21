@@ -20,7 +20,7 @@ static void collide_block(
     eg_app *app,
     eg_entity *block,
     eg_entity *other,
-    eg_ray_res *t_res,
+    eg_collision *t_res,
     int is_b)
 {
     // The collision resolution correction factor formula is pulled from

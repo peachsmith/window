@@ -3,19 +3,34 @@
 
 #include "example.h"
 
+// defintion of eg_collision struct
+struct eg_collision
+{
+    eg_point cp; // contact point
+    eg_point cn; // contact normal
+    float t;     // t such that P(t) = CP
+};
+
+typedef struct col_res
+{
+    eg_collision col;
+    eg_entity *target;
+} col_res;
+
 // a helper type for a dynamic array of collision results
 typedef struct collision_list
 {
     int cap;
     int count;
-    eg_col_res *data;
+    col_res *data;
 } collision_list;
 
 // utility functions for the collision_list type
+// TODO: replace this with a non-heap approach.
 collision_list *col_create_list();
 void col_destroy_list(collision_list *);
 void col_clear_list(collision_list *);
-int col_push_result(collision_list *, eg_col_res *);
+int col_push_result(collision_list *, col_res *);
 
 /**
  * Determines if a collision will occur between a moving source entity A and
@@ -35,7 +50,7 @@ int demo_swept_aabb(
     eg_app *app,
     eg_entity *a,
     eg_entity *b,
-    eg_ray_res *res);
+    eg_collision *res);
 
 /**
  * Determines if two rectangles overlap.
@@ -54,6 +69,8 @@ int demo_is_overlapped(
 
 /**
  * Detects and handles collisions between all entities in an application.
+ * TODO: clipping through the floor is still possible. This requires further
+ * investigation.
  *
  * Params:
  *   eg_app* - a pointer to an app struct

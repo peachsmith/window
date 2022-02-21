@@ -86,23 +86,10 @@ typedef struct eg_rect
 } eg_rect;
 
 /**
- * The result of testing for the intersection of a ray with a rectangle.
- */
-typedef struct eg_ray_res
-{
-    eg_point cp; // contact point
-    eg_point cn; // contact normal
-    float t;     // t such that P(t) = CP
-} eg_ray_res;
-
-/**
  * The result of collision detection.
+ * This structure is defined by the consuming application.
  */
-typedef struct eg_col_res
-{
-    eg_ray_res col;
-    eg_entity *target;
-} eg_col_res;
+typedef struct eg_collision eg_collision;
 
 typedef struct eg_camera
 {
@@ -137,7 +124,7 @@ typedef void (*eg_collider)(
     eg_app *,
     eg_entity *,
     eg_entity *,
-    eg_ray_res *,
+    eg_collision *,
     int);
 
 // definition of the eg_app struct

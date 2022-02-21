@@ -5,12 +5,12 @@
 collision_list *col_create_list()
 {
     int cap;              // initial capacity
-    eg_col_res *data;     // dynamic array
+    col_res *data;        // dynamic array
     collision_list *list; // wrapper struct
 
     // Allocate memory for an array with an initial capacity of 10.
     cap = 10;
-    data = (eg_col_res *)malloc(sizeof(eg_col_res) * cap);
+    data = (col_res *)malloc(sizeof(col_res) * cap);
     if (data == NULL)
     {
         return NULL;
@@ -59,7 +59,7 @@ void col_clear_list(collision_list *list)
     list->count = 0;
 }
 
-int col_push_result(collision_list *list, eg_col_res *result)
+int col_push_result(collision_list *list, col_res *result)
 {
     if (list == NULL || result == NULL)
     {
@@ -70,10 +70,10 @@ int col_push_result(collision_list *list, eg_col_res *result)
     if (list->count >= list->cap)
     {
         int new_cap;
-        eg_col_res *new_data;
+        col_res *new_data;
 
         new_cap = list->cap + list->cap / 2;
-        new_data = (eg_col_res *)realloc(list->data, new_cap);
+        new_data = (col_res *)realloc(list->data, new_cap);
         if (new_data == NULL)
         {
             free(list->data);

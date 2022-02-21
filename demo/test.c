@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     app.cam.x = 0;
     app.cam.y = 0;
     eg_entity_type reg[ENTITY_TYPE_MAX];
-    eg_ray_res res;
+    eg_collision res;
 
     // Register the source entity
     reg[ENTITY_TYPE_PLAYER].id = ENTITY_TYPE_PLAYER;

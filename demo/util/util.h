@@ -17,7 +17,7 @@
 void demo_draw_collision(
     eg_app *app,
     eg_rect *r,
-    eg_ray_res *res,
+    eg_collision *res,
     eg_point *p,
     eg_point *d);
 
