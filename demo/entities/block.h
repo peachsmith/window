@@ -34,4 +34,9 @@ eg_entity *block_demo_create_big(int, int);
 void block_demo_register_long(eg_entity_type *);
 eg_entity *block_demo_create_long(int, int);
 
+// register and create functions for a long, rectangular block that can be
+// passed through with certain input.
+void throughblock_demo_register_long(eg_entity_type *);
+eg_entity *throughblock_demo_create_long(int, int);
+
 #endif

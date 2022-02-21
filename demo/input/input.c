@@ -24,12 +24,25 @@ void root_input_callback(eg_app *app, eg_entity *target)
         }
     }
 
+    // down arrow key
+    if (eg_peek_input(app, EG_KEYCODE_DOWN))
+    {
+        if (!eg_check_flag(target, ENTITY_FLAG_DOWN))
+        {
+            eg_set_flag(target, ENTITY_FLAG_DOWN);
+        }
+    }
+    else if (eg_check_flag(target, ENTITY_FLAG_DOWN))
+    {
+        eg_clear_flag(target, ENTITY_FLAG_DOWN);
+    }
+
     // jumping
     if (eg_consume_input(app, EG_KEYCODE_SPACE))
     {
-        if (!eg_check_flag(target, 0))
+        if (!eg_check_flag(target, ENTITY_FLAG_JUMP))
         {
-            eg_set_flag(target, 0);
+            eg_set_flag(target, ENTITY_FLAG_JUMP);
             target->y_vel -= 12;
         }
     }
