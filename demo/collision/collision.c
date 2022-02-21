@@ -7,10 +7,20 @@
 #define DIR_BACKWARD 0
 #define DIR_FORWARD 1
 
+// maximum allowable collisions for one entity
+#define COL_LIMIT 64
+
+typedef struct col_res
+{
+    eg_collision col;
+    eg_entity *target;
+} col_res;
+
 static void detect_collisions(
     eg_app *app,
     eg_entity *source,
-    collision_list **cols,
+    col_res *cols,
+    int *count,
     int direction)
 {
     // If direction has a non zero value, then we check every entity after
@@ -25,8 +35,12 @@ static void detect_collisions(
         if (demo_swept_aabb(app, source, target, &res))
         {
             // Add the collision result to the array.
-            col_res col_res = {.col = res, .target = target};
-            col_push_result(*cols, &col_res);
+            if (*count < COL_LIMIT)
+            {
+                cols[*count].col = res;
+                cols[*count].target = target;
+                *count = *count + 1;
+            }
         }
 
         target = direction ? target->next : target->previous;
@@ -90,17 +104,9 @@ void demo_handle_collisions(eg_app *app)
     // Stage 2: Collision Sorting
     // Stage 3: Collision Resolution
 
-    collision_list *cols; // collision result list
-    eg_entity *source;    // source entity
-
-    // Create the collision result list.
-    // This will be reused on each iteration of the main collision loop.
-    cols = col_create_list();
-    if (cols == NULL)
-    {
-        app->done = 1;
-        return;
-    }
+    col_res cols[COL_LIMIT]; // collision result list
+    int count = 0;
+    eg_entity *source; // source entity
 
     // main collision loop
     source = app->entities;
@@ -109,32 +115,32 @@ void demo_handle_collisions(eg_app *app)
         // Stage 1: Collision Detection
         // We traverse the entity list forwards and backwards from the source
         // entity. This prevents checking an entity for collision with itself.
-        detect_collisions(app, source, &cols, DIR_FORWARD);
-        detect_collisions(app, source, &cols, DIR_BACKWARD);
+        detect_collisions(app, source, cols, &count, DIR_FORWARD);
+        detect_collisions(app, source, cols, &count, DIR_BACKWARD);
 
         // Stage 2: Collision Sorting
         int sorted = 0;
         while (!sorted)
         {
             sorted = 1;
-            for (int i = 0; i < cols->count; i++)
+            for (int i = 0; i < count; i++)
             {
                 col_res tmp;
-                if (i < cols->count - 1)
+                if (i < count - 1)
                 {
-                    if (greater(&(cols->data[i]), &(cols->data[i + 1])))
+                    if (greater(&(cols[i]), &(cols[i + 1])))
                     {
                         sorted = 0;
-                        tmp = cols->data[i];
-                        cols->data[i] = cols->data[i + 1];
-                        cols->data[i + 1] = tmp;
+                        tmp = cols[i];
+                        cols[i] = cols[i + 1];
+                        cols[i + 1] = tmp;
                     }
                 }
             }
         }
 
         // Stage 3: Collision Resolution
-        for (int i = 0; i < cols->count; i++)
+        for (int i = 0; i < count; i++)
         {
             eg_entity *a;     // source entity A
             eg_entity *b;     // target entity B
@@ -143,7 +149,7 @@ void demo_handle_collisions(eg_app *app)
             eg_collider colb; // target collision callback
 
             a = source;
-            b = cols->data[i].target;
+            b = cols[i].target;
 
             if (demo_swept_aabb(app, a, b, &col))
             {
@@ -163,13 +169,7 @@ void demo_handle_collisions(eg_app *app)
             }
         }
 
-        // Clear the collision list.
-        col_clear_list(cols);
-
         source = source->next;
 
     } // END main collision detection loop
-
-    // Destroy the collision list.
-    col_destroy_list(cols);
 }

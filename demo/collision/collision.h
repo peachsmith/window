@@ -11,27 +11,6 @@ struct eg_collision
     float t;     // t such that P(t) = CP
 };
 
-typedef struct col_res
-{
-    eg_collision col;
-    eg_entity *target;
-} col_res;
-
-// a helper type for a dynamic array of collision results
-typedef struct collision_list
-{
-    int cap;
-    int count;
-    col_res *data;
-} collision_list;
-
-// utility functions for the collision_list type
-// TODO: replace this with a non-heap approach.
-collision_list *col_create_list();
-void col_destroy_list(collision_list *);
-void col_clear_list(collision_list *);
-int col_push_result(collision_list *, col_res *);
-
 /**
  * Determines if a collision will occur between a moving source entity A and
  * a static target entity B. This uses an implementation of Swept AABB, which
