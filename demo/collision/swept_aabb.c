@@ -459,7 +459,6 @@ int demo_swept_aabb(
         int bx = b->x_pos + app->cam.x;
         int by = b->y_pos + app->cam.y;
         int bw = app->registry[b->id].width;
-        int bh = app->registry[b->id].height;
 
         // target x <= source x <= target x + target w
         // OR

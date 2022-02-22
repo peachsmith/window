@@ -51,7 +51,8 @@ static void update_moving_block(eg_app *app, eg_entity *block)
     block->y_pos += block->y_vel;
     block->x_pos += block->x_vel;
 
-    // Horizontal moving platform
+    //------------------------------------------------------
+    // Horizontal Movement
     // Switch direction to start moving right.
     if (block->x_pos <= -150)
     {
@@ -78,32 +79,33 @@ static void update_moving_block(eg_app *app, eg_entity *block)
         block->x_vel = -1;
     }
 
-    // Vertical moving platform
-    // // Switch direction to start moving down.
-    // if (block->y_pos <= 0)
-    // {
-    //     block->y_vel = 1;
-    // }
+    //------------------------------------------------------
+    // Vertical Movement
+    // Switch direction to start moving down.
+    if (block->y_pos <= 30)
+    {
+        block->y_vel = 1;
+    }
 
-    // // If the platform is above position 80 and is moving down,
-    // // continue to move down.
-    // if (block->y_pos < 120 && block->y_vel >= 0)
-    // {
-    //     block->y_vel = 1;
-    // }
+    // If the platform is above position 80 and is moving down,
+    // continue to move down.
+    if (block->y_pos < 130 && block->y_vel >= 0)
+    {
+        block->y_vel = 1;
+    }
 
-    // // Switch directions to start moving up.
-    // if (block->y_pos >= 120)
-    // {
-    //     block->y_vel = -1;
-    // }
+    // Switch directions to start moving up.
+    if (block->y_pos >= 130)
+    {
+        block->y_vel = -1;
+    }
 
-    // // If the platform is below position 30 and is moving up,
-    // // continue to move up.
-    // if (block->y_pos > 0 && block->y_vel < 0)
-    // {
-    //     block->y_vel = -1;
-    // }
+    // If the platform is below position 30 and is moving up,
+    // continue to move up.
+    if (block->y_pos > 30 && block->y_vel < 0)
+    {
+        block->y_vel = -1;
+    }
 }
 
 static void collide_block(
@@ -167,7 +169,6 @@ static void collide_block(
     {
         if (t_res->cn.y < 0)
         {
-            int aw = app->registry[other->id].width;
             int ah = app->registry[other->id].height;
             eg_set_flag(other, ENTITY_FLAG_MOVE);
             other->link = block;
