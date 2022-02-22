@@ -45,6 +45,11 @@ static void render_moving_block(eg_app *app, eg_entity *block)
 
 static void update_moving_block(eg_app *app, eg_entity *block)
 {
+    // Update the position of the platform before updating the velocity.
+    // This prevents a disconnect between the platform and any entities
+    // being carried by it.
+    block->y_pos += block->y_vel;
+
     // Switch direction to start moving down.
     if (block->y_pos <= 0)
     {
@@ -70,8 +75,6 @@ static void update_moving_block(eg_app *app, eg_entity *block)
     {
         block->y_vel = -1;
     }
-
-    block->y_pos += block->y_vel;
 }
 
 static void collide_block(

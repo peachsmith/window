@@ -58,6 +58,7 @@ static void update_player(eg_app *app, eg_entity *player)
             player->y_vel += player->link->y_vel;
         }
         eg_clear_flag(player, ENTITY_FLAG_MOVE);
+        // player->link = NULL;
     }
 
     // Update vertical position.

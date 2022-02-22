@@ -450,20 +450,22 @@ int demo_swept_aabb(
     // Check for moving platforms.
     // Currently, the link field of the entity struct indicates that the
     // source entity is standing on a moving platform.
-    if (a->link != NULL)
+    if (a->link != NULL && b->id == ENTITY_TYPE_BLOCK_MOVING)
     {
         // Verify that the source entity's x position is within the
         // horizontal bounds of the platform.
-
         int ax = a->x_pos;
         int bx = b->x_pos + app->cam.x;
+        int by = b->y_pos + app->cam.y;
         int bw = app->registry[b->id].width;
+        int bh = app->registry[b->id].height;
 
         // target x <= source x <= target x + target w
         // OR
         // target x <= source x + source w <= target x + target w
-        if ((ax >= bx && ax <= bx + bw) ||
-            (ax + aw >= bx && ax + aw <= bx + bw))
+        if (((ax >= bx && ax <= bx + bw) ||
+             (ax + aw >= bx && ax + aw <= bx + bw)) &&
+            a->y_pos + ah == by)
         {
             res->cn.x = 0;
             res->cn.y = -1;
