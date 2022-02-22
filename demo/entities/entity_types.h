@@ -11,12 +11,15 @@
 #define ENTITY_TYPE_BLOCK_BIG 5
 #define ENTITY_TYPE_BLOCK_LONG 6
 #define ENTITY_TYPE_THROUGHBLOCK_LONG 7
+#define ENTITY_TYPE_BLOCK_MOVING 8
 
 // This is the total number of entity types.
-#define ENTITY_TYPE_MAX 8
+#define ENTITY_TYPE_MAX 9
 
 // flags
-#define ENTITY_FLAG_JUMP 0
-#define ENTITY_FLAG_DOWN 1
+#define ENTITY_FLAG_GROUND 0
+#define ENTITY_FLAG_JUMP 1
+#define ENTITY_FLAG_DOWN 2
+#define ENTITY_FLAG_MOVE 3
 
 #endif

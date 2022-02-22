@@ -111,6 +111,7 @@ int demo_prepare(eg_app *app)
     block_demo_register_big(&reg[ENTITY_TYPE_BLOCK_BIG]);
     block_demo_register_long(&reg[ENTITY_TYPE_BLOCK_LONG]);
     throughblock_demo_register_long(&reg[ENTITY_TYPE_THROUGHBLOCK_LONG]);
+    block_demo_register_moving(&reg[ENTITY_TYPE_BLOCK_MOVING]);
 
     load_scene_0(app);
 

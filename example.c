@@ -257,6 +257,7 @@ eg_entity *eg_create_entity()
     entity->x_vel = 0;
     entity->y_vel = 0;
     entity->flags = 0;
+    entity->link = NULL;
     entity->next = NULL;
     entity->previous = NULL;
 

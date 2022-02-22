@@ -30,6 +30,44 @@ static void render_throughblock(eg_app *app, eg_entity *block)
     eg_draw_rect(app, &r, 0);
 }
 
+// Renders a moving block
+static void render_moving_block(eg_app *app, eg_entity *block)
+{
+    eg_rect r;
+    r.x = block->x_pos + app->cam.x;
+    r.y = block->y_pos + app->cam.y;
+    r.w = app->registry[block->id].width;
+    r.h = app->registry[block->id].height;
+
+    eg_set_color(app, EG_COLOR_SEA_GREEN);
+    eg_draw_rect(app, &r, 0);
+}
+
+static void update_moving_block(eg_app *app, eg_entity *block)
+{
+    if (block->y_pos <= 30)
+    {
+        block->y_vel = 1;
+    }
+
+    if (block->y_pos < 80 && block->y_vel >= 0)
+    {
+        block->y_vel = 1;
+    }
+
+    if (block->y_pos >= 80)
+    {
+        block->y_vel = -1;
+    }
+
+    if (block->y_pos > 30 && block->y_vel < 0)
+    {
+        block->y_vel = -1;
+    }
+
+    block->y_pos += block->y_vel;
+}
+
 static void collide_block(
     eg_app *app,
     eg_entity *block,
@@ -40,12 +78,20 @@ static void collide_block(
     // The collision resolution correction factor formula is pulled from
     // the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.
 
+    // Clear the jump flag and set the ground flag.
+    // Only do this if the entity collided with the block from above.
+    if (t_res->cn.y < 0 && !t_res->cn.x)
+    {
+        eg_clear_flag(other, ENTITY_FLAG_JUMP);
+        eg_set_flag(other, ENTITY_FLAG_GROUND);
+    }
+
     // If the block is a throughblock, check if we should resolve the collision.
     if (block->id == ENTITY_TYPE_THROUGHBLOCK_LONG)
     {
         // If the down key is pressed and the y component of the contact
         // is negative, don't resolve the collision.
-        if (eg_check_flag(other, ENTITY_FLAG_DOWN) && t_res->cn.y < 0)
+        if (eg_check_flag(other, ENTITY_FLAG_DOWN))
         {
             return;
         }
@@ -76,13 +122,19 @@ static void collide_block(
         other->y_vel += (int)correction;
     }
 
-    // Clear the jump flag.
-    // Only do this if the entity collided with the block from above.
-    // TODO: give proper names to flags and design a system to use flags
-    // in correct contexts.
-    if (t_res->cn.y < 0 && !t_res->cn.x)
+    // If the block is a moving platform, update the source entity's position
+    // according to the correction factor, then set the source entity's
+    // velocity to match the platform.
+    if (block->id == ENTITY_TYPE_BLOCK_MOVING)
     {
-        eg_clear_flag(other, ENTITY_FLAG_JUMP);
+        if (t_res->cn.y < 0)
+        {
+            eg_set_flag(other, ENTITY_FLAG_MOVE);
+            other->link = block;
+            // other->y_vel = block->y_vel;
+            // other->y_pos += other->y_vel;
+            // other->y_vel = block->y_vel;
+        }
     }
 }
 
@@ -184,6 +236,33 @@ eg_entity *throughblock_demo_create_long(int x, int y)
     }
 
     block->id = ENTITY_TYPE_THROUGHBLOCK_LONG;
+    block->x_pos = x;
+    block->y_pos = y;
+
+    return block;
+}
+
+void block_demo_register_moving(eg_entity_type *t)
+{
+    t->id = ENTITY_TYPE_BLOCK_MOVING;
+    t->width = 60;
+    t->height = 16;
+    t->render = render_moving_block;
+    t->update = update_moving_block;
+    t->collide = collide_block;
+}
+
+eg_entity *block_demo_create_moving(int x, int y)
+{
+    eg_entity *block = NULL;
+
+    block = eg_create_entity();
+    if (block == NULL)
+    {
+        return NULL;
+    }
+
+    block->id = ENTITY_TYPE_BLOCK_MOVING;
     block->x_pos = x;
     block->y_pos = y;
 

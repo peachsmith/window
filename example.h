@@ -198,6 +198,9 @@ struct eg_entity
     int y_vel;     // vertical velocity
     uint8_t flags; // flags
 
+    // TEMP: trying to implement moving platforms
+    eg_entity *link;
+
     eg_entity *next;
     eg_entity *previous;
 };

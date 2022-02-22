@@ -1,6 +1,8 @@
 #include "demo/collision/collision.h"
+#include "demo/entities/entity_types.h"
 #include <float.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
  * Determines if a ray intersects a rectangle.
@@ -413,6 +415,12 @@ int demo_swept_aabb(
         return 0;
     }
 
+    // A moving platform cannot be the source entity.
+    if (a->id == ENTITY_TYPE_BLOCK_MOVING)
+    {
+        return 0;
+    }
+
     // Get the width and height of source entity A.
     int aw = app->registry[a->id].width;
     int ah = app->registry[a->id].height;
@@ -436,6 +444,19 @@ int demo_swept_aabb(
 
     if (ray_v_rect(&p, &d, &r, res))
     {
+        return 1;
+    }
+
+    // Check for moving platforms.
+    // Currently, the link field of the entity struct indicates that the
+    // source entity is standing on a moving platform.
+    if (a->link != NULL)
+    {
+        res->cn.x = 0;
+        res->cn.y = -1;
+        res->cp.x = p.x;
+        res->cp.y = p.y;
+        res->t = 0;
         return 1;
     }
 

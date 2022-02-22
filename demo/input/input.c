@@ -40,9 +40,14 @@ void root_input_callback(eg_app *app, eg_entity *target)
     // jumping
     if (eg_consume_input(app, EG_KEYCODE_SPACE))
     {
-        if (!eg_check_flag(target, ENTITY_FLAG_JUMP))
+        if (eg_check_flag(target, ENTITY_FLAG_GROUND) &&
+            !eg_check_flag(target, ENTITY_FLAG_JUMP))
         {
+            eg_clear_flag(target, ENTITY_FLAG_GROUND);
             eg_set_flag(target, ENTITY_FLAG_JUMP);
+            eg_clear_flag(target, ENTITY_FLAG_MOVE);
+            target->link = NULL;
+            target->y_vel = 0;
             target->y_vel -= 12;
         }
     }

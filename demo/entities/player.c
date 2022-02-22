@@ -49,6 +49,14 @@ static void update_player(eg_app *app, eg_entity *player)
         player->x_vel++;
     }
 
+    // If the player is standing on a moving platform,
+    // adjust the y velocity to match the platform.
+    if (eg_check_flag(player, ENTITY_FLAG_MOVE))
+    {
+        player->y_vel = player->link->y_vel;
+        eg_clear_flag(player, ENTITY_FLAG_MOVE);
+    }
+
     // Update vertical position.
     if (player->y_pos + h >= app->cb && player->y_vel > 0)
     {
