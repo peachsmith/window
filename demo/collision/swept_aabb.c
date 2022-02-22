@@ -452,12 +452,26 @@ int demo_swept_aabb(
     // source entity is standing on a moving platform.
     if (a->link != NULL)
     {
-        res->cn.x = 0;
-        res->cn.y = -1;
-        res->cp.x = p.x;
-        res->cp.y = p.y;
-        res->t = 0;
-        return 1;
+        // Verify that the source entity's x position is within the
+        // horizontal bounds of the platform.
+
+        int ax = a->x_pos;
+        int bx = b->x_pos + app->cam.x;
+        int bw = app->registry[b->id].width;
+
+        // target x <= source x <= target x + target w
+        // OR
+        // target x <= source x + source w <= target x + target w
+        if ((ax >= bx && ax <= bx + bw) ||
+            (ax + aw >= bx && ax + aw <= bx + bw))
+        {
+            res->cn.x = 0;
+            res->cn.y = -1;
+            res->cp.x = p.x;
+            res->cp.y = p.y;
+            res->t = 0;
+            return 1;
+        }
     }
 
     return 0;

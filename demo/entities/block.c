@@ -45,22 +45,28 @@ static void render_moving_block(eg_app *app, eg_entity *block)
 
 static void update_moving_block(eg_app *app, eg_entity *block)
 {
-    if (block->y_pos <= 30)
+    // Switch direction to start moving down.
+    if (block->y_pos <= 0)
     {
         block->y_vel = 1;
     }
 
-    if (block->y_pos < 80 && block->y_vel >= 0)
+    // If the platform is above position 80 and is moving down,
+    // continue to move down.
+    if (block->y_pos < 120 && block->y_vel >= 0)
     {
         block->y_vel = 1;
     }
 
-    if (block->y_pos >= 80)
+    // Switch directions to start moving up.
+    if (block->y_pos >= 120)
     {
         block->y_vel = -1;
     }
 
-    if (block->y_pos > 30 && block->y_vel < 0)
+    // If the platform is below position 30 and is moving up,
+    // continue to move up.
+    if (block->y_pos > 0 && block->y_vel < 0)
     {
         block->y_vel = -1;
     }
@@ -129,11 +135,14 @@ static void collide_block(
     {
         if (t_res->cn.y < 0)
         {
+            int ah = app->registry[other->id].height;
             eg_set_flag(other, ENTITY_FLAG_MOVE);
             other->link = block;
-            // other->y_vel = block->y_vel;
-            // other->y_pos += other->y_vel;
-            // other->y_vel = block->y_vel;
+            other->y_vel = block->y_pos + app->cam.y - (other->y_pos + ah);
+            // if (block->y_vel)
+            // {
+            //     other->y_vel += block->y_vel;
+            // }
         }
     }
 }

@@ -97,7 +97,7 @@ eg_impl *eg_impl_create(int screen_width, int screen_height)
     impl->window = window;
     impl->renderer = renderer;
     impl->keystates = keystates;
-    impl->frame_len = 16;
+    impl->frame_len = 64; // 16;
     impl->ticks = 0;
 
     // Notes on frame_len field:
