@@ -172,8 +172,12 @@ static void collide_block(
             eg_set_flag(other, ENTITY_FLAG_MOVE);
             other->link = block;
 
-            // Adjust the source entity's x velocity.
-            // other->x_vel += block->x_vel;
+            // Adjust the x velocity if the source entity is not
+            // currently providing its own velocity.
+            if (other->x_vel == 0)
+            {
+                other->x_vel += block->x_vel;
+            }
 
             // Adjust the source entity's y velocity.
             other->y_vel = block->y_pos + app->cam.y - (other->y_pos + ah);

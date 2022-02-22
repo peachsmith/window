@@ -22,6 +22,10 @@ static void update_player(eg_app *app, eg_entity *player)
     int w = app->registry[player->id].width;
     int h = app->registry[player->id].height;
 
+    // Check the MOVE flag to see if the player is being carried by a
+    // a moving platform.
+    int carry = eg_check_flag(player, ENTITY_FLAG_MOVE);
+
     // Update horizontal position.
     if (player->x_pos + w >= app->cr && player->x_vel > 0)
     {
@@ -51,11 +55,10 @@ static void update_player(eg_app *app, eg_entity *player)
 
     // If the player is standing on a moving platform,
     // adjust the y velocity to match the platform.
-    if (eg_check_flag(player, ENTITY_FLAG_MOVE))
+    if (carry)
     {
         if (player->link != NULL)
         {
-            player->x_vel = player->link->x_vel;
             player->y_vel += player->link->y_vel;
         }
         eg_clear_flag(player, ENTITY_FLAG_MOVE);

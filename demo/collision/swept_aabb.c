@@ -450,6 +450,7 @@ int demo_swept_aabb(
     // Check for moving platforms.
     // Currently, the link field of the entity struct indicates that the
     // source entity is standing on a moving platform.
+    // TODO: properly implement moving platform linkage detection.
     if (a->link != NULL && b->id == ENTITY_TYPE_BLOCK_MOVING)
     {
         // Verify that the source entity's x position is within the
