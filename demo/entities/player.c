@@ -55,6 +55,7 @@ static void update_player(eg_app *app, eg_entity *player)
     {
         if (player->link != NULL)
         {
+            player->x_vel = player->link->x_vel;
             player->y_vel += player->link->y_vel;
         }
         eg_clear_flag(player, ENTITY_FLAG_MOVE);

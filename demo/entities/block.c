@@ -49,32 +49,61 @@ static void update_moving_block(eg_app *app, eg_entity *block)
     // This prevents a disconnect between the platform and any entities
     // being carried by it.
     block->y_pos += block->y_vel;
+    block->x_pos += block->x_vel;
 
-    // Switch direction to start moving down.
-    if (block->y_pos <= 0)
+    // Horizontal moving platform
+    // Switch direction to start moving right.
+    if (block->x_pos <= -150)
     {
-        block->y_vel = 1;
+        block->x_vel = 1;
     }
 
-    // If the platform is above position 80 and is moving down,
-    // continue to move down.
-    if (block->y_pos < 120 && block->y_vel >= 0)
+    // If the platform is to the left of position -50 and is moving right,
+    // continue to move right.
+    if (block->x_pos < -50 && block->x_vel >= 0)
     {
-        block->y_vel = 1;
+        block->x_vel = 1;
     }
 
     // Switch directions to start moving up.
-    if (block->y_pos >= 120)
+    if (block->x_pos >= -50)
     {
-        block->y_vel = -1;
+        block->x_vel = -1;
     }
 
-    // If the platform is below position 30 and is moving up,
-    // continue to move up.
-    if (block->y_pos > 0 && block->y_vel < 0)
+    // If the platform is below position 30 and is moving left,
+    // continue to move left.
+    if (block->x_pos > -150 && block->x_vel < 0)
     {
-        block->y_vel = -1;
+        block->x_vel = -1;
     }
+
+    // Vertical moving platform
+    // // Switch direction to start moving down.
+    // if (block->y_pos <= 0)
+    // {
+    //     block->y_vel = 1;
+    // }
+
+    // // If the platform is above position 80 and is moving down,
+    // // continue to move down.
+    // if (block->y_pos < 120 && block->y_vel >= 0)
+    // {
+    //     block->y_vel = 1;
+    // }
+
+    // // Switch directions to start moving up.
+    // if (block->y_pos >= 120)
+    // {
+    //     block->y_vel = -1;
+    // }
+
+    // // If the platform is below position 30 and is moving up,
+    // // continue to move up.
+    // if (block->y_pos > 0 && block->y_vel < 0)
+    // {
+    //     block->y_vel = -1;
+    // }
 }
 
 static void collide_block(
@@ -138,14 +167,16 @@ static void collide_block(
     {
         if (t_res->cn.y < 0)
         {
+            int aw = app->registry[other->id].width;
             int ah = app->registry[other->id].height;
             eg_set_flag(other, ENTITY_FLAG_MOVE);
             other->link = block;
+
+            // Adjust the source entity's x velocity.
+            // other->x_vel += block->x_vel;
+
+            // Adjust the source entity's y velocity.
             other->y_vel = block->y_pos + app->cam.y - (other->y_pos + ah);
-            // if (block->y_vel)
-            // {
-            //     other->y_vel += block->y_vel;
-            // }
         }
     }
 }
