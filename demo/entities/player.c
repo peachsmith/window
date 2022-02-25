@@ -9,8 +9,8 @@ static void render_player(eg_app *app, eg_entity *player)
     eg_rect r;
     r.x = player->x_pos;
     r.y = player->y_pos;
-    r.w = app->registry[player->id].width;
-    r.h = app->registry[player->id].height;
+    r.w = app->registry[player->type].width;
+    r.h = app->registry[player->type].height;
 
     eg_set_color(app, EG_COLOR_ORANGE);
     eg_draw_rect(app, &r, 0);
@@ -19,8 +19,8 @@ static void render_player(eg_app *app, eg_entity *player)
 static void update_player(eg_app *app, eg_entity *player)
 {
     // Get the width and height of the player.
-    int w = app->registry[player->id].width;
-    int h = app->registry[player->id].height;
+    int w = app->registry[player->type].width;
+    int h = app->registry[player->type].height;
 
     // Check the MOVE flag to see if the player is being carried by a
     // a moving platform.
@@ -106,7 +106,7 @@ eg_entity *player_demo_create(int x, int y)
         return NULL;
     }
 
-    player->id = ENTITY_TYPE_PLAYER;
+    player->type = ENTITY_TYPE_PLAYER;
     player->x_pos = x;
     player->y_pos = y;
 

@@ -416,14 +416,14 @@ int demo_swept_aabb(
     }
 
     // A moving platform cannot be the source entity.
-    if (a->id == ENTITY_TYPE_BLOCK_MOVING)
+    if (a->type == ENTITY_TYPE_BLOCK_MOVING)
     {
         return 0;
     }
 
     // Get the width and height of source entity A.
-    int aw = app->registry[a->id].width;
-    int ah = app->registry[a->id].height;
+    int aw = app->registry[a->type].width;
+    int ah = app->registry[a->type].height;
 
     // Create a rectangle representing the boundaries of target entity B.
     // To construct the target boundary, we add half of the source width to
@@ -431,8 +431,8 @@ int demo_swept_aabb(
     // We also add the camera position.
     r.x = b->x_pos + app->cam.x - (aw / 2);
     r.y = b->y_pos + app->cam.y - (ah / 2);
-    r.w = app->registry[b->id].width + aw;
-    r.h = app->registry[b->id].height + ah;
+    r.w = app->registry[b->type].width + aw;
+    r.h = app->registry[b->type].height + ah;
 
     // The origin point P is the center point of source entity A.
     p.x = a->x_pos + aw / 2;
@@ -451,18 +451,23 @@ int demo_swept_aabb(
     // Currently, the link field of the entity struct indicates that the
     // source entity is standing on a moving platform.
     // TODO: properly implement moving platform linkage detection.
-    if (a->link != NULL && b->id == ENTITY_TYPE_BLOCK_MOVING)
+    if (a->link != NULL && b->type == ENTITY_TYPE_BLOCK_MOVING)
     {
         // Verify that the source entity's x position is within the
         // horizontal bounds of the platform.
         int ax = a->x_pos;
         int bx = b->x_pos + app->cam.x;
         int by = b->y_pos + app->cam.y;
-        int bw = app->registry[b->id].width;
+        int bw = app->registry[b->type].width;
 
-        // target x <= source x <= target x + target w
-        // OR
-        // target x <= source x + source w <= target x + target w
+        // Check if the source entity is on top of the target.
+        // (
+        //   target x <= source x <= target x + target w
+        //   OR
+        //   target x <= source x + source w <= target x + target w
+        // )
+        // AND
+        // source y + source h == target y
         if (((ax >= bx && ax <= bx + bw) ||
              (ax + aw >= bx && ax + aw <= bx + bw)) &&
             a->y_pos + ah == by)

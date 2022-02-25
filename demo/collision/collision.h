@@ -12,6 +12,25 @@ struct eg_collision
 };
 
 /**
+ * Result of rectangle overlap calculation.
+ */
+typedef struct eg_overlap
+{
+    // The fields dx0, dx1, dy0, and dy1 are referred to as the deltas.
+    // They represent the differences between the positions of the sides
+    // of two rectangles.
+    // Given two rectangles A and B:
+    // dx0 is difference between the right side of A and the left side of B.
+    // dx1 is difference between the right side of B and the left side of A.
+    // dy0 is difference between the bottom side of A and the top side of B.
+    // dy1 is difference between the bottom side of B and the top side of A.
+    int dx0;
+    int dx1;
+    int dy0;
+    int dy1;
+} eg_overlap;
+
+/**
  * Determines if a collision will occur between a moving source entity A and
  * a static target entity B. This uses an implementation of Swept AABB, which
  * assumes that all rectangles are axis-aligned.

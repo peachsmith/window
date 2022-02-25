@@ -10,8 +10,8 @@ static void render_block(eg_app *app, eg_entity *block)
     eg_rect r;
     r.x = block->x_pos + app->cam.x;
     r.y = block->y_pos + app->cam.y;
-    r.w = app->registry[block->id].width;
-    r.h = app->registry[block->id].height;
+    r.w = app->registry[block->type].width;
+    r.h = app->registry[block->type].height;
 
     eg_set_color(app, EG_COLOR_LIGHT_BLUE);
     eg_draw_rect(app, &r, 0);
@@ -23,8 +23,8 @@ static void render_throughblock(eg_app *app, eg_entity *block)
     eg_rect r;
     r.x = block->x_pos + app->cam.x;
     r.y = block->y_pos + app->cam.y;
-    r.w = app->registry[block->id].width;
-    r.h = app->registry[block->id].height;
+    r.w = app->registry[block->type].width;
+    r.h = app->registry[block->type].height;
 
     eg_set_color(app, EG_COLOR_MAUVE);
     eg_draw_rect(app, &r, 0);
@@ -36,8 +36,8 @@ static void render_moving_block(eg_app *app, eg_entity *block)
     eg_rect r;
     r.x = block->x_pos + app->cam.x;
     r.y = block->y_pos + app->cam.y;
-    r.w = app->registry[block->id].width;
-    r.h = app->registry[block->id].height;
+    r.w = app->registry[block->type].width;
+    r.h = app->registry[block->type].height;
 
     eg_set_color(app, EG_COLOR_SEA_GREEN);
     eg_draw_rect(app, &r, 0);
@@ -51,60 +51,31 @@ static void update_moving_block(eg_app *app, eg_entity *block)
     block->y_pos += block->y_vel;
     block->x_pos += block->x_vel;
 
-    //------------------------------------------------------
-    // Horizontal Movement
-    // Switch direction to start moving right.
-    if (block->x_pos <= -150)
-    {
-        block->x_vel = 1;
-    }
+    // Starting Point: (-50, 30)
+    // Behavior: move diagonally, down and to the left, then reverse direction
+    // and return to starting position and repeat.
 
-    // If the platform is to the left of position -50 and is moving right,
-    // continue to move right.
-    if (block->x_pos < -50 && block->x_vel >= 0)
-    {
-        block->x_vel = 1;
-    }
-
-    // Switch directions to start moving up.
-    if (block->x_pos >= -50)
+    // Move down and to the left.
+    if (block->ticks < 100)
     {
         block->x_vel = -1;
-    }
-
-    // If the platform is below position 30 and is moving left,
-    // continue to move left.
-    if (block->x_pos > -150 && block->x_vel < 0)
-    {
-        block->x_vel = -1;
-    }
-
-    //------------------------------------------------------
-    // Vertical Movement
-    // Switch direction to start moving down.
-    if (block->y_pos <= 30)
-    {
         block->y_vel = 1;
     }
 
-    // If the platform is above position 80 and is moving down,
-    // continue to move down.
-    if (block->y_pos < 130 && block->y_vel >= 0)
+    // Move up and to the right.
+    if (block->ticks >= 100 && block->ticks < 200)
     {
-        block->y_vel = 1;
-    }
-
-    // Switch directions to start moving up.
-    if (block->y_pos >= 130)
-    {
+        block->x_vel = 1;
         block->y_vel = -1;
     }
 
-    // If the platform is below position 30 and is moving up,
-    // continue to move up.
-    if (block->y_pos > 30 && block->y_vel < 0)
+    // Advance the tick count.
+    block->ticks++;
+
+    // Reset tick count.
+    if (block->ticks >= 200)
     {
-        block->y_vel = -1;
+        block->ticks = 0;
     }
 }
 
@@ -127,7 +98,7 @@ static void collide_block(
     }
 
     // If the block is a throughblock, check if we should resolve the collision.
-    if (block->id == ENTITY_TYPE_THROUGHBLOCK_LONG)
+    if (block->type == ENTITY_TYPE_THROUGHBLOCK_LONG)
     {
         // If the down key is pressed and the y component of the contact
         // is negative, don't resolve the collision.
@@ -165,11 +136,11 @@ static void collide_block(
     // If the block is a moving platform, update the source entity's position
     // according to the correction factor, then set the source entity's
     // velocity to match the platform.
-    if (block->id == ENTITY_TYPE_BLOCK_MOVING)
+    if (block->type == ENTITY_TYPE_BLOCK_MOVING)
     {
         if (t_res->cn.y < 0)
         {
-            int ah = app->registry[other->id].height;
+            int ah = app->registry[other->type].height;
             eg_set_flag(other, ENTITY_FLAG_MOVE);
             other->link = block;
 
@@ -205,7 +176,7 @@ eg_entity *block_demo_create(int x, int y)
         return NULL;
     }
 
-    block->id = ENTITY_TYPE_BLOCK;
+    block->type = ENTITY_TYPE_BLOCK;
     block->x_pos = x;
     block->y_pos = y;
 
@@ -231,7 +202,7 @@ eg_entity *block_demo_create_big(int x, int y)
         return NULL;
     }
 
-    block->id = ENTITY_TYPE_BLOCK_BIG;
+    block->type = ENTITY_TYPE_BLOCK_BIG;
     block->x_pos = x;
     block->y_pos = y;
 
@@ -257,7 +228,7 @@ eg_entity *block_demo_create_long(int x, int y)
         return NULL;
     }
 
-    block->id = ENTITY_TYPE_BLOCK_LONG;
+    block->type = ENTITY_TYPE_BLOCK_LONG;
     block->x_pos = x;
     block->y_pos = y;
 
@@ -283,7 +254,7 @@ eg_entity *throughblock_demo_create_long(int x, int y)
         return NULL;
     }
 
-    block->id = ENTITY_TYPE_THROUGHBLOCK_LONG;
+    block->type = ENTITY_TYPE_THROUGHBLOCK_LONG;
     block->x_pos = x;
     block->y_pos = y;
 
@@ -310,7 +281,7 @@ eg_entity *block_demo_create_moving(int x, int y)
         return NULL;
     }
 
-    block->id = ENTITY_TYPE_BLOCK_MOVING;
+    block->type = ENTITY_TYPE_BLOCK_MOVING;
     block->x_pos = x;
     block->y_pos = y;
 

@@ -29,9 +29,9 @@ static void update(eg_app *app)
     eg_entity *ent = app->entities;
     while (ent != NULL)
     {
-        if (app->registry[ent->id].update != NULL)
+        if (app->registry[ent->type].update != NULL)
         {
-            app->registry[ent->id].update(app, ent);
+            app->registry[ent->type].update(app, ent);
         }
         ent = ent->next;
     }
@@ -49,9 +49,9 @@ static void draw(eg_app *app)
     eg_entity *ent = app->entities;
     while (ent != NULL)
     {
-        if (app->registry[ent->id].render != NULL)
+        if (app->registry[ent->type].render != NULL)
         {
-            app->registry[ent->id].render(app, ent);
+            app->registry[ent->type].render(app, ent);
         }
         ent = ent->next;
     }

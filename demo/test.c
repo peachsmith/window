@@ -44,12 +44,12 @@ int main(int argc, char **argv)
     // p.x = a->x_pos + aw / 2;
     // p.y = a->y_pos + ah / 2;
 
-    source.id = ENTITY_TYPE_PLAYER;
+    source.type = ENTITY_TYPE_PLAYER;
     source.x_pos = 0;
     source.y_pos = 34;
     source.link = NULL;
 
-    target.id = ENTITY_TYPE_BLOCK;
+    target.type = ENTITY_TYPE_BLOCK;
     target.x_pos = 120;
     target.y_pos = 30;
     target.x_vel = 0;

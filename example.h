@@ -46,25 +46,6 @@ typedef struct eg_entity eg_entity;
 typedef struct eg_entity_type eg_entity_type;
 
 /**
- * Result of rectangle overlap calculation.
- */
-typedef struct eg_overlap
-{
-    // The fields dx0, dx1, dy0, and dy1 are referred to as the deltas.
-    // They represent the differences between the positions of the sides
-    // of two rectangles.
-    // Given two rectangles A and B:
-    // dx0 is difference between the right side of A and the left side of B.
-    // dx1 is difference between the right side of B and the left side of A.
-    // dy0 is difference between the bottom side of A and the top side of B.
-    // dy1 is difference between the bottom side of B and the top side of A.
-    int dx0;
-    int dx1;
-    int dy0;
-    int dy1;
-} eg_overlap;
-
-/**
  * A point represents the x and y coordinates in 2D space.
  */
 typedef struct eg_point
@@ -190,13 +171,15 @@ struct eg_input_handler
 // definition of the eg_entity struct
 struct eg_entity
 {
-    int id; // identifies the entity type in the registry
-
+    int type;      // identifies the entity type in the registry
     int x_pos;     // horizontal position
     int y_pos;     // vertical position
     int x_vel;     // horizontal velocity
     int y_vel;     // vertical velocity
     uint8_t flags; // flags
+
+    // Used for actions that take multiple iterations of the main loop.
+    int ticks;
 
     // TEMP: trying to implement moving platforms
     eg_entity *link;
