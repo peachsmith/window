@@ -251,6 +251,7 @@ eg_entity *eg_create_entity()
         return NULL;
     }
 
+    entity->id = 0;
     entity->type = 0;
     entity->x_pos = 0;
     entity->y_pos = 0;

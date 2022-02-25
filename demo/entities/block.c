@@ -43,29 +43,17 @@ static void render_moving_block(eg_app *app, eg_entity *block)
     eg_draw_rect(app, &r, 0);
 }
 
-static void update_moving_block(eg_app *app, eg_entity *block)
+static void move_vertical(eg_app *app, eg_entity *block)
 {
-    // Update the position of the platform before updating the velocity.
-    // This prevents a disconnect between the platform and any entities
-    // being carried by it.
-    block->y_pos += block->y_vel;
-    block->x_pos += block->x_vel;
-
-    // Starting Point: (-50, 30)
-    // Behavior: move diagonally, down and to the left, then reverse direction
-    // and return to starting position and repeat.
-
-    // Move down and to the left.
+    // Move down.
     if (block->ticks < 100)
     {
-        block->x_vel = -1;
         block->y_vel = 1;
     }
 
-    // Move up and to the right.
+    // Move up.
     if (block->ticks >= 100 && block->ticks < 200)
     {
-        block->x_vel = 1;
         block->y_vel = -1;
     }
 
@@ -76,6 +64,84 @@ static void update_moving_block(eg_app *app, eg_entity *block)
     if (block->ticks >= 200)
     {
         block->ticks = 0;
+    }
+}
+
+static void move_horizontal(eg_app *app, eg_entity *block)
+{
+    // Move left.
+    if (block->ticks < 100)
+    {
+        block->x_vel = -1;
+    }
+
+    // Move right.
+    if (block->ticks >= 100 && block->ticks < 200)
+    {
+        block->x_vel = 1;
+    }
+
+    // Advance the tick count.
+    block->ticks++;
+
+    // Reset tick count.
+    if (block->ticks >= 200)
+    {
+        block->ticks = 0;
+    }
+}
+
+static void move_down_right(eg_app *app, eg_entity *block)
+{
+    // Move down and to the left.
+    if (block->ticks < 100)
+    {
+        block->x_vel = 1;
+        block->y_vel = 1;
+    }
+
+    // Move up and to the right.
+    if (block->ticks >= 100 && block->ticks < 200)
+    {
+        block->x_vel = -1;
+        block->y_vel = -1;
+    }
+
+    // Advance the tick count.
+    block->ticks++;
+
+    // Reset tick count.
+    if (block->ticks >= 200)
+    {
+        block->ticks = 0;
+    }
+}
+
+static void update_moving_block(eg_app *app, eg_entity *block)
+{
+    // Update the position of the platform before updating the velocity.
+    // This prevents a disconnect between the platform and any entities
+    // being carried by it.
+    block->y_pos += block->y_vel;
+    block->x_pos += block->x_vel;
+
+    // We use the flags to determine which update function to call.
+    switch (block->flags)
+    {
+    case 0:
+        move_vertical(app, block);
+        break;
+
+    case 1:
+        move_horizontal(app, block);
+        break;
+
+    case 2:
+        move_down_right(app, block);
+        break;
+
+    default:
+        return;
     }
 }
 
@@ -152,6 +218,14 @@ static void collide_block(
             }
 
             // Adjust the source entity's y velocity.
+            // The moving platform may be updated before or after the entity
+            // standing on it.
+            // The platform's position will be updated, then its velocity
+            // will be updated.
+            // We want the correction factor to predic and account for this
+            // change.
+            // The entity being carried by the platform should move with the
+            // platform regardless of when they were added to the application.
             other->y_vel = block->y_pos + app->cam.y - (other->y_pos + ah);
         }
     }

@@ -16,6 +16,9 @@
 #define EG_DEFAULT_SCREEN_WIDTH 240
 #define EG_DEFAULT_SCREEN_HEIGHT 160
 
+#define DEBUG_PLAYER 1
+#define DEBUG_PLATFORM 2
+
 /**
  * This structure represents the state of an application.
  * Only one of these should be created in a given program.
@@ -171,6 +174,7 @@ struct eg_input_handler
 // definition of the eg_entity struct
 struct eg_entity
 {
+    int id;        // unique identifier for an entity
     int type;      // identifies the entity type in the registry
     int x_pos;     // horizontal position
     int y_pos;     // vertical position

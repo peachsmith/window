@@ -21,4 +21,12 @@ void demo_draw_collision(
     eg_point *p,
     eg_point *d);
 
+/**
+ * Draws the camera boundaries on the screen.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ */
+void demo_draw_camera(eg_app *);
+
 #endif

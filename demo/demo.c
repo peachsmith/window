@@ -5,6 +5,7 @@
 #include "demo/entities/entity_types.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
+#include "demo/util/util.h"
 
 #include <stdio.h>
 
@@ -57,39 +58,7 @@ static void draw(eg_app *app)
     }
 
     // TEMP: draw the camera boundaries.
-    eg_point l0, l1, r0, r1, t0, t1, b0, b1;
-
-    eg_set_color(app, EG_COLOR_MAUVE);
-
-    // left boundary
-    l0.x = app->cl;
-    l0.y = 0;
-    l1.x = app->cl;
-    l1.y = app->screen_height;
-    eg_draw_line(app, &l0, &l1);
-
-    // right boundary
-    r0.x = app->cr;
-    r0.y = 0;
-    r1.x = app->cr;
-    r1.y = app->screen_height;
-    eg_draw_line(app, &r0, &r1);
-
-    eg_set_color(app, EG_COLOR_TEAL);
-
-    // top boundary
-    t0.x = 0;
-    t0.y = app->ct;
-    t1.x = app->screen_width;
-    t1.y = app->ct;
-    eg_draw_line(app, &t0, &t1);
-
-    // bottom boundary
-    b0.x = 0;
-    b0.y = app->cb;
-    b1.x = app->screen_width;
-    b1.y = app->cb;
-    eg_draw_line(app, &b0, &b1);
+    // demo_draw_camera(app);
 }
 
 int demo_prepare(eg_app *app)

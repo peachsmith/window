@@ -477,8 +477,21 @@ int demo_swept_aabb(
             res->cp.x = p.x;
             res->cp.y = p.y;
             res->t = 0;
+
+            // if (a->id == DEBUG_PLAYER && b->id == DEBUG_PLATFORM)
+            // {
+            //     printf("[DEBUG] STILL BEING CARRIED\n");
+            // }
+
             return 1;
         }
+        // if (a->id == DEBUG_PLAYER && b->id == DEBUG_PLATFORM)
+        // {
+        //     printf("[DEBUG] NO LONGER BEING CARRIED PLAYER: (%d, %d) PLATFORM: (%d, %d) PLAYER Y + HEIGHT: (%d)\n",
+        //            ax, a->y_pos,
+        //            bx, by,
+        //            a->y_pos + ah);
+        // }
     }
 
     return 0;
