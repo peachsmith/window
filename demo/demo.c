@@ -36,14 +36,6 @@ static void update(eg_app *app)
         }
         ent = ent->next;
     }
-
-    // TEMP: clear the update flags.
-    ent = app->entities;
-    while (ent != NULL)
-    {
-        eg_clear_flag(ent, ENTITY_FLAG_UPDATE);
-        ent = ent->next;
-    }
 }
 
 /**

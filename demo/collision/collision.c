@@ -1,4 +1,5 @@
 #include "demo/collision/collision.h"
+#include "demo/entities/entity_types.h"
 #include <stdio.h>
 
 // Directions.
@@ -168,6 +169,9 @@ void demo_handle_collisions(eg_app *app)
                 }
             }
         }
+
+        // Clear the update flag of the current source entity.
+        eg_clear_flag(source, ENTITY_FLAG_UPDATE);
 
         source = source->next;
 
