@@ -47,14 +47,14 @@ int main(int argc, char **argv)
     source.type = ENTITY_TYPE_PLAYER;
     source.x_pos = 0;
     source.y_pos = 34;
-    source.link = NULL;
+    source.carrier = NULL;
 
     target.type = ENTITY_TYPE_BLOCK;
     target.x_pos = 120;
     target.y_pos = 30;
     target.x_vel = 0;
     target.y_vel = 0;
-    target.link = NULL;
+    target.carrier = NULL;
 
     int test_count = 0;
     int col_count = 0;
