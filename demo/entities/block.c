@@ -350,7 +350,7 @@ void block_demo_register_moving(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_moving(int x, int y)
+eg_entity *block_demo_create_moving(int x, int y, int type)
 {
     eg_entity *block = NULL;
 
@@ -363,6 +363,7 @@ eg_entity *block_demo_create_moving(int x, int y)
     block->type = ENTITY_TYPE_BLOCK_MOVING;
     block->x_pos = x;
     block->y_pos = y;
+    block->flags = (uint8_t)(type & 3);
 
     return block;
 }

@@ -62,8 +62,8 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create(x_start + 48, y_start + 36));
     eg_add_entity(app, block_demo_create(x_start + 60, y_start + 36));
 
-    // A vertically moving platform (added before player).
-    eg_add_entity(app, block_demo_create_moving(x_start - 60, y_start));
+    // Vertically moving platform (added before player).
+    eg_add_entity(app, block_demo_create_moving(x_start - 60, y_start, 0));
 
     // Create the player entity and add it to the app.
     player = player_demo_create(80, 10);
@@ -89,22 +89,11 @@ void load_scene_0(eg_app *app)
     // the down arrow key.
     eg_add_entity(app, throughblock_demo_create_long(x_start + 132, y_start + 36));
 
-    // A horizontally moving platform (added after player).
-    eg_entity *hblock = block_demo_create_moving(x_start - 120, y_start);
-    if (hblock != NULL)
-    {
-        hblock->flags = 1;
-    }
-    eg_add_entity(app, hblock);
+    // Horizontally moving platform (added after player).
+    eg_add_entity(app, block_demo_create_moving(x_start - 120, y_start, 1));
 
-    // Diagonally moving block (added after the player).
-    eg_entity *dblock = block_demo_create_moving(x_start + 232, y_start);
-    if (dblock != NULL)
-    {
-        dblock->id = DEBUG_PLATFORM;
-        dblock->flags = 2;
-    }
-    eg_add_entity(app, dblock);
+    // Diagonally moving platform (added after the player).
+    eg_add_entity(app, block_demo_create_moving(x_start + 232, y_start, 2));
 
     // Create the initial input handler and add it to the app.
     root_callback = root_input_callback;
