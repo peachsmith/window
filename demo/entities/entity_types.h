@@ -21,5 +21,6 @@
 #define ENTITY_FLAG_JUMP 1
 #define ENTITY_FLAG_DOWN 2
 #define ENTITY_FLAG_MOVE 3
+#define ENTITY_FLAG_UPDATE 4
 
 #endif

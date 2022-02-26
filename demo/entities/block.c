@@ -126,7 +126,7 @@ static void update_moving_block(eg_app *app, eg_entity *block)
     block->x_pos += block->x_vel;
 
     // We use the flags to determine which update function to call.
-    switch (block->flags)
+    switch (block->flags & 3)
     {
     case 0:
         move_vertical(app, block);
@@ -143,6 +143,10 @@ static void update_moving_block(eg_app *app, eg_entity *block)
     default:
         return;
     }
+
+    // Set the update flag so that entities being carried by this platform
+    // can update their state accordingly.
+    eg_set_flag(block, ENTITY_FLAG_UPDATE);
 }
 
 static void collide_block(

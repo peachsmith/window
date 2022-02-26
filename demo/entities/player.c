@@ -59,7 +59,19 @@ static void update_player(eg_app *app, eg_entity *player)
     {
         if (player->link != NULL)
         {
-            player->y_vel += player->link->y_vel;
+            int cf = 0;
+
+            // Determine the correction factor.
+            if (eg_check_flag(player->link, ENTITY_FLAG_UPDATE))
+            {
+                cf = player->link->y_pos + app->cam.y - (player->y_pos + h);
+            }
+            else
+            {
+                cf = player->y_vel + player->link->y_vel;
+            }
+            
+            player->y_vel = cf;
         }
         eg_clear_flag(player, ENTITY_FLAG_MOVE);
         // player->link = NULL;
