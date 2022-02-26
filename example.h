@@ -16,6 +16,7 @@
 #define EG_DEFAULT_SCREEN_WIDTH 240
 #define EG_DEFAULT_SCREEN_HEIGHT 160
 
+// TEMP: debug IDs for identifying certain entities.
 #define DEBUG_PLAYER 1
 #define DEBUG_PLATFORM 2
 
@@ -185,8 +186,9 @@ struct eg_entity
     // Used for actions that take multiple iterations of the main loop.
     int ticks;
 
-    // TEMP: trying to implement moving platforms
-    eg_entity *link;
+    // The carrier is an entity that is modifying another entity's position
+    // and velocity.
+    eg_entity *carrier;
 
     eg_entity *next;
     eg_entity *previous;

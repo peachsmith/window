@@ -102,7 +102,7 @@ void load_scene_0(eg_app *app)
     if (dblock != NULL)
     {
         dblock->id = DEBUG_PLATFORM;
-        dblock->flags = 0;
+        dblock->flags = 2;
     }
     eg_add_entity(app, dblock);
 

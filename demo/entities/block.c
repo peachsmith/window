@@ -125,7 +125,8 @@ static void update_moving_block(eg_app *app, eg_entity *block)
     block->y_pos += block->y_vel;
     block->x_pos += block->x_vel;
 
-    // We use the flags to determine which update function to call.
+    // The first two bit flags are used to determine which update function
+    // is called.
     switch (block->flags & 3)
     {
     case 0:
@@ -212,7 +213,7 @@ static void collide_block(
         {
             int ah = app->registry[other->type].height;
             eg_set_flag(other, ENTITY_FLAG_MOVE);
-            other->link = block;
+            other->carrier = block;
 
             // Adjust the x velocity if the source entity is not
             // currently providing its own velocity.

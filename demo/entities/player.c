@@ -55,27 +55,34 @@ static void update_player(eg_app *app, eg_entity *player)
 
     // If the player is standing on a moving platform,
     // adjust the y velocity to match the platform.
-    if (carry)
+    if (carry && player->carrier != NULL)
     {
-        if (player->link != NULL)
-        {
-            int cf = 0;
+        int cf = 0;
 
-            // Determine the correction factor.
-            if (eg_check_flag(player->link, ENTITY_FLAG_UPDATE))
-            {
-                cf = player->link->y_pos + app->cam.y - (player->y_pos + h);
-            }
-            else
-            {
-                cf = player->y_vel + player->link->y_vel;
-            }
-            
-            player->y_vel = cf;
+        // Determine the correction factor.
+        // If the platform was already updated, recalculate the correction
+        // factor that was done in the collision resolution.
+        // Otherwise, we just add the platform's y velocity to the player's.
+        if (eg_check_flag(player->carrier, ENTITY_FLAG_UPDATE))
+        {
+            cf = player->carrier->y_pos + app->cam.y - (player->y_pos + h);
         }
-        eg_clear_flag(player, ENTITY_FLAG_MOVE);
-        // player->link = NULL;
+        else
+        {
+            cf = player->y_vel + player->carrier->y_vel;
+        }
+
+        player->y_vel = cf;
     }
+
+    // Set the link pointer to NULL.
+    if (!carry && player->carrier != NULL)
+    {
+        player->carrier = NULL;
+    }
+
+    // Clear the carry flag.
+    eg_clear_flag(player, ENTITY_FLAG_MOVE);
 
     // Update vertical position.
     if (player->y_pos + h >= app->cb && player->y_vel > 0)

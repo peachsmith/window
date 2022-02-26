@@ -259,7 +259,7 @@ eg_entity *eg_create_entity()
     entity->y_vel = 0;
     entity->flags = 0;
     entity->ticks = 0;
-    entity->link = NULL;
+    entity->carrier = NULL;
     entity->next = NULL;
     entity->previous = NULL;
 

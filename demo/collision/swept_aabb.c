@@ -447,27 +447,21 @@ int demo_swept_aabb(
         return 1;
     }
 
-    // Check for moving platforms.
-    // Currently, the link field of the entity struct indicates that the
-    // source entity is standing on a moving platform.
-    // TODO: properly implement moving platform linkage detection.
-    if (a->link != NULL && b->type == ENTITY_TYPE_BLOCK_MOVING)
+    // If the source entity is being carried by a moving entity,
+    // we verify that the source entity is still in contact with
+    // the carrier.
+    // TODO: account for camera position for all entities.
+    if (a->carrier != NULL && b->type == ENTITY_TYPE_BLOCK_MOVING)
     {
-        // Verify that the source entity's x position is within the
-        // horizontal bounds of the platform.
         int ax = a->x_pos;
         int bx = b->x_pos + app->cam.x;
         int by = b->y_pos + app->cam.y;
         int bw = app->registry[b->type].width;
 
-        // Check if the source entity is on top of the target.
-        // (
-        //   target x <= source x <= target x + target w
-        //   OR
-        //   target x <= source x + source w <= target x + target w
-        // )
-        // AND
-        // source y + source h == target y
+        // Verify that the source entity's x position is within the
+        // horizontal bounds of the platform.
+        // We also check that the sum of the sources's y position and height
+        // is equal to the y position of the target.
         if (((ax >= bx && ax <= bx + bw) ||
              (ax + aw >= bx && ax + aw <= bx + bw)) &&
             a->y_pos + ah == by)
@@ -477,21 +471,8 @@ int demo_swept_aabb(
             res->cp.x = p.x;
             res->cp.y = p.y;
             res->t = 0;
-
-            // if (a->id == DEBUG_PLAYER && b->id == DEBUG_PLATFORM)
-            // {
-            //     printf("[DEBUG] STILL BEING CARRIED\n");
-            // }
-
             return 1;
         }
-        // if (a->id == DEBUG_PLAYER && b->id == DEBUG_PLATFORM)
-        // {
-        //     printf("[DEBUG] NO LONGER BEING CARRIED PLAYER: (%d, %d) PLATFORM: (%d, %d) PLAYER Y + HEIGHT: (%d)\n",
-        //            ax, a->y_pos,
-        //            bx, by,
-        //            a->y_pos + ah);
-        // }
     }
 
     return 0;
