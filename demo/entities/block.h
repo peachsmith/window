@@ -43,4 +43,8 @@ eg_entity *throughblock_demo_create_long(int, int);
 void block_demo_register_moving(eg_entity_type *);
 eg_entity *block_demo_create_moving(int, int, int);
 
+// register and create functions for a sloped block.
+void block_demo_register_sloped(eg_entity_type *);
+eg_entity *block_demo_create_sloped(int, int);
+
 #endif

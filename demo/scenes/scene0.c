@@ -51,9 +51,9 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create(x_start, y_start + 36));
 
     // TEMP: another column of blocks for debugging the floor-clipping bug.
-    eg_add_entity(app, block_demo_create(x_start + 110, y_start));
-    eg_add_entity(app, block_demo_create(x_start + 110, y_start + 12));
-    eg_add_entity(app, block_demo_create(x_start + 110, y_start + 24));
+    // eg_add_entity(app, block_demo_create(x_start + 110, y_start));
+    // eg_add_entity(app, block_demo_create(x_start + 110, y_start + 12));
+    // eg_add_entity(app, block_demo_create(x_start + 110, y_start + 24));
 
     // the first part of the horizontal row of blocks
     eg_add_entity(app, block_demo_create(x_start + 12, y_start + 36));
@@ -94,6 +94,9 @@ void load_scene_0(eg_app *app)
 
     // Diagonally moving platform (added after the player).
     eg_add_entity(app, block_demo_create_moving(x_start + 232, y_start, 2));
+
+    // Sloped block
+    eg_add_entity(app, block_demo_create_sloped(x_start + 102, y_start + 4));
 
     // Create the initial input handler and add it to the app.
     root_callback = root_input_callback;

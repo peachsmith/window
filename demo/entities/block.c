@@ -43,6 +43,24 @@ static void render_moving_block(eg_app *app, eg_entity *block)
     eg_draw_rect(app, &r, 0);
 }
 
+// Renders a sloped block
+static void render_sloped_block(eg_app *app, eg_entity *block)
+{
+    eg_rect r;
+    r.x = block->x_pos + app->cam.x;
+    r.y = block->y_pos + app->cam.y;
+    r.w = app->registry[block->type].width;
+    r.h = app->registry[block->type].height;
+
+    eg_set_color(app, EG_COLOR_RED);
+    eg_draw_rect(app, &r, 0);
+
+    eg_set_color(app, EG_COLOR_LIGHT_BLUE);
+    eg_point a = {.x = r.x, .y = r.y + r.h};
+    eg_point b = {.x = r.x + r.w, .y = r.y};
+    eg_draw_line(app, &a, &b);
+}
+
 static void move_vertical(eg_app *app, eg_entity *block)
 {
     // Move down.
@@ -199,6 +217,7 @@ static void collide_block(
 
     if (t_res->cn.y)
     {
+        // Correction factor for landing on top of the block.
         int absy = other->y_vel > 0 ? other->y_vel : -(other->y_vel);
         float correction = t_res->cn.y * absy * t1;
         other->y_vel += (int)correction;
@@ -364,6 +383,32 @@ eg_entity *block_demo_create_moving(int x, int y, int type)
     block->x_pos = x;
     block->y_pos = y;
     block->flags = (uint8_t)(type & 3);
+
+    return block;
+}
+
+void block_demo_register_sloped(eg_entity_type *t)
+{
+    t->id = ENTITY_TYPE_BLOCK_SLOPE;
+    t->width = 60;
+    t->height = 32;
+    t->render = render_sloped_block;
+    t->collide = collide_block;
+}
+
+eg_entity *block_demo_create_sloped(int x, int y)
+{
+    eg_entity *block = NULL;
+
+    block = eg_create_entity();
+    if (block == NULL)
+    {
+        return NULL;
+    }
+
+    block->type = ENTITY_TYPE_BLOCK_SLOPE;
+    block->x_pos = x;
+    block->y_pos = y;
 
     return block;
 }
