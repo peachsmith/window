@@ -51,6 +51,23 @@ int demo_swept_aabb(
     eg_collision *res);
 
 /**
+ * Determines if a collision will occur between a moving source entity A and
+ * a static target entity B. This uses an implementation of the separated
+ * axis theorem.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_entity* - the source entity
+ *   eg_entity* - the target entity
+ *   eg_t-res* - a pointer to the collision result struct
+ */
+int demo_sat(
+    eg_app *app,
+    eg_entity *a,
+    eg_entity *b,
+    eg_collision *res);
+
+/**
  * Determines if two rectangles overlap.
  * The third argument is a pointer to an eg_overlap struct.
  * This will receive the results of the overlap calculations.
