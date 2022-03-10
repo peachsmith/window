@@ -44,59 +44,60 @@ void load_scene_0(eg_app *app)
     // Add some of the blocks here and some of them later to prove that
     // the order in which entities are added doesn't affect their collision.
 
-    // a vertical column of blocks
-    eg_add_entity(app, block_demo_create(x_start, y_start));
-    eg_add_entity(app, block_demo_create(x_start, y_start + 12));
-    eg_add_entity(app, block_demo_create(x_start, y_start + 24));
-    eg_add_entity(app, block_demo_create(x_start, y_start + 36));
+    // // a vertical column of blocks
+    // eg_add_entity(app, block_demo_create(x_start, y_start));
+    // eg_add_entity(app, block_demo_create(x_start, y_start + 12));
+    // eg_add_entity(app, block_demo_create(x_start, y_start + 24));
+    // eg_add_entity(app, block_demo_create(x_start, y_start + 36));
 
-    // TEMP: another column of blocks for debugging the floor-clipping bug.
-    // eg_add_entity(app, block_demo_create(x_start + 110, y_start));
-    // eg_add_entity(app, block_demo_create(x_start + 110, y_start + 12));
-    // eg_add_entity(app, block_demo_create(x_start + 110, y_start + 24));
+    // // TEMP: another column of blocks for debugging the floor-clipping bug.
+    // // eg_add_entity(app, block_demo_create(x_start + 110, y_start));
+    // // eg_add_entity(app, block_demo_create(x_start + 110, y_start + 12));
+    // // eg_add_entity(app, block_demo_create(x_start + 110, y_start + 24));
 
-    // the first part of the horizontal row of blocks
-    eg_add_entity(app, block_demo_create(x_start + 12, y_start + 36));
-    eg_add_entity(app, block_demo_create(x_start + 24, y_start + 36));
-    eg_add_entity(app, block_demo_create(x_start + 36, y_start + 36));
-    eg_add_entity(app, block_demo_create(x_start + 48, y_start + 36));
-    eg_add_entity(app, block_demo_create(x_start + 60, y_start + 36));
+    // // the first part of the horizontal row of blocks
+    // eg_add_entity(app, block_demo_create(x_start + 12, y_start + 36));
+    // eg_add_entity(app, block_demo_create(x_start + 24, y_start + 36));
+    // eg_add_entity(app, block_demo_create(x_start + 36, y_start + 36));
+    // eg_add_entity(app, block_demo_create(x_start + 48, y_start + 36));
+    // eg_add_entity(app, block_demo_create(x_start + 60, y_start + 36));
 
-    // Vertically moving platform (added before player).
-    eg_add_entity(app, block_demo_create_moving(x_start - 60, y_start, 0));
+    // // Vertically moving platform (added before player).
+    // eg_add_entity(app, block_demo_create_moving(x_start - 60, y_start, 0));
 
     // Create the player entity and add it to the app.
     player = player_demo_create(80, 10);
     eg_add_entity(app, player);
 
-    // Add the rest of the horizontal row.
-    eg_add_entity(app, block_demo_create(x_start + 72, y_start + 36));
-    eg_add_entity(app, block_demo_create(x_start + 84, y_start + 36));
-    eg_add_entity(app, block_demo_create(x_start + 96, y_start + 36));
-    eg_add_entity(app, block_demo_create(x_start + 108, y_start + 36));
+    // // Add the rest of the horizontal row.
+    // eg_add_entity(app, block_demo_create(x_start + 72, y_start + 36));
+    // eg_add_entity(app, block_demo_create(x_start + 84, y_start + 36));
+    // eg_add_entity(app, block_demo_create(x_start + 96, y_start + 36));
+    // eg_add_entity(app, block_demo_create(x_start + 108, y_start + 36));
 
-    // Add another vertical column of blocks.
-    eg_add_entity(app, block_demo_create(x_start + 120, y_start + 36));
-    eg_add_entity(app, block_demo_create(x_start + 120, y_start + 48));
-    eg_add_entity(app, block_demo_create(x_start + 120, y_start + 60));
-    eg_add_entity(app, block_demo_create(x_start + 120, y_start + 72));
-    eg_add_entity(app, block_demo_create(x_start + 120, y_start + 84));
+    // // Add another vertical column of blocks.
+    // eg_add_entity(app, block_demo_create(x_start + 120, y_start + 36));
+    // eg_add_entity(app, block_demo_create(x_start + 120, y_start + 48));
+    // eg_add_entity(app, block_demo_create(x_start + 120, y_start + 60));
+    // eg_add_entity(app, block_demo_create(x_start + 120, y_start + 72));
+    // eg_add_entity(app, block_demo_create(x_start + 120, y_start + 84));
 
-    // A long, horizontal block.
-    eg_add_entity(app, block_demo_create_long(x_start + 120, y_start + 96));
+    // // A long, horizontal block.
+    // eg_add_entity(app, block_demo_create_long(x_start + 120, y_start + 96));
 
-    // A long, horizontal block that can be passed through when holding
-    // the down arrow key.
-    eg_add_entity(app, throughblock_demo_create_long(x_start + 132, y_start + 36));
+    // // A long, horizontal block that can be passed through when holding
+    // // the down arrow key.
+    // eg_add_entity(app, throughblock_demo_create_long(x_start + 132, y_start + 36));
 
-    // Horizontally moving platform (added after player).
-    eg_add_entity(app, block_demo_create_moving(x_start - 120, y_start, 1));
+    // // Horizontally moving platform (added after player).
+    // eg_add_entity(app, block_demo_create_moving(x_start - 120, y_start, 1));
 
-    // Diagonally moving platform (added after the player).
-    eg_add_entity(app, block_demo_create_moving(x_start + 232, y_start, 2));
+    // // Diagonally moving platform (added after the player).
+    // eg_add_entity(app, block_demo_create_moving(x_start + 232, y_start, 2));
 
     // Sloped block
-    eg_add_entity(app, block_demo_create_sloped(x_start + 102, y_start + 4));
+    // eg_add_entity(app, block_demo_create_sloped(x_start + 102, y_start + 4));
+    eg_add_entity(app, block_demo_create_sloped(x_start + 102, y_start + 40));
 
     // Create the initial input handler and add it to the app.
     root_callback = root_input_callback;

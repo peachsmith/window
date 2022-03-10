@@ -51,9 +51,8 @@ int demo_swept_aabb(
     eg_collision *res);
 
 /**
- * Determines if a collision will occur between a moving source entity A and
- * a static target entity B. This uses an implementation of the separated
- * axis theorem.
+ * Used for slopes.
+ * UNDER CONSTRUCTION
  *
  * Params:
  *   eg_app* - a pointer to an app struct

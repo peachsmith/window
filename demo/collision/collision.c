@@ -32,15 +32,31 @@ static void detect_collisions(
     {
         eg_collision res;
 
-        // Use swept AABB to determine if the two entities will collide.
-        if (demo_swept_aabb(app, source, target, &res))
+        if (target->type == ENTITY_TYPE_BLOCK_SLOPE)
         {
-            // Add the collision result to the array.
-            if (*count < COL_LIMIT)
+            if (demo_sat(app, source, target, &res))
             {
-                cols[*count].col = res;
-                cols[*count].target = target;
-                *count = *count + 1;
+                // Add the collision result to the array.
+                if (*count < COL_LIMIT)
+                {
+                    cols[*count].col = res;
+                    cols[*count].target = target;
+                    *count = *count + 1;
+                }
+            }
+        }
+        else
+        {
+            // Use swept AABB to determine if the two entities will collide.
+            if (demo_swept_aabb(app, source, target, &res))
+            {
+                // Add the collision result to the array.
+                if (*count < COL_LIMIT)
+                {
+                    cols[*count].col = res;
+                    cols[*count].target = target;
+                    *count = *count + 1;
+                }
             }
         }
 

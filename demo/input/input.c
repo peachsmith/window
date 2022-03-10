@@ -24,33 +24,57 @@ void root_input_callback(eg_app *app, eg_entity *target)
         }
     }
 
-    // down arrow key
-    if (eg_peek_input(app, EG_KEYCODE_DOWN))
+    //------------------------------------------------
+    // BEGIN debugging slopes and SAT
+    // TEMP
+
+    // up movement
+    if (eg_peek_input(app, EG_KEYCODE_UP))
     {
-        if (!eg_check_flag(target, ENTITY_FLAG_DOWN))
+        if (target->y_vel >= -2)
         {
-            eg_set_flag(target, ENTITY_FLAG_DOWN);
+            target->y_vel -= 2;
         }
-    }
-    else if (eg_check_flag(target, ENTITY_FLAG_DOWN))
-    {
-        eg_clear_flag(target, ENTITY_FLAG_DOWN);
     }
 
-    // jumping
-    if (eg_consume_input(app, EG_KEYCODE_SPACE))
+    // down movement
+    if (eg_peek_input(app, EG_KEYCODE_DOWN))
     {
-        if (eg_check_flag(target, ENTITY_FLAG_GROUND) &&
-            !eg_check_flag(target, ENTITY_FLAG_JUMP))
+        if (target->y_vel <= 2)
         {
-            eg_clear_flag(target, ENTITY_FLAG_GROUND);
-            eg_set_flag(target, ENTITY_FLAG_JUMP);
-            eg_clear_flag(target, ENTITY_FLAG_MOVE);
-            target->carrier = NULL;
-            target->y_vel = 0;
-            target->y_vel -= 12;
+            target->y_vel += 2;
         }
     }
+    // END debugging slopes and SAT
+    //------------------------------------------------
+
+    // // down arrow key
+    // if (eg_peek_input(app, EG_KEYCODE_DOWN))
+    // {
+    //     if (!eg_check_flag(target, ENTITY_FLAG_DOWN))
+    //     {
+    //         eg_set_flag(target, ENTITY_FLAG_DOWN);
+    //     }
+    // }
+    // else if (eg_check_flag(target, ENTITY_FLAG_DOWN))
+    // {
+    //     eg_clear_flag(target, ENTITY_FLAG_DOWN);
+    // }
+
+    // // jumping
+    // if (eg_consume_input(app, EG_KEYCODE_SPACE))
+    // {
+    //     if (eg_check_flag(target, ENTITY_FLAG_GROUND) &&
+    //         !eg_check_flag(target, ENTITY_FLAG_JUMP))
+    //     {
+    //         eg_clear_flag(target, ENTITY_FLAG_GROUND);
+    //         eg_set_flag(target, ENTITY_FLAG_JUMP);
+    //         eg_clear_flag(target, ENTITY_FLAG_MOVE);
+    //         target->carrier = NULL;
+    //         target->y_vel = 0;
+    //         target->y_vel -= 12;
+    //     }
+    // }
 
     // TEMP: Reset the state of various things.
     if (eg_consume_input(app, EG_KEYCODE_R))

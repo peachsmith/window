@@ -22,6 +22,22 @@ void demo_draw_collision(
     eg_point *d);
 
 /**
+ * Draws various elements of SAT collision detection.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_point* - an array of points for entity A
+ *   eg_point* - an array of points for entity B
+ */
+void demo_draw_sat(
+    eg_app *app,
+    eg_point *pa,
+    eg_point *pb,
+    eg_point *n0,
+    eg_point *n1,
+    eg_point *q);
+
+/**
  * Draws the camera boundaries on the screen.
  *
  * Params:

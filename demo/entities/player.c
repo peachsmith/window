@@ -27,20 +27,20 @@ static void update_player(eg_app *app, eg_entity *player)
     int carry = eg_check_flag(player, ENTITY_FLAG_MOVE);
 
     // Update horizontal position.
-    if (player->x_pos + w >= app->cr && player->x_vel > 0)
-    {
-        player->x_pos = app->cr - w;
-        app->cam.x -= player->x_vel;
-    }
-    else if (player->x_pos <= app->cl + 1 && player->x_vel < 0)
-    {
-        player->x_pos = app->cl + 1;
-        app->cam.x -= player->x_vel;
-    }
-    else
-    {
-        player->x_pos += player->x_vel;
-    }
+    // if (player->x_pos + w >= app->cr && player->x_vel > 0)
+    // {
+    //     player->x_pos = app->cr - w;
+    //     app->cam.x -= player->x_vel;
+    // }
+    // else if (player->x_pos <= app->cl + 1 && player->x_vel < 0)
+    // {
+    //     player->x_pos = app->cl + 1;
+    //     app->cam.x -= player->x_vel;
+    // }
+    // else
+    // {
+    player->x_pos += player->x_vel;
+    // }
 
     // Perform horizontal inertia.
     if (player->x_vel > 0)
@@ -53,55 +53,67 @@ static void update_player(eg_app *app, eg_entity *player)
         player->x_vel++;
     }
 
-    // If the player is standing on a moving platform,
-    // adjust the y velocity to match the platform.
-    if (carry && player->carrier != NULL)
-    {
-        int cf = 0;
+    // // If the player is standing on a moving platform,
+    // // adjust the y velocity to match the platform.
+    // if (carry && player->carrier != NULL)
+    // {
+    //     int cf = 0;
 
-        // Determine the correction factor.
-        // If the platform was already updated, recalculate the correction
-        // factor that was done in the collision resolution.
-        // Otherwise, we just add the platform's y velocity to the player's.
-        if (eg_check_flag(player->carrier, ENTITY_FLAG_UPDATE))
-        {
-            cf = player->carrier->y_pos + app->cam.y - (player->y_pos + h);
-        }
-        else
-        {
-            cf = player->y_vel + player->carrier->y_vel;
-        }
+    //     // Determine the correction factor.
+    //     // If the platform was already updated, recalculate the correction
+    //     // factor that was done in the collision resolution.
+    //     // Otherwise, we just add the platform's y velocity to the player's.
+    //     if (eg_check_flag(player->carrier, ENTITY_FLAG_UPDATE))
+    //     {
+    //         cf = player->carrier->y_pos + app->cam.y - (player->y_pos + h);
+    //     }
+    //     else
+    //     {
+    //         cf = player->y_vel + player->carrier->y_vel;
+    //     }
 
-        player->y_vel = cf;
-    }
+    //     player->y_vel = cf;
+    // }
 
-    // Set the link pointer to NULL.
-    if (!carry && player->carrier != NULL)
-    {
-        player->carrier = NULL;
-    }
+    // // Set the link pointer to NULL.
+    // if (!carry && player->carrier != NULL)
+    // {
+    //     player->carrier = NULL;
+    // }
 
-    // Clear the carry flag.
-    eg_clear_flag(player, ENTITY_FLAG_MOVE);
+    // // Clear the carry flag.
+    // eg_clear_flag(player, ENTITY_FLAG_MOVE);
 
-    // Update vertical position.
-    if (player->y_pos + h >= app->cb && player->y_vel > 0)
-    {
-        player->y_pos = app->cb - h;
-        app->cam.y -= player->y_vel;
-    }
-    else if (player->y_pos <= app->ct + 1 && player->y_vel < 0)
-    {
-        player->y_pos = app->ct + 1;
-        app->cam.y -= player->y_vel;
-    }
-    else
-    {
-        player->y_pos += player->y_vel;
-    }
+    // // Update vertical position.
+    // if (player->y_pos + h >= app->cb && player->y_vel > 0)
+    // {
+    //     player->y_pos = app->cb - h;
+    //     app->cam.y -= player->y_vel;
+    // }
+    // else if (player->y_pos <= app->ct + 1 && player->y_vel < 0)
+    // {
+    //     player->y_pos = app->ct + 1;
+    //     app->cam.y -= player->y_vel;
+    // }
+    // else
+    // {
+    player->y_pos += player->y_vel;
+    // }
 
     // Apply gravity.
-    if (player->y_vel < 4)
+    // if (player->y_vel < 4)
+    // {
+    //     player->y_vel++;
+    // }
+
+    // TEMP
+    // Perform vertical inertia.
+    if (player->y_vel > 0)
+    {
+        player->y_vel--;
+    }
+
+    if (player->y_vel < 0)
     {
         player->y_vel++;
     }
