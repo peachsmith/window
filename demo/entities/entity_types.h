@@ -23,5 +23,6 @@
 #define ENTITY_FLAG_DOWN 2
 #define ENTITY_FLAG_MOVE 3
 #define ENTITY_FLAG_UPDATE 4
+#define ENTITY_FLAG_SLOPE 5
 
 #endif

@@ -1,5 +1,6 @@
 #include "demo/collision/collision.h"
 #include "demo/util/util.h"
+#include "demo/entities/entity_types.h"
 
 #include <float.h>
 #include <stdlib.h>
@@ -45,14 +46,21 @@ static int intersect(
  * Video: https://www.youtube.com/watch?v=7Ik2vowGcU0
  * Source: https://github.com/OneLoneCoder/olcPixelGameEngine/blob/master/Videos/OneLoneCoder_PGE_PolygonCollisions1.cpp
  */
-int demo_sat(
+int demo_line(
     eg_app *app,
     eg_entity *a,
     eg_entity *b,
     eg_collision *res)
 {
+    // If the source entity is not a collider, then don't bother checking
+    // for a collision.
+    if (a->type == ENTITY_TYPE_BLOCK_SLOPE)
+    {
+        return 0;
+    }
+
     eg_point pa[4]; // vertices of entity A
-    eg_point pb[3]; // vertices of entity B
+    eg_point pb[4]; // vertices of entity B
 
     // Get the width and height of each entity.
     int aw = app->registry[a->type].width;
@@ -68,11 +76,10 @@ int demo_sat(
     int by = b->y_pos;
 
     // Get the vertices for entity A.
-    // Entity A is assumed to be a rectangle, so there are four points.
 
     // top left vertex
     pa[0].x = ax + a->x_vel;
-    pa[0].y = ay + a->y_vel;
+    pa[0].y = ay; // + a->y_vel;
 
     // top right vertex
     pa[1].x = ax + aw + a->x_vel;
@@ -87,73 +94,55 @@ int demo_sat(
     pa[3].y = ay + ah + a->y_vel;
 
     // Get the vertices for entity B.
-    // Entity B is assumed to be a triangle, so there are three points.
-    // For now, we assume that entity B is a right triangle with a hypoteneus
-    // connecting the bottom left and top right vertices.
 
-    // top right vertex
-    pb[0].x = bx + bw;
+    // top left vertex
+    pb[0].x = bx;
     pb[0].y = by;
 
-    // bottom right vertex
+    // top right vertex
     pb[1].x = bx + bw;
-    pb[1].y = by + bh;
+    pb[1].y = by;
+
+    // bottom right vertex
+    pb[2].x = bx + bw;
+    pb[2].y = by + bh;
 
     // bottom left vertex
-    pb[2].x = bx;
-    pb[2].y = by + bh;
+    pb[3].x = bx;
+    pb[3].y = by + bh;
 
     // Find the Centroid of the triangle.
     // eg_point c = {.x = pb[2].x + ((2 * bw) / 3), .y = pb[2].y - bh / 3};
 
-    // Find the Centroid of the rectangle.
-    eg_point c = {.x = pa[0].x /*+ aw / 2*/, .y = pa[0].y + ah / 2};
+    // The starting point of the source line.
+    eg_point aa = {.x = pa[0].x, .y = pa[0].y + ah / 2};
+    eg_point ab = pa[2];
 
-    // Line intersection check.
+    // Check the flags of the platform to see which direction the diagonal
+    // line is sloped.
+    int dir = eg_check_flag(b, 0);
+    eg_point ba = pb[3];
+    eg_point bb = pb[1];
 
-    // line from centroid to bottom left corner
-    // float line_r1s_x = (float)c.x;
-    // float line_r1s_y = (float)c.y;
-    // float line_r1e_x = (float)(pb[2].x);
-    // float line_r1e_y = (float)(pb[2].y);
-
-    // // right side of player entity
-    // float line_r2s_x = (float)(pa[1].x);
-    // float line_r2s_y = (float)(pa[1].y);
-    // float line_r2e_x = (float)(pa[2].x);
-    // float line_r2e_y = (float)(pa[2].y);
-
-    // float ih = (line_r2e_x - line_r2s_x) * (line_r1s_y - line_r1e_y) - (line_r1s_x - line_r1e_x) * (line_r2e_y - line_r2s_y);
-    // float it1 = ((line_r2s_y - line_r2e_y) * (line_r1s_x - line_r2s_x) + (line_r2e_x - line_r2s_x) * (line_r1s_y - line_r2s_y)) / ih;
-    // float it2 = ((line_r1s_y - line_r1e_y) * (line_r1s_x - line_r2s_x) + (line_r1e_x - line_r1s_x) * (line_r1s_y - line_r2s_y)) / ih;
-
-    // float tx;
-    // float ty;
+    if (!dir)
+    {
+        ba = pb[0];
+        bb = pb[2];
+        aa.x += aw;
+    }
 
     // Draw the source line.
     // printf("[DEBUG] C: (%d, %d)\n", c.x, c.y);
-    // eg_rect cr = {.x = c.x - 2, .y = c.y - 2, .w = 4, .h = 4};
+    // eg_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
     // eg_set_color(app, EG_COLOR_INDIGO);
     // eg_draw_rect(app, &cr, 1);
-    // eg_draw_line(app, &c, &(pa[2]));
+    // eg_draw_line(app, &aa, &ab);
 
-    // if (it1 >= 0.0f && it1 < 1.0f && it2 >= 0.0f && it2 < 1.0f)
-    // {
-    // if (intersect(&c, &(pb[2]), &(pa[1]), &(pa[2]), &tx, &ty))
-    // {
-    //     // float tx = (1.0f - t1) * (pb[2].x - c.x);
-    //     // float ty = (1.0f - t1) * (pb[2].y - c.y);
-    //     printf("[DEBUG] line intersection collision (%.2f, %.2f)\n", tx, ty);
-    // }
-    if (intersect(&c, &(pa[2]), &(pb[2]), &(pb[0]), &(res->tx), &(res->ty)))
+    if (intersect(&aa, &ab, &ba, &bb, &(res->tx), &(res->ty)))
     {
-        // float tx = (1.0f - t1) * (pb[2].x - c.x);
-        // float ty = (1.0f - t1) * (pb[2].y - c.y);
-        // printf("[DEBUG] line intersection collision (%.2f, %.2f)\n", tx, ty);
+        // printf("[DEBUG] player V0: (%d, %d)\n", a->x_vel, a->y_vel);
         return 1;
     }
-
-    // demo_draw_sat(app, pa, pb, &n0, &n1, &q);
 
     return 0;
 }

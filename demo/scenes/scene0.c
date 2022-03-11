@@ -97,7 +97,8 @@ void load_scene_0(eg_app *app)
 
     // Sloped block
     // eg_add_entity(app, block_demo_create_sloped(x_start + 102, y_start + 4));
-    eg_add_entity(app, block_demo_create_sloped(x_start + 70, y_start + 50));
+    eg_add_entity(app, block_demo_create_sloped(110, y_start + 32, 1));
+    eg_add_entity(app, block_demo_create_sloped(0, y_start + 32, 0));
 
     // Create the initial input handler and add it to the app.
     root_callback = root_input_callback;

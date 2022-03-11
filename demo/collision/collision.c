@@ -37,7 +37,7 @@ static void detect_collisions(
 
         if (target->type == ENTITY_TYPE_BLOCK_SLOPE)
         {
-            if (demo_sat(app, source, target, &res))
+            if (demo_line(app, source, target, &res))
             {
                 // Add the collision result to the array.
                 if (*count < COL_LIMIT)
@@ -207,7 +207,7 @@ void demo_handle_collisions(eg_app *app)
 
             if (b->type == ENTITY_TYPE_BLOCK_SLOPE)
             {
-                if (demo_sat(app, a, b, &col))
+                if (demo_line(app, a, b, &col))
                 {
                     // Call the source entity's collision function.
                     cola = app->registry[a->type].collide;

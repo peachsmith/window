@@ -62,7 +62,7 @@ int demo_swept_aabb(
  *   eg_entity* - the target entity
  *   eg_t-res* - a pointer to the collision result struct
  */
-int demo_sat(
+int demo_line(
     eg_app *app,
     eg_entity *a,
     eg_entity *b,

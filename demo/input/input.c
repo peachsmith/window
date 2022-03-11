@@ -24,6 +24,12 @@ void root_input_callback(eg_app *app, eg_entity *target)
         }
     }
 
+    // Print some empty space for debugging.
+    if (eg_consume_input(app, EG_KEYCODE_M))
+    {
+        puts("");
+    }
+
     //------------------------------------------------
     // BEGIN debugging slopes and SAT
     // TEMP

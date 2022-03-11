@@ -101,6 +101,18 @@ static void update_player(eg_app *app, eg_entity *player)
     player->y_pos += player->y_vel;
     // }
 
+    // If the player is on a sloped platform, reset the y velocity
+    // so gravity doesn't interfere with collision resolution.
+    if (eg_check_flag(player, ENTITY_FLAG_SLOPE))
+    {
+        eg_clear_flag(player, ENTITY_FLAG_SLOPE);
+        player->y_vel = 0;
+    }
+    else
+    {
+        printf("[DEBUG] player has separated from slope\n");
+    }
+
     // Apply gravity.
     if (player->y_vel < 4)
     {

@@ -52,12 +52,19 @@ static void render_sloped_block(eg_app *app, eg_entity *block)
     r.w = app->registry[block->type].width;
     r.h = app->registry[block->type].height;
 
+    // Draw the boundaries of the width and height.
     eg_set_color(app, EG_COLOR_RED);
     eg_draw_rect(app, &r, 0);
 
+    // Draw the diagonal line.
     eg_set_color(app, EG_COLOR_LIGHT_BLUE);
     eg_point a = {.x = r.x, .y = r.y + r.h};
     eg_point b = {.x = r.x + r.w, .y = r.y};
+    if (!eg_check_flag(block, 0))
+    {
+        a.y -= r.h;
+        b.y += r.h;
+    }
     eg_draw_line(app, &a, &b);
 }
 
@@ -191,24 +198,8 @@ static void collide_block(
         // We now must determine which direction to resolve the collision
         // based on the source entity's velocity.
 
-        // If the source entity's velocity has a non zero y component,
-        // but its x component is 0, then we only want to resolve the
-        // collision vertically.
-        if (other->y_vel && !other->x_vel)
-        {
-            other->y_vel -= (int)t_res->ty;
-            return;
-        }
-
-        // If the x and y components of the source entity's velocity are non
-        // zero, then we resolve the collision on both axes.
-        if (other->y_vel && other->x_vel)
-        {
-            // other->x_vel -= (int)t_res->tx;
-            other->y_vel -= (int)t_res->ty;
-        }
-
-        // other->x_vel -= (int)t_res->tx;
+        other->y_vel -= (int)t_res->ty;
+        eg_set_flag(other, ENTITY_FLAG_SLOPE);
 
         return;
     }
@@ -431,7 +422,7 @@ void block_demo_register_sloped(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_sloped(int x, int y)
+eg_entity *block_demo_create_sloped(int x, int y, int dir)
 {
     eg_entity *block = NULL;
 
@@ -444,6 +435,14 @@ eg_entity *block_demo_create_sloped(int x, int y)
     block->type = ENTITY_TYPE_BLOCK_SLOPE;
     block->x_pos = x;
     block->y_pos = y;
+
+    // We use the first flag to indicate the direction of the slope.
+    // 1 for incline from left to right, or 0 for incline from right
+    // to left.
+    if (dir)
+    {
+        block->flags = 1;
+    }
 
     return block;
 }
