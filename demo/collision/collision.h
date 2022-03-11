@@ -9,6 +9,8 @@ struct eg_collision
     eg_point cp; // contact point
     eg_point cn; // contact normal
     float t;     // t such that P(t) = CP
+    float tx;    // horizontal correction factor for diagonal lines
+    float ty;    // veritcal correction factor for diagonal lines
 };
 
 /**

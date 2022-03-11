@@ -39,6 +39,7 @@ static void update_player(eg_app *app, eg_entity *player)
     // }
     // else
     // {
+    // printf("[DEBUG] player V: (%d, %d)\n", player->x_vel, player->y_vel);
     player->x_pos += player->x_vel;
     // }
 
@@ -101,22 +102,22 @@ static void update_player(eg_app *app, eg_entity *player)
     // }
 
     // Apply gravity.
-    // if (player->y_vel < 4)
-    // {
-    //     player->y_vel++;
-    // }
-
-    // TEMP
-    // Perform vertical inertia.
-    if (player->y_vel > 0)
-    {
-        player->y_vel--;
-    }
-
-    if (player->y_vel < 0)
+    if (player->y_vel < 4)
     {
         player->y_vel++;
     }
+
+    // TEMP
+    // Perform vertical inertia.
+    // if (player->y_vel > 0)
+    // {
+    //     player->y_vel--;
+    // }
+
+    // if (player->y_vel < 0)
+    // {
+    //     player->y_vel++;
+    // }
 }
 
 void player_demo_register(eg_entity_type *t)

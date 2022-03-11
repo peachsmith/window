@@ -31,6 +31,9 @@ static void detect_collisions(
     while (target != NULL)
     {
         eg_collision res;
+        res.t = 0.0f;
+        res.tx = 0.0f;
+        res.ty = 0.0f;
 
         if (target->type == ENTITY_TYPE_BLOCK_SLOPE)
         {
@@ -73,12 +76,20 @@ static void detect_collisions(
  */
 static int greater(col_res *a, col_res *b)
 {
-    float t0;     // t value of entity a
-    float t1;     // t value of entity b
+    float t0; // t value of entity a
+    float t1; // t value of entity b
+    float tx0;
+    float ty0;
+    float tx1;
+    float ty1;
     eg_point cn0; // contact normal of entity a
     eg_point cn1; // contact normal of entity b
     int corner;   // corner collision flag
 
+    tx0 = a->col.tx;
+    ty0 = a->col.ty;
+    tx1 = b->col.tx;
+    ty1 = b->col.ty;
     t0 = a->col.t;
     t1 = b->col.t;
     cn0 = a->col.cn;
@@ -98,10 +109,23 @@ static int greater(col_res *a, col_res *b)
     // for one source. Hopefully, this never happens.
     // It should only be possible if two targets overlap in
     // just the right way.
-    if (cn0.x && cn0.y && cn1.x && cn1.y)
-    {
-        printf("[WARN] two corner collisions for one source\n");
-    }
+    // if (cn0.x && cn0.y && cn1.x && cn1.y)
+    // {
+    //     printf("[WARN] two corner collisions for one source\n");
+    // }
+
+    // Collisions with diagonal lines take priority.
+    // if ((tx0 != 0.0f || ty0 != 0.0f && t0 == 0.0f) && (tx1 == 0.0f && ty1 == 0.0f && t1 != 0.0f))
+    // {
+    //     // printf("[DEBUG] diagonal line and AABB\n");
+    //     return 1;
+    // }
+
+    // if ((tx1 != 0.0f || ty1 != 0.0f && t1 == 0.0f) && (tx0 == 0.0f && ty0 == 0.0f && t0 != 0.0f))
+    // {
+    //     // printf("[DEBUG] diagonal line and AABB\n");
+    //     return 0;
+    // }
 
     // The t value takes priority.
     // We only check the corner collision into account if
@@ -135,6 +159,8 @@ void demo_handle_collisions(eg_app *app)
         detect_collisions(app, source, cols, &count, DIR_FORWARD);
         detect_collisions(app, source, cols, &count, DIR_BACKWARD);
 
+        // int dbg_sort = 0;
+
         // Stage 2: Collision Sorting
         int sorted = 0;
         while (!sorted)
@@ -154,6 +180,17 @@ void demo_handle_collisions(eg_app *app)
                     }
                 }
             }
+
+            // if (dbg_sort < 10000)
+            // {
+            //     dbg_sort++;
+            // }
+            // else
+            // {
+            //     printf("[ERROR] infinite collision sorting loop\n");
+            //     sorted = 1;
+            //     app->done = 1;
+            // }
         }
 
         // Stage 3: Collision Resolution
@@ -168,20 +205,43 @@ void demo_handle_collisions(eg_app *app)
             a = source;
             b = cols[i].target;
 
-            if (demo_swept_aabb(app, a, b, &col))
+            if (b->type == ENTITY_TYPE_BLOCK_SLOPE)
             {
-                // Call the source entity's collision function.
-                cola = app->registry[a->type].collide;
-                if (cola != NULL)
+                if (demo_sat(app, a, b, &col))
                 {
-                    cola(app, a, b, &col, 0);
-                }
+                    // Call the source entity's collision function.
+                    cola = app->registry[a->type].collide;
+                    if (cola != NULL)
+                    {
+                        cola(app, a, b, &col, 0);
+                    }
 
-                // Call the target entity's collision function.
-                colb = app->registry[b->type].collide;
-                if (colb != NULL)
+                    // Call the target entity's collision function.
+                    colb = app->registry[b->type].collide;
+                    if (colb != NULL)
+                    {
+                        colb(app, b, a, &col, 1);
+                    }
+                }
+            }
+            else
+            {
+
+                if (demo_swept_aabb(app, a, b, &col))
                 {
-                    colb(app, b, a, &col, 1);
+                    // Call the source entity's collision function.
+                    cola = app->registry[a->type].collide;
+                    if (cola != NULL)
+                    {
+                        cola(app, a, b, &col, 0);
+                    }
+
+                    // Call the target entity's collision function.
+                    colb = app->registry[b->type].collide;
+                    if (colb != NULL)
+                    {
+                        colb(app, b, a, &col, 1);
+                    }
                 }
             }
         }

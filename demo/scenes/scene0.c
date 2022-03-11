@@ -70,10 +70,10 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, player);
 
     // // Add the rest of the horizontal row.
-    // eg_add_entity(app, block_demo_create(x_start + 72, y_start + 36));
-    // eg_add_entity(app, block_demo_create(x_start + 84, y_start + 36));
-    // eg_add_entity(app, block_demo_create(x_start + 96, y_start + 36));
-    // eg_add_entity(app, block_demo_create(x_start + 108, y_start + 36));
+    // eg_add_entity(app, block_demo_create(x_start + 72, y_start + 66));
+    // eg_add_entity(app, block_demo_create(x_start + 84, y_start + 66));
+    // eg_add_entity(app, block_demo_create(x_start + 96, y_start + 66));
+    // eg_add_entity(app, block_demo_create(x_start + 108, y_start + 66));
 
     // // Add another vertical column of blocks.
     // eg_add_entity(app, block_demo_create(x_start + 120, y_start + 36));
@@ -97,7 +97,7 @@ void load_scene_0(eg_app *app)
 
     // Sloped block
     // eg_add_entity(app, block_demo_create_sloped(x_start + 102, y_start + 4));
-    eg_add_entity(app, block_demo_create_sloped(x_start + 102, y_start + 40));
+    eg_add_entity(app, block_demo_create_sloped(x_start + 70, y_start + 50));
 
     // Create the initial input handler and add it to the app.
     root_callback = root_input_callback;

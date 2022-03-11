@@ -71,20 +71,20 @@ int demo_sat(
     // Entity A is assumed to be a rectangle, so there are four points.
 
     // top left vertex
-    pa[0].x = ax;
-    pa[0].y = ay;
+    pa[0].x = ax + a->x_vel;
+    pa[0].y = ay + a->y_vel;
 
     // top right vertex
-    pa[1].x = ax + aw;
-    pa[1].y = ay;
+    pa[1].x = ax + aw + a->x_vel;
+    pa[1].y = ay + a->y_vel;
 
     // bottom right vertex
-    pa[2].x = ax + aw;
-    pa[2].y = ay + ah;
+    pa[2].x = ax + aw / 2 + a->x_vel;
+    pa[2].y = ay + ah + a->y_vel;
 
     // bottom left vertex
-    pa[3].x = ax;
-    pa[3].y = ay + ah;
+    pa[3].x = ax + a->x_vel;
+    pa[3].y = ay + ah + a->y_vel;
 
     // Get the vertices for entity B.
     // Entity B is assumed to be a triangle, so there are three points.
@@ -104,7 +104,10 @@ int demo_sat(
     pb[2].y = by + bh;
 
     // Find the Centroid of the triangle.
-    eg_point c = {.x = pb[2].x + ((2 * bw) / 3), .y = pb[2].y - bh / 3};
+    // eg_point c = {.x = pb[2].x + ((2 * bw) / 3), .y = pb[2].y - bh / 3};
+
+    // Find the Centroid of the rectangle.
+    eg_point c = {.x = pa[0].x /*+ aw / 2*/, .y = pa[0].y + ah / 2};
 
     // Line intersection check.
 
@@ -124,23 +127,31 @@ int demo_sat(
     // float it1 = ((line_r2s_y - line_r2e_y) * (line_r1s_x - line_r2s_x) + (line_r2e_x - line_r2s_x) * (line_r1s_y - line_r2s_y)) / ih;
     // float it2 = ((line_r1s_y - line_r1e_y) * (line_r1s_x - line_r2s_x) + (line_r1e_x - line_r1s_x) * (line_r1s_y - line_r2s_y)) / ih;
 
-    float tx;
-    float ty;
+    // float tx;
+    // float ty;
+
+    // Draw the source line.
+    // printf("[DEBUG] C: (%d, %d)\n", c.x, c.y);
+    // eg_rect cr = {.x = c.x - 2, .y = c.y - 2, .w = 4, .h = 4};
+    // eg_set_color(app, EG_COLOR_INDIGO);
+    // eg_draw_rect(app, &cr, 1);
+    // eg_draw_line(app, &c, &(pa[2]));
 
     // if (it1 >= 0.0f && it1 < 1.0f && it2 >= 0.0f && it2 < 1.0f)
     // {
-    if (intersect(&c, &(pb[2]), &(pa[1]), &(pa[2]), &tx, &ty))
+    // if (intersect(&c, &(pb[2]), &(pa[1]), &(pa[2]), &tx, &ty))
+    // {
+    //     // float tx = (1.0f - t1) * (pb[2].x - c.x);
+    //     // float ty = (1.0f - t1) * (pb[2].y - c.y);
+    //     printf("[DEBUG] line intersection collision (%.2f, %.2f)\n", tx, ty);
+    // }
+    if (intersect(&c, &(pa[2]), &(pb[2]), &(pb[0]), &(res->tx), &(res->ty)))
     {
         // float tx = (1.0f - t1) * (pb[2].x - c.x);
         // float ty = (1.0f - t1) * (pb[2].y - c.y);
-        printf("[DEBUG] line intersection collision (%.2f, %.2f)\n", tx, ty);
+        // printf("[DEBUG] line intersection collision (%.2f, %.2f)\n", tx, ty);
+        return 1;
     }
-
-    // printf("[DEBUG] C: (%d, %d)\n", c.x, c.y);
-    eg_rect cr = {.x = c.x - 2, .y = c.y - 2, .w = 4, .h = 4};
-    eg_set_color(app, EG_COLOR_INDIGO);
-    eg_draw_rect(app, &cr, 1);
-    eg_draw_line(app, &c, &(pb[2]));
 
     // demo_draw_sat(app, pa, pb, &n0, &n1, &q);
 

@@ -29,22 +29,22 @@ void root_input_callback(eg_app *app, eg_entity *target)
     // TEMP
 
     // up movement
-    if (eg_peek_input(app, EG_KEYCODE_UP))
-    {
-        if (target->y_vel >= -2)
-        {
-            target->y_vel -= 2;
-        }
-    }
+    // if (eg_peek_input(app, EG_KEYCODE_UP))
+    // {
+    //     if (target->y_vel >= -2)
+    //     {
+    //         target->y_vel -= 2;
+    //     }
+    // }
 
-    // down movement
-    if (eg_peek_input(app, EG_KEYCODE_DOWN))
-    {
-        if (target->y_vel <= 2)
-        {
-            target->y_vel += 2;
-        }
-    }
+    // // down movement
+    // if (eg_peek_input(app, EG_KEYCODE_DOWN))
+    // {
+    //     if (target->y_vel <= 2)
+    //     {
+    //         target->y_vel += 2;
+    //     }
+    // }
     // END debugging slopes and SAT
     //------------------------------------------------
 
@@ -61,20 +61,20 @@ void root_input_callback(eg_app *app, eg_entity *target)
     //     eg_clear_flag(target, ENTITY_FLAG_DOWN);
     // }
 
-    // // jumping
-    // if (eg_consume_input(app, EG_KEYCODE_SPACE))
-    // {
-    //     if (eg_check_flag(target, ENTITY_FLAG_GROUND) &&
-    //         !eg_check_flag(target, ENTITY_FLAG_JUMP))
-    //     {
-    //         eg_clear_flag(target, ENTITY_FLAG_GROUND);
-    //         eg_set_flag(target, ENTITY_FLAG_JUMP);
-    //         eg_clear_flag(target, ENTITY_FLAG_MOVE);
-    //         target->carrier = NULL;
-    //         target->y_vel = 0;
-    //         target->y_vel -= 12;
-    //     }
-    // }
+    // jumping
+    if (eg_consume_input(app, EG_KEYCODE_SPACE))
+    {
+        if (eg_check_flag(target, ENTITY_FLAG_GROUND) &&
+            !eg_check_flag(target, ENTITY_FLAG_JUMP))
+        {
+            eg_clear_flag(target, ENTITY_FLAG_GROUND);
+            eg_set_flag(target, ENTITY_FLAG_JUMP);
+            eg_clear_flag(target, ENTITY_FLAG_MOVE);
+            target->carrier = NULL;
+            target->y_vel = 0;
+            target->y_vel -= 12;
+        }
+    }
 
     // TEMP: Reset the state of various things.
     if (eg_consume_input(app, EG_KEYCODE_R))

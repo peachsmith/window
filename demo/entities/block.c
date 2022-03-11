@@ -178,6 +178,41 @@ static void collide_block(
     // The collision resolution correction factor formula is pulled from
     // the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.
 
+    if (block->type == ENTITY_TYPE_BLOCK_SLOPE)
+    {
+        // For now, we are assuming that the source entity collided with
+        // the diagonal line from above.
+        eg_clear_flag(other, ENTITY_FLAG_JUMP);
+        eg_set_flag(other, ENTITY_FLAG_GROUND);
+
+        // printf("[DEBUG] line intersection collision (%.2f, %.2f)\n", t_res->tx, t_res->ty);
+
+        // The source entity has collided with a diagonal line.
+        // We now must determine which direction to resolve the collision
+        // based on the source entity's velocity.
+
+        // If the source entity's velocity has a non zero y component,
+        // but its x component is 0, then we only want to resolve the
+        // collision vertically.
+        if (other->y_vel && !other->x_vel)
+        {
+            other->y_vel -= (int)t_res->ty;
+            return;
+        }
+
+        // If the x and y components of the source entity's velocity are non
+        // zero, then we resolve the collision on both axes.
+        if (other->y_vel && other->x_vel)
+        {
+            // other->x_vel -= (int)t_res->tx;
+            other->y_vel -= (int)t_res->ty;
+        }
+
+        // other->x_vel -= (int)t_res->tx;
+
+        return;
+    }
+
     // Clear the jump flag and set the ground flag.
     // Only do this if the entity collided with the block from above.
     if (t_res->cn.y < 0 && !t_res->cn.x)
@@ -390,7 +425,7 @@ eg_entity *block_demo_create_moving(int x, int y, int type)
 void block_demo_register_sloped(eg_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_SLOPE;
-    t->width = 60;
+    t->width = 120;
     t->height = 32;
     t->render = render_sloped_block;
     t->collide = collide_block;
