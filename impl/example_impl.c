@@ -7,9 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// TEMP
-static const char *tmp_msg = "Hello, World!";
-
 // keyboard functions defined in keyboard.c
 SDL_Scancode eg_impl_get_sdl_scancode(eg_keycode k);
 eg_keycode eg_impl_get_eg_keycode(SDL_Scancode sc);
@@ -232,7 +229,7 @@ void eg_draw_text(eg_app *app, const char *msg)
 
     for (int i = 0; msg[i] != '\0'; i++)
     {
-        SDL_Texture *tex = impl->atlas.chars[msg[i]];
+        SDL_Texture *tex = impl->atlas.chars[(int)msg[i]];
         int q = SDL_QueryTexture(tex, NULL, NULL, &w, &h);
         if (!q)
         {

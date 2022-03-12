@@ -30,30 +30,6 @@ void root_input_callback(eg_app *app, eg_entity *target)
         puts("");
     }
 
-    //------------------------------------------------
-    // BEGIN debugging slopes and SAT
-    // TEMP
-
-    // up movement
-    // if (eg_peek_input(app, EG_KEYCODE_UP))
-    // {
-    //     if (target->y_vel >= -2)
-    //     {
-    //         target->y_vel -= 2;
-    //     }
-    // }
-
-    // // down movement
-    // if (eg_peek_input(app, EG_KEYCODE_DOWN))
-    // {
-    //     if (target->y_vel <= 2)
-    //     {
-    //         target->y_vel += 2;
-    //     }
-    // }
-    // END debugging slopes and SAT
-    //------------------------------------------------
-
     // down arrow key
     if (eg_peek_input(app, EG_KEYCODE_DOWN))
     {

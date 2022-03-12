@@ -115,18 +115,6 @@ static void update_player(eg_app *app, eg_entity *player)
     {
         player->y_vel++;
     }
-
-    // TEMP
-    // Perform vertical inertia.
-    // if (player->y_vel > 0)
-    // {
-    //     player->y_vel--;
-    // }
-
-    // if (player->y_vel < 0)
-    // {
-    //     player->y_vel++;
-    // }
 }
 
 void player_demo_register(eg_entity_type *t)
