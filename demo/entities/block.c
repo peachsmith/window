@@ -52,18 +52,31 @@ static void render_sloped_block(eg_app *app, eg_entity *block)
     r.w = app->registry[block->type].width;
     r.h = app->registry[block->type].height;
 
-    // Draw the boundaries of the width and height.
-    eg_set_color(app, EG_COLOR_RED);
-    eg_draw_rect(app, &r, 0);
+    int dir = block->flags & 3;
 
-    // Draw the diagonal line.
+    if (dir < 2)
+    {
+        // Draw the boundaries of the width and height.
+        eg_set_color(app, EG_COLOR_RED);
+        eg_draw_rect(app, &r, 0);
+    }
+
+    // Draw the line.
+    // Default is from bottom left to top right.
     eg_set_color(app, EG_COLOR_FOREST_GREEN);
     eg_point a = {.x = r.x, .y = r.y + r.h};
     eg_point b = {.x = r.x + r.w, .y = r.y};
-    if (!eg_check_flag(block, 0))
+
+    if (dir == 0)
     {
+        // from top left to bottom right.
         a.y -= r.h;
         b.y += r.h;
+    }
+    else if (dir == 2)
+    {
+        // horizontal line from top left to top right.
+        a.y -= r.h;
     }
     eg_draw_line(app, &a, &b);
 }
@@ -198,7 +211,7 @@ static void collide_block(
         // We now must determine which direction to resolve the collision
         // based on the source entity's velocity.
 
-        other->y_vel -= (int)t_res->ty;
+        other->y_vel -= ((int)t_res->ty + 1);
         eg_set_flag(other, ENTITY_FLAG_SLOPE);
 
         return;
@@ -439,10 +452,7 @@ eg_entity *block_demo_create_sloped(int x, int y, int dir)
     // We use the first flag to indicate the direction of the slope.
     // 1 for incline from left to right, or 0 for incline from right
     // to left.
-    if (dir)
-    {
-        block->flags = 1;
-    }
+    block->flags = dir;
 
     return block;
 }

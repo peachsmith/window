@@ -120,15 +120,20 @@ int demo_line(
 
     // Check the flags of the platform to see which direction the diagonal
     // line is sloped.
-    int dir = eg_check_flag(b, 0);
+    int dir = b->flags & 3;
     eg_point ba = pb[3];
     eg_point bb = pb[1];
 
-    if (!dir)
+    if (dir == 0)
     {
         ba = pb[0];
         bb = pb[2];
         aa.x += aw;
+    }
+    else if (dir == 2)
+    {
+        ba = pb[0];
+        bb = pb[1];
     }
 
     // Draw the source line.

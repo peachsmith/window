@@ -56,11 +56,11 @@ void load_scene_0(eg_app *app)
     // // eg_add_entity(app, block_demo_create(x_start + 110, y_start + 24));
 
     // // the first part of the horizontal row of blocks
-    eg_add_entity(app, block_demo_create(x_start + 12, 92));
-    eg_add_entity(app, block_demo_create(x_start + 24, 92));
-    eg_add_entity(app, block_demo_create(x_start + 36, 92));
-    eg_add_entity(app, block_demo_create(x_start + 48, 92));
-    eg_add_entity(app, block_demo_create(x_start + 60, 92));
+    eg_add_entity(app, block_demo_create(x_start - 21 + 12, 92));
+    eg_add_entity(app, block_demo_create(x_start - 21 + 24, 92));
+    eg_add_entity(app, block_demo_create(x_start - 21 + 36, 92));
+    eg_add_entity(app, block_demo_create(x_start - 21 + 48, 92));
+    eg_add_entity(app, block_demo_create(x_start - 21 + 60, 92));
 
     // // Vertically moving platform (added before player).
     eg_add_entity(app, block_demo_create_moving(570, y_start - 32, 0));
@@ -70,10 +70,10 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, player);
 
     // // Add the rest of the horizontal row.
-    eg_add_entity(app, block_demo_create(x_start + 72, 92));
-    eg_add_entity(app, block_demo_create(x_start + 84, 92));
-    eg_add_entity(app, block_demo_create(x_start + 96, 92));
-    eg_add_entity(app, block_demo_create(x_start + 108, 92));
+    eg_add_entity(app, block_demo_create(x_start - 21 + 72, 92));
+    eg_add_entity(app, block_demo_create(x_start - 21 + 84, 92));
+    eg_add_entity(app, block_demo_create(x_start - 21 + 96, 92));
+    eg_add_entity(app, block_demo_create(x_start - 21 + 108, 92));
 
     // // Add another vertical column of blocks.
     // eg_add_entity(app, block_demo_create(x_start + 120, y_start + 36));
@@ -83,7 +83,8 @@ void load_scene_0(eg_app *app)
     // eg_add_entity(app, block_demo_create(x_start + 120, y_start + 84));
 
     // A long, horizontal block.
-    eg_add_entity(app, block_demo_create_long(230, 62));
+    // eg_add_entity(app, block_demo_create_long(230, 62));
+    eg_add_entity(app, block_demo_create_sloped(209, 62, 2));
 
     // // A long, horizontal block that can be passed through when holding
     // // the down arrow key.
@@ -97,8 +98,10 @@ void load_scene_0(eg_app *app)
 
     // Sloped block
     // eg_add_entity(app, block_demo_create_sloped(x_start + 102, y_start + 4));
-    eg_add_entity(app, block_demo_create_sloped(110, y_start + 32, 1));
+    eg_add_entity(app, block_demo_create_sloped(89, y_start + 32, 1));
     // eg_add_entity(app, block_demo_create_sloped(0, y_start + 32, 0));
+    // eg_add_entity(app, block_demo_create_sloped(330, y_start + 32, 0));
+    // eg_add_entity(app, block_demo_create_long(330, y_start + 32));
     eg_add_entity(app, block_demo_create_sloped(330, y_start + 32, 0));
     eg_add_entity(app, block_demo_create_sloped(450, y_start + 32, 1));
 

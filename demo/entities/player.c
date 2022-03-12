@@ -101,12 +101,13 @@ static void update_player(eg_app *app, eg_entity *player)
         player->y_pos += player->y_vel;
     }
 
-    // If the player is on a sloped platform, reset the y velocity
-    // so gravity doesn't interfere with collision resolution.
+    // If the player is on a sloped platform, set the y velocity to some
+    // value that causes the player to collide with the platform before
+    // moving into open space.
     if (eg_check_flag(player, ENTITY_FLAG_SLOPE))
     {
         eg_clear_flag(player, ENTITY_FLAG_SLOPE);
-        player->y_vel = 0;
+        player->y_vel = 4;
     }
 
     // Apply gravity.
