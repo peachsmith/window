@@ -54,7 +54,7 @@ int demo_line(
 {
     // If the source entity is not a collider, then don't bother checking
     // for a collision.
-    if (a->type == ENTITY_TYPE_BLOCK_SLOPE)
+    if (a->type != ENTITY_TYPE_PLAYER)
     {
         return 0;
     }
@@ -72,8 +72,8 @@ int demo_line(
     // TODO: account for camera position.
     int ax = a->x_pos;
     int ay = a->y_pos;
-    int bx = b->x_pos;
-    int by = b->y_pos;
+    int bx = b->x_pos + app->cam.x;
+    int by = b->y_pos + app->cam.y;
 
     // Get the vertices for entity A.
 

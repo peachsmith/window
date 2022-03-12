@@ -57,7 +57,7 @@ static void render_sloped_block(eg_app *app, eg_entity *block)
     eg_draw_rect(app, &r, 0);
 
     // Draw the diagonal line.
-    eg_set_color(app, EG_COLOR_LIGHT_BLUE);
+    eg_set_color(app, EG_COLOR_FOREST_GREEN);
     eg_point a = {.x = r.x, .y = r.y + r.h};
     eg_point b = {.x = r.x + r.w, .y = r.y};
     if (!eg_check_flag(block, 0))

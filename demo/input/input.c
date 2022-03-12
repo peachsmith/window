@@ -54,18 +54,18 @@ void root_input_callback(eg_app *app, eg_entity *target)
     // END debugging slopes and SAT
     //------------------------------------------------
 
-    // // down arrow key
-    // if (eg_peek_input(app, EG_KEYCODE_DOWN))
-    // {
-    //     if (!eg_check_flag(target, ENTITY_FLAG_DOWN))
-    //     {
-    //         eg_set_flag(target, ENTITY_FLAG_DOWN);
-    //     }
-    // }
-    // else if (eg_check_flag(target, ENTITY_FLAG_DOWN))
-    // {
-    //     eg_clear_flag(target, ENTITY_FLAG_DOWN);
-    // }
+    // down arrow key
+    if (eg_peek_input(app, EG_KEYCODE_DOWN))
+    {
+        if (!eg_check_flag(target, ENTITY_FLAG_DOWN))
+        {
+            eg_set_flag(target, ENTITY_FLAG_DOWN);
+        }
+    }
+    else if (eg_check_flag(target, ENTITY_FLAG_DOWN))
+    {
+        eg_clear_flag(target, ENTITY_FLAG_DOWN);
+    }
 
     // jumping
     if (eg_consume_input(app, EG_KEYCODE_SPACE))

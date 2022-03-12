@@ -58,7 +58,7 @@ static void draw(eg_app *app)
     }
 
     // TEMP: draw the camera boundaries.
-    // demo_draw_camera(app);
+    demo_draw_camera(app);
 }
 
 int demo_prepare(eg_app *app)
