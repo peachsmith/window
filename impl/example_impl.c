@@ -2,9 +2,13 @@
 
 // SDL is used for things like creating windows and handling input.
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <stdio.h>
 #include <stdlib.h>
+
+// TEMP
+static const char *tmp_msg = "Hello, World!";
 
 // keyboard functions defined in keyboard.c
 SDL_Scancode eg_impl_get_sdl_scancode(eg_keycode k);
@@ -22,6 +26,14 @@ int eg_impl_init()
         return 0;
     }
 
+    if (TTF_Init() == -1)
+    {
+        fprintf(stderr,
+                "failed to initialize SDL_ttf error: %s\n",
+                TTF_GetError());
+        return 0;
+    }
+
     eg_impl_init_keyboard();
 
     return 1;
@@ -29,6 +41,7 @@ int eg_impl_init()
 
 void eg_impl_term()
 {
+    TTF_Quit();
     SDL_Quit();
 }
 
@@ -41,6 +54,8 @@ struct eg_impl
     const Uint8 *keystates;
     Uint64 ticks;
     Uint64 frame_len;
+    TTF_Font *font;        // the default font for rendering text
+    SDL_Texture *tmp_text; // temporary texture for testing font rendering
 };
 
 eg_impl *eg_impl_create(int screen_width, int screen_height)
@@ -93,10 +108,54 @@ eg_impl *eg_impl_create(int screen_width, int screen_height)
         return NULL;
     }
 
+    // Load a font.
+    TTF_Font *font = TTF_OpenFont("../JetBrainsMonoNL-Regular.ttf", 14);
+    if (font == NULL)
+    {
+        fprintf(stderr,
+                "failed to load font. error: %s\n",
+                TTF_GetError());
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        free(impl);
+        return NULL;
+    }
+
+    // Create a surface.
+    SDL_Color c = {.a = 255, .r = 250, .g = 250, .b = 250};
+    SDL_Surface *s = TTF_RenderUTF8_Blended(font, "Hello, World!", c);
+    if (s == NULL)
+    {
+        fprintf(stderr,
+                "failed to create glyph surface. error: %s\n",
+                TTF_GetError());
+        TTF_CloseFont(font);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        free(impl);
+        return NULL;
+    }
+
+    SDL_Texture *tmp_tex = SDL_CreateTextureFromSurface(renderer, s);
+    SDL_FreeSurface(s);
+    if (s == NULL)
+    {
+        fprintf(stderr,
+                "failed to create glyph texture. error: %s\n",
+                TTF_GetError());
+        TTF_CloseFont(font);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        free(impl);
+        return NULL;
+    }
+    impl->tmp_text = tmp_tex;
+
     // Populate the fields of the wrapper struct.
     impl->window = window;
     impl->renderer = renderer;
     impl->keystates = keystates;
+    impl->font = font;
     impl->frame_len = 16;
     impl->ticks = 0;
 
@@ -115,9 +174,22 @@ void eg_impl_destroy(eg_impl *impl)
         return;
     }
 
+    SDL_DestroyTexture(impl->tmp_text);
+    TTF_CloseFont(impl->font);
     SDL_DestroyRenderer(impl->renderer);
     SDL_DestroyWindow(impl->window);
     free(impl);
+}
+
+void eg_draw_text(eg_app *app)
+{
+    eg_impl *impl = app->impl;
+
+    int w;
+    int h;
+    TTF_SizeUTF8(impl->font, tmp_msg, &w, &h);
+    SDL_Rect r = {.x = 10, .y = 10, .w = w, .h = h};
+    SDL_RenderCopy(impl->renderer, impl->tmp_text, NULL, &r);
 }
 
 void eg_impl_process_events(eg_app *app)

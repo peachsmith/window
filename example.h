@@ -207,6 +207,9 @@ struct eg_entity_type
 //----------------------------------------------------------------------------
 // core functions
 
+// TEMP
+void eg_draw_text(eg_app*);
+
 /**
  * Initializes the framework.
  * This should be called once before allocating any resources or using any
