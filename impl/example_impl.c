@@ -45,6 +45,15 @@ void eg_impl_term()
     SDL_Quit();
 }
 
+// maximum number of characters in a font atlas
+#define FONT_ATLAS_MAX 128
+
+typedef struct font_atlas
+{
+    SDL_Texture *chars[FONT_ATLAS_MAX];
+    int count; // current number of characters in the atlas.
+} font_atlas;
+
 // complete definition of the eg_impl type
 struct eg_impl
 {
@@ -54,9 +63,56 @@ struct eg_impl
     const Uint8 *keystates;
     Uint64 ticks;
     Uint64 frame_len;
-    TTF_Font *font;        // the default font for rendering text
-    SDL_Texture *tmp_text; // temporary texture for testing font rendering
+    TTF_Font *font;   // the default font for rendering text
+    font_atlas atlas; // a collection of textures for rendering text
 };
+
+static int init_font_atlas(SDL_Renderer *r, TTF_Font *font, font_atlas *atlas)
+{
+    for (int i = 0; i < FONT_ATLAS_MAX; i++)
+    {
+        atlas->chars[i] = NULL;
+    }
+
+    SDL_Color white = {.a = 255, .r = 255, .g = 255, .b = 255};
+    for (int i = 32; i < 127 && i < FONT_ATLAS_MAX; i++)
+    {
+        const char c[2] = {(char)i, '\0'};
+
+        // Create the SDL_Surface
+        SDL_Surface *surface = TTF_RenderUTF8_Blended(font, c, white);
+        if (surface == NULL)
+        {
+            return 0;
+        }
+
+        // Convert the SDL_Surface into an SDL_Texture.
+        // Since we don't need the surface anymore, it should be destroyed
+        // regardless of whether or not we succeeded in creating the texture.
+        SDL_Texture *texture = SDL_CreateTextureFromSurface(r, surface);
+        SDL_FreeSurface(surface);
+        if (texture == NULL)
+        {
+            return 0;
+        }
+
+        atlas->chars[i] = texture;
+        atlas->count++;
+    }
+
+    return 1;
+}
+
+static void destroy_font_atlas_textures(font_atlas *atlas)
+{
+    for (int i = 0; i < FONT_ATLAS_MAX; i++)
+    {
+        if (atlas->chars[i] != NULL)
+        {
+            SDL_DestroyTexture(atlas->chars[i]);
+        }
+    }
+}
 
 eg_impl *eg_impl_create(int screen_width, int screen_height)
 {
@@ -121,35 +177,16 @@ eg_impl *eg_impl_create(int screen_width, int screen_height)
         return NULL;
     }
 
-    // Create a surface.
-    SDL_Color c = {.a = 255, .r = 250, .g = 250, .b = 250};
-    SDL_Surface *s = TTF_RenderUTF8_Blended(font, "Hello, World!", c);
-    if (s == NULL)
+    if (!init_font_atlas(renderer, font, &(impl->atlas)))
     {
         fprintf(stderr,
-                "failed to create glyph surface. error: %s\n",
-                TTF_GetError());
+                "failed to create font atlas\n");
         TTF_CloseFont(font);
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
         free(impl);
         return NULL;
     }
-
-    SDL_Texture *tmp_tex = SDL_CreateTextureFromSurface(renderer, s);
-    SDL_FreeSurface(s);
-    if (s == NULL)
-    {
-        fprintf(stderr,
-                "failed to create glyph texture. error: %s\n",
-                TTF_GetError());
-        TTF_CloseFont(font);
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        free(impl);
-        return NULL;
-    }
-    impl->tmp_text = tmp_tex;
 
     // Populate the fields of the wrapper struct.
     impl->window = window;
@@ -174,22 +211,36 @@ void eg_impl_destroy(eg_impl *impl)
         return;
     }
 
-    SDL_DestroyTexture(impl->tmp_text);
+    destroy_font_atlas_textures(&(impl->atlas));
     TTF_CloseFont(impl->font);
     SDL_DestroyRenderer(impl->renderer);
     SDL_DestroyWindow(impl->window);
     free(impl);
 }
 
-void eg_draw_text(eg_app *app)
+void eg_draw_text(eg_app *app, const char *msg)
 {
     eg_impl *impl = app->impl;
 
+    // text starting position
+    int x = 10;
+    int y = 10;
+
+    // character dimensions
     int w;
     int h;
-    TTF_SizeUTF8(impl->font, tmp_msg, &w, &h);
-    SDL_Rect r = {.x = 10, .y = 10, .w = w, .h = h};
-    SDL_RenderCopy(impl->renderer, impl->tmp_text, NULL, &r);
+
+    for (int i = 0; msg[i] != '\0'; i++)
+    {
+        SDL_Texture *tex = impl->atlas.chars[msg[i]];
+        int q = SDL_QueryTexture(tex, NULL, NULL, &w, &h);
+        if (!q)
+        {
+            SDL_Rect r = {.x = x, .y = y, .w = w, .h = h};
+            x += w;
+            SDL_RenderCopy(impl->renderer, tex, NULL, &r);
+        }
+    }
 }
 
 void eg_impl_process_events(eg_app *app)

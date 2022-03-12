@@ -47,7 +47,7 @@ static void update(eg_app *app)
 static void draw(eg_app *app)
 {
     // TEMP render some text
-    eg_draw_text(app);
+    eg_draw_text(app, "Hello, World!");
 
     // Render the entities.
     eg_entity *ent = app->entities;

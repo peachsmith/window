@@ -208,7 +208,7 @@ struct eg_entity_type
 // core functions
 
 // TEMP
-void eg_draw_text(eg_app*);
+void eg_draw_text(eg_app *, const char *);
 
 /**
  * Initializes the framework.
