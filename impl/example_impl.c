@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 // 95 printable ASCII characters [32:126]
-static const char *ascii_set = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+//  !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 
 // keyboard functions defined in keyboard.c
 SDL_Scancode eg_impl_get_sdl_scancode(eg_keycode k);
