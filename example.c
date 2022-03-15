@@ -13,8 +13,13 @@ void eg_impl_process_events(eg_app *);
 int eg_impl_delay(eg_app *);
 void eg_impl_clear_screen(eg_app *);
 void eg_impl_render_screen(eg_app *);
+void eg_impl_set_color(eg_app *app, uint32_t color);
+void eg_impl_draw_line(eg_app *app, eg_point *a, eg_point *b);
+void eg_impl_draw_rect(eg_app *app, eg_rect *r, int filled);
 int eg_impl_peek_key(eg_app *, int);
 int eg_impl_consume_key(eg_app *, int);
+int eg_impl_load_font(eg_app *, const char *, int);
+void eg_impl_draw_text(eg_app *, const char *, int, int);
 
 //----------------------------------------------------------------------------
 // core functions
@@ -129,6 +134,24 @@ void eg_end_frame(eg_app *app)
 {
     eg_impl_render_screen(app);
     eg_impl_delay(app);
+}
+
+//----------------------------------------------------------------------------
+// drawing functions
+
+void eg_set_color(eg_app *app, eg_color color)
+{
+    eg_impl_set_color(app, color);
+}
+
+void eg_draw_line(eg_app *app, eg_point *a, eg_point *b)
+{
+    eg_impl_draw_line(app, a, b);
+}
+
+void eg_draw_rect(eg_app *app, eg_rect *r, int filled)
+{
+    eg_impl_draw_rect(app, r, filled);
 }
 
 //----------------------------------------------------------------------------
@@ -417,4 +440,17 @@ void eg_toggle_flag(eg_entity *e, int f)
 
     // Set the flag.
     e->flags |= bit;
+}
+
+//----------------------------------------------------------------------------
+// font functions
+
+int eg_load_font(eg_app *app, const char *path, int p)
+{
+    return eg_impl_load_font(app, path, p);
+}
+
+void eg_draw_text(eg_app *app, const char *msg, int x, int y)
+{
+    eg_impl_draw_text(app, msg, x, y);
 }

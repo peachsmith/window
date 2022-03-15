@@ -47,7 +47,7 @@ static void update(eg_app *app)
 static void draw(eg_app *app)
 {
     // TEMP render some text
-    eg_draw_text(app, "Hello, World!");
+    eg_draw_text(app, "Hello, World!", 2, 2);
 
     // Render the entities.
     eg_entity *ent = app->entities;
@@ -76,6 +76,11 @@ int demo_prepare(eg_app *app)
     app->registry = reg;
     app->update = update;
     app->draw = draw;
+
+    if (!eg_load_font(app, "../Alegreya-VariableFont_wght.ttf", 16))
+    {
+        fprintf(stderr, "failed to load font\n");
+    }
 
     // Register the entity types.
     player_demo_register(&reg[ENTITY_TYPE_PLAYER]);

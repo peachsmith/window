@@ -1,19 +1,5 @@
 #include "example.h"
-
-// SDL is used for things like creating windows and handling input.
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-
-// 95 printable ASCII characters [32:126]
-//  !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~
-
-// keyboard functions defined in keyboard.c
-SDL_Scancode eg_impl_get_sdl_scancode(eg_keycode k);
-eg_keycode eg_impl_get_eg_keycode(SDL_Scancode sc);
-void eg_impl_init_keyboard();
+#include "impl.h"
 
 int eg_impl_init()
 {
@@ -31,6 +17,7 @@ int eg_impl_init()
         fprintf(stderr,
                 "failed to initialize SDL_ttf error: %s\n",
                 TTF_GetError());
+        SDL_Quit();
         return 0;
     }
 
@@ -45,184 +32,19 @@ void eg_impl_term()
     SDL_Quit();
 }
 
-// maximum number of characters in a font atlas
-#define FONT_ATLAS_MAX 128
-
-typedef struct glyph_size
-{
-    int x;
-    int w;
-    int h;
-} glyph_size;
-
-typedef struct font_atlas
-{
-    SDL_Texture *single; // a single texture containing all characters
-    SDL_Texture *chars[FONT_ATLAS_MAX];
-    glyph_size sizes[FONT_ATLAS_MAX];
-    int count; // current number of characters in the atlas.
-} font_atlas;
-
-// complete definition of the eg_impl type
-struct eg_impl
-{
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    SDL_Event event;
-    const Uint8 *keystates;
-    Uint64 ticks;
-    Uint64 frame_len;
-    TTF_Font *font;   // the default font for rendering text
-    font_atlas atlas; // a collection of textures for rendering text
-};
-
-static int init_font_atlas(SDL_Renderer *r, TTF_Font *font, font_atlas *atlas)
-{
-    // Get renderer info.
-    SDL_RendererInfo ri;
-    if (SDL_GetRendererInfo(r, &ri))
-    {
-        fprintf(stderr, "failed to get renderer info %s\n", SDL_GetError());
-        return 0;
-    }
-
-    printf("[DEBUG] Renderer Info\n-------------\n");
-    printf("[DEBUG] Name: %s\n", ri.name);
-    printf("[DEBUG] Number of texture formats: %d\n", ri.num_texture_formats);
-    printf("[DEBUG] Max Width: %d\n", ri.max_texture_width);
-    printf("[DEBUG] Max Height: %d\n", ri.max_texture_height);
-    printf("[DEBUG] SDL_RENDERER_SOFTWARE: %s\n", (ri.flags & SDL_RENDERER_SOFTWARE) ? "yes" : "no");
-    printf("[DEBUG] SDL_RENDERER_ACCELERATED: %s\n", (ri.flags & SDL_RENDERER_ACCELERATED) ? "yes" : "no");
-    printf("[DEBUG] SDL_RENDERER_PRESENTVSYNC: %s\n", (ri.flags & SDL_RENDERER_PRESENTVSYNC) ? "yes" : "no");
-    printf("[DEBUG] SDL_RENDERER_TARGETTEXTURE: %s\n", (ri.flags & SDL_RENDERER_TARGETTEXTURE) ? "yes" : "no");
-
-    for (int i = 0; i < FONT_ATLAS_MAX; i++)
-    {
-        atlas->chars[i] = NULL;
-    }
-
-    // Create a texture for each character.
-    SDL_Color white = {.a = 255, .r = 255, .g = 255, .b = 255};
-    for (int i = 32; i < 127 && i < FONT_ATLAS_MAX; i++)
-    {
-        const char c[2] = {(char)i, '\0'};
-
-        SDL_Surface *surface = TTF_RenderUTF8_Blended(font, c, white);
-        if (surface == NULL)
-        {
-            return 0;
-        }
-
-        SDL_Texture *texture = SDL_CreateTextureFromSurface(r, surface);
-        SDL_FreeSurface(surface);
-        if (texture == NULL)
-        {
-            return 0;
-        }
-
-        // Store the dimensions of each glyph texture.
-        SDL_QueryTexture(
-            texture,
-            NULL,
-            NULL,
-            &(atlas->sizes[i].w),
-            &(atlas->sizes[i].h));
-
-        atlas->sizes[i].x = 0;
-        if (i > 32)
-        {
-            atlas->sizes[i].x = atlas->sizes[i - 1].x + atlas->sizes[i - 1].w;
-        }
-
-        atlas->chars[i] = texture;
-        atlas->count++;
-    }
-
-    // If the renderer supports using textures as render targets,
-    // then put all the character textures into one texture.
-    if (ri.flags & SDL_RENDERER_TARGETTEXTURE)
-    {
-        Uint32 format;
-
-        // Get the format of the first glyph texture.
-        if (SDL_QueryTexture(atlas->chars[32], &format, NULL, NULL, NULL))
-        {
-            fprintf(stderr, "failed to query first glyph texture\n");
-            return 0;
-        }
-
-        // Create the font atlas texture.
-        SDL_Texture *target = SDL_CreateTexture(
-            r,
-            format,
-            SDL_TEXTUREACCESS_TARGET,
-            2048,
-            24);
-        if (target == NULL)
-        {
-            fprintf(stderr, "failed to create font atlas texture\n");
-            return 0;
-        }
-
-        // Set the font atlas texture as the current render target.
-        if (SDL_SetRenderTarget(r, target))
-        {
-            fprintf(stderr,
-                    "failed to set render target for font atlas: %s\n",
-                    SDL_GetError());
-            return 0;
-        }
-
-        int dest_x = 0;
-        for (int i = 32; i < 127; i++)
-        {
-            SDL_Rect src;
-            SDL_Rect dest;
-
-            src.x = 0;
-            src.y = 0;
-            src.w = atlas->sizes[i].w;
-            src.h = atlas->sizes[i].h;
-
-            dest.x = dest_x;
-            dest.y = 0;
-            dest.w = atlas->sizes[i].w;
-            dest.h = atlas->sizes[i].h;
-
-            if (SDL_RenderCopy(r, atlas->chars[i], &src, &dest))
-            {
-                fprintf(
-                    stderr,
-                    "error copying glyph texture to atlas %s\n",
-                    SDL_GetError());
-                return 0;
-            }
-
-            dest_x += atlas->sizes[i].w;
-        }
-
-        atlas->single = target;
-
-        // Reset the renderer target.
-        SDL_SetRenderTarget(r, NULL);
-    }
-
-    return 1;
-}
-
-static void destroy_font_atlas_textures(font_atlas *atlas)
+static void destroy_font_atlas_textures(eg_font *atlas)
 {
     for (int i = 0; i < FONT_ATLAS_MAX; i++)
     {
-        if (atlas->chars[i] != NULL)
+        if (atlas->glyphs[i] != NULL)
         {
-            SDL_DestroyTexture(atlas->chars[i]);
+            SDL_DestroyTexture(atlas->glyphs[i]);
         }
     }
 
-    if (atlas->single != NULL)
+    if (atlas->atlas != NULL)
     {
-        SDL_DestroyTexture(atlas->single);
+        SDL_DestroyTexture(atlas->atlas);
     }
 }
 
@@ -239,7 +61,13 @@ eg_impl *eg_impl_create(int screen_width, int screen_height)
     {
         return NULL;
     }
-    impl->atlas.single = NULL;
+
+    // Zero out the font data.
+    impl->font.atlas = NULL;
+    for (int i = 0; i < FONT_ATLAS_MAX; i++)
+    {
+        impl->font.glyphs[i] = NULL;
+    }
 
     // Create the window.
     window = SDL_CreateWindow(
@@ -277,35 +105,10 @@ eg_impl *eg_impl_create(int screen_width, int screen_height)
         return NULL;
     }
 
-    // Load a font.
-    TTF_Font *font = TTF_OpenFont("../Alegreya-VariableFont_wght.ttf", 16);
-    if (font == NULL)
-    {
-        fprintf(stderr,
-                "failed to load font. error: %s\n",
-                TTF_GetError());
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        free(impl);
-        return NULL;
-    }
-
-    if (!init_font_atlas(renderer, font, &(impl->atlas)))
-    {
-        fprintf(stderr,
-                "failed to create font atlas\n");
-        TTF_CloseFont(font);
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        free(impl);
-        return NULL;
-    }
-
     // Populate the fields of the wrapper struct.
     impl->window = window;
     impl->renderer = renderer;
     impl->keystates = keystates;
-    impl->font = font;
     impl->frame_len = 16;
     impl->ticks = 0;
 
@@ -324,59 +127,10 @@ void eg_impl_destroy(eg_impl *impl)
         return;
     }
 
-    destroy_font_atlas_textures(&(impl->atlas));
-    TTF_CloseFont(impl->font);
+    destroy_font_atlas_textures(&(impl->font));
     SDL_DestroyRenderer(impl->renderer);
     SDL_DestroyWindow(impl->window);
     free(impl);
-}
-
-void eg_draw_text(eg_app *app, const char *msg)
-{
-    eg_impl *impl = app->impl;
-
-    // text starting position
-    int x = 2;
-    int y = 2;
-
-    // character dimensions
-    int w;
-    int h;
-
-    // Render text using an individual texture for each glyph.F
-    for (int i = 0; msg[i] != '\0'; i++)
-    {
-        SDL_Texture *tex = impl->atlas.chars[(int)msg[i]];
-        int q = SDL_QueryTexture(tex, NULL, NULL, &w, &h);
-        if (!q)
-        {
-            SDL_Rect r = {.x = x, .y = y, .w = w, .h = h};
-            x += w;
-            SDL_RenderCopy(impl->renderer, tex, NULL, &r);
-        }
-    }
-
-    // Render text using a single texture atlas.
-    x = 2;
-    y += h;
-    for (int i = 0; msg[i] != '\0'; i++)
-    {
-        SDL_Rect src = {
-            .x = impl->atlas.sizes[(int)msg[i]].x,
-            .y = 0,
-            .w = impl->atlas.sizes[(int)msg[i]].w,
-            .h = impl->atlas.sizes[(int)msg[i]].h};
-
-        SDL_Rect dest = {
-            .x = x,
-            .y = y,
-            .w = impl->atlas.sizes[(int)msg[i]].w,
-            .h = impl->atlas.sizes[(int)msg[i]].h};
-
-        x += impl->atlas.sizes[(int)msg[i]].w;
-
-        SDL_RenderCopy(impl->renderer, impl->atlas.single, &src, &dest);
-    }
 }
 
 void eg_impl_process_events(eg_app *app)
@@ -463,9 +217,7 @@ void eg_impl_render_screen(eg_app *app)
     SDL_RenderPresent(impl->renderer);
 }
 
-// Public API function
-// TODO: refactor this to eg_impl_set_color and wrap it
-void eg_set_color(eg_app *app, uint32_t color)
+void eg_impl_set_color(eg_app *app, uint32_t color)
 {
     if (app == NULL || app->impl == NULL)
     {
@@ -486,9 +238,7 @@ void eg_set_color(eg_app *app, uint32_t color)
     SDL_SetRenderDrawColor(impl->renderer, r, g, b, a);
 }
 
-// Public API function
-// TODO: refactor this to eg_impl_draw_line and wrap it
-void eg_draw_line(eg_app *app, eg_point *a, eg_point *b)
+void eg_impl_draw_line(eg_app *app, eg_point *a, eg_point *b)
 {
     if (app == NULL || app->impl == NULL)
     {
@@ -504,9 +254,7 @@ void eg_draw_line(eg_app *app, eg_point *a, eg_point *b)
         b->y);
 }
 
-// Public API function
-// TODO: refactor this to eg_impl_draw_rect and wrap it
-void eg_draw_rect(eg_app *app, eg_rect *r, int filled)
+void eg_impl_draw_rect(eg_app *app, eg_rect *r, int filled)
 {
     if (app == NULL || app->impl == NULL)
     {

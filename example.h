@@ -49,6 +49,8 @@ typedef struct eg_entity eg_entity;
  */
 typedef struct eg_entity_type eg_entity_type;
 
+typedef struct eg_font eg_font;
+
 /**
  * A point represents the x and y coordinates in 2D space.
  */
@@ -206,9 +208,6 @@ struct eg_entity_type
 
 //----------------------------------------------------------------------------
 // core functions
-
-// TEMP
-void eg_draw_text(eg_app *, const char *);
 
 /**
  * Initializes the framework.
@@ -473,5 +472,32 @@ void eg_clear_flag(eg_entity *e, int f);
  *   int - the index of the flag to toggle, ranging from 0 to 7.
  */
 void eg_toggle_flag(eg_entity *e, int f);
+
+//----------------------------------------------------------------------------
+// font functions
+
+/**
+ * Loads a font from a TrueType file.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   const char* - file path of the TrueType file
+ *   int - point size
+ *
+ * Returns:
+ *   int - 1 on success or 0 on failure
+ */
+int eg_load_font(eg_app *, const char *, int);
+
+/**
+ * Renders a string of text to the screen.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   const char* - the text to render
+ *   int - the x position of the text on the screen
+ *   int - the y position of the text on the screen
+ */
+void eg_draw_text(eg_app *, const char *, int, int);
 
 #endif
