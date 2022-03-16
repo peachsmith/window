@@ -8,7 +8,6 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
 {
     SDL_RendererInfo ri;
     SDL_Color white = {.a = 255, .r = 255, .g = 255, .b = 255};
-    SDL_Color clear = {.a = 0, .r = 255, .g = 255, .b = 255};
     SDL_BlendMode blend_mode;
 
     // Get renderer info.
