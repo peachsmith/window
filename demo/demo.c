@@ -6,6 +6,7 @@
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
 #include "demo/util/util.h"
+#include "demo/menu/menu.h"
 
 #include <stdio.h>
 
@@ -21,6 +22,11 @@ static void update(eg_app *app)
     if (app->input != NULL)
     {
         app->input->callback(app, app->input->target);
+    }
+
+    if (app->pause)
+    {
+        return;
     }
 
     // Handle collisions.
@@ -47,7 +53,7 @@ static void update(eg_app *app)
 static void draw(eg_app *app)
 {
     // TEMP render some text
-    eg_draw_text(app, "Hello, World!", 2, 2);
+    eg_draw_text(app, "H", 2, 2);
 
     // Render the entities.
     eg_entity *ent = app->entities;
@@ -58,6 +64,12 @@ static void draw(eg_app *app)
             app->registry[ent->type].render(app, ent);
         }
         ent = ent->next;
+    }
+
+    if (app->pause)
+    {
+        const eg_menu *m = app->menus[app->menu_count - 1];
+        m->render(app, m);
     }
 
     // TEMP: draw the camera boundaries.
@@ -77,10 +89,20 @@ int demo_prepare(eg_app *app)
     app->update = update;
     app->draw = draw;
 
+    // Initialize menus.
+    demo_init_pause_menu(app);
+
+    // Alegreya-VariableFont_wght
+    // JetBrainsMonoNL-Regular
     if (!eg_load_font(app, "../Alegreya-VariableFont_wght.ttf", 16))
     {
         fprintf(stderr, "failed to load font\n");
     }
+
+    // if (!eg_load_font(app, "../JetBrainsMonoNL-Regular.ttf", 16))
+    // {
+    //     fprintf(stderr, "failed to load font\n");
+    // }
 
     // Register the entity types.
     player_demo_register(&reg[ENTITY_TYPE_PLAYER]);

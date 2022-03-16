@@ -4,8 +4,28 @@
 
 #include <stdio.h>
 
+void pause_input_callback(eg_app *app, eg_entity *target)
+{
+    if (eg_consume_input(app, EG_KEYCODE_Q))
+    {
+        printf("[DEBUG] resumed\n");
+        app->pause = 0;
+        eg_input_handler *handler = eg_pop_input_handler(app);
+        eg_destroy_input_handler(handler);
+    }
+}
+
 void root_input_callback(eg_app *app, eg_entity *target)
 {
+    if (eg_consume_input(app, EG_KEYCODE_Q))
+    {
+        printf("[DEBUG] paused\n");
+        app->pause = 1;
+        eg_input_handler *handler = eg_create_input_handler(pause_input_callback, NULL);
+        eg_push_input_handler(app, handler);
+        return;
+    }
+
     // left movement
     if (eg_peek_input(app, EG_KEYCODE_LEFT))
     {

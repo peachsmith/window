@@ -84,6 +84,10 @@ typedef struct eg_camera
     int y;
 } eg_camera;
 
+typedef struct eg_menu_item eg_menu_item;
+
+typedef struct eg_menu eg_menu;
+
 /**
  * A function that can get all its required input from an app struct.
  *
@@ -98,6 +102,9 @@ typedef void (*eg_func)(eg_app *);
  *   eg_entity* - an entity that may be affected by the task.
  */
 typedef void (*eg_callback)(eg_app *, eg_entity *);
+
+// TEMP callback specifically for a menu
+typedef void (*eg_menu_callback)(eg_app *, const eg_menu *);
 
 /**
  * The behavior of one entity when it collides with another.
@@ -158,6 +165,12 @@ struct eg_app
 
     eg_func update;
     eg_func draw;
+
+    int pause;
+
+    // menus
+    const eg_menu **menus;
+    int menu_count;
 };
 
 // definition of the eg_input_handler struct
@@ -204,6 +217,22 @@ struct eg_entity_type
     eg_callback render;
     eg_callback update;
     eg_collider collide;
+};
+
+struct eg_menu_item
+{
+    eg_point position;
+    const char *text;
+    eg_callback callback;
+};
+
+struct eg_menu
+{
+    eg_point position;
+    eg_point cursor;
+    eg_menu_item **items;
+    int item_count;
+    eg_menu_callback render;
 };
 
 //----------------------------------------------------------------------------

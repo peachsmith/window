@@ -93,6 +93,10 @@ eg_app *eg_create_app()
     app->screen_width = EG_DEFAULT_SCREEN_WIDTH;
     app->screen_height = EG_DEFAULT_SCREEN_HEIGHT;
 
+    app->pause = 0;
+    app->menus = NULL;
+    app->menu_count = 0;
+
     return app;
 }
 

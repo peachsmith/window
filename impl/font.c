@@ -6,8 +6,12 @@
 
 static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
 {
-    // Get renderer info.
     SDL_RendererInfo ri;
+    SDL_Color white = {.a = 255, .r = 255, .g = 255, .b = 255};
+    SDL_Color clear = {.a = 0, .r = 255, .g = 255, .b = 255};
+    SDL_BlendMode blend_mode;
+
+    // Get renderer info.
     if (SDL_GetRendererInfo(r, &ri))
     {
         fprintf(stderr, "failed to get renderer info %s\n", SDL_GetError());
@@ -24,11 +28,13 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
     printf("[DEBUG] SDL_RENDERER_PRESENTVSYNC: %s\n", (ri.flags & SDL_RENDERER_PRESENTVSYNC) ? "yes" : "no");
     printf("[DEBUG] SDL_RENDERER_TARGETTEXTURE: %s\n", (ri.flags & SDL_RENDERER_TARGETTEXTURE) ? "yes" : "no");
 
+    // Get the current renderer blend mode.
+    SDL_GetRenderDrawBlendMode(r, &blend_mode);
+
     // Default to multi texture mode.
     font->mode = FONT_MODE_MULTI;
 
     // Create a texture for each character.
-    SDL_Color white = {.a = 255, .r = 255, .g = 255, .b = 255};
     for (int i = 32; i < 127 && i < FONT_ATLAS_MAX; i++)
     {
         char c[2]; // string representation of a character
@@ -83,6 +89,7 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
     {
         Uint32 format;
         SDL_Texture *target;
+
         int dest_x = 0;
 
         // Get the format of the first glyph texture.
@@ -104,6 +111,9 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
             fprintf(stderr, "failed to create font atlas texture\n");
             return 0;
         }
+
+        // Set the blend mode for the atlas texture to allow for alpha values.
+        SDL_SetTextureBlendMode(target, SDL_BLENDMODE_BLEND);
 
         // Set the font atlas texture as the current render target.
         if (SDL_SetRenderTarget(r, target))
@@ -130,6 +140,13 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
             dest.w = font->sizes[i].w;
             dest.h = font->sizes[i].h;
 
+            // Set the glyph texture blending mode to none to prevent
+            // loss of quality when copying it into the target texture.
+            // Someone else had the same problem with quality loss when
+            // copying glyph textures into an atlas texture.
+            // Forum post: https://discourse.libsdl.org/t/solved-sdl-ttf-low-quality-glyphs/27089/5
+            SDL_SetTextureBlendMode(font->glyphs[i], SDL_BLENDMODE_NONE);
+
             if (SDL_RenderCopy(r, font->glyphs[i], &src, &dest))
             {
                 fprintf(
@@ -153,8 +170,9 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
             font->glyphs[i] = NULL;
         }
 
-        // Reset the renderer target.
+        // Reset the renderer target and blend mode.
         SDL_SetRenderTarget(r, NULL);
+        SDL_SetRenderDrawBlendMode(r, blend_mode);
     }
 
     font->loaded = 1;
@@ -193,7 +211,6 @@ void eg_impl_draw_text(eg_app *app, const char *msg, int x, int y)
 
     if (!impl->font.loaded)
     {
-        printf("font was not loaded\n");
         return;
     }
 
