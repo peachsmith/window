@@ -7,7 +7,7 @@
 
 void fish_input_callback(eg_app *app, eg_entity *target)
 {
-    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    if (eg_consume_input(app, EG_KEYCODE_X))
     {
         app->menu_count--;
         eg_input_handler *handler = eg_pop_input_handler(app);
@@ -52,7 +52,7 @@ void fish_input_callback(eg_app *app, eg_entity *target)
 
 void pause_input_callback(eg_app *app, eg_entity *target)
 {
-    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    if (eg_consume_input(app, EG_KEYCODE_X))
     {
         printf("[DEBUG] resumed\n");
         app->menu_count--;
