@@ -52,9 +52,6 @@ static void update(eg_app *app)
  */
 static void draw(eg_app *app)
 {
-    // TEMP render some text
-    eg_draw_text(app, "H", 2, 2);
-
     // Render the entities.
     eg_entity *ent = app->entities;
     while (ent != NULL)
@@ -68,12 +65,9 @@ static void draw(eg_app *app)
 
     if (app->pause)
     {
-        const eg_menu *m = app->menus[app->menu_count - 1];
+        eg_menu *m = app->menus[app->menu_count - 1];
         m->render(app, m);
     }
-
-    // TEMP: draw the camera boundaries.
-    // demo_draw_camera(app);
 }
 
 int demo_prepare(eg_app *app)

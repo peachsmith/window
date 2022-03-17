@@ -104,7 +104,7 @@ typedef void (*eg_func)(eg_app *);
 typedef void (*eg_callback)(eg_app *, eg_entity *);
 
 // TEMP callback specifically for a menu
-typedef void (*eg_menu_callback)(eg_app *, const eg_menu *);
+typedef void (*eg_menu_callback)(eg_app *, eg_menu *);
 
 /**
  * The behavior of one entity when it collides with another.
@@ -169,7 +169,7 @@ struct eg_app
     int pause;
 
     // menus
-    const eg_menu **menus;
+    eg_menu **menus;
     int menu_count;
 };
 

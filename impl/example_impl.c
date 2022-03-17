@@ -202,7 +202,7 @@ void eg_impl_clear_screen(eg_app *app)
 
     eg_impl *impl = app->impl;
 
-    SDL_SetRenderDrawColor(impl->renderer, 0, 50, 20, 255);
+    SDL_SetRenderDrawColor(impl->renderer, 0X04, 0X35, 0X8D, 255);
     SDL_RenderClear(impl->renderer);
 }
 
