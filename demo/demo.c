@@ -65,8 +65,11 @@ static void draw(eg_app *app)
 
     if (app->pause)
     {
-        eg_menu *m = app->menus[app->menu_count - 1];
-        m->render(app, m);
+        for (int i = 0; i < app->menu_count; i++)
+        {
+            eg_menu *m = app->menus[i];
+            m->render(app, m);
+        }
     }
 }
 
@@ -84,7 +87,7 @@ int demo_prepare(eg_app *app)
     app->draw = draw;
 
     // Initialize menus.
-    demo_init_pause_menu(app);
+    demo_init_menus(app);
 
     // Alegreya-VariableFont_wght
     // JetBrainsMonoNL-Regular

@@ -1,14 +1,61 @@
 #include "demo/input/input.h"
 #include "demo/entities/player.h"
 #include "demo/entities/entity_types.h"
+#include "demo/menu/menu.h"
 
 #include <stdio.h>
 
+void fish_input_callback(eg_app *app, eg_entity *target)
+{
+    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    {
+        app->menu_count--;
+        eg_input_handler *handler = eg_pop_input_handler(app);
+        eg_destroy_input_handler(handler);
+        return;
+    }
+
+    if (eg_consume_input(app, EG_KEYCODE_UP))
+    {
+        eg_menu *m = app->menus[app->menu_count - 1];
+
+        if (m->cursor.y > 0)
+        {
+            m->cursor.y--;
+        }
+    }
+
+    if (eg_consume_input(app, EG_KEYCODE_DOWN))
+    {
+        eg_menu *m = app->menus[app->menu_count - 1];
+
+        if (m->cursor.y < 1)
+        {
+            m->cursor.y++;
+        }
+    }
+
+    // menu item selection
+    if (eg_consume_input(app, EG_KEYCODE_Z))
+    {
+        eg_menu *m = app->menus[app->menu_count - 1];
+
+        // Determine which menu item has been selected.
+        // Layout:
+        // items[0]
+        // items[1]
+        eg_menu_item *item = m->items[m->cursor.y];
+
+        item->callback(app, NULL);
+    }
+}
+
 void pause_input_callback(eg_app *app, eg_entity *target)
 {
-    if (eg_consume_input(app, EG_KEYCODE_Q))
+    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
     {
         printf("[DEBUG] resumed\n");
+        app->menu_count--;
         app->pause = 0;
         eg_input_handler *handler = eg_pop_input_handler(app);
         eg_destroy_input_handler(handler);
@@ -76,6 +123,9 @@ void root_input_callback(eg_app *app, eg_entity *target)
     if (eg_consume_input(app, EG_KEYCODE_Q))
     {
         printf("[DEBUG] paused\n");
+
+        demo_open_pause_menu(app);
+
         app->pause = 1;
         eg_input_handler *handler = eg_create_input_handler(pause_input_callback, NULL);
         eg_push_input_handler(app, handler);
