@@ -5,6 +5,37 @@
 
 #include <stdio.h>
 
+void demo_dialog_input_callback(eg_app *app, eg_entity *target)
+{
+    eg_dialog *d = app->dialogs[app->dialog_count - 1];
+
+    if (eg_consume_input(app, EG_KEYCODE_Z))
+    {
+        if (d->ticks >= 68)
+        {
+            app->dialog_count--;
+            eg_input_handler *handler = eg_pop_input_handler(app);
+            eg_destroy_input_handler(handler);
+            return;
+        }
+    }
+
+    if (eg_consume_input(app, EG_KEYCODE_X))
+    {
+        if (d->ticks < 68)
+        {
+            d->ticks = 68;
+        }
+        else
+        {
+            app->dialog_count--;
+            eg_input_handler *handler = eg_pop_input_handler(app);
+            eg_destroy_input_handler(handler);
+            return;
+        }
+    }
+}
+
 void fish_input_callback(eg_app *app, eg_entity *target)
 {
     if (eg_consume_input(app, EG_KEYCODE_X))

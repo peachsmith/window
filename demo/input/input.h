@@ -19,4 +19,6 @@ void root_input_callback(eg_app *, eg_entity *);
 
 void fish_input_callback(eg_app *app, eg_entity *target);
 
+void demo_dialog_input_callback(eg_app *app, eg_entity *target);
+
 #endif

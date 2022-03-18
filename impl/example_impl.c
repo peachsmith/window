@@ -21,6 +21,16 @@ int eg_impl_init()
         return 0;
     }
 
+    if (!IMG_Init(IMG_INIT_PNG))
+    {
+        fprintf(stderr,
+                "failed to initialize SDL_image error: %s\n",
+                IMG_GetError());
+        TTF_Quit();
+        SDL_Quit();
+        return 0;
+    }
+
     eg_impl_init_keyboard();
 
     return 1;
@@ -28,6 +38,7 @@ int eg_impl_init()
 
 void eg_impl_term()
 {
+    IMG_Quit();
     TTF_Quit();
     SDL_Quit();
 }
@@ -45,6 +56,15 @@ static void destroy_font_atlas_textures(eg_font *atlas)
     if (atlas->atlas != NULL)
     {
         SDL_DestroyTexture(atlas->atlas);
+    }
+}
+
+static void destroy_images(eg_sprite_sheet *sheet)
+{
+    if (sheet->img != NULL)
+    {
+        SDL_DestroyTexture(sheet->img);
+        sheet->img = NULL;
     }
 }
 
@@ -69,14 +89,18 @@ eg_impl *eg_impl_create(int screen_width, int screen_height)
         impl->font.glyphs[i] = NULL;
     }
 
+    // Zero out image data
+    impl->sprite_sheet.img = NULL;
+
     // Create the window.
+    // NOTE: we use SDL_WINDOW_ALLOW_HIGHDPI on macOS.
     window = SDL_CreateWindow(
         "Example",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         screen_width,
         screen_height,
-        SDL_WINDOW_SHOWN);
+        SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
     if (window == NULL)
     {
         free(impl);
@@ -93,6 +117,22 @@ eg_impl *eg_impl_create(int screen_width, int screen_height)
         SDL_DestroyWindow(window);
         free(impl);
         return NULL;
+    }
+
+    // TEMP: get window and screen info for scaling on mac.
+    int ww, wh;
+    int rw, rh;
+    SDL_GetWindowSize(window, &ww, &wh);
+    SDL_GetRendererOutputSize(renderer, &rw, &rh);
+    printf("[DEBUG] window: (%d x %d), renderer: (%d, %d)\n", ww, wh, rw, rh);
+    if (rw > ww)
+    {
+        int scale_correction_x = rw / ww;
+        int scale_correction_y = rh / wh;
+        printf("[DEBUG] scale correction factor: (%d, %d)\n",
+               scale_correction_x,
+               scale_correction_y);
+        SDL_RenderSetScale(renderer, (float)scale_correction_x, (float)scale_correction_y);
     }
 
     // Get the keyboard state.
@@ -128,6 +168,7 @@ void eg_impl_destroy(eg_impl *impl)
     }
 
     destroy_font_atlas_textures(&(impl->font));
+    destroy_images(&(impl->sprite_sheet));
     SDL_DestroyRenderer(impl->renderer);
     SDL_DestroyWindow(impl->window);
     free(impl);
@@ -202,7 +243,8 @@ void eg_impl_clear_screen(eg_app *app)
 
     eg_impl *impl = app->impl;
 
-    SDL_SetRenderDrawColor(impl->renderer, 0X04, 0X35, 0X8D, 255);
+    // SDL_SetRenderDrawColor(impl->renderer, 0X04, 0X35, 0X8D, 255);
+    SDL_SetRenderDrawColor(impl->renderer, 0, 0, 0, 255);
     SDL_RenderClear(impl->renderer);
 }
 

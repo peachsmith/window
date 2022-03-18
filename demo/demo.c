@@ -7,6 +7,7 @@
 #include "demo/scenes/scenes.h"
 #include "demo/util/util.h"
 #include "demo/menu/menu.h"
+#include "demo/dialog/dialog.h"
 
 #include <stdio.h>
 
@@ -22,6 +23,13 @@ static void update(eg_app *app)
     if (app->input != NULL)
     {
         app->input->callback(app, app->input->target);
+    }
+
+    // Update dialogs.
+    if (app->dialog_count > 0)
+    {
+        eg_dialog *d = app->dialogs[app->dialog_count - 1];
+        d->update(app, d);
     }
 
     if (app->pause)
@@ -70,6 +78,12 @@ static void draw(eg_app *app)
             eg_menu *m = app->menus[i];
             m->render(app, m);
         }
+
+        if (app->dialog_count > 0)
+        {
+            eg_dialog *d = app->dialogs[app->dialog_count - 1];
+            d->render(app, d);
+        }
     }
 }
 
@@ -89,17 +103,30 @@ int demo_prepare(eg_app *app)
     // Initialize menus.
     demo_init_menus(app);
 
+    // Initialize dialogs.
+    demo_init_dialogs(app);
+
     // Alegreya-VariableFont_wght
     // JetBrainsMonoNL-Regular
-    if (!eg_load_font(app, "../Alegreya-VariableFont_wght.ttf", 16))
+    // if (!eg_load_font(app, "Alegreya-VariableFont_wght.ttf", 16))
+    // {
+    //     fprintf(stderr, "failed to load font\n");
+    // }
+
+    // if (!eg_load_font(app, "JetBrainsMonoNL-Regular.ttf", 16))
+    // {
+    //     fprintf(stderr, "failed to load font\n");
+    // }
+
+    if (!eg_load_font(app, "Kenney Pixel.ttf", 16))
     {
         fprintf(stderr, "failed to load font\n");
     }
 
-    // if (!eg_load_font(app, "../JetBrainsMonoNL-Regular.ttf", 16))
-    // {
-    //     fprintf(stderr, "failed to load font\n");
-    // }
+    if (!eg_load_sprite_sheet(app, "UIpackSheet_transparent copy3.png"))
+    {
+        fprintf(stderr, "failed to load image\n");
+    }
 
     // Register the entity types.
     player_demo_register(&reg[ENTITY_TYPE_PLAYER]);

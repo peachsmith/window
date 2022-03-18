@@ -63,3 +63,7 @@ test.exe
 
 # font files
 *.ttf
+
+# PNG image files
+*.png
+

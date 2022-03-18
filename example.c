@@ -20,6 +20,8 @@ int eg_impl_peek_key(eg_app *, int);
 int eg_impl_consume_key(eg_app *, int);
 int eg_impl_load_font(eg_app *, const char *, int);
 void eg_impl_draw_text(eg_app *, const char *, int, int);
+int eg_impl_load_sprite_sheet(eg_app *, const char *);
+void eg_impl_draw_image(eg_app *, eg_rect *, eg_rect *);
 
 //----------------------------------------------------------------------------
 // core functions
@@ -96,6 +98,8 @@ eg_app *eg_create_app()
     app->pause = 0;
     app->menus = NULL;
     app->menu_count = 0;
+    app->dialogs = NULL;
+    app->dialog_count = 0;
 
     return app;
 }
@@ -457,4 +461,17 @@ int eg_load_font(eg_app *app, const char *path, int p)
 void eg_draw_text(eg_app *app, const char *msg, int x, int y)
 {
     eg_impl_draw_text(app, msg, x, y);
+}
+
+//----------------------------------------------------------------------------
+// image functions
+
+int eg_load_sprite_sheet(eg_app *app, const char *path)
+{
+    return eg_impl_load_sprite_sheet(app, path);
+}
+
+void eg_draw_image(eg_app *app, eg_rect *src, eg_rect *dest)
+{
+    return eg_impl_draw_image(app, src, dest);
 }

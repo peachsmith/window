@@ -6,6 +6,7 @@
 // https://www.libsdl.org/
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,6 +18,11 @@
 // multiple textures.
 #define FONT_MODE_SINGLE 0
 #define FONT_MODE_MULTI 1
+
+struct eg_sprite_sheet
+{
+    SDL_Texture *img;
+};
 
 struct eg_font
 {
@@ -37,6 +43,7 @@ struct eg_impl
     Uint64 ticks;
     Uint64 frame_len;
     eg_font font;
+    eg_sprite_sheet sprite_sheet;
 };
 
 //----------------------------------------------------------------------------
@@ -82,8 +89,23 @@ eg_keycode eg_impl_get_eg_keycode(SDL_Scancode sc);
  *   eg_app* - a pointer to an app struct
  *   const char* - the path to the TrueType file
  *   int - point size
+ *
+ * Returns:
+ *   int - 1 on success, or 0 on failure
  */
 int eg_impl_load_font(eg_app *, const char *, int);
+
+/**
+ * Reads a sprite sheet from a PNG file.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   const char* - the path to the PNG file
+ *
+ * Returns:
+ *   int - 1 on success, or 0 on failure
+ */
+int eg_impl_load_sprite_sheet(eg_app *, const char *);
 
 /**
  * Renders a string of text to the screen.
@@ -95,5 +117,8 @@ int eg_impl_load_font(eg_app *, const char *, int);
  *   int - the y position of the text on the screen
  */
 void eg_impl_draw_text(eg_app *, const char *, int, int);
+
+// TEMP: draw part of a sprite sheet
+void eg_impl_draw_image(eg_app *, eg_rect *, eg_rect *);
 
 #endif

@@ -51,6 +51,8 @@ typedef struct eg_entity_type eg_entity_type;
 
 typedef struct eg_font eg_font;
 
+typedef struct eg_sprite_sheet eg_sprite_sheet;
+
 /**
  * A point represents the x and y coordinates in 2D space.
  */
@@ -85,8 +87,8 @@ typedef struct eg_camera
 } eg_camera;
 
 typedef struct eg_menu_item eg_menu_item;
-
 typedef struct eg_menu eg_menu;
+typedef struct eg_dialog eg_dialog;
 
 /**
  * A function that can get all its required input from an app struct.
@@ -105,6 +107,9 @@ typedef void (*eg_callback)(eg_app *, eg_entity *);
 
 // TEMP callback specifically for a menu
 typedef void (*eg_menu_callback)(eg_app *, eg_menu *);
+
+// TEMP callback specifically for a dialog
+typedef void (*eg_dialog_callback)(eg_app *, eg_dialog *);
 
 /**
  * The behavior of one entity when it collides with another.
@@ -171,6 +176,10 @@ struct eg_app
     // menus
     eg_menu **menus;
     int menu_count;
+
+    // dialog
+    eg_dialog **dialogs;
+    int dialog_count;
 };
 
 // definition of the eg_input_handler struct
@@ -233,6 +242,15 @@ struct eg_menu
     eg_menu_item **items;
     int item_count;
     eg_menu_callback render;
+};
+
+struct eg_dialog
+{
+    eg_point position;
+    int ticks;
+    const char *text;
+    eg_dialog_callback render;
+    eg_dialog_callback update;
 };
 
 //----------------------------------------------------------------------------
@@ -528,5 +546,23 @@ int eg_load_font(eg_app *, const char *, int);
  *   int - the y position of the text on the screen
  */
 void eg_draw_text(eg_app *, const char *, int, int);
+
+//----------------------------------------------------------------------------
+// image functions
+
+/**
+ * Loads a sprite sheet from a PNG file.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   const char* - file path of the PNG file
+ *
+ * Returns:
+ *   int - 1 on success or 0 on failure
+ */
+int eg_load_sprite_sheet(eg_app *, const char *);
+
+// TEMP draws part of a sprite sheet or something
+void eg_draw_image(eg_app *, eg_rect *, eg_rect *);
 
 #endif
