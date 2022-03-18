@@ -473,5 +473,5 @@ int eg_load_sprite_sheet(eg_app *app, const char *path)
 
 void eg_draw_image(eg_app *app, eg_rect *src, eg_rect *dest)
 {
-    return eg_impl_draw_image(app, src, dest);
+    eg_impl_draw_image(app, src, dest);
 }
