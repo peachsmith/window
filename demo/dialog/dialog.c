@@ -17,10 +17,6 @@ static void update_demo_dialog(eg_app *app, eg_dialog *dialog);
 
 static void render_demo_dialog(eg_app *app, eg_dialog *dialog)
 {
-    // tile coordinates in the sprite sheet for the cursor
-    int cursor_sheet_x = 5;
-    int cursor_sheet_y = 26;
-
     // Render the menu panel.
     eg_rect rect = {
         .x = dialog->position.x,
