@@ -1,10 +1,13 @@
 #include "demo/dialog/dialog.h"
 #include "demo/input/input.h"
+#include "demo/util/util.h"
 
 #include <stdio.h>
 
 #define MAX_DIALOGS 10
 #define DIALOG_BUFSIZE 256
+
+// The tick limit for a single panel of dialog.
 #define DEMO_DIALOG_TICK_MAX 68
 
 static const char *demo_dialog_text = "This is a dialog.";
@@ -14,19 +17,17 @@ static void update_demo_dialog(eg_app *app, eg_dialog *dialog);
 
 static void render_demo_dialog(eg_app *app, eg_dialog *dialog)
 {
-    eg_rect r = {
+    // tile coordinates in the sprite sheet for the cursor
+    int cursor_sheet_x = 5;
+    int cursor_sheet_y = 26;
+
+    // Render the menu panel.
+    eg_rect rect = {
         .x = dialog->position.x,
         .y = dialog->position.y,
-        .w = 200,
-        .h = 45};
-
-    // background color
-    eg_set_color(app, 0xFF103030);
-    eg_draw_rect(app, &r, 1);
-
-    // border color
-    eg_set_color(app, 0xFFE0E0E0);
-    eg_draw_rect(app, &r, 0);
+        .w = 14,
+        .h = 3};
+    demo_draw_panel(app, &rect);
 
     // Render the text.
     char buffer[DIALOG_BUFSIZE];
@@ -36,18 +37,14 @@ static void render_demo_dialog(eg_app *app, eg_dialog *dialog)
     int i;
     for (i = 0; i < dialog->ticks / 4; i++)
     {
-        if (i < 17 && i < DIALOG_BUFSIZE - 1)
+        if (i < 81 && i < DIALOG_BUFSIZE - 1)
         {
             buffer[i] = demo_dialog_text[i];
         }
     }
 
-    // If characters were added to the buffer, append a string
-    // terminator NUL character.
-    if (i > 0)
-    {
-        buffer[i] = '\0';
-    }
+    // Append a string terminator NUL character.
+    buffer[i] = '\0';
 
     // Render the dialog text.
     eg_draw_text(app,
@@ -73,8 +70,8 @@ void demo_init_dialogs(eg_app *app)
     //----------------------------------
     // BEGIN init demo dialog
 
-    demo_dialog.position.x = 5;
-    demo_dialog.position.y = 110;
+    demo_dialog.position.x = 8;
+    demo_dialog.position.y = 108;
     demo_dialog.render = render_demo_dialog;
     demo_dialog.update = update_demo_dialog;
     demo_dialog.text = demo_dialog_text;

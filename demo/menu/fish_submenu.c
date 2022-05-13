@@ -1,4 +1,5 @@
 #include "demo/menu/menu.h"
+#include "demo/util/util.h"
 
 #include <stdio.h>
 
@@ -30,19 +31,17 @@ static void fish_item_2_callback(eg_app *app, eg_entity *target)
 
 static void render_fish_submenu(eg_app *app, eg_menu *menu)
 {
-    eg_rect r;
-    r.x = menu->position.x;
-    r.y = menu->position.y;
-    r.w = 100;
-    r.h = 80;
+    // tile coordinates in the sprite sheet for the cursor
+    int cursor_sheet_x = 5;
+    int cursor_sheet_y = 26;
 
-    // background color
-    eg_set_color(app, 0xFF103030);
-    eg_draw_rect(app, &r, 1);
-
-    // border color
-    eg_set_color(app, 0xFFE0E0E0);
-    eg_draw_rect(app, &r, 0);
+    // Render the menu panel.
+    eg_rect rect = {
+        .x = menu->position.x,
+        .y = menu->position.y,
+        .w = 5,
+        .h = 4};
+    demo_draw_panel(app, &rect);
 
     // Render menu items.
     for (int i = 0; i < menu->item_count; i++)
@@ -54,12 +53,19 @@ static void render_fish_submenu(eg_app *app, eg_menu *menu)
     }
 
     // Render the cursor.
-    eg_rect cusor_rect = {
-        .x = menu->position.x + 11,
-        .y = menu->position.y + 16 + (menu->cursor.y * 24),
-        .w = 8,
-        .h = 8};
-    eg_draw_rect(app, &cusor_rect, 1);
+    int tile_w = 16;
+    int tile_h = 16;
+    eg_rect cusor_src = {
+        .x = cursor_sheet_x * (tile_w + 2),
+        .y = cursor_sheet_y * (tile_h + 2),
+        .w = tile_w,
+        .h = tile_h};
+    eg_rect cusor_dest = {
+        .x = 107 + (menu->cursor.x * 80),
+        .y = 59 + (menu->cursor.y * 24),
+        .w = tile_w,
+        .h = tile_h};
+    eg_draw_image(app, &cusor_src, &cusor_dest);
 }
 
 void demo_init_fish_submenu(eg_app *app)

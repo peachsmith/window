@@ -213,6 +213,11 @@ void eg_impl_draw_text(eg_app *app, const char *msg, int x, int y)
         return;
     }
 
+    // TODO: implement newlines
+    // TODO: implement glyph dimension logic (for new lines and line breaks)
+    // TODO: separate this function into two functions based on whether we're
+    // rendering each glyph as a separate texture or using a single texture.
+
     // Render text using an individual texture for each glyph.
     if (impl->font.mode == FONT_MODE_MULTI)
     {

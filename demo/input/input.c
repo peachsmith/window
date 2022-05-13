@@ -7,11 +7,14 @@
 
 void demo_dialog_input_callback(eg_app *app, eg_entity *target)
 {
+    // TODO: move this into a better place.
+    int max_ticks = 68;
+
     eg_dialog *d = app->dialogs[app->dialog_count - 1];
 
     if (eg_consume_input(app, EG_KEYCODE_Z))
     {
-        if (d->ticks >= 68)
+        if (d->ticks >= max_ticks)
         {
             app->dialog_count--;
             eg_input_handler *handler = eg_pop_input_handler(app);
@@ -22,9 +25,9 @@ void demo_dialog_input_callback(eg_app *app, eg_entity *target)
 
     if (eg_consume_input(app, EG_KEYCODE_X))
     {
-        if (d->ticks < 68)
+        if (d->ticks < max_ticks)
         {
-            d->ticks = 68;
+            d->ticks = max_ticks;
         }
         else
         {
