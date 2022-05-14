@@ -3,6 +3,6 @@
 
 #include "example.h"
 
-void demo_init_textures(eg_app *);
+int demo_init_textures(eg_app *);
 
 #endif

@@ -103,10 +103,16 @@ int demo_prepare(eg_app *app)
     app->draw = draw;
 
     // Initialize tetxures.
-    demo_init_textures(app);
+    if (!demo_init_textures(app))
+    {
+        return 0;
+    }
 
     // Initialize fonts.
-    demo_init_fonts(app);
+    if (!demo_init_fonts(app))
+    {
+        return 0;
+    }
 
     // Initialize menus.
     demo_init_menus(app);

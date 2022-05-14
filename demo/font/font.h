@@ -3,6 +3,6 @@
 
 #include "example.h"
 
-void demo_init_fonts(eg_app *);
+int demo_init_fonts(eg_app *);
 
 #endif
