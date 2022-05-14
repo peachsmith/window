@@ -108,22 +108,22 @@ int demo_prepare(eg_app *app)
 
     // Alegreya-VariableFont_wght
     // JetBrainsMonoNL-Regular
-    // if (!eg_load_font(app, "Alegreya-VariableFont_wght.ttf", 16))
+    // if (!eg_load_font(app, "assets/fonts/Alegreya-VariableFont_wght.ttf", 16))
     // {
     //     fprintf(stderr, "failed to load font\n");
     // }
 
-    // if (!eg_load_font(app, "JetBrainsMonoNL-Regular.ttf", 16))
+    // if (!eg_load_font(app, "assets/fonts/JetBrainsMonoNL-Regular.ttf", 16))
     // {
     //     fprintf(stderr, "failed to load font\n");
     // }
 
-    if (!eg_load_font(app, "Kenney Pixel.ttf", 16))
+    if (!eg_load_font(app, "assets/fonts/Kenney Pixel.ttf", 16))
     {
         fprintf(stderr, "failed to load font\n");
     }
 
-    if (!eg_load_sprite_sheet(app, "UIpackSheet_transparent copy3.png"))
+    if (!eg_load_sprite_sheet(app, "assets/images/ui.png"))
     {
         fprintf(stderr, "failed to load image\n");
     }
