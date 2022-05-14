@@ -269,10 +269,7 @@ void demo_draw_panel(eg_app *app, eg_rect *rect)
             dest.x = col;
             dest.y = row;
 
-            // Currently, the  eg_draw_image function assumes that we only
-            // have one image loaded.
-            // TODO: implement multiple image loading
-            eg_draw_image(app, &src, &dest);
+            eg_draw_texture(app, app->textures[0], &src, &dest);
         }
     }
 }

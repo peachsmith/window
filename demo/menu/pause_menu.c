@@ -68,6 +68,7 @@ static void render_pause_menu(eg_app *app, eg_menu *menu)
     for (int i = 0; i < menu->item_count; i++)
     {
         eg_draw_text(app,
+                     app->fonts[0],
                      menu->items[i]->text,
                      menu->items[i]->position.x,
                      menu->items[i]->position.y);
@@ -86,7 +87,10 @@ static void render_pause_menu(eg_app *app, eg_menu *menu)
         .y = 22 + (menu->cursor.y * 24),
         .w = tile_w,
         .h = tile_h};
-    eg_draw_image(app, &cusor_src, &cusor_dest);
+    eg_draw_texture(app,
+                    app->textures[0],
+                    &cusor_src,
+                    &cusor_dest);
 }
 
 void demo_init_pause_menu(eg_app *app)

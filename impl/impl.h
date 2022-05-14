@@ -19,7 +19,7 @@
 #define FONT_MODE_SINGLE 0
 #define FONT_MODE_MULTI 1
 
-struct eg_sprite_sheet
+struct eg_texture
 {
     SDL_Texture *img;
 };
@@ -42,8 +42,6 @@ struct eg_impl
     const Uint8 *keystates;
     Uint64 ticks;
     Uint64 frame_len;
-    eg_font font;
-    eg_sprite_sheet sprite_sheet;
 };
 
 //----------------------------------------------------------------------------
@@ -93,7 +91,8 @@ eg_keycode eg_impl_get_eg_keycode(SDL_Scancode sc);
  * Returns:
  *   int - 1 on success, or 0 on failure
  */
-int eg_impl_load_font(eg_app *, const char *, int);
+// int eg_impl_load_font(eg_app *, const char *, int);
+eg_font *eg_impl_load_font(eg_app *, const char *, int);
 
 /**
  * Reads a sprite sheet from a PNG file.
@@ -116,9 +115,19 @@ int eg_impl_load_sprite_sheet(eg_app *, const char *);
  *   int - the x position of the text on the screen
  *   int - the y position of the text on the screen
  */
-void eg_impl_draw_text(eg_app *, const char *, int, int);
+// void eg_impl_draw_text(eg_app *, const char *, int, int);
+void eg_impl_draw_text(eg_app *, eg_font *, const char *, int, int);
 
-// TEMP: draw part of a sprite sheet
-void eg_impl_draw_image(eg_app *, eg_rect *, eg_rect *);
+/**
+ * Renders a portion of a texure to the screen.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_texture* - the texure to render
+ *   eg_rect* - a rectangular region of the texture that will be rendered
+ *   eg_rect* - a rectangular region of the screen to which the texture
+ *              will be rendered
+ */
+void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *);
 
 #endif

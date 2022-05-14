@@ -44,6 +44,7 @@ static void render_demo_dialog(eg_app *app, eg_dialog *dialog)
 
     // Render the dialog text.
     eg_draw_text(app,
+                 app->fonts[0],
                  buffer,
                  dialog->position.x + 5,
                  dialog->position.y + 5);

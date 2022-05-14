@@ -179,10 +179,12 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
     return 1;
 }
 
-int eg_impl_load_font(eg_app *app, const char *path, int p)
+eg_font *eg_impl_load_font(eg_app *app, const char *path, int p)
 {
+    eg_font *font = NULL;
     eg_impl *impl = app->impl;
 
+    // Load the font data from the TrueType file.
     TTF_Font *ttf = TTF_OpenFont(path, p);
     if (ttf == NULL)
     {
@@ -192,23 +194,44 @@ int eg_impl_load_font(eg_app *app, const char *path, int p)
         return 0;
     }
 
-    if (!init_font_atlas(impl->renderer, ttf, &(impl->font)))
+    // Create the font object.
+    font = (eg_font *)malloc(sizeof(eg_font));
+    if (font == NULL)
+    {
+        TTF_CloseFont(ttf);
+        return NULL;
+    }
+
+    // Zero out the font data.
+    font->atlas = NULL;
+    for (int i = 0; i < FONT_ATLAS_MAX; i++)
+    {
+        font->glyphs[i] = NULL;
+    }
+
+    if (!init_font_atlas(impl->renderer, ttf, font))
     {
         fprintf(stderr,
                 "failed to create font atlas\n");
+        free(font);
         TTF_CloseFont(ttf);
-        return 0;
+        return NULL;
     }
 
     TTF_CloseFont(ttf);
-    return 1;
+
+    // Add the font to the application's font list.
+    app->fonts[(app->font_count)++] = font;
+
+    return font;
 }
 
-void eg_impl_draw_text(eg_app *app, const char *msg, int x, int y)
+// void eg_impl_draw_text(eg_app *app, const char *msg, int x, int y)
+void eg_impl_draw_text(eg_app *app, eg_font *font, const char *msg, int x, int y)
 {
     eg_impl *impl = app->impl;
 
-    if (!impl->font.loaded)
+    if (font == NULL || !font->loaded)
     {
         return;
     }
@@ -219,13 +242,13 @@ void eg_impl_draw_text(eg_app *app, const char *msg, int x, int y)
     // rendering each glyph as a separate texture or using a single texture.
 
     // Render text using an individual texture for each glyph.
-    if (impl->font.mode == FONT_MODE_MULTI)
+    if (font->mode == FONT_MODE_MULTI)
     {
         int w;
         int h;
         for (int i = 0; msg[i] != '\0'; i++)
         {
-            SDL_Texture *tex = impl->font.glyphs[(int)msg[i]];
+            SDL_Texture *tex = font->glyphs[(int)msg[i]];
             int q = SDL_QueryTexture(tex, NULL, NULL, &w, &h);
             if (!q)
             {
@@ -237,25 +260,25 @@ void eg_impl_draw_text(eg_app *app, const char *msg, int x, int y)
     }
 
     // Render text using a single texture atlas.
-    if (impl->font.mode == FONT_MODE_SINGLE)
+    if (font->mode == FONT_MODE_SINGLE)
     {
         for (int i = 0; msg[i] != '\0'; i++)
         {
             SDL_Rect src = {
-                .x = impl->font.sizes[(int)msg[i]].x,
+                .x = font->sizes[(int)msg[i]].x,
                 .y = 0,
-                .w = impl->font.sizes[(int)msg[i]].w,
-                .h = impl->font.sizes[(int)msg[i]].h};
+                .w = font->sizes[(int)msg[i]].w,
+                .h = font->sizes[(int)msg[i]].h};
 
             SDL_Rect dest = {
                 .x = x,
                 .y = y,
-                .w = impl->font.sizes[(int)msg[i]].w,
-                .h = impl->font.sizes[(int)msg[i]].h};
+                .w = font->sizes[(int)msg[i]].w,
+                .h = font->sizes[(int)msg[i]].h};
 
-            x += impl->font.sizes[(int)msg[i]].w;
+            x += font->sizes[(int)msg[i]].w;
 
-            SDL_RenderCopy(impl->renderer, impl->font.atlas, &src, &dest);
+            SDL_RenderCopy(impl->renderer, font->atlas, &src, &dest);
         }
     }
 }

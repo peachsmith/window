@@ -8,6 +8,8 @@
 #include "demo/util/util.h"
 #include "demo/menu/menu.h"
 #include "demo/dialog/dialog.h"
+#include "demo/font/font.h"
+#include "demo/texture/texture.h"
 
 #include <stdio.h>
 
@@ -100,33 +102,17 @@ int demo_prepare(eg_app *app)
     app->update = update;
     app->draw = draw;
 
+    // Initialize tetxures.
+    demo_init_textures(app);
+
+    // Initialize fonts.
+    demo_init_fonts(app);
+
     // Initialize menus.
     demo_init_menus(app);
 
     // Initialize dialogs.
     demo_init_dialogs(app);
-
-    // Alegreya-VariableFont_wght
-    // JetBrainsMonoNL-Regular
-    // if (!eg_load_font(app, "assets/fonts/Alegreya-VariableFont_wght.ttf", 16))
-    // {
-    //     fprintf(stderr, "failed to load font\n");
-    // }
-
-    // if (!eg_load_font(app, "assets/fonts/JetBrainsMonoNL-Regular.ttf", 16))
-    // {
-    //     fprintf(stderr, "failed to load font\n");
-    // }
-
-    if (!eg_load_font(app, "assets/fonts/Kenney Pixel.ttf", 16))
-    {
-        fprintf(stderr, "failed to load font\n");
-    }
-
-    if (!eg_load_sprite_sheet(app, "assets/images/ui.png"))
-    {
-        fprintf(stderr, "failed to load image\n");
-    }
 
     // Register the entity types.
     player_demo_register(&reg[ENTITY_TYPE_PLAYER]);

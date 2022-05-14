@@ -49,9 +49,15 @@ typedef struct eg_entity eg_entity;
  */
 typedef struct eg_entity_type eg_entity_type;
 
-typedef struct eg_font eg_font;
+/**
+ * Graphical data that can potentially be rendered to the screen.
+ */
+typedef struct eg_texture eg_texture;
 
-typedef struct eg_sprite_sheet eg_sprite_sheet;
+/**
+ * Font data for rendering text.
+ */
+typedef struct eg_font eg_font;
 
 /**
  * A point represents the x and y coordinates in 2D space.
@@ -142,6 +148,28 @@ struct eg_app
     // gracefully.
     int done;
 
+    // The pause flag prevents the normal update cycle, allowing for using
+    // menus and dialogs.
+    int pause;
+
+    // screen dimensions
+    int screen_width;
+    int screen_height;
+
+    eg_camera cam;
+
+    // TEMP: camera boundaries for debugging
+    // TODO: organize camera struct
+    int cl;
+    int cr;
+    int ct;
+    int cb;
+
+    // The update function initiates the update cycle, wherein each object
+    // that can be updated is advanced to the next stage
+    eg_func update;
+    eg_func draw;
+
     // The input handler stack is a dynamic linked list of input handlers.
     // The input handler on the top of the stack is the only input handler
     // that can perform any action at any given time.
@@ -157,29 +185,21 @@ struct eg_app
     // entities of a given type.
     eg_entity_type *registry;
 
-    eg_camera cam;
-
-    // TEMP: camera boundaries for debugging
-    // TODO: organize camera struct
-    int cl;
-    int cr;
-    int ct;
-    int cb;
-    int screen_width;
-    int screen_height;
-
-    eg_func update;
-    eg_func draw;
-
-    int pause;
-
     // menus
     eg_menu **menus;
     int menu_count;
 
-    // dialog
+    // dialogs
     eg_dialog **dialogs;
     int dialog_count;
+
+    // textures
+    eg_texture **textures;
+    int texture_count;
+
+    // fonts
+    eg_font **fonts;
+    int font_count;
 };
 
 // definition of the eg_input_handler struct
@@ -534,7 +554,8 @@ void eg_toggle_flag(eg_entity *e, int f);
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-int eg_load_font(eg_app *, const char *, int);
+// int eg_load_font(eg_app *, const char *, int);
+eg_font *eg_load_font(eg_app *, const char *, int);
 
 /**
  * Renders a string of text to the screen.
@@ -545,13 +566,13 @@ int eg_load_font(eg_app *, const char *, int);
  *   int - the x position of the text on the screen
  *   int - the y position of the text on the screen
  */
-void eg_draw_text(eg_app *, const char *, int, int);
+void eg_draw_text(eg_app *, eg_font *, const char *, int, int);
 
 //----------------------------------------------------------------------------
-// image functions
+// texture functions
 
 /**
- * Loads a sprite sheet from a PNG file.
+ * Loads a texture from a PNG file.
  *
  * Params:
  *   eg_app* - a pointer to an app struct
@@ -560,9 +581,18 @@ void eg_draw_text(eg_app *, const char *, int, int);
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-int eg_load_sprite_sheet(eg_app *, const char *);
+eg_texture *eg_load_texture(eg_app *, const char *);
 
-// TEMP draws part of a sprite sheet or something
-void eg_draw_image(eg_app *, eg_rect *, eg_rect *);
+/**
+ * Renders a texure to the screen.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_texture* - the texure to render
+ *   eg_rect* - a rectangular region of the texture that will be rendered
+ *   eg_rect* - a rectangular region of the screen to which the texture
+ *              will be rendered
+ */
+void eg_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *);
 
 #endif
