@@ -1,5 +1,6 @@
 #include "demo/util/util.h"
 #include "demo/collision/collision.h"
+#include "demo/texture/texture.h"
 
 #include <stdio.h>
 
@@ -269,7 +270,7 @@ void demo_draw_panel(eg_app *app, eg_rect *rect)
             dest.x = col;
             dest.y = row;
 
-            eg_draw_texture(app, app->textures[0], &src, &dest);
+            eg_draw_texture(app, app->textures[DEMO_TEXTURE_UI], &src, &dest);
         }
     }
 }

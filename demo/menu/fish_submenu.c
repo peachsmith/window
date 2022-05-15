@@ -1,5 +1,7 @@
 #include "demo/menu/menu.h"
 #include "demo/util/util.h"
+#include "demo/texture/texture.h"
+#include "demo/font/font.h"
 
 #include <stdio.h>
 
@@ -47,7 +49,7 @@ static void render_fish_submenu(eg_app *app, eg_menu *menu)
     for (int i = 0; i < menu->item_count; i++)
     {
         eg_draw_text(app,
-                     app->fonts[0],
+                     app->fonts[DEMO_FONT_KENNY_PIXEL],
                      menu->items[i]->text,
                      menu->items[i]->position.x,
                      menu->items[i]->position.y);
@@ -67,9 +69,9 @@ static void render_fish_submenu(eg_app *app, eg_menu *menu)
         .w = tile_w,
         .h = tile_h};
     eg_draw_texture(app,
-                  app->textures[0],
-                  &cusor_src,
-                  &cusor_dest);
+                    app->textures[DEMO_TEXTURE_UI],
+                    &cusor_src,
+                    &cusor_dest);
 }
 
 void demo_init_fish_submenu(eg_app *app)
