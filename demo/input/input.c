@@ -8,7 +8,7 @@
 void demo_dialog_input_callback(eg_app *app, eg_entity *target)
 {
     // TODO: move this into a better place.
-    int max_ticks = 68;
+    int max_ticks = 340; //68;
 
     eg_dialog *d = app->dialogs[app->dialog_count - 1];
 
@@ -239,5 +239,38 @@ void root_input_callback(eg_app *app, eg_entity *target)
         printf("The escape key was pressed. "
                "The application should now terminate.\n");
         app->done = 1;
+    }
+
+    // TEMP for changing sprite sheet coordinates.
+    if (eg_consume_input(app, EG_KEYCODE_A))
+    {
+        if (target->sprite_x > 0)
+        {
+            target->sprite_x--;
+        }
+    }
+
+    if (eg_consume_input(app, EG_KEYCODE_D))
+    {
+        if (target->sprite_x < 19)
+        {
+            target->sprite_x++;
+        }
+    }
+
+    if (eg_consume_input(app, EG_KEYCODE_W))
+    {
+        if (target->sprite_y > 0)
+        {
+            target->sprite_y--;
+        }
+    }
+
+    if (eg_consume_input(app, EG_KEYCODE_S))
+    {
+        if (target->sprite_y < 8)
+        {
+            target->sprite_y++;
+        }
     }
 }

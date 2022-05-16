@@ -20,6 +20,7 @@ int eg_impl_peek_key(eg_app *, int);
 int eg_impl_consume_key(eg_app *, int);
 eg_font *eg_impl_load_font(eg_app *, const char *, int);
 void eg_impl_draw_text(eg_app *, eg_font *, const char *, int, int);
+void eg_impl_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
 eg_texture *eg_impl_load_texture(eg_app *, const char *);
 void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *);
 void eg_impl_destroy_font(eg_font *);
@@ -480,6 +481,11 @@ eg_font *eg_load_font(eg_app *app, const char *path, int p)
 void eg_draw_text(eg_app *app, eg_font *font, const char *msg, int x, int y)
 {
     eg_impl_draw_text(app, font, msg, x, y);
+}
+
+void eg_draw_text_bounded(eg_app *app, eg_font *font, const char *msg, eg_rect *bounds)
+{
+    eg_impl_draw_text_bounded(app, font, msg, bounds);
 }
 
 //----------------------------------------------------------------------------

@@ -1,16 +1,21 @@
 #include "demo/dialog/dialog.h"
 #include "demo/input/input.h"
 #include "demo/util/util.h"
+#include "demo/font/font.h"
 
 #include <stdio.h>
 
 #define MAX_DIALOGS 10
 #define DIALOG_BUFSIZE 256
 
-// The tick limit for a single panel of dialog.
-#define DEMO_DIALOG_TICK_MAX 68
+// Amount of ticks to wait before rendering each new character.
+#define DEMO_DIALOG_SPEED_SCALE 4
 
-static const char *demo_dialog_text = "This is a dialog.";
+// The tick limit for a single panel of dialog.
+// This should be <number of characters> * DEMO_DIALOG_SPEED_SCALE
+#define DEMO_DIALOG_TICK_MAX 340
+
+static const char *demo_dialog_text = "This is a dialog. This is a test of the line break functionality. How long can we go?";
 
 static void render_demo_dialog(eg_app *app, eg_dialog *dialog);
 static void update_demo_dialog(eg_app *app, eg_dialog *dialog);
@@ -31,9 +36,10 @@ static void render_demo_dialog(eg_app *app, eg_dialog *dialog)
 
     // Copy the dialog text into the buffer.
     int i;
-    for (i = 0; i < dialog->ticks / 4; i++)
+    int text_len = 85; // number of characters we're trying to render.
+    for (i = 0; i < dialog->ticks / DEMO_DIALOG_SPEED_SCALE; i++)
     {
-        if (i < 81 && i < DIALOG_BUFSIZE - 1)
+        if (i < text_len && i < DIALOG_BUFSIZE - 1)
         {
             buffer[i] = demo_dialog_text[i];
         }
@@ -43,11 +49,15 @@ static void render_demo_dialog(eg_app *app, eg_dialog *dialog)
     buffer[i] = '\0';
 
     // Render the dialog text.
-    eg_draw_text(app,
-                 app->fonts[0],
-                 buffer,
-                 dialog->position.x + 5,
-                 dialog->position.y + 5);
+    eg_rect bounds = {
+        .x = dialog->position.x + 5,
+        .y = dialog->position.y + 5,
+        .w = 200,
+        .h = 0};
+    eg_draw_text_bounded(app,
+                         app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
+                         buffer,
+                         &bounds);
 }
 
 static void update_demo_dialog(eg_app *app, eg_dialog *dialog)

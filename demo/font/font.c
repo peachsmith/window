@@ -29,5 +29,11 @@ int demo_init_fonts(eg_app *app)
         return 0;
     }
 
+    if (eg_load_font(app, "assets/fonts/pokemon_fire_red.ttf", 16) == NULL)
+    {
+        fprintf(stderr, "failed to load font\n");
+        return 0;
+    }
+
     return 1;
 }

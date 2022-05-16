@@ -236,6 +236,10 @@ struct eg_entity
 
     eg_entity *next;
     eg_entity *previous;
+
+    // TEMP: for debugging sprite sheet
+    int sprite_x;
+    int sprite_y;
 };
 
 struct eg_entity_type
@@ -567,6 +571,25 @@ eg_font *eg_load_font(eg_app *, const char *, int);
  *   int - the y position of the text on the screen
  */
 void eg_draw_text(eg_app *, eg_font *, const char *, int, int);
+
+/**
+ * Renders a string of text to the screen within a specified area.
+ * The fourth argument is an eg_rect structure describing the area that will
+ * contain the text.
+ * The x and y fields of the rect represent the starting position.
+ * The w field of the rect represents the line width. This is the point at
+ * which a line break will occur.
+ * The h field of the rect represents the newline distance. This is the amount
+ * of pixels to move down when writing a newline. If this value is 0, the
+ * default heigh of the character 'A' in the font will be used.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   const char* - the text to render
+ *   int - the x position of the text on the screen
+ *   int - the y position of the text on the screen
+ */
+void eg_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
 
 //----------------------------------------------------------------------------
 // texture functions

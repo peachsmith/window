@@ -1,5 +1,6 @@
 #include "demo/entities/player.h"
 #include "demo/entities/entity_types.h"
+#include "demo/texture/texture.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,13 +8,28 @@
 static void render_player(eg_app *app, eg_entity *player)
 {
     eg_rect r;
-    r.x = player->x_pos;
-    r.y = player->y_pos;
-    r.w = app->registry[player->type].width;
-    r.h = app->registry[player->type].height;
+    r.x = player->x_pos - 5;
+    r.y = player->y_pos - 5;
+    r.w = app->registry[player->type].width + 5;
+    r.h = app->registry[player->type].height + 5;
 
-    eg_set_color(app, EG_COLOR_ORANGE);
-    eg_draw_rect(app, &r, 0);
+    int tile_w = 18; // 24;
+    int tile_h = 18; // 24;
+    int tile_x = player->sprite_x;
+    int tile_y = player->sprite_y;
+
+    eg_set_color(app, EG_COLOR_LIGHT_GRAY);
+    eg_draw_rect(app, &r, 1);
+
+    eg_rect src = {.x = tile_x * tile_w, .y = tile_y * tile_h, .w = tile_w, .h = tile_h};
+    eg_rect dest = {.x = player->x_pos, .y = player->y_pos, .w = tile_w, .h = tile_h};
+
+    // render sprite
+    eg_draw_texture(app, app->textures[DEMO_TEXTURE_SCENERY], &src, &dest);
+
+    // render hit box
+    // eg_set_color(app, EG_COLOR_ORANGE);
+    // eg_draw_rect(app, &r, 0);
 }
 
 static void update_player(eg_app *app, eg_entity *player)
@@ -139,6 +155,8 @@ eg_entity *player_demo_create(int x, int y)
     player->type = ENTITY_TYPE_PLAYER;
     player->x_pos = x;
     player->y_pos = y;
+    player->sprite_x = 0;
+    player->sprite_y = 0;
 
     return player;
 }

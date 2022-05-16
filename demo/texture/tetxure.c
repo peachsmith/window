@@ -19,5 +19,17 @@ int demo_init_textures(eg_app *app)
         return 0;
     }
 
+    if (eg_load_texture(app, "assets/images/characters.png") == NULL)
+    {
+        fprintf(stderr, "failed to load image\n");
+        return 0;
+    }
+
+    if (eg_load_texture(app, "assets/images/scenery.png") == NULL)
+    {
+        fprintf(stderr, "failed to load image\n");
+        return 0;
+    }
+
     return 1;
 }

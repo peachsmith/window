@@ -70,7 +70,7 @@ static void render_pause_menu(eg_app *app, eg_menu *menu)
     for (int i = 0; i < menu->item_count; i++)
     {
         eg_draw_text(app,
-                     app->fonts[DEMO_FONT_KENNY_PIXEL],
+                     app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
                      menu->items[i]->text,
                      menu->items[i]->position.x,
                      menu->items[i]->position.y);
