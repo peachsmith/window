@@ -22,9 +22,10 @@
 static void update(eg_app *app)
 {
     // Handle input.
-    if (app->input != NULL)
+    if (app->input != NULL && app->input_count > 0)
     {
-        app->input->callback(app, app->input->target);
+        // app->input->callback(app, app->input->target);
+        app->input[app->input_count - 1](app);
     }
 
     // Update dialogs.
@@ -119,6 +120,9 @@ int demo_prepare(eg_app *app)
 
     // Initialize dialogs.
     demo_init_dialogs(app);
+
+    // Initialize input.
+    demo_init_input(app);
 
     // Register the entity types.
     player_demo_register(&reg[ENTITY_TYPE_PLAYER]);

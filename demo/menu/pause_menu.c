@@ -11,11 +11,11 @@
 static eg_menu pause_menu;
 
 // pause menu item callbacks
-static void pause_item_1_callback(eg_app *app, eg_entity *target);
-static void pause_item_2_callback(eg_app *app, eg_entity *target);
-static void pause_item_3_callback(eg_app *app, eg_entity *target);
-static void pause_item_4_callback(eg_app *app, eg_entity *target);
-static void render_pause_menu(eg_app *app, eg_menu *menu);
+static void pause_item_1_callback(eg_app *, eg_menu *);
+static void pause_item_2_callback(eg_app *, eg_menu *);
+static void pause_item_3_callback(eg_app *, eg_menu *);
+static void pause_item_4_callback(eg_app *, eg_menu *);
+static void render_pause_menu(eg_app *, eg_menu *);
 
 // pause menu item text
 static const char *item_1_text = "Info";
@@ -30,24 +30,23 @@ static eg_menu_item pause_item_3;
 static eg_menu_item pause_item_4;
 static eg_menu_item *pause_items[4];
 
-static void pause_item_1_callback(eg_app *app, eg_entity *target)
+static void pause_item_1_callback(eg_app *app, eg_menu *menu)
 {
-    printf("[DEBUG] this is the callback for pause menu item 1\n");
+    demo_open_info_dialog(app);
 }
 
-static void pause_item_2_callback(eg_app *app, eg_entity *target)
+static void pause_item_2_callback(eg_app *app, eg_menu *menu)
 {
     app->done = 1;
 }
 
-static void pause_item_3_callback(eg_app *app, eg_entity *target)
+static void pause_item_3_callback(eg_app *app, eg_menu *menu)
 {
-    eg_input_handler *handler = eg_create_input_handler(fish_input_callback, NULL);
-    eg_push_input_handler(app, handler);
-    demo_open_fish_submenu(app);
+    eg_push_input_handler(app, fish_input_handler);
+    demo_open_fish_menu(app);
 }
 
-static void pause_item_4_callback(eg_app *app, eg_entity *target)
+static void pause_item_4_callback(eg_app *app, eg_menu *menu)
 {
     demo_open_demo_dialog(app);
 }

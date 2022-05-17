@@ -62,16 +62,27 @@ eg_app *eg_create_app()
 
     // Ensure that all pointers are NULL or have a default value.
     app->impl = NULL;
-    app->entities = NULL;
-    app->input = NULL;
+
     app->update = default_update;
     app->draw = default_draw;
+
+    app->entities = NULL;
+
+    // TEMP: remove this once searchable entities are implemented.
+    app->player = NULL;
+
+    app->input = NULL;
+    app->input_count = 0;
+
     app->fonts = NULL;
     app->font_count = 0;
+
     app->textures = NULL;
     app->texture_count = 0;
+
     app->menus = NULL;
     app->menu_count = 0;
+
     app->dialogs = NULL;
     app->dialog_count = 0;
 
@@ -118,13 +129,15 @@ void eg_destroy_app(eg_app *app)
         app->entities = next;
     }
 
+    // TODO: remove this, since its just a static array
+    // of function pointers.
     // Destroy the input handlers.
-    while (app->input != NULL)
-    {
-        eg_input_handler *previous = app->input->previous;
-        eg_destroy_input_handler(app->input);
-        app->input = previous;
-    }
+    // while (app->input != NULL)
+    // {
+    //     eg_input_handler *previous = app->input->previous;
+    //     eg_destroy_input_handler(app->input);
+    //     app->input = previous;
+    // }
 
     // Destroy the fonts.
     for (int i = 0; i < app->font_count; i++)
@@ -213,43 +226,26 @@ void eg_destroy_input_handler(eg_input_handler *handler)
     free(handler);
 }
 
-void eg_push_input_handler(eg_app *app, eg_input_handler *handler)
+// void eg_push_input_handler(eg_app *app, eg_input_handler *handler)
+void eg_push_input_handler(eg_app *app, eg_callback handler)
 {
-    if (app == NULL || handler == NULL)
+    if (app == NULL || app->input == NULL || handler == NULL)
     {
         return;
     }
 
-    // If the stack is empty, then the handler becomes the top of the stack.
-    if (app->input == NULL)
-    {
-        app->input = handler;
-        return;
-    }
-
-    // Save the reference to the current handler in the new handler.
-    handler->previous = app->input;
-
-    // Set the application's current input handler to be the new handler.
-    app->input = handler;
+    app->input[app->input_count++] = handler;
 }
 
-eg_input_handler *eg_pop_input_handler(eg_app *app)
+void eg_pop_input_handler(eg_app *app)
 {
     // If the stack is empty, then return without doing anything.
     if (app == NULL || app->input == NULL)
     {
-        return NULL;
+        return;
     }
 
-    // Get the top of the input handler stack.
-    // This will be returned so that it can be saved or destroyed.
-    eg_input_handler *current = app->input;
-
-    // The previous input handler now becomes the current input handler.
-    app->input = app->input->previous;
-
-    return current;
+    app->input_count--;
 }
 
 //----------------------------------------------------------------------------

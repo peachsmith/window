@@ -5,6 +5,10 @@
 
 #include "example.h"
 
+#define MAX_INPUT_HANDLERS 20
+
+void demo_init_input(eg_app *);
+
 /**
  * The root input handler callback.
  * This is the default input handler for the application. It should be the
@@ -15,10 +19,9 @@
  * Params:
  *   eg_app* - a pointer to an app struct
  */
-void root_input_callback(eg_app *, eg_entity *);
-
-void fish_input_callback(eg_app *app, eg_entity *target);
-
-void demo_dialog_input_callback(eg_app *app, eg_entity *target);
+void root_input_handler(eg_app *);
+void fish_input_handler(eg_app *);
+void pause_input_handler(eg_app *);
+void demo_dialog_input_handler(eg_app *);
 
 #endif

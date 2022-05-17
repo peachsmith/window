@@ -3,6 +3,8 @@
 #include "demo/entities/block.h"
 #include "demo/entities/player.h"
 
+#include <stdio.h>
+
 /**
  * Create a basic map.
  * Given 18 blocks b0, b1, ..., b17, the layout should look like this:
@@ -34,8 +36,8 @@
 void load_scene_0(eg_app *app)
 {
     eg_entity *player;
-    eg_callback root_callback;
-    eg_input_handler *root_handler;
+    // eg_callback root_callback;
+    // eg_input_handler *root_handler;
 
     // Starting position for building a sequence of blocks.
     int x_start = 10;
@@ -68,6 +70,9 @@ void load_scene_0(eg_app *app)
     // Create the player entity and add it to the app.
     player = player_demo_create(80, 10);
     eg_add_entity(app, player);
+
+    // TEMP: remove this once searchable entities are implemented.
+    app->player = player;
 
     // // Add the rest of the horizontal row.
     eg_add_entity(app, block_demo_create(x_start - 21 + 72, 92));
@@ -106,7 +111,8 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create_sloped(450, y_start + 32, 1));
 
     // Create the initial input handler and add it to the app.
-    root_callback = root_input_callback;
-    root_handler = eg_create_input_handler(root_callback, player);
-    eg_push_input_handler(app, root_handler);
+    // root_callback = root_input_callback;
+    // root_handler = eg_create_input_handler(root_callback, player);
+    // eg_push_input_handler(app, root_handler);
+    eg_push_input_handler(app, root_input_handler);
 }

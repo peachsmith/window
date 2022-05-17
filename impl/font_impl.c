@@ -271,10 +271,7 @@ static void impl_draw_text_single(
 {
     eg_impl *impl = app->impl;
 
-    // TEMP text line length
-    // int line_length = 200;
     int orig_x = x;
-    int orig_y = y;
 
     for (int i = 0; msg[i] != '\0'; i++)
     {
@@ -298,7 +295,7 @@ static void impl_draw_text_single(
             // If the line height is 0, default to the line height of the
             // 'A' character.
             int dy = line_height > 0 ? line_height
-                                     : font->sizes[(int)msg[65]].h;
+                                     : font->sizes[(int)'A'].h;
             y += dy;
         }
 

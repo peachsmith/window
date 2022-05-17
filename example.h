@@ -103,18 +103,38 @@ typedef struct eg_dialog eg_dialog;
 typedef void (*eg_func)(eg_app *);
 
 /**
- * Performs some task.
+ * A callback function.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ */
+typedef void (*eg_callback)(eg_app *);
+
+/**
+ * Performs a task using a specific entity.
  *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   eg_entity* - an entity that may be affected by the task.
  */
-typedef void (*eg_callback)(eg_app *, eg_entity *);
+typedef void (*eg_entity_callback)(eg_app *, eg_entity *);
 
-// TEMP callback specifically for a menu
+/**
+ * A callback function for a menu or menu item.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_entity* - a menu
+ */
 typedef void (*eg_menu_callback)(eg_app *, eg_menu *);
 
-// TEMP callback specifically for a dialog
+/**
+ * A callback function for a dialog.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_entity* - a dialog
+ */
 typedef void (*eg_dialog_callback)(eg_app *, eg_dialog *);
 
 /**
@@ -170,10 +190,25 @@ struct eg_app
     eg_func update;
     eg_func draw;
 
-    // The input handler stack is a dynamic linked list of input handlers.
-    // The input handler on the top of the stack is the only input handler
-    // that can perform any action at any given time.
-    eg_input_handler *input;
+    // textures
+    eg_texture **textures;
+    int texture_count;
+
+    // fonts
+    eg_font **fonts;
+    int font_count;
+
+    // menus
+    eg_menu **menus;
+    int menu_count;
+
+    // dialogs
+    eg_dialog **dialogs;
+    int dialog_count;
+
+    // input handlers
+    eg_callback *input;
+    int input_count;
 
     // A linked list of entities.
     // Entities are updated and rendered in the opposite order from which they
@@ -185,21 +220,9 @@ struct eg_app
     // entities of a given type.
     eg_entity_type *registry;
 
-    // menus
-    eg_menu **menus;
-    int menu_count;
-
-    // dialogs
-    eg_dialog **dialogs;
-    int dialog_count;
-
-    // textures
-    eg_texture **textures;
-    int texture_count;
-
-    // fonts
-    eg_font **fonts;
-    int font_count;
+    // TEMP: a handle to the player entity.
+    // TODO: implement searchable entities.
+    eg_entity *player;
 };
 
 // definition of the eg_input_handler struct
@@ -247,8 +270,8 @@ struct eg_entity_type
     int id;
     int width;
     int height;
-    eg_callback render;
-    eg_callback update;
+    eg_entity_callback render;
+    eg_entity_callback update;
     eg_collider collide;
 };
 
@@ -256,7 +279,7 @@ struct eg_menu_item
 {
     eg_point position;
     const char *text;
-    eg_callback callback;
+    eg_menu_callback callback;
 };
 
 struct eg_menu
@@ -271,10 +294,18 @@ struct eg_menu
 struct eg_dialog
 {
     eg_point position;
+    int speed_scale;
+    int panel;
+
     int ticks;
+    int tick_limit;
+
     const char *text;
+    int text_len;
+
     eg_dialog_callback render;
     eg_dialog_callback update;
+    eg_dialog_callback advance;
 };
 
 //----------------------------------------------------------------------------
@@ -427,7 +458,8 @@ void eg_destroy_input_handler(eg_input_handler *);
  *   eg_app* - a pointer to an app struct
  *   eg_input_handler* - a pointer to an input handler.
  */
-void eg_push_input_handler(eg_app *, eg_input_handler *);
+// void eg_push_input_handler(eg_app *, eg_input_handler *);
+void eg_push_input_handler(eg_app *, eg_callback);
 
 /**
  * Pops an input handler off the top of the input handler stack.
@@ -437,11 +469,8 @@ void eg_push_input_handler(eg_app *, eg_input_handler *);
  *
  * Params:
  *   eg_app* - a pointer to an app struct
- *
- * Returns:
- *   eg_input_handler* - the handler that was removed from the stack
  */
-eg_input_handler *eg_pop_input_handler(eg_app *);
+void eg_pop_input_handler(eg_app *);
 
 //----------------------------------------------------------------------------
 // entity functions

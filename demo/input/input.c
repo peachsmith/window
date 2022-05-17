@@ -5,47 +5,47 @@
 
 #include <stdio.h>
 
-void demo_dialog_input_callback(eg_app *app, eg_entity *target)
-{
-    // TODO: move this into a better place.
-    int max_ticks = 340; //68;
+static eg_callback input_handlers[20];
 
+void demo_init_input(eg_app *app)
+{
+    app->input = &(input_handlers[0]);
+}
+
+void demo_dialog_input_handler(eg_app *app)
+{
     eg_dialog *d = app->dialogs[app->dialog_count - 1];
 
     if (eg_consume_input(app, EG_KEYCODE_Z))
     {
-        if (d->ticks >= max_ticks)
+        if (d->ticks >= d->tick_limit)
         {
-            app->dialog_count--;
-            eg_input_handler *handler = eg_pop_input_handler(app);
-            eg_destroy_input_handler(handler);
+            d->advance(app, d);
             return;
         }
     }
 
     if (eg_consume_input(app, EG_KEYCODE_X))
     {
-        if (d->ticks < max_ticks)
+        if (d->ticks < d->tick_limit)
         {
-            d->ticks = max_ticks;
+            d->ticks = d->tick_limit;
         }
         else
         {
             app->dialog_count--;
-            eg_input_handler *handler = eg_pop_input_handler(app);
-            eg_destroy_input_handler(handler);
+            eg_pop_input_handler(app);
             return;
         }
     }
 }
 
-void fish_input_callback(eg_app *app, eg_entity *target)
+void fish_input_handler(eg_app *app)
 {
     if (eg_consume_input(app, EG_KEYCODE_X))
     {
         app->menu_count--;
-        eg_input_handler *handler = eg_pop_input_handler(app);
-        eg_destroy_input_handler(handler);
+        eg_pop_input_handler(app);
         return;
     }
 
@@ -80,19 +80,18 @@ void fish_input_callback(eg_app *app, eg_entity *target)
         // items[1]
         eg_menu_item *item = m->items[m->cursor.y];
 
-        item->callback(app, NULL);
+        item->callback(app, m);
     }
 }
 
-void pause_input_callback(eg_app *app, eg_entity *target)
+void pause_input_handler(eg_app *app)
 {
     if (eg_consume_input(app, EG_KEYCODE_X))
     {
         printf("[DEBUG] resumed\n");
         app->menu_count--;
         app->pause = 0;
-        eg_input_handler *handler = eg_pop_input_handler(app);
-        eg_destroy_input_handler(handler);
+        eg_pop_input_handler(app);
         return;
     }
 
@@ -152,8 +151,10 @@ void pause_input_callback(eg_app *app, eg_entity *target)
     }
 }
 
-void root_input_callback(eg_app *app, eg_entity *target)
+void root_input_handler(eg_app *app)
 {
+
+    // Pause the application.
     if (eg_consume_input(app, EG_KEYCODE_Q))
     {
         printf("[DEBUG] paused\n");
@@ -161,10 +162,33 @@ void root_input_callback(eg_app *app, eg_entity *target)
         demo_open_pause_menu(app);
 
         app->pause = 1;
-        eg_input_handler *handler = eg_create_input_handler(pause_input_callback, NULL);
-        eg_push_input_handler(app, handler);
+        // eg_input_handler *handler = eg_create_input_handler(pause_input_callback, NULL);
+        // eg_push_input_handler(app, handler);
+        eg_push_input_handler(app, pause_input_handler);
         return;
     }
+
+    // Print some empty space for debugging.
+    if (eg_consume_input(app, EG_KEYCODE_M))
+    {
+        puts("");
+    }
+
+    // If the escape key is pressed, terminate the application.
+    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    {
+        printf("The escape key was pressed. "
+               "The application should now terminate.\n");
+        app->done = 1;
+    }
+
+    //-------------------------------------------------
+    // BEGIN player controls
+
+    // TODO: remove or replace this once searchable entities have been implemented.
+    eg_entity *target = app->player;
+
+    // TODO: implement a way to locate target entities during input handling.
 
     // left movement
     if (eg_peek_input(app, EG_KEYCODE_LEFT))
@@ -182,12 +206,6 @@ void root_input_callback(eg_app *app, eg_entity *target)
         {
             target->x_vel += 2;
         }
-    }
-
-    // Print some empty space for debugging.
-    if (eg_consume_input(app, EG_KEYCODE_M))
-    {
-        puts("");
     }
 
     // down arrow key
@@ -233,44 +251,29 @@ void root_input_callback(eg_app *app, eg_entity *target)
         app->cam.y = 0;
     }
 
-    // If the escape key is pressed, terminate the application.
-    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    // TEMP
+    // The following W, A, S, D controls are used for debugging
+    // sprite sheets.
+    if (eg_consume_input(app, EG_KEYCODE_A) && target->sprite_x > 0)
     {
-        printf("The escape key was pressed. "
-               "The application should now terminate.\n");
-        app->done = 1;
+        target->sprite_x--;
     }
 
-    // TEMP for changing sprite sheet coordinates.
-    if (eg_consume_input(app, EG_KEYCODE_A))
+    if (eg_consume_input(app, EG_KEYCODE_D) && target->sprite_x < 19)
     {
-        if (target->sprite_x > 0)
-        {
-            target->sprite_x--;
-        }
+        target->sprite_x++;
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_D))
+    if (eg_consume_input(app, EG_KEYCODE_W) && target->sprite_y > 0)
     {
-        if (target->sprite_x < 19)
-        {
-            target->sprite_x++;
-        }
+        target->sprite_y--;
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_W))
+    if (eg_consume_input(app, EG_KEYCODE_S) && target->sprite_y < 8)
     {
-        if (target->sprite_y > 0)
-        {
-            target->sprite_y--;
-        }
+        target->sprite_y++;
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_S))
-    {
-        if (target->sprite_y < 8)
-        {
-            target->sprite_y++;
-        }
-    }
+    // END player controls
+    //-------------------------------------------------
 }
