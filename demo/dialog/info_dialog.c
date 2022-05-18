@@ -45,6 +45,7 @@ void demo_open_info_dialog(eg_app *app)
     info_dialog.text_len = 44;
     info_dialog.ticks = 0;
     info_dialog.tick_limit = info_dialog.text_len * info_dialog.speed_scale;
+    info_dialog.result = 0;
 
     app->dialogs[app->dialog_count++] = &info_dialog;
 }
@@ -61,6 +62,8 @@ static void advance_info_dialog(eg_app *app, eg_dialog *dialog)
 {
     if (dialog->panel >= 1)
     {
+        printf("info result: %d\n", dialog->result);
+
         // Close the dialog.
         app->dialog_count--;
         eg_pop_input_handler(app);

@@ -24,12 +24,28 @@ static eg_menu_item *info_items[2];
 
 static void info_item_1_callback(eg_app *app, eg_menu *menu)
 {
-    printf("[DEBUG] TODO: implement callbacks that can pass data between menus and dialogs\n");
+    app->menu_count--;
+    eg_pop_input_handler(app);
+
+    if (app->dialog_count > 0)
+    {
+        eg_dialog *d = app->dialogs[app->dialog_count - 1];
+        d->result = 1;
+        d->advance(app, d);
+    }
 }
 
 static void info_item_2_callback(eg_app *app, eg_menu *menu)
 {
-    printf("[DEBUG] This software was written using SDL2.\n");
+    app->menu_count--;
+    eg_pop_input_handler(app);
+
+    if (app->dialog_count > 0)
+    {
+        eg_dialog *d = app->dialogs[app->dialog_count - 1];
+        d->result = 2;
+        d->advance(app, d);
+    }
 }
 
 static void render_info_menu(eg_app *app, eg_menu *menu)

@@ -289,6 +289,9 @@ struct eg_menu
     eg_menu_item **items;
     int item_count;
     eg_menu_callback render;
+
+    // for passing values between menus and dialogs.
+    int result;
 };
 
 struct eg_dialog
@@ -306,6 +309,9 @@ struct eg_dialog
     eg_dialog_callback render;
     eg_dialog_callback update;
     eg_dialog_callback advance;
+
+    // for passing values between menus and dialogs.
+    int result;
 };
 
 //----------------------------------------------------------------------------
