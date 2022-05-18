@@ -67,8 +67,9 @@ static void advance_info_dialog(eg_app *app, eg_dialog *dialog)
         return;
     }
 
-    eg_push_input_handler(app, fish_input_handler);
+    eg_push_input_handler(app, info_input_handler);
     demo_open_info_menu(app);
+    dialog->panel++;
 
     // dialog->text = info_dialog_panel_2;
     // dialog->text_len = 29;

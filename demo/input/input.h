@@ -21,6 +21,7 @@ void demo_init_input(eg_app *);
  */
 void root_input_handler(eg_app *);
 void fish_input_handler(eg_app *);
+void info_input_handler(eg_app *);
 void pause_input_handler(eg_app *);
 void demo_dialog_input_handler(eg_app *);
 
