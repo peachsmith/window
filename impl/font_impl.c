@@ -299,7 +299,17 @@ static void impl_draw_text_single(
             y += dy;
         }
 
-        SDL_RenderCopy(impl->renderer, font->atlas, &src, &dest);
+        if (msg[i] == '\n')
+        {
+            x = orig_x;
+            int dy = line_height > 0 ? line_height
+                                     : font->sizes[(int)'A'].h;
+            y += dy;
+        }
+        else
+        {
+            SDL_RenderCopy(impl->renderer, font->atlas, &src, &dest);
+        }
     }
 }
 

@@ -42,7 +42,7 @@ static void pause_item_2_callback(eg_app *app, eg_menu *menu)
 
 static void pause_item_3_callback(eg_app *app, eg_menu *menu)
 {
-    eg_push_input_handler(app, fish_input_handler);
+    // eg_push_input_handler(app, fish_menu_input_handler);
     demo_open_fish_menu(app);
 }
 
@@ -144,5 +144,10 @@ void demo_init_pause_menu(eg_app *app)
 
 void demo_open_pause_menu(eg_app *app)
 {
+    eg_push_input_handler(app, pause_menu_input_handler);
+
+    pause_menu.cursor.x = 0;
+    pause_menu.cursor.y = 0;
+
     app->menus[(app->menu_count)++] = &pause_menu;
 }

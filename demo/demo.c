@@ -24,7 +24,6 @@ static void update(eg_app *app)
     // Handle input.
     if (app->input != NULL && app->input_count > 0)
     {
-        // app->input->callback(app, app->input->target);
         app->input[app->input_count - 1](app);
     }
 

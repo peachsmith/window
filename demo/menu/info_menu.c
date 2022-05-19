@@ -2,6 +2,7 @@
 #include "demo/util/util.h"
 #include "demo/texture/texture.h"
 #include "demo/font/font.h"
+#include "demo/input/input.h"
 
 #include <stdio.h>
 
@@ -81,8 +82,8 @@ static void render_info_menu(eg_app *app, eg_menu *menu)
         .w = tile_w,
         .h = tile_h};
     eg_rect cusor_dest = {
-        .x = 107 + (menu->cursor.x * 80),
-        .y = 59 + (menu->cursor.y * 24),
+        .x = 127 + (menu->cursor.x * 80),
+        .y = 52 + (menu->cursor.y * 24),
         .w = tile_w,
         .h = tile_h};
     eg_draw_texture(app,
@@ -98,8 +99,8 @@ void demo_init_info_menu(eg_app *app)
     info_menu.cursor.y = 0;
 
     // Initialize menu position.
-    info_menu.position.x = 100;
-    info_menu.position.y = 50;
+    info_menu.position.x = 120;
+    info_menu.position.y = 42;
 
     // Initialize menu items.
 
@@ -127,5 +128,10 @@ void demo_init_info_menu(eg_app *app)
 
 void demo_open_info_menu(eg_app *app)
 {
+    eg_push_input_handler(app, info_menu_input_handler);
+
+    info_menu.cursor.x = 0;
+    info_menu.cursor.y = 0;
+
     app->menus[(app->menu_count)++] = &info_menu;
 }

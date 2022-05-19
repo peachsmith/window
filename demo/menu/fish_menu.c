@@ -2,6 +2,7 @@
 #include "demo/util/util.h"
 #include "demo/texture/texture.h"
 #include "demo/font/font.h"
+#include "demo/input/input.h"
 
 #include <stdio.h>
 
@@ -111,5 +112,10 @@ void demo_init_fish_menu(eg_app *app)
 
 void demo_open_fish_menu(eg_app *app)
 {
+    eg_push_input_handler(app, fish_menu_input_handler);
+
+    fish_menu.cursor.x = 0;
+    fish_menu.cursor.y = 0;
+
     app->menus[(app->menu_count)++] = &fish_menu;
 }

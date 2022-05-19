@@ -7,7 +7,7 @@
 // defined in example_impl.c.
 int eg_impl_init();
 void eg_impl_term();
-eg_impl *eg_impl_create(int, int);
+eg_impl *eg_impl_create(int, int, int);
 void eg_impl_destroy(eg_impl *);
 void eg_impl_process_events(eg_app *);
 int eg_impl_delay(eg_app *);
@@ -63,6 +63,8 @@ eg_app *eg_create_app()
     // Ensure that all pointers are NULL or have a default value.
     app->impl = NULL;
 
+    app->scale = 1;
+
     app->update = default_update;
     app->draw = default_draw;
 
@@ -97,7 +99,8 @@ eg_app *eg_create_app()
     // Create the implementation struct.
     app->impl = eg_impl_create(
         EG_DEFAULT_SCREEN_WIDTH,
-        EG_DEFAULT_SCREEN_HEIGHT);
+        EG_DEFAULT_SCREEN_HEIGHT,
+        app->scale);
     if (app->impl == NULL)
     {
         free(app);

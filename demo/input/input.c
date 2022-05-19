@@ -33,14 +33,12 @@ void demo_dialog_input_handler(eg_app *app)
         }
         else
         {
-            // app->dialog_count--;
-            // eg_pop_input_handler(app);
             d->advance(app, d);
         }
     }
 }
 
-void fish_input_handler(eg_app *app)
+void fish_menu_input_handler(eg_app *app)
 {
     if (eg_consume_input(app, EG_KEYCODE_X))
     {
@@ -84,12 +82,20 @@ void fish_input_handler(eg_app *app)
     }
 }
 
-void info_input_handler(eg_app *app)
+void info_menu_input_handler(eg_app *app)
 {
     if (eg_consume_input(app, EG_KEYCODE_X))
     {
         app->menu_count--;
         eg_pop_input_handler(app);
+
+        if (app->dialog_count > 0)
+        {
+            eg_dialog *d = app->dialogs[app->dialog_count - 1];
+            d->result = 0;
+            d->advance(app, d);
+        }
+
         return;
     }
 
@@ -128,7 +134,7 @@ void info_input_handler(eg_app *app)
     }
 }
 
-void pause_input_handler(eg_app *app)
+void pause_menu_input_handler(eg_app *app)
 {
     if (eg_consume_input(app, EG_KEYCODE_X))
     {
@@ -206,9 +212,7 @@ void root_input_handler(eg_app *app)
         demo_open_pause_menu(app);
 
         app->pause = 1;
-        // eg_input_handler *handler = eg_create_input_handler(pause_input_callback, NULL);
-        // eg_push_input_handler(app, handler);
-        eg_push_input_handler(app, pause_input_handler);
+        // eg_push_input_handler(app, pause_menu_input_handler);
         return;
     }
 

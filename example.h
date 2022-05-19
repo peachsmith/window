@@ -161,6 +161,9 @@ struct eg_app
     // detected.
     unsigned char key_captures[EG_MAX_KEYCODE];
 
+    // For different sized windows.
+    int scale;
+
     // This flag is used as a sentinel value by the main loop.
     // As long as this value is 0, the main loop should continue to execute.
     // Once this flag is set to a non 0 value, any resources allocated by the

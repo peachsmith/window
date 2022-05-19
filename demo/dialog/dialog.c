@@ -49,7 +49,7 @@ void demo_render_dialog(eg_app *app, eg_dialog *dialog)
     eg_rect bounds = {
         .x = dialog->position.x + 5,
         .y = dialog->position.y + 5,
-        .w = 200,
+        .w = 210,
         .h = 0};
     eg_draw_text_bounded(app,
                          app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
@@ -65,10 +65,14 @@ void demo_render_dialog(eg_app *app, eg_dialog *dialog)
             .w = 16,
             .h = 16};
         eg_rect ind_dest = {
-            .x = dialog->position.x + 205,
+            .x = dialog->position.x + 206,
             .y = dialog->position.y + 30,
             .w = 16,
             .h = 16};
-        eg_draw_texture(app, app->textures[DEMO_TEXTURE_UI], &ind_src, &ind_dest);
+        eg_draw_texture(
+            app,
+            app->textures[DEMO_TEXTURE_UI],
+            &ind_src,
+            &ind_dest);
     }
 }

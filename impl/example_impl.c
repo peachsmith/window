@@ -68,7 +68,7 @@ void eg_impl_destroy_texture(eg_texture *texture)
     }
 }
 
-eg_impl *eg_impl_create(int screen_width, int screen_height)
+eg_impl *eg_impl_create(int screen_width, int screen_height, int scale)
 {
     eg_impl *impl;
     SDL_Window *window;
@@ -88,8 +88,8 @@ eg_impl *eg_impl_create(int screen_width, int screen_height)
         "Example",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        screen_width,
-        screen_height,
+        screen_width * scale,
+        screen_height * scale,
         SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
     if (window == NULL)
     {
@@ -122,7 +122,11 @@ eg_impl *eg_impl_create(int screen_width, int screen_height)
         printf("[DEBUG] scale correction factor: (%d, %d)\n",
                scale_correction_x,
                scale_correction_y);
-        SDL_RenderSetScale(renderer, (float)scale_correction_x, (float)scale_correction_y);
+        SDL_RenderSetScale(renderer, (float)scale_correction_x * scale, (float)scale_correction_y * scale);
+    }
+    else if (scale > 0)
+    {
+        SDL_RenderSetScale(renderer, (float)scale, (float)scale);
     }
 
     // Get the keyboard state.
