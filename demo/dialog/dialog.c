@@ -1,6 +1,7 @@
 #include "demo/dialog/dialog.h"
 #include "demo/input/input.h"
 #include "demo/util/util.h"
+#include "demo/util/ui.h"
 #include "demo/font/font.h"
 #include "demo/texture/texture.h"
 
@@ -20,12 +21,13 @@ void demo_init_dialogs(eg_app *app)
 void demo_render_dialog(eg_app *app, eg_dialog *dialog)
 {
     // Render the menu panel.
-    eg_rect rect = {
-        .x = dialog->position.x,
-        .y = dialog->position.y,
-        .w = 14,
-        .h = 3};
-    demo_draw_panel(app, &rect);
+    ui_draw_panel(app, dialog->position.x, dialog->position.y, dialog->w, dialog->h);
+    // eg_rect rect = {
+    //     .x = dialog->position.x,
+    //     .y = dialog->position.y,
+    //     .w = 14,
+    //     .h = 3};
+    // demo_draw_panel(app, &rect);
 
     // Render the text.
     char buffer[DEMO_DIALOG_BUFSIZE];

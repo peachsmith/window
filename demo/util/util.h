@@ -45,14 +45,4 @@ void demo_draw_sat(
  */
 void demo_draw_camera(eg_app *);
 
-/**
- * Renders a panel on the screen for things like menus and dialogs.
- *
- * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_rect* - a pointer to a rectangle containing the position and
- *              dimensions of the panel
- */
-void demo_draw_panel(eg_app *, eg_rect *);
-
 #endif

@@ -2,6 +2,7 @@
 #include "demo/input/input.h"
 #include "demo/dialog/dialog.h"
 #include "demo/util/util.h"
+#include "demo/util/ui.h"
 #include "demo/texture/texture.h"
 #include "demo/font/font.h"
 
@@ -58,12 +59,7 @@ static void render_pause_menu(eg_app *app, eg_menu *menu)
     int cursor_sheet_y = 26;
 
     // Render the menu panel.
-    eg_rect rect = {
-        .x = menu->position.x,
-        .y = menu->position.y,
-        .w = 13,
-        .h = 5};
-    demo_draw_panel(app, &rect);
+    ui_draw_panel(app, menu->position.x, menu->position.y, menu->w, menu->h);
 
     // Render menu items.
     for (int i = 0; i < menu->item_count; i++)
@@ -103,6 +99,9 @@ void demo_init_pause_menu(eg_app *app)
     // Initialize menu position.
     pause_menu.position.x = 5;
     pause_menu.position.y = 5;
+
+    pause_menu.w = 172;
+    pause_menu.h = 77;
 
     // Initialize menu items.
 
