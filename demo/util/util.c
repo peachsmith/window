@@ -1,5 +1,6 @@
 #include "demo/util/util.h"
 #include "demo/collision/collision.h"
+#include "demo/texture/texture.h"
 
 #include <stdio.h>
 
@@ -269,10 +270,7 @@ void demo_draw_panel(eg_app *app, eg_rect *rect)
             dest.x = col;
             dest.y = row;
 
-            // Currently, the  eg_draw_image function assumes that we only
-            // have one image loaded.
-            // TODO: implement multiple image loading
-            eg_draw_image(app, &src, &dest);
+            eg_draw_texture(app, app->textures[DEMO_TEXTURE_UI], &src, &dest);
         }
     }
 }

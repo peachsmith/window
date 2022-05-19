@@ -9,7 +9,7 @@ LINK_DIR=-L$(SDL2_HOME)/lib -L$(SDL_TTF_HOME)/lib -L$(SDL_IMAGE_HOME)/lib
 
 CC=clang # This can be switched out for gcc.
 CFLAGS=-Wall -Werror
-SRC=*.c impl/*.c demo/main.c demo/demo.c demo/util/*.c demo/menu/*.c demo/dialog/*.c demo/entities/*.c demo/input/*.c demo/collision/*.c demo/scenes/*.c
+SRC=*.c impl/*.c demo/main.c demo/demo.c demo/util/*.c demo/menu/*.c demo/dialog/*.c demo/entities/*.c demo/input/*.c demo/collision/*.c demo/scenes/*.c demo/font/*.c demo/texture/*.c
 TESTSRC=*.c impl/*.c demo/test.c demo/entities/*.c demo/input/*.c demo/collision/*.c demo/scenes/*.c
 LIBS=-lSDL2 -lSDL2main -lSDL2_ttf -lSDL2_image
 

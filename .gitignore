@@ -67,3 +67,7 @@ test.exe
 # PNG image files
 *.png
 
+# asset directory
+assets/
+assets.zip
+

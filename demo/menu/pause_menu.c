@@ -2,6 +2,8 @@
 #include "demo/input/input.h"
 #include "demo/dialog/dialog.h"
 #include "demo/util/util.h"
+#include "demo/texture/texture.h"
+#include "demo/font/font.h"
 
 #include <stdio.h>
 
@@ -9,11 +11,11 @@
 static eg_menu pause_menu;
 
 // pause menu item callbacks
-static void pause_item_1_callback(eg_app *app, eg_entity *target);
-static void pause_item_2_callback(eg_app *app, eg_entity *target);
-static void pause_item_3_callback(eg_app *app, eg_entity *target);
-static void pause_item_4_callback(eg_app *app, eg_entity *target);
-static void render_pause_menu(eg_app *app, eg_menu *menu);
+static void pause_item_1_callback(eg_app *, eg_menu *);
+static void pause_item_2_callback(eg_app *, eg_menu *);
+static void pause_item_3_callback(eg_app *, eg_menu *);
+static void pause_item_4_callback(eg_app *, eg_menu *);
+static void render_pause_menu(eg_app *, eg_menu *);
 
 // pause menu item text
 static const char *item_1_text = "Info";
@@ -28,24 +30,23 @@ static eg_menu_item pause_item_3;
 static eg_menu_item pause_item_4;
 static eg_menu_item *pause_items[4];
 
-static void pause_item_1_callback(eg_app *app, eg_entity *target)
+static void pause_item_1_callback(eg_app *app, eg_menu *menu)
 {
-    printf("[DEBUG] this is the callback for pause menu item 1\n");
+    demo_open_info_dialog(app);
 }
 
-static void pause_item_2_callback(eg_app *app, eg_entity *target)
+static void pause_item_2_callback(eg_app *app, eg_menu *menu)
 {
     app->done = 1;
 }
 
-static void pause_item_3_callback(eg_app *app, eg_entity *target)
+static void pause_item_3_callback(eg_app *app, eg_menu *menu)
 {
-    eg_input_handler *handler = eg_create_input_handler(fish_input_callback, NULL);
-    eg_push_input_handler(app, handler);
-    demo_open_fish_submenu(app);
+    // eg_push_input_handler(app, fish_menu_input_handler);
+    demo_open_fish_menu(app);
 }
 
-static void pause_item_4_callback(eg_app *app, eg_entity *target)
+static void pause_item_4_callback(eg_app *app, eg_menu *menu)
 {
     demo_open_demo_dialog(app);
 }
@@ -68,6 +69,7 @@ static void render_pause_menu(eg_app *app, eg_menu *menu)
     for (int i = 0; i < menu->item_count; i++)
     {
         eg_draw_text(app,
+                     app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
                      menu->items[i]->text,
                      menu->items[i]->position.x,
                      menu->items[i]->position.y);
@@ -86,7 +88,10 @@ static void render_pause_menu(eg_app *app, eg_menu *menu)
         .y = 22 + (menu->cursor.y * 24),
         .w = tile_w,
         .h = tile_h};
-    eg_draw_image(app, &cusor_src, &cusor_dest);
+    eg_draw_texture(app,
+                    app->textures[DEMO_TEXTURE_UI],
+                    &cusor_src,
+                    &cusor_dest);
 }
 
 void demo_init_pause_menu(eg_app *app)
@@ -139,5 +144,10 @@ void demo_init_pause_menu(eg_app *app)
 
 void demo_open_pause_menu(eg_app *app)
 {
+    eg_push_input_handler(app, pause_menu_input_handler);
+
+    pause_menu.cursor.x = 0;
+    pause_menu.cursor.y = 0;
+
     app->menus[(app->menu_count)++] = &pause_menu;
 }

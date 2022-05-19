@@ -49,9 +49,15 @@ typedef struct eg_entity eg_entity;
  */
 typedef struct eg_entity_type eg_entity_type;
 
-typedef struct eg_font eg_font;
+/**
+ * Graphical data that can potentially be rendered to the screen.
+ */
+typedef struct eg_texture eg_texture;
 
-typedef struct eg_sprite_sheet eg_sprite_sheet;
+/**
+ * Font data for rendering text.
+ */
+typedef struct eg_font eg_font;
 
 /**
  * A point represents the x and y coordinates in 2D space.
@@ -97,18 +103,38 @@ typedef struct eg_dialog eg_dialog;
 typedef void (*eg_func)(eg_app *);
 
 /**
- * Performs some task.
+ * A callback function.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ */
+typedef void (*eg_callback)(eg_app *);
+
+/**
+ * Performs a task using a specific entity.
  *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   eg_entity* - an entity that may be affected by the task.
  */
-typedef void (*eg_callback)(eg_app *, eg_entity *);
+typedef void (*eg_entity_callback)(eg_app *, eg_entity *);
 
-// TEMP callback specifically for a menu
+/**
+ * A callback function for a menu or menu item.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_entity* - a menu
+ */
 typedef void (*eg_menu_callback)(eg_app *, eg_menu *);
 
-// TEMP callback specifically for a dialog
+/**
+ * A callback function for a dialog.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_entity* - a dialog
+ */
 typedef void (*eg_dialog_callback)(eg_app *, eg_dialog *);
 
 /**
@@ -135,6 +161,9 @@ struct eg_app
     // detected.
     unsigned char key_captures[EG_MAX_KEYCODE];
 
+    // For different sized windows.
+    int scale;
+
     // This flag is used as a sentinel value by the main loop.
     // As long as this value is 0, the main loop should continue to execute.
     // Once this flag is set to a non 0 value, any resources allocated by the
@@ -142,10 +171,47 @@ struct eg_app
     // gracefully.
     int done;
 
-    // The input handler stack is a dynamic linked list of input handlers.
-    // The input handler on the top of the stack is the only input handler
-    // that can perform any action at any given time.
-    eg_input_handler *input;
+    // The pause flag prevents the normal update cycle, allowing for using
+    // menus and dialogs.
+    int pause;
+
+    // screen dimensions
+    int screen_width;
+    int screen_height;
+
+    eg_camera cam;
+
+    // TEMP: camera boundaries for debugging
+    // TODO: organize camera struct
+    int cl;
+    int cr;
+    int ct;
+    int cb;
+
+    // The update function initiates the update cycle, wherein each object
+    // that can be updated is advanced to the next stage
+    eg_func update;
+    eg_func draw;
+
+    // textures
+    eg_texture **textures;
+    int texture_count;
+
+    // fonts
+    eg_font **fonts;
+    int font_count;
+
+    // menus
+    eg_menu **menus;
+    int menu_count;
+
+    // dialogs
+    eg_dialog **dialogs;
+    int dialog_count;
+
+    // input handlers
+    eg_callback *input;
+    int input_count;
 
     // A linked list of entities.
     // Entities are updated and rendered in the opposite order from which they
@@ -157,29 +223,9 @@ struct eg_app
     // entities of a given type.
     eg_entity_type *registry;
 
-    eg_camera cam;
-
-    // TEMP: camera boundaries for debugging
-    // TODO: organize camera struct
-    int cl;
-    int cr;
-    int ct;
-    int cb;
-    int screen_width;
-    int screen_height;
-
-    eg_func update;
-    eg_func draw;
-
-    int pause;
-
-    // menus
-    eg_menu **menus;
-    int menu_count;
-
-    // dialog
-    eg_dialog **dialogs;
-    int dialog_count;
+    // TEMP: a handle to the player entity.
+    // TODO: implement searchable entities.
+    eg_entity *player;
 };
 
 // definition of the eg_input_handler struct
@@ -216,6 +262,10 @@ struct eg_entity
 
     eg_entity *next;
     eg_entity *previous;
+
+    // TEMP: for debugging sprite sheet
+    int sprite_x;
+    int sprite_y;
 };
 
 struct eg_entity_type
@@ -223,8 +273,8 @@ struct eg_entity_type
     int id;
     int width;
     int height;
-    eg_callback render;
-    eg_callback update;
+    eg_entity_callback render;
+    eg_entity_callback update;
     eg_collider collide;
 };
 
@@ -232,7 +282,7 @@ struct eg_menu_item
 {
     eg_point position;
     const char *text;
-    eg_callback callback;
+    eg_menu_callback callback;
 };
 
 struct eg_menu
@@ -242,15 +292,29 @@ struct eg_menu
     eg_menu_item **items;
     int item_count;
     eg_menu_callback render;
+
+    // for passing values between menus and dialogs.
+    int result;
 };
 
 struct eg_dialog
 {
     eg_point position;
+    int speed_scale;
+    int panel;
+
     int ticks;
+    int tick_limit;
+
     const char *text;
+    int text_len;
+
     eg_dialog_callback render;
     eg_dialog_callback update;
+    eg_dialog_callback advance;
+
+    // for passing values between menus and dialogs.
+    int result;
 };
 
 //----------------------------------------------------------------------------
@@ -403,7 +467,8 @@ void eg_destroy_input_handler(eg_input_handler *);
  *   eg_app* - a pointer to an app struct
  *   eg_input_handler* - a pointer to an input handler.
  */
-void eg_push_input_handler(eg_app *, eg_input_handler *);
+// void eg_push_input_handler(eg_app *, eg_input_handler *);
+void eg_push_input_handler(eg_app *, eg_callback);
 
 /**
  * Pops an input handler off the top of the input handler stack.
@@ -413,11 +478,8 @@ void eg_push_input_handler(eg_app *, eg_input_handler *);
  *
  * Params:
  *   eg_app* - a pointer to an app struct
- *
- * Returns:
- *   eg_input_handler* - the handler that was removed from the stack
  */
-eg_input_handler *eg_pop_input_handler(eg_app *);
+void eg_pop_input_handler(eg_app *);
 
 //----------------------------------------------------------------------------
 // entity functions
@@ -534,7 +596,8 @@ void eg_toggle_flag(eg_entity *e, int f);
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-int eg_load_font(eg_app *, const char *, int);
+// int eg_load_font(eg_app *, const char *, int);
+eg_font *eg_load_font(eg_app *, const char *, int);
 
 /**
  * Renders a string of text to the screen.
@@ -545,13 +608,32 @@ int eg_load_font(eg_app *, const char *, int);
  *   int - the x position of the text on the screen
  *   int - the y position of the text on the screen
  */
-void eg_draw_text(eg_app *, const char *, int, int);
-
-//----------------------------------------------------------------------------
-// image functions
+void eg_draw_text(eg_app *, eg_font *, const char *, int, int);
 
 /**
- * Loads a sprite sheet from a PNG file.
+ * Renders a string of text to the screen within a specified area.
+ * The fourth argument is an eg_rect structure describing the area that will
+ * contain the text.
+ * The x and y fields of the rect represent the starting position.
+ * The w field of the rect represents the line width. This is the point at
+ * which a line break will occur.
+ * The h field of the rect represents the newline distance. This is the amount
+ * of pixels to move down when writing a newline. If this value is 0, the
+ * default heigh of the character 'A' in the font will be used.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   const char* - the text to render
+ *   int - the x position of the text on the screen
+ *   int - the y position of the text on the screen
+ */
+void eg_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
+
+//----------------------------------------------------------------------------
+// texture functions
+
+/**
+ * Loads a texture from a PNG file.
  *
  * Params:
  *   eg_app* - a pointer to an app struct
@@ -560,9 +642,18 @@ void eg_draw_text(eg_app *, const char *, int, int);
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-int eg_load_sprite_sheet(eg_app *, const char *);
+eg_texture *eg_load_texture(eg_app *, const char *);
 
-// TEMP draws part of a sprite sheet or something
-void eg_draw_image(eg_app *, eg_rect *, eg_rect *);
+/**
+ * Renders a texure to the screen.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_texture* - the texure to render
+ *   eg_rect* - a rectangular region of the texture that will be rendered
+ *   eg_rect* - a rectangular region of the screen to which the texture
+ *              will be rendered
+ */
+void eg_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *);
 
 #endif

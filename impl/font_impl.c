@@ -179,10 +179,12 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
     return 1;
 }
 
-int eg_impl_load_font(eg_app *app, const char *path, int p)
+eg_font *eg_impl_load_font(eg_app *app, const char *path, int p)
 {
+    eg_font *font = NULL;
     eg_impl *impl = app->impl;
 
+    // Load the font data from the TrueType file.
     TTF_Font *ttf = TTF_OpenFont(path, p);
     if (ttf == NULL)
     {
@@ -192,70 +194,170 @@ int eg_impl_load_font(eg_app *app, const char *path, int p)
         return 0;
     }
 
-    if (!init_font_atlas(impl->renderer, ttf, &(impl->font)))
+    // Create the font object.
+    font = (eg_font *)malloc(sizeof(eg_font));
+    if (font == NULL)
+    {
+        TTF_CloseFont(ttf);
+        return NULL;
+    }
+
+    // Zero out the font data.
+    font->atlas = NULL;
+    for (int i = 0; i < FONT_ATLAS_MAX; i++)
+    {
+        font->glyphs[i] = NULL;
+    }
+
+    if (!init_font_atlas(impl->renderer, ttf, font))
     {
         fprintf(stderr,
                 "failed to create font atlas\n");
+        free(font);
         TTF_CloseFont(ttf);
-        return 0;
+        return NULL;
     }
 
     TTF_CloseFont(ttf);
-    return 1;
+
+    // Add the font to the application's font list.
+    app->fonts[(app->font_count)++] = font;
+
+    return font;
 }
 
-void eg_impl_draw_text(eg_app *app, const char *msg, int x, int y)
+/**
+ * Renders a string of text to the screen using a font atlas that is composed
+ * of multiple textures.
+ */
+static void impl_draw_text_multi(
+    eg_app *app,
+    eg_font *font,
+    const char *msg,
+    int x,
+    int y,
+    int line_width,
+    int line_height)
 {
     eg_impl *impl = app->impl;
 
-    if (!impl->font.loaded)
+    int w;
+    int h;
+    for (int i = 0; msg[i] != '\0'; i++)
     {
-        return;
-    }
-
-    // TODO: implement newlines
-    // TODO: implement glyph dimension logic (for new lines and line breaks)
-    // TODO: separate this function into two functions based on whether we're
-    // rendering each glyph as a separate texture or using a single texture.
-
-    // Render text using an individual texture for each glyph.
-    if (impl->font.mode == FONT_MODE_MULTI)
-    {
-        int w;
-        int h;
-        for (int i = 0; msg[i] != '\0'; i++)
+        SDL_Texture *tex = font->glyphs[(int)msg[i]];
+        int q = SDL_QueryTexture(tex, NULL, NULL, &w, &h);
+        if (!q)
         {
-            SDL_Texture *tex = impl->font.glyphs[(int)msg[i]];
-            int q = SDL_QueryTexture(tex, NULL, NULL, &w, &h);
-            if (!q)
-            {
-                SDL_Rect r = {.x = x, .y = y, .w = w, .h = h};
-                x += w;
-                SDL_RenderCopy(impl->renderer, tex, NULL, &r);
-            }
+            SDL_Rect r = {.x = x, .y = y, .w = w, .h = h};
+            x += w;
+            SDL_RenderCopy(impl->renderer, tex, NULL, &r);
         }
     }
+}
 
-    // Render text using a single texture atlas.
-    if (impl->font.mode == FONT_MODE_SINGLE)
+/**
+ * Renders a string of text to the screen using a font atlas that is composed
+ * of one single texture.
+ */
+static void impl_draw_text_single(
+    eg_app *app,
+    eg_font *font,
+    const char *msg,
+    int x,
+    int y,
+    int line_width,
+    int line_height)
+{
+    eg_impl *impl = app->impl;
+
+    int orig_x = x;
+
+    for (int i = 0; msg[i] != '\0'; i++)
     {
-        for (int i = 0; msg[i] != '\0'; i++)
+        SDL_Rect src = {
+            .x = font->sizes[(int)msg[i]].x,
+            .y = 0,
+            .w = font->sizes[(int)msg[i]].w,
+            .h = font->sizes[(int)msg[i]].h};
+
+        SDL_Rect dest = {
+            .x = x,
+            .y = y,
+            .w = font->sizes[(int)msg[i]].w,
+            .h = font->sizes[(int)msg[i]].h};
+
+        x += font->sizes[(int)msg[i]].w;
+
+        if (line_width > 0 && x >= line_width)
         {
-            SDL_Rect src = {
-                .x = impl->font.sizes[(int)msg[i]].x,
-                .y = 0,
-                .w = impl->font.sizes[(int)msg[i]].w,
-                .h = impl->font.sizes[(int)msg[i]].h};
-
-            SDL_Rect dest = {
-                .x = x,
-                .y = y,
-                .w = impl->font.sizes[(int)msg[i]].w,
-                .h = impl->font.sizes[(int)msg[i]].h};
-
-            x += impl->font.sizes[(int)msg[i]].w;
-
-            SDL_RenderCopy(impl->renderer, impl->font.atlas, &src, &dest);
+            x = orig_x;
+            // If the line height is 0, default to the line height of the
+            // 'A' character.
+            int dy = line_height > 0 ? line_height
+                                     : font->sizes[(int)'A'].h;
+            y += dy;
         }
+
+        if (msg[i] == '\n')
+        {
+            x = orig_x;
+            int dy = line_height > 0 ? line_height
+                                     : font->sizes[(int)'A'].h;
+            y += dy;
+        }
+        else
+        {
+            SDL_RenderCopy(impl->renderer, font->atlas, &src, &dest);
+        }
+    }
+}
+
+void eg_impl_draw_text(
+    eg_app *app,
+    eg_font *font,
+    const char *msg,
+    int x,
+    int y)
+{
+    if (font->mode == FONT_MODE_MULTI)
+    {
+        impl_draw_text_multi(app, font, msg, x, y, 0, 0);
+    }
+
+    if (font->mode == FONT_MODE_SINGLE)
+    {
+        impl_draw_text_single(app, font, msg, x, y, 0, 0);
+    }
+}
+
+void eg_impl_draw_text_bounded(
+    eg_app *app,
+    eg_font *font,
+    const char *msg,
+    eg_rect *bounds)
+{
+    if (font->mode == FONT_MODE_MULTI)
+    {
+        impl_draw_text_multi(
+            app,
+            font,
+            msg,
+            bounds->x,
+            bounds->y,
+            bounds->w,
+            bounds->h);
+    }
+
+    if (font->mode == FONT_MODE_SINGLE)
+    {
+        impl_draw_text_single(
+            app,
+            font,
+            msg,
+            bounds->x,
+            bounds->y,
+            bounds->w,
+            bounds->h);
     }
 }

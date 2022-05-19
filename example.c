@@ -7,7 +7,7 @@
 // defined in example_impl.c.
 int eg_impl_init();
 void eg_impl_term();
-eg_impl *eg_impl_create(int, int);
+eg_impl *eg_impl_create(int, int, int);
 void eg_impl_destroy(eg_impl *);
 void eg_impl_process_events(eg_app *);
 int eg_impl_delay(eg_app *);
@@ -18,10 +18,13 @@ void eg_impl_draw_line(eg_app *app, eg_point *a, eg_point *b);
 void eg_impl_draw_rect(eg_app *app, eg_rect *r, int filled);
 int eg_impl_peek_key(eg_app *, int);
 int eg_impl_consume_key(eg_app *, int);
-int eg_impl_load_font(eg_app *, const char *, int);
-void eg_impl_draw_text(eg_app *, const char *, int, int);
-int eg_impl_load_sprite_sheet(eg_app *, const char *);
-void eg_impl_draw_image(eg_app *, eg_rect *, eg_rect *);
+eg_font *eg_impl_load_font(eg_app *, const char *, int);
+void eg_impl_draw_text(eg_app *, eg_font *, const char *, int, int);
+void eg_impl_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
+eg_texture *eg_impl_load_texture(eg_app *, const char *);
+void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *);
+void eg_impl_destroy_font(eg_font *);
+void eg_impl_destroy_texture(eg_texture *);
 
 //----------------------------------------------------------------------------
 // core functions
@@ -59,15 +62,45 @@ eg_app *eg_create_app()
 
     // Ensure that all pointers are NULL or have a default value.
     app->impl = NULL;
-    app->entities = NULL;
-    app->input = NULL;
+
+    app->scale = 1;
+
     app->update = default_update;
     app->draw = default_draw;
+
+    app->entities = NULL;
+
+    // TEMP: remove this once searchable entities are implemented.
+    app->player = NULL;
+
+    app->input = NULL;
+    app->input_count = 0;
+
+    app->fonts = NULL;
+    app->font_count = 0;
+
+    app->textures = NULL;
+    app->texture_count = 0;
+
+    app->menus = NULL;
+    app->menu_count = 0;
+
+    app->dialogs = NULL;
+    app->dialog_count = 0;
+
+    app->screen_width = EG_DEFAULT_SCREEN_WIDTH;
+    app->screen_height = EG_DEFAULT_SCREEN_HEIGHT;
+
+    app->done = 0;
+    app->pause = 0;
+    app->cam.x = 0;
+    app->cam.y = 0;
 
     // Create the implementation struct.
     app->impl = eg_impl_create(
         EG_DEFAULT_SCREEN_WIDTH,
-        EG_DEFAULT_SCREEN_HEIGHT);
+        EG_DEFAULT_SCREEN_HEIGHT,
+        app->scale);
     if (app->impl == NULL)
     {
         free(app);
@@ -80,26 +113,11 @@ eg_app *eg_create_app()
         app->key_captures[i] = 0;
     }
 
-    // Set the main loop sentinel value to 0.
-    app->done = 0;
-
-    // Set the camera position to (0, 0).
-    app->cam.x = 0;
-    app->cam.y = 0;
-
     // TEMP: camera boudnaries for debugging.
     app->cl = 50;
     app->cr = 180;
     app->ct = 20;
     app->cb = 140;
-    app->screen_width = EG_DEFAULT_SCREEN_WIDTH;
-    app->screen_height = EG_DEFAULT_SCREEN_HEIGHT;
-
-    app->pause = 0;
-    app->menus = NULL;
-    app->menu_count = 0;
-    app->dialogs = NULL;
-    app->dialog_count = 0;
 
     return app;
 }
@@ -114,12 +132,26 @@ void eg_destroy_app(eg_app *app)
         app->entities = next;
     }
 
+    // TODO: remove this, since its just a static array
+    // of function pointers.
     // Destroy the input handlers.
-    while (app->input != NULL)
+    // while (app->input != NULL)
+    // {
+    //     eg_input_handler *previous = app->input->previous;
+    //     eg_destroy_input_handler(app->input);
+    //     app->input = previous;
+    // }
+
+    // Destroy the fonts.
+    for (int i = 0; i < app->font_count; i++)
     {
-        eg_input_handler *previous = app->input->previous;
-        eg_destroy_input_handler(app->input);
-        app->input = previous;
+        eg_impl_destroy_font(app->fonts[i]);
+    }
+
+    // Destroy the textures.
+    for (int i = 0; i < app->texture_count; i++)
+    {
+        eg_impl_destroy_texture(app->textures[i]);
     }
 
     // Destroy the entity registry.
@@ -197,43 +229,26 @@ void eg_destroy_input_handler(eg_input_handler *handler)
     free(handler);
 }
 
-void eg_push_input_handler(eg_app *app, eg_input_handler *handler)
+// void eg_push_input_handler(eg_app *app, eg_input_handler *handler)
+void eg_push_input_handler(eg_app *app, eg_callback handler)
 {
-    if (app == NULL || handler == NULL)
+    if (app == NULL || app->input == NULL || handler == NULL)
     {
         return;
     }
 
-    // If the stack is empty, then the handler becomes the top of the stack.
-    if (app->input == NULL)
-    {
-        app->input = handler;
-        return;
-    }
-
-    // Save the reference to the current handler in the new handler.
-    handler->previous = app->input;
-
-    // Set the application's current input handler to be the new handler.
-    app->input = handler;
+    app->input[app->input_count++] = handler;
 }
 
-eg_input_handler *eg_pop_input_handler(eg_app *app)
+void eg_pop_input_handler(eg_app *app)
 {
     // If the stack is empty, then return without doing anything.
     if (app == NULL || app->input == NULL)
     {
-        return NULL;
+        return;
     }
 
-    // Get the top of the input handler stack.
-    // This will be returned so that it can be saved or destroyed.
-    eg_input_handler *current = app->input;
-
-    // The previous input handler now becomes the current input handler.
-    app->input = app->input->previous;
-
-    return current;
+    app->input_count--;
 }
 
 //----------------------------------------------------------------------------
@@ -453,25 +468,34 @@ void eg_toggle_flag(eg_entity *e, int f)
 //----------------------------------------------------------------------------
 // font functions
 
-int eg_load_font(eg_app *app, const char *path, int p)
+// int eg_load_font(eg_app *app, const char *path, int p)
+// {
+//     return eg_impl_load_font(app, path, p);
+// }
+eg_font *eg_load_font(eg_app *app, const char *path, int p)
 {
     return eg_impl_load_font(app, path, p);
 }
 
-void eg_draw_text(eg_app *app, const char *msg, int x, int y)
+void eg_draw_text(eg_app *app, eg_font *font, const char *msg, int x, int y)
 {
-    eg_impl_draw_text(app, msg, x, y);
+    eg_impl_draw_text(app, font, msg, x, y);
+}
+
+void eg_draw_text_bounded(eg_app *app, eg_font *font, const char *msg, eg_rect *bounds)
+{
+    eg_impl_draw_text_bounded(app, font, msg, bounds);
 }
 
 //----------------------------------------------------------------------------
-// image functions
+// texture functions
 
-int eg_load_sprite_sheet(eg_app *app, const char *path)
+eg_texture *eg_load_texture(eg_app *app, const char *path)
 {
-    return eg_impl_load_sprite_sheet(app, path);
+    return eg_impl_load_texture(app, path);
 }
 
-void eg_draw_image(eg_app *app, eg_rect *src, eg_rect *dest)
+void eg_draw_texture(eg_app *app, eg_texture *texture, eg_rect *src, eg_rect *dest)
 {
-    eg_impl_draw_image(app, src, dest);
+    eg_impl_draw_texture(app, texture, src, dest);
 }

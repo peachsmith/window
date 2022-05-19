@@ -8,7 +8,10 @@ void demo_init_menus(eg_app *);
 void demo_init_pause_menu(eg_app *);
 void demo_open_pause_menu(eg_app *);
 
-void demo_init_fish_submenu(eg_app *);
-void demo_open_fish_submenu(eg_app *);
+void demo_init_fish_menu(eg_app *);
+void demo_open_fish_menu(eg_app *);
+
+void demo_init_info_menu(eg_app *);
+void demo_open_info_menu(eg_app *);
 
 #endif

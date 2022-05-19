@@ -5,20 +5,14 @@
 
 #include "example.h"
 
-/**
- * The root input handler callback.
- * This is the default input handler for the application. It should be the
- * first input handler pushed onto the input handler stack.
- * In this example, pressing the N key pushes another input handler onto
- * the stack.
- *
- * Params:
- *   eg_app* - a pointer to an app struct
- */
-void root_input_callback(eg_app *, eg_entity *);
+#define MAX_INPUT_HANDLERS 20
 
-void fish_input_callback(eg_app *app, eg_entity *target);
+void demo_init_input(eg_app *);
 
-void demo_dialog_input_callback(eg_app *app, eg_entity *target);
+void root_input_handler(eg_app *);
+void fish_menu_input_handler(eg_app *);
+void info_menu_input_handler(eg_app *);
+void pause_menu_input_handler(eg_app *);
+void demo_dialog_input_handler(eg_app *);
 
 #endif

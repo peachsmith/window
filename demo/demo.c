@@ -8,6 +8,8 @@
 #include "demo/util/util.h"
 #include "demo/menu/menu.h"
 #include "demo/dialog/dialog.h"
+#include "demo/font/font.h"
+#include "demo/texture/texture.h"
 
 #include <stdio.h>
 
@@ -20,9 +22,9 @@
 static void update(eg_app *app)
 {
     // Handle input.
-    if (app->input != NULL)
+    if (app->input != NULL && app->input_count > 0)
     {
-        app->input->callback(app, app->input->target);
+        app->input[app->input_count - 1](app);
     }
 
     // Update dialogs.
@@ -100,33 +102,26 @@ int demo_prepare(eg_app *app)
     app->update = update;
     app->draw = draw;
 
+    // Initialize tetxures.
+    if (!demo_init_textures(app))
+    {
+        return 0;
+    }
+
+    // Initialize fonts.
+    if (!demo_init_fonts(app))
+    {
+        return 0;
+    }
+
     // Initialize menus.
     demo_init_menus(app);
 
     // Initialize dialogs.
     demo_init_dialogs(app);
 
-    // Alegreya-VariableFont_wght
-    // JetBrainsMonoNL-Regular
-    // if (!eg_load_font(app, "Alegreya-VariableFont_wght.ttf", 16))
-    // {
-    //     fprintf(stderr, "failed to load font\n");
-    // }
-
-    // if (!eg_load_font(app, "JetBrainsMonoNL-Regular.ttf", 16))
-    // {
-    //     fprintf(stderr, "failed to load font\n");
-    // }
-
-    if (!eg_load_font(app, "Kenney Pixel.ttf", 16))
-    {
-        fprintf(stderr, "failed to load font\n");
-    }
-
-    if (!eg_load_sprite_sheet(app, "UIpackSheet_transparent copy3.png"))
-    {
-        fprintf(stderr, "failed to load image\n");
-    }
+    // Initialize input.
+    demo_init_input(app);
 
     // Register the entity types.
     player_demo_register(&reg[ENTITY_TYPE_PLAYER]);
