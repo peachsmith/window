@@ -1,6 +1,8 @@
 #include "demo/util/sprite.h"
 #include "demo/texture/texture.h"
 
+#include "colors.h"
+
 void sprite_draw_character(eg_app *app, int x, int y)
 {
     // tile dimensions
@@ -57,4 +59,182 @@ void sprite_draw_brick(eg_app *app, int x, int y)
         app->textures[DEMO_TEXTURE_SCENERY],
         &src,
         &dest);
+}
+
+void sprite_draw_grass_block(eg_app *app, int x, int y, int w, int h)
+{
+    // tile dimensions
+    int tile_w = 18;
+    int tile_h = 18;
+
+    // tile coordinates
+    int tile_x_left = 1;
+    int tile_x_mid = 2;
+    int tile_x_right = 3;
+    int tile_y_top = 1;
+    int tile_y_mid = 6;
+    int tile_y_bottom = 7;
+
+    // The width and height of the panel cannot be less than the width and
+    // height of the tiles used to build it.
+    if (w < tile_w)
+    {
+        w = tile_w;
+    }
+
+    if (h < tile_h)
+    {
+        h = tile_h;
+    }
+
+    // If the height is less than the tile height,
+    // we change the y coordinate to use tiles that have a bottom border.
+    if (h == tile_h)
+    {
+        tile_y_top = 0;
+        tile_y_mid = 0;
+        tile_y_bottom = 0;
+    }
+
+    // If the width is less than the tile width,
+    // we change the x coordinate to use tiles that have
+    // left and right borders.
+    if (w == tile_w)
+    {
+        tile_x_left = 0;
+        tile_x_mid = 0;
+        tile_x_right = 0;
+    }
+
+    int sheet_x = tile_x_left;
+    int sheet_y = tile_y_top;
+
+    // source rectangle for menu tiles
+    // There is a 2 pixel margin between each tile in the sprite sheet.
+    eg_rect src = {
+        .x = sheet_x * tile_w,
+        .y = sheet_y * tile_h,
+        .w = tile_w,
+        .h = tile_h};
+
+    // destination rectangle for menu tiles
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    int right_limit = x + w - tile_w;
+    int bottom_limit = y + h - tile_h;
+
+    for (int row = y; row < y + h; row += tile_h)
+    {
+        if (row + tile_h > y + h)
+        {
+            row = bottom_limit - tile_h;
+        }
+
+        for (int col = x; col < x + w; col += tile_w)
+        {
+            if (col + tile_w > x + w)
+            {
+                col = right_limit - tile_w;
+            }
+
+            // top
+            if (row == y)
+            {
+                sheet_y = tile_y_top;
+
+                // top left corner
+                if (col == x)
+                {
+                    sheet_x = tile_x_left;
+                }
+
+                // middle
+                if (col > x && col < right_limit)
+                {
+                    sheet_x = tile_x_mid;
+                }
+
+                // top right corner
+                if (col == right_limit)
+                {
+                    sheet_x = tile_x_right;
+                }
+            }
+
+            // middle
+            if (row > y && row < bottom_limit)
+            {
+                sheet_y = tile_y_mid;
+
+                // left side
+                if (col == x)
+                {
+                    sheet_x = tile_x_left;
+                }
+
+                // middle
+                if (col > x && col < right_limit)
+                {
+                    sheet_x = tile_x_mid;
+                }
+
+                // right side
+                if (col == right_limit)
+                {
+                    sheet_x = tile_x_right;
+                }
+            }
+
+            // bottom
+            if (row == bottom_limit)
+            {
+                sheet_y = tile_y_bottom;
+
+                // bottom left corner
+                if (col == x)
+                {
+                    sheet_x = tile_x_left;
+                }
+
+                // middle
+                if (col > x && col < right_limit)
+                {
+                    sheet_x = tile_x_mid;
+                }
+
+                // bottom right corner
+                if (col == right_limit)
+                {
+                    sheet_x = tile_x_right;
+                }
+            }
+
+            src.x = sheet_x * tile_w;
+            src.y = sheet_y * tile_h;
+            dest.x = col;
+            dest.y = row;
+
+            eg_draw_texture(
+                app,
+                app->textures[DEMO_TEXTURE_SCENERY],
+                &src,
+                &dest);
+        }
+    }
+}
+
+void sprite_draw_background(eg_app *app, int type)
+{
+    eg_rect dest = {
+        .x = 0,
+        .y = 0,
+        .w = app->screen_width,
+        .h = app->screen_height};
+
+    eg_set_color(app, EG_COLOR_CORNFLOWER_BLUE);
+    eg_draw_rect(app, &dest, 1);
 }

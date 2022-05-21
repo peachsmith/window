@@ -7,6 +7,9 @@ void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
     int tile_w = 16;
     int tile_h = 16;
 
+    // number of pixels between each tile
+    int padding = 2;
+
     // The width and height of the panel cannot be less than the width and
     // height of the tiles used to build it.
     if (w < tile_w)
@@ -35,8 +38,8 @@ void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
     // source rectangle for menu tiles
     // There is a 2 pixel margin between each tile in the sprite sheet.
     eg_rect src = {
-        .x = sheet_x * (tile_w + 2),
-        .y = sheet_y * (tile_h + 2),
+        .x = sheet_x * (tile_w + padding),
+        .y = sheet_y * (tile_h + padding),
         .w = tile_w,
         .h = tile_h};
 
@@ -136,8 +139,8 @@ void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
                 }
             }
 
-            src.x = sheet_x * (tile_w + 2);
-            src.y = sheet_y * (tile_h + 2);
+            src.x = sheet_x * (tile_w + padding);
+            src.y = sheet_y * (tile_h + padding);
             dest.x = col;
             dest.y = row;
 

@@ -40,14 +40,22 @@ static void render_throughblock(eg_app *app, eg_entity *block)
 // Renders a moving block
 static void render_moving_block(eg_app *app, eg_entity *block)
 {
-    eg_rect r;
-    r.x = block->x_pos + app->cam.x;
-    r.y = block->y_pos + app->cam.y;
-    r.w = app->registry[block->type].width;
-    r.h = app->registry[block->type].height;
+    sprite_draw_grass_block(
+        app,
+        block->x_pos + app->cam.x,
+        block->y_pos + app->cam.y,
+        app->registry[block->type].width,
+        app->registry[block->type].height);
+        
+    // hit box
+    // eg_rect r;
+    // r.x = block->x_pos + app->cam.x;
+    // r.y = block->y_pos + app->cam.y;
+    // r.w = app->registry[block->type].width;
+    // r.h = app->registry[block->type].height;
 
-    eg_set_color(app, EG_COLOR_SEA_GREEN);
-    eg_draw_rect(app, &r, 0);
+    // eg_set_color(app, EG_COLOR_SEA_GREEN);
+    // eg_draw_rect(app, &r, 0);
 }
 
 // Renders a sloped block
@@ -408,8 +416,8 @@ eg_entity *throughblock_demo_create_long(int x, int y)
 void block_demo_register_moving(eg_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_MOVING;
-    t->width = 60;
-    t->height = 16;
+    t->width = 54;
+    t->height = 18;
     t->render = render_moving_block;
     t->update = update_moving_block;
     t->collide = collide_block;
