@@ -1,20 +1,27 @@
 #include "demo/entities/block.h"
 #include "demo/entities/entity_types.h"
 #include "demo/collision/collision.h"
+#include "demo/util/sprite.h"
 
 #include <stdio.h>
 
 // Renders a standard block
 static void render_block(eg_app *app, eg_entity *block)
 {
-    eg_rect r;
-    r.x = block->x_pos + app->cam.x;
-    r.y = block->y_pos + app->cam.y;
-    r.w = app->registry[block->type].width;
-    r.h = app->registry[block->type].height;
+    sprite_draw_brick(
+        app,
+        block->x_pos + app->cam.x,
+        block->y_pos + app->cam.y);
 
-    eg_set_color(app, EG_COLOR_LIGHT_BLUE);
-    eg_draw_rect(app, &r, 0);
+    // hit box
+    // eg_rect r;
+    // r.x = block->x_pos + app->cam.x;
+    // r.y = block->y_pos + app->cam.y;
+    // r.w = app->registry[block->type].width;
+    // r.h = app->registry[block->type].height;
+
+    // eg_set_color(app, EG_COLOR_LIGHT_BLUE);
+    // eg_draw_rect(app, &r, 0);
 }
 
 // Renders a throughblock
@@ -297,8 +304,8 @@ static void collide_block(
 void block_demo_register(eg_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK;
-    t->width = 12;
-    t->height = 12;
+    t->width = 18;
+    t->height = 18;
     t->render = render_block;
     t->collide = collide_block;
 }

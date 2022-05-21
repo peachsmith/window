@@ -5,39 +5,9 @@
 
 #include <stdio.h>
 
-/**
- * Create a basic map.
- * Given 18 blocks b0, b1, ..., b17, the layout should look like this:
- *     +--+
- *  b0 |  |
- *     +--+
- *     +--+
- *     |  |
- *     +--+
- *     +--+
- *     |  |
- *     +--+
- *     +--++--++--++--++--++--++--++--++--++--++--+
- *     |  ||  ||  ||  ||  ||  ||  ||  ||  ||  ||  |
- *     +--++--++--++--++--++--++--++--++--++--++--+
- *                                             +--+
- *                                             |  |
- *                                             +--+
- *                                             +--+
- *                                             |  |
- *                                             +--+
- *                                             +--+
- *                                             |  |
- *                                             +--+
- *                                             +--+
- *                                             |  | b17
- *                                             +--+
- */
 void load_scene_0(eg_app *app)
 {
     eg_entity *player;
-    // eg_callback root_callback;
-    // eg_input_handler *root_handler;
 
     // Starting position for building a sequence of blocks.
     int x_start = 10;
@@ -58,11 +28,11 @@ void load_scene_0(eg_app *app)
     // // eg_add_entity(app, block_demo_create(x_start + 110, y_start + 24));
 
     // // the first part of the horizontal row of blocks
-    eg_add_entity(app, block_demo_create(x_start - 21 + 12, 92));
-    eg_add_entity(app, block_demo_create(x_start - 21 + 24, 92));
-    eg_add_entity(app, block_demo_create(x_start - 21 + 36, 92));
-    eg_add_entity(app, block_demo_create(x_start - 21 + 48, 92));
-    eg_add_entity(app, block_demo_create(x_start - 21 + 60, 92));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 18, 94));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 36, 94));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 54, 94));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 72, 94));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 90, 94));
 
     // // Vertically moving platform (added before player).
     eg_add_entity(app, block_demo_create_moving(570, y_start - 32, 0));
@@ -75,10 +45,10 @@ void load_scene_0(eg_app *app)
     app->player = player;
 
     // // Add the rest of the horizontal row.
-    eg_add_entity(app, block_demo_create(x_start - 21 + 72, 92));
-    eg_add_entity(app, block_demo_create(x_start - 21 + 84, 92));
-    eg_add_entity(app, block_demo_create(x_start - 21 + 96, 92));
-    eg_add_entity(app, block_demo_create(x_start - 21 + 108, 92));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 108, 94));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 126, 94));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 144, 94));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 162, 94));
 
     // // Add another vertical column of blocks.
     // eg_add_entity(app, block_demo_create(x_start + 120, y_start + 36));
@@ -111,8 +81,5 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create_sloped(450, y_start + 32, 1));
 
     // Create the initial input handler and add it to the app.
-    // root_callback = root_input_callback;
-    // root_handler = eg_create_input_handler(root_callback, player);
-    // eg_push_input_handler(app, root_handler);
     eg_push_input_handler(app, root_input_handler);
 }
