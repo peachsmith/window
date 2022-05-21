@@ -212,7 +212,6 @@ void root_input_handler(eg_app *app)
         demo_open_pause_menu(app);
 
         app->pause = 1;
-        // eg_push_input_handler(app, pause_menu_input_handler);
         return;
     }
 

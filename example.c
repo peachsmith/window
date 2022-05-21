@@ -468,10 +468,6 @@ void eg_toggle_flag(eg_entity *e, int f)
 //----------------------------------------------------------------------------
 // font functions
 
-// int eg_load_font(eg_app *app, const char *path, int p)
-// {
-//     return eg_impl_load_font(app, path, p);
-// }
 eg_font *eg_load_font(eg_app *app, const char *path, int p)
 {
     return eg_impl_load_font(app, path, p);

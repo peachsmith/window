@@ -1,5 +1,6 @@
 #include "demo/menu/menu.h"
 #include "demo/util/util.h"
+#include "demo/util/ui.h"
 #include "demo/texture/texture.h"
 #include "demo/font/font.h"
 #include "demo/input/input.h"
@@ -35,17 +36,8 @@ static void fish_item_2_callback(eg_app *app, eg_menu *menu)
 
 static void render_fish_menu(eg_app *app, eg_menu *menu)
 {
-    // tile coordinates in the sprite sheet for the cursor
-    int cursor_sheet_x = 5;
-    int cursor_sheet_y = 26;
-
     // Render the menu panel.
-    eg_rect rect = {
-        .x = menu->position.x,
-        .y = menu->position.y,
-        .w = 5,
-        .h = 4};
-    demo_draw_panel(app, &rect);
+    ui_draw_panel(app, menu->position.x, menu->position.y, menu->w, menu->h);
 
     // Render menu items.
     for (int i = 0; i < menu->item_count; i++)
@@ -58,22 +50,10 @@ static void render_fish_menu(eg_app *app, eg_menu *menu)
     }
 
     // Render the cursor.
-    int tile_w = 16;
-    int tile_h = 16;
-    eg_rect cusor_src = {
-        .x = cursor_sheet_x * (tile_w + 2),
-        .y = cursor_sheet_y * (tile_h + 2),
-        .w = tile_w,
-        .h = tile_h};
-    eg_rect cusor_dest = {
-        .x = 107 + (menu->cursor.x * 80),
-        .y = 59 + (menu->cursor.y * 24),
-        .w = tile_w,
-        .h = tile_h};
-    eg_draw_texture(app,
-                    app->textures[DEMO_TEXTURE_UI],
-                    &cusor_src,
-                    &cusor_dest);
+    ui_draw_cursor(
+        app,
+        107 + menu->cursor.x * 80,
+        59 + menu->cursor.y * 24);
 }
 
 void demo_init_fish_menu(eg_app *app)
@@ -85,6 +65,9 @@ void demo_init_fish_menu(eg_app *app)
     // Initialize menu position.
     fish_menu.position.x = 100;
     fish_menu.position.y = 50;
+
+    fish_menu.w = 80;
+    fish_menu.h = 64;
 
     // Initialize menu items.
 

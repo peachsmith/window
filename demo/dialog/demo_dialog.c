@@ -20,6 +20,8 @@ void demo_init_demo_dialog(eg_app *app)
 {
     demo_dialog.position.x = 8;
     demo_dialog.position.y = 108;
+    demo_dialog.w = 224;
+    demo_dialog.h = 48;
     demo_dialog.speed_scale = 4;
     demo_dialog.panel = 0;
 

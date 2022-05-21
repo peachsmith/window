@@ -24,6 +24,8 @@ void demo_init_info_dialog(eg_app *app)
 {
     info_dialog.position.x = 8;
     info_dialog.position.y = 108;
+    info_dialog.w = 224;
+    info_dialog.h = 48;
     info_dialog.speed_scale = 4;
     info_dialog.panel = 0;
     info_dialog.result = 0;

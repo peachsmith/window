@@ -288,6 +288,8 @@ struct eg_menu_item
 struct eg_menu
 {
     eg_point position;
+    int w;
+    int h;
     eg_point cursor;
     eg_menu_item **items;
     int item_count;
@@ -300,6 +302,8 @@ struct eg_menu
 struct eg_dialog
 {
     eg_point position;
+    int w;
+    int h;
     int speed_scale;
     int panel;
 
