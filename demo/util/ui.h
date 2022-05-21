@@ -26,7 +26,7 @@ void ui_draw_text(eg_app *);
  * Params:
  *   eg_app* - a pointer to an app struct
  */
-void ui_draw_cursor(eg_app *);
+void ui_draw_cursor(eg_app *, int, int);
 
 /**
  * Draws an indicator. An indicator signifies that more content will be

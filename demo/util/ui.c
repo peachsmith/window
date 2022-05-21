@@ -150,8 +150,32 @@ void ui_draw_text(eg_app *app)
 {
 }
 
-void ui_draw_cursor(eg_app *app)
+void ui_draw_cursor(eg_app *app, int x, int y)
 {
+    int tile_w = 16;
+    int tile_h = 16;
+    int padding = 2;
+
+    // tile coordinates in the sprite sheet for the cursor
+    int cursor_sheet_x = 5;
+    int cursor_sheet_y = 26;
+
+    eg_rect cusor_src = {
+        .x = cursor_sheet_x * (tile_w + padding),
+        .y = cursor_sheet_y * (tile_h + padding),
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect cusor_dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_draw_texture(app,
+                    app->textures[DEMO_TEXTURE_UI],
+                    &cusor_src,
+                    &cusor_dest);
 }
 
 void ui_draw_indicator(eg_app *app)
