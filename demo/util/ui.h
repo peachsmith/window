@@ -37,6 +37,6 @@ void ui_draw_cursor(eg_app *, int, int);
  * Params:
  *   eg_app* - a pointer to an app struct
  */
-void ui_draw_indicator(eg_app *);
+void ui_draw_indicator(eg_app *, int, int);
 
 #endif

@@ -178,6 +178,31 @@ void ui_draw_cursor(eg_app *app, int x, int y)
                     &cusor_dest);
 }
 
-void ui_draw_indicator(eg_app *app)
+void ui_draw_indicator(eg_app *app, int x, int y)
 {
+    int tile_w = 16;
+    int tile_h = 16;
+    int padding = 2;
+
+    // tile coordinates for the dialog advancement indicator
+    int sheet_x = 5;
+    int sheet_y = 10;
+
+    eg_rect ind_src = {
+        .x = sheet_x * (tile_w + padding),
+        .y = sheet_y * (tile_h + padding),
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect ind_dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_draw_texture(
+        app,
+        app->textures[DEMO_TEXTURE_UI],
+        &ind_src,
+        &ind_dest);
 }
