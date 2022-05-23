@@ -46,7 +46,7 @@ static void render_moving_block(eg_app *app, eg_entity *block)
         block->y_pos + app->cam.y,
         app->registry[block->type].width,
         app->registry[block->type].height);
-        
+
     // hit box
     // eg_rect r;
     // r.x = block->x_pos + app->cam.x;
@@ -466,7 +466,7 @@ eg_entity *block_demo_create_sloped(int x, int y, int dir)
 
     // We use the first flag to indicate the direction of the slope.
     // 1 for incline from left to right, or 0 for incline from right
-    // to left.
+    // to left. 2 for horizontal (used for dismounting slopes).
     block->flags = dir;
 
     return block;

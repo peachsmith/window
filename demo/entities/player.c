@@ -9,21 +9,21 @@
 static void render_player(eg_app *app, eg_entity *player)
 {
     // Render the player sprite.
-    sprite_draw_character(
-        app,
-        player->x_pos,
-        player->y_pos);
+    // sprite_draw_character(
+    //     app,
+    //     player->x_pos,
+    //     player->y_pos);
 
     // hit box
-    // eg_rect r;
-    // r.x = player->x_pos;
-    // r.y = player->y_pos;
-    // r.w = app->registry[player->type].width;
-    // r.h = app->registry[player->type].height;
+    eg_rect r;
+    r.x = player->x_pos;
+    r.y = player->y_pos;
+    r.w = app->registry[player->type].width;
+    r.h = app->registry[player->type].height;
 
-    // // Render the player hit box.
-    // eg_set_color(app, EG_COLOR_ORANGE);
-    // eg_draw_rect(app, &r, 0);
+    // Render the player hit box.
+    eg_set_color(app, EG_COLOR_ORANGE);
+    eg_draw_rect(app, &r, 0);
 }
 
 static void update_player(eg_app *app, eg_entity *player)
@@ -129,8 +129,8 @@ static void update_player(eg_app *app, eg_entity *player)
 
 void player_demo_register(eg_entity_type *t)
 {
-    t->width = 24;
-    t->height = 24;
+    t->width = 24; // 24;
+    t->height = 25; //24;
     t->render = render_player;
     t->update = update_player;
 }

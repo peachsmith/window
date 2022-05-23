@@ -136,8 +136,8 @@ int demo_line(
         bb = pb[1];
     }
 
-    // Draw the source line.
-    // printf("[DEBUG] C: (%d, %d)\n", c.x, c.y);
+    // // Draw the source line.
+    // // printf("[DEBUG] C: (%d, %d)\n", c.x, c.y);
     // eg_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
     // eg_set_color(app, EG_COLOR_INDIGO);
     // eg_draw_rect(app, &cr, 1);
@@ -145,6 +145,22 @@ int demo_line(
 
     if (intersect(&aa, &ab, &ba, &bb, &(res->tx), &(res->ty)))
     {
+        if (dir == 2)
+        {
+            printf("[DEBUG] horizontal slope detected. ty: %.2f, ay: %d, ah: %d, by: %d\n",
+                   res->ty,
+                   ay,
+                   ah,
+                   by);
+
+            // Draw the source line.
+            // printf("[DEBUG] C: (%d, %d)\n", c.x, c.y);
+            eg_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
+            eg_set_color(app, EG_COLOR_INDIGO);
+            eg_draw_rect(app, &cr, 1);
+            eg_draw_line(app, &aa, &ab);
+        }
+
         // printf("[DEBUG] player V0: (%d, %d)\n", a->x_vel, a->y_vel);
         return 1;
     }

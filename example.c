@@ -63,7 +63,7 @@ eg_app *eg_create_app()
     // Ensure that all pointers are NULL or have a default value.
     app->impl = NULL;
 
-    app->scale = 1;
+    app->scale = 3;
 
     app->update = default_update;
     app->draw = default_draw;
@@ -131,16 +131,6 @@ void eg_destroy_app(eg_app *app)
         eg_destroy_entity(app->entities);
         app->entities = next;
     }
-
-    // TODO: remove this, since its just a static array
-    // of function pointers.
-    // Destroy the input handlers.
-    // while (app->input != NULL)
-    // {
-    //     eg_input_handler *previous = app->input->previous;
-    //     eg_destroy_input_handler(app->input);
-    //     app->input = previous;
-    // }
 
     // Destroy the fonts.
     for (int i = 0; i < app->font_count; i++)

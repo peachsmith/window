@@ -64,7 +64,7 @@ static void update(eg_app *app)
 static void draw(eg_app *app)
 {
     // Render background
-    sprite_draw_background(app, 0);
+    // sprite_draw_background(app, 0);
 
     // Render the entities.
     eg_entity *ent = app->entities;

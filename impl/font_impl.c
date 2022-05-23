@@ -33,7 +33,17 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
     // Default to multi texture mode.
     font->mode = FONT_MODE_MULTI;
 
+    for (int i = 0; i < FONT_ATLAS_MAX; i++)
+    {
+        font->sizes[i].x = 0xFF;
+        font->sizes[i].y = 0xFF;
+        font->sizes[i].w = 0xFF;
+        font->sizes[i].h = 0xFF;
+    }
+
     // Create a texture for each character.
+    // 32 = ' '
+    // 126 = '~'
     for (int i = 32; i < 127 && i < FONT_ATLAS_MAX; i++)
     {
         char c[2]; // string representation of a character
@@ -271,7 +281,12 @@ static void impl_draw_text_single(
 {
     eg_impl *impl = app->impl;
 
-    int orig_x = x;
+    int x0 = x;
+
+    // If the line height is 0, default to the line height of the
+    // 'A' character.
+    int dy = line_height > 0 ? line_height
+                             : font->sizes[(int)'A'].h;
 
     for (int i = 0; msg[i] != '\0'; i++)
     {
@@ -287,28 +302,29 @@ static void impl_draw_text_single(
             .w = font->sizes[(int)msg[i]].w,
             .h = font->sizes[(int)msg[i]].h};
 
-        x += font->sizes[(int)msg[i]].w;
+        int glyph_width = font->sizes[(int)msg[i]].w;
 
-        if (line_width > 0 && x >= line_width)
+        int line_break = 0;
+
+        // Detect line breaks.
+        // Line breaks can occur due to the text exceeding the specified
+        // line width, or the presence of a newline character.
+        if ((line_width > 0 && x >= line_width) || msg[i] == '\n')
         {
-            x = orig_x;
-            // If the line height is 0, default to the line height of the
-            // 'A' character.
-            int dy = line_height > 0 ? line_height
-                                     : font->sizes[(int)'A'].h;
+            x = x0;
             y += dy;
+            line_break = 1;
         }
 
-        if (msg[i] == '\n')
-        {
-            x = orig_x;
-            int dy = line_height > 0 ? line_height
-                                     : font->sizes[(int)'A'].h;
-            y += dy;
-        }
-        else
+        // Only render printable characters to the screen.
+        // Only increase the x position if we have not performed a line break.
+        if (msg[i] >= ' ' && msg[i] <= '~')
         {
             SDL_RenderCopy(impl->renderer, font->atlas, &src, &dest);
+            if (!line_break)
+            {
+                x += glyph_width;
+            }
         }
     }
 }

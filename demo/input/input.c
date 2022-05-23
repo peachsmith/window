@@ -138,7 +138,6 @@ void pause_menu_input_handler(eg_app *app)
 {
     if (eg_consume_input(app, EG_KEYCODE_X) || eg_consume_input(app, EG_KEYCODE_Q))
     {
-        printf("[DEBUG] resumed\n");
         app->menu_count--;
         app->pause = 0;
         eg_pop_input_handler(app);
@@ -207,8 +206,6 @@ void root_input_handler(eg_app *app)
     // Pause the application.
     if (eg_consume_input(app, EG_KEYCODE_Q))
     {
-        printf("[DEBUG] paused\n");
-
         demo_open_pause_menu(app);
 
         app->pause = 1;
