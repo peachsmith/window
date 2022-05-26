@@ -223,17 +223,6 @@ static void collide_block(
             int ty = (int)(t_res->ty);
             int pre = check + (other->y_vel - ty);
 
-            if (pre > by)
-            {
-                // printf("[DEBUG] >  %d, ty: %d, A bottom: %d, y_vel: %d, dest: %d, By: %d\n",
-                //        pre - by,
-                //        ty,
-                //        check,
-                //        other->y_vel,
-                //        check + other->y_vel,
-                //        by);
-            }
-
             if (pre == by)
             {
                 if (ty > other->y_vel)
