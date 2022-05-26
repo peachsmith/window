@@ -298,25 +298,29 @@ void root_input_handler(eg_app *app)
     // TEMP
     // The following W, A, S, D controls are used for debugging
     // sprite sheets.
-    // if (eg_consume_input(app, EG_KEYCODE_A) && target->sprite_x > 0)
-    // {
-    //     target->sprite_x--;
-    // }
+    if (eg_consume_input(app, EG_KEYCODE_A)) // && target->sprite_x > 0)
+    {
+        // target->sprite_x--;
+        app->registry[ENTITY_TYPE_PLAYER].width--;
+    }
 
-    // if (eg_consume_input(app, EG_KEYCODE_D) && target->sprite_x < 19)
-    // {
-    //     target->sprite_x++;
-    // }
+    if (eg_consume_input(app, EG_KEYCODE_D)) // && target->sprite_x < 19)
+    {
+        // target->sprite_x++;
+        app->registry[ENTITY_TYPE_PLAYER].width++;
+    }
 
-    // if (eg_consume_input(app, EG_KEYCODE_W) && target->sprite_y > 0)
-    // {
-    //     target->sprite_y--;
-    // }
+    if (eg_consume_input(app, EG_KEYCODE_W)) // && target->sprite_y > 0)
+    {
+        // target->sprite_y--;
+        app->registry[ENTITY_TYPE_PLAYER].height++;
+    }
 
-    // if (eg_consume_input(app, EG_KEYCODE_S) && target->sprite_y < 8)
-    // {
-    //     target->sprite_y++;
-    // }
+    if (eg_consume_input(app, EG_KEYCODE_S)) // && target->sprite_y < 8)
+    {
+        // target->sprite_y++;
+        app->registry[ENTITY_TYPE_PLAYER].height--;
+    }
 
     // END player controls
     //-------------------------------------------------
