@@ -28,6 +28,7 @@ void load_scene_0(eg_app *app)
     // // eg_add_entity(app, block_demo_create(x_start + 110, y_start + 24));
 
     // // the first part of the horizontal row of blocks
+    eg_add_entity(app, block_demo_create(x_start - 27 + 18, 76));
     eg_add_entity(app, block_demo_create(x_start - 27 + 18, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 36, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 54, 94));
@@ -38,7 +39,7 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create_moving(570, y_start - 32, 0));
 
     // Create the player entity and add it to the app.
-    player = player_demo_create(80, 10);
+    player = player_demo_create(150, 10);
     eg_add_entity(app, player);
 
     // TEMP: remove this once searchable entities are implemented.

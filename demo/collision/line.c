@@ -78,8 +78,10 @@ int demo_line(
     // Get the vertices for entity A.
 
     // top left vertex
+    // TODO: I forgot why I added the x velocity to the x position,
+    // but didn't do the same with y.
     pa[0].x = ax + a->x_vel;
-    pa[0].y = ay; // + a->y_vel;
+    pa[0].y = ay + a->y_vel;
 
     // top right vertex
     pa[1].x = ax + aw + a->x_vel;
@@ -147,11 +149,13 @@ int demo_line(
     {
         if (dir == 2)
         {
-            printf("[DEBUG] horizontal slope detected. ty: %.2f, ay: %d, ah: %d, by: %d\n",
-                   res->ty,
-                   ay,
-                   ah,
-                   by);
+            // printf("[DEBUG] horizontal slope detected. ty: %.2f, ay: %d, ah: %d, by: %d\n",
+            //        res->ty,
+            //        ay,
+            //        ah,
+            //        by);
+
+            int check = pa[3].y + (a->y_vel - ((int)(res->ty)));
 
             // Draw the source line.
             // printf("[DEBUG] C: (%d, %d)\n", c.x, c.y);

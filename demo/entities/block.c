@@ -215,12 +215,43 @@ static void collide_block(
 
     if (block->type == ENTITY_TYPE_BLOCK_SLOPE)
     {
+        if ((block->flags & 3) == 2)
+        {
+            int ah = app->registry[other->type].height;
+            int by = block->y_pos + app->cam.y;
+            int check = other->y_pos + ah;
+            int ty = (int)(t_res->ty);
+            int pre = check + (other->y_vel - ty);
+
+            if (pre > by)
+            {
+                // printf("[DEBUG] >  %d, ty: %d, A bottom: %d, y_vel: %d, dest: %d, By: %d\n",
+                //        pre - by,
+                //        ty,
+                //        check,
+                //        other->y_vel,
+                //        check + other->y_vel,
+                //        by);
+            }
+
+            if (pre == by)
+            {
+                if (ty > other->y_vel)
+                {
+                    ty = other->y_vel;
+                    t_res->ty = (float)ty;
+                }
+                else
+                {
+                    t_res->ty--;
+                }
+            }
+        }
+
         // For now, we are assuming that the source entity collided with
         // the diagonal line from above.
         eg_clear_flag(other, ENTITY_FLAG_JUMP);
         eg_set_flag(other, ENTITY_FLAG_GROUND);
-
-        // printf("[DEBUG] line intersection collision (%.2f, %.2f)\n", t_res->tx, t_res->ty);
 
         // The source entity has collided with a diagonal line.
         // We now must determine which direction to resolve the collision
