@@ -286,79 +286,19 @@ static void collide_block(
 
     if (t_res->cn.x)
     {
-        int ax = other->x_pos;
-        int bx = block->x_pos + app->cam.x;
-        int aw = app->registry[other->type].width;
-        int bw = app->registry[block->type].width;
-
-        int ay = other->y_pos;
-        int by = block->y_pos + app->cam.y;
-        int ah = app->registry[other->type].height;
-        int bh = app->registry[block->type].height;
-
-        printf("[DEBUG] CNx: %d, ay: %d, by + bh: %d, aw: %d, ah: %d\n",
-               t_res->cn.x,
-               ay,
-               by + bh,
-               aw,
-               ah);
-
         int absx = other->x_vel > 0 ? other->x_vel : -(other->x_vel);
         float correction = t_res->cn.x * absx * t1;
         int old_xv = other->x_vel;
         other->x_vel += (int)correction;
-
-        // Correct the correction factor.
-        // TODO: move this into the swept_aabb.c file.
-        if (old_xv > 0)
-        {
-            int pre = ax + aw + other->x_vel;
-            if (pre >= bx && pre - bx > 0)
-            {
-                other->x_vel -= (pre - bx);
-            }
-        }
-
-        if (old_xv < 0)
-        {
-            int pre = ax + other->x_vel;
-            if (pre > bx + bw && pre - (bx + bw) > 0)
-            {
-                other->x_vel -= (pre - (bx + bw));
-            }
-        }
     }
 
     if (t_res->cn.y)
     {
-        int ay = other->y_pos;
-        int by = block->y_pos + app->cam.y;
-        int ah = app->registry[other->type].height;
-        int bh = app->registry[block->type].height;
-
         // Correction factor for landing on top of the block.
         int absy = other->y_vel > 0 ? other->y_vel : -(other->y_vel);
         float correction = t_res->cn.y * absy * t1;
         int old_yv = other->y_vel;
         other->y_vel += (int)correction;
-
-        if (old_yv > 0)
-        {
-            int pre = ay + ah + other->y_vel;
-            if (pre >= by && pre - by > 0)
-            {
-                other->y_vel -= (pre - by);
-            }
-        }
-
-        if (old_yv < 0)
-        {
-            int pre = ay + other->y_vel;
-            if (pre > by + bh && pre - (by + bh) > 0)
-            {
-                other->y_vel -= (pre - (by + bh));
-            }
-        }
     }
 
     // If the block is a moving platform, update the source entity's position

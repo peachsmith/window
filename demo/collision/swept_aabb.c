@@ -348,10 +348,6 @@ static int ray_v_rect(
     // and the contact normal will not be set.
     if (near_x > near_y)
     {
-        // printf("[DEBUG] near_x: %.2f, near_y: %.2f, dx: %.2f\n",
-        //        near_x,
-        //        near_y,
-        //        dx);
         // If near_x > near_y and Dx < 0, then CN is (-1, 0)
         // If near_x > near_y and Dx > 0, then CN is (1, 0)
         if (dx < 0)
@@ -367,10 +363,6 @@ static int ray_v_rect(
     }
     else if (near_x < near_y)
     {
-        // printf("[DEBUG] near_x: %.2f, near_y: %.2f, dx: %.2f\n",
-        //        near_x,
-        //        near_y,
-        //        dy);
         // If near_x < near_y and Dy < 0, then CN is (0, 1)
         // If near_x < near_y and Dy > 0, then CN is (0, -1)
         if (dy < 0)
@@ -441,6 +433,16 @@ int demo_swept_aabb(
     r.y = b->y_pos + app->cam.y - (ah / 2);
     r.w = app->registry[b->type].width + aw;
     r.h = app->registry[b->type].height + ah;
+
+    if (aw & 1)
+    {
+        r.x--;
+    }
+
+    if (ah & 1)
+    {
+        r.y--;
+    }
 
     // The origin point P is the center point of source entity A.
     p.x = a->x_pos + aw / 2;
