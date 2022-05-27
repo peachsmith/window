@@ -3,7 +3,7 @@
 
 #include "example.h"
 
-void sprite_draw_character(eg_app *, int, int);
+void sprite_draw_character(eg_app *, int, int, int);
 
 void sprite_draw_brick(eg_app *, int, int);
 

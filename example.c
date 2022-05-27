@@ -22,7 +22,7 @@ eg_font *eg_impl_load_font(eg_app *, const char *, int);
 void eg_impl_draw_text(eg_app *, eg_font *, const char *, int, int);
 void eg_impl_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
 eg_texture *eg_impl_load_texture(eg_app *, const char *);
-void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *);
+void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
 void eg_impl_destroy_font(eg_font *);
 void eg_impl_destroy_texture(eg_texture *);
 
@@ -63,7 +63,7 @@ eg_app *eg_create_app()
     // Ensure that all pointers are NULL or have a default value.
     app->impl = NULL;
 
-    app->scale = 3;
+    app->scale = 1;
 
     app->update = default_update;
     app->draw = default_draw;
@@ -481,7 +481,7 @@ eg_texture *eg_load_texture(eg_app *app, const char *path)
     return eg_impl_load_texture(app, path);
 }
 
-void eg_draw_texture(eg_app *app, eg_texture *texture, eg_rect *src, eg_rect *dest)
+void eg_draw_texture(eg_app *app, eg_texture *texture, eg_rect *src, eg_rect *dest, int mirror)
 {
-    eg_impl_draw_texture(app, texture, src, dest);
+    eg_impl_draw_texture(app, texture, src, dest, mirror);
 }

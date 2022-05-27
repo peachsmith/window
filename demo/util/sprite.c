@@ -3,7 +3,7 @@
 
 #include "colors.h"
 
-void sprite_draw_character(eg_app *app, int x, int y)
+void sprite_draw_character(eg_app *app, int x, int y, int mirror)
 {
     // tile dimensions
     int tile_w = 24;
@@ -29,7 +29,8 @@ void sprite_draw_character(eg_app *app, int x, int y)
         app,
         app->textures[DEMO_TEXTURE_CHARACTERS],
         &src,
-        &dest);
+        &dest,
+        mirror);
 }
 
 void sprite_draw_brick(eg_app *app, int x, int y)
@@ -58,7 +59,8 @@ void sprite_draw_brick(eg_app *app, int x, int y)
         app,
         app->textures[DEMO_TEXTURE_SCENERY],
         &src,
-        &dest);
+        &dest,
+        0);
 }
 
 void sprite_draw_grass_block(eg_app *app, int x, int y, int w, int h)
@@ -222,7 +224,8 @@ void sprite_draw_grass_block(eg_app *app, int x, int y, int w, int h)
                 app,
                 app->textures[DEMO_TEXTURE_SCENERY],
                 &src,
-                &dest);
+                &dest,
+                0);
         }
     }
 }

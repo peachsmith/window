@@ -14,14 +14,14 @@ static void render_block(eg_app *app, eg_entity *block)
         block->y_pos + app->cam.y);
 
     // hit box
-    eg_rect r;
-    r.x = block->x_pos + app->cam.x;
-    r.y = block->y_pos + app->cam.y;
-    r.w = app->registry[block->type].width;
-    r.h = app->registry[block->type].height;
+    // eg_rect r;
+    // r.x = block->x_pos + app->cam.x;
+    // r.y = block->y_pos + app->cam.y;
+    // r.w = app->registry[block->type].width;
+    // r.h = app->registry[block->type].height;
 
-    eg_set_color(app, EG_COLOR_LIGHT_BLUE);
-    eg_draw_rect(app, &r, 0);
+    // eg_set_color(app, EG_COLOR_LIGHT_BLUE);
+    // eg_draw_rect(app, &r, 0);
 }
 
 // Renders a throughblock

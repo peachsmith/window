@@ -24,5 +24,6 @@
 #define ENTITY_FLAG_MOVE 3
 #define ENTITY_FLAG_UPDATE 4
 #define ENTITY_FLAG_SLOPE 5
+#define ENTITY_FLAG_MIRROR 6
 
 #endif

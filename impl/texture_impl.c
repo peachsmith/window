@@ -34,12 +34,18 @@ eg_texture *eg_impl_load_texture(eg_app *app, const char *path)
     return texture;
 }
 
-void eg_impl_draw_texture(eg_app *app, eg_texture *texture, eg_rect *src, eg_rect *dest)
+void eg_impl_draw_texture(eg_app *app, eg_texture *texture, eg_rect *src, eg_rect *dest, int mirror)
 {
     SDL_Renderer *r = app->impl->renderer;
     SDL_Texture *sheet = texture->img;
     SDL_Rect s = {.x = src->x, .y = src->y, .w = src->w, .h = src->h};
     SDL_Rect d = {.x = dest->x, .y = dest->y, .w = dest->w, .h = dest->h};
+
+    if (mirror)
+    {
+        SDL_RenderCopyEx(r, sheet, &s, &d, 0.0f, NULL, SDL_FLIP_HORIZONTAL);
+        return;
+    }
 
     SDL_RenderCopy(r, sheet, &s, &d);
 }

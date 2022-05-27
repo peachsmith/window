@@ -128,6 +128,6 @@ void eg_impl_draw_text(eg_app *, eg_font *, const char *, int, int);
  *   eg_rect* - a rectangular region of the screen to which the texture
  *              will be rendered
  */
-void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *);
+void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
 
 #endif

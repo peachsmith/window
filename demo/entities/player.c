@@ -9,21 +9,22 @@
 static void render_player(eg_app *app, eg_entity *player)
 {
     // Render the player sprite.
-    // sprite_draw_character(
-    //     app,
-    //     player->x_pos,
-    //     player->y_pos);
+    sprite_draw_character(
+        app,
+        player->x_pos,
+        player->y_pos,
+        eg_check_flag(player, ENTITY_FLAG_MIRROR));
 
     // hit box
-    eg_rect r;
-    r.x = player->x_pos;
-    r.y = player->y_pos;
-    r.w = app->registry[player->type].width;
-    r.h = app->registry[player->type].height;
+    // eg_rect r;
+    // r.x = player->x_pos;
+    // r.y = player->y_pos;
+    // r.w = app->registry[player->type].width;
+    // r.h = app->registry[player->type].height;
 
-    // Render the player hit box.
-    eg_set_color(app, EG_COLOR_ORANGE);
-    eg_draw_rect(app, &r, 0);
+    // // Render the player hit box.
+    // eg_set_color(app, EG_COLOR_ORANGE);
+    // eg_draw_rect(app, &r, 0);
 }
 
 static void update_player(eg_app *app, eg_entity *player)
@@ -111,37 +112,26 @@ static void update_player(eg_app *app, eg_entity *player)
         player->y_pos += player->y_vel;
     }
 
-    // TEMP Perform vertical inertia.
-    if (player->y_vel > 0)
+    // If the player is on a sloped platform, set the y velocity to some
+    // value that causes the player to collide with the platform before
+    // moving into open space.
+    if (eg_check_flag(player, ENTITY_FLAG_SLOPE))
     {
-        player->y_vel--;
+        eg_clear_flag(player, ENTITY_FLAG_SLOPE);
+        player->y_vel = 4;
     }
 
-    if (player->y_vel < 0)
+    // Apply gravity.
+    if (player->y_vel < 4)
     {
         player->y_vel++;
     }
-
-    // // If the player is on a sloped platform, set the y velocity to some
-    // // value that causes the player to collide with the platform before
-    // // moving into open space.
-    // if (eg_check_flag(player, ENTITY_FLAG_SLOPE))
-    // {
-    //     eg_clear_flag(player, ENTITY_FLAG_SLOPE);
-    //     player->y_vel = 4;
-    // }
-
-    // // Apply gravity.
-    // if (player->y_vel < 4)
-    // {
-    //     player->y_vel++;
-    // }
 }
 
 void player_demo_register(eg_entity_type *t)
 {
-    t->width = 24;  // 24;
-    t->height = 24; // 24;
+    t->width = 24;
+    t->height = 24;
     t->render = render_player;
     t->update = update_player;
 }

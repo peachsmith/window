@@ -144,7 +144,7 @@ void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
             dest.x = col;
             dest.y = row;
 
-            eg_draw_texture(app, app->textures[DEMO_TEXTURE_UI], &src, &dest);
+            eg_draw_texture(app, app->textures[DEMO_TEXTURE_UI], &src, &dest, 0);
         }
     }
 }
@@ -178,7 +178,8 @@ void ui_draw_cursor(eg_app *app, int x, int y)
     eg_draw_texture(app,
                     app->textures[DEMO_TEXTURE_UI],
                     &cusor_src,
-                    &cusor_dest);
+                    &cusor_dest,
+                    0);
 }
 
 void ui_draw_indicator(eg_app *app, int x, int y)
@@ -207,5 +208,6 @@ void ui_draw_indicator(eg_app *app, int x, int y)
         app,
         app->textures[DEMO_TEXTURE_UI],
         &ind_src,
-        &ind_dest);
+        &ind_dest,
+        0);
 }
