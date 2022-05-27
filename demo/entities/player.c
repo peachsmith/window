@@ -111,20 +111,31 @@ static void update_player(eg_app *app, eg_entity *player)
         player->y_pos += player->y_vel;
     }
 
-    // If the player is on a sloped platform, set the y velocity to some
-    // value that causes the player to collide with the platform before
-    // moving into open space.
-    if (eg_check_flag(player, ENTITY_FLAG_SLOPE))
+    // TEMP Perform vertical inertia.
+    if (player->y_vel > 0)
     {
-        eg_clear_flag(player, ENTITY_FLAG_SLOPE);
-        player->y_vel = 4;
+        player->y_vel--;
     }
 
-    // Apply gravity.
-    if (player->y_vel < 4)
+    if (player->y_vel < 0)
     {
         player->y_vel++;
     }
+
+    // // If the player is on a sloped platform, set the y velocity to some
+    // // value that causes the player to collide with the platform before
+    // // moving into open space.
+    // if (eg_check_flag(player, ENTITY_FLAG_SLOPE))
+    // {
+    //     eg_clear_flag(player, ENTITY_FLAG_SLOPE);
+    //     player->y_vel = 4;
+    // }
+
+    // // Apply gravity.
+    // if (player->y_vel < 4)
+    // {
+    //     player->y_vel++;
+    // }
 }
 
 void player_demo_register(eg_entity_type *t)

@@ -29,6 +29,8 @@ void load_scene_0(eg_app *app)
 
     // // the first part of the horizontal row of blocks
     eg_add_entity(app, block_demo_create(x_start - 27 + 18, 76));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 56, 76));
+
     eg_add_entity(app, block_demo_create(x_start - 27 + 18, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 36, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 54, 94));
@@ -50,6 +52,12 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create(x_start - 27 + 126, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 144, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 162, 94));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 162, 76));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 162, 112));
+
+    eg_add_entity(app, block_demo_create(x_start - 27 -24, 94));
+    eg_add_entity(app, block_demo_create(x_start - 27 -24, 76));
+    eg_add_entity(app, block_demo_create(x_start - 27 -24, 112));
 
     // // Add another vertical column of blocks.
     // eg_add_entity(app, block_demo_create(x_start + 120, y_start + 36));
@@ -74,7 +82,7 @@ void load_scene_0(eg_app *app)
 
     // Sloped block
     // eg_add_entity(app, block_demo_create_sloped(x_start + 102, y_start + 4));
-    eg_add_entity(app, block_demo_create_sloped(89, y_start + 32, 1));
+    // eg_add_entity(app, block_demo_create_sloped(89, y_start + 32, 1));
     // eg_add_entity(app, block_demo_create_sloped(0, y_start + 32, 0));
     // eg_add_entity(app, block_demo_create_sloped(330, y_start + 32, 0));
     // eg_add_entity(app, block_demo_create_long(330, y_start + 32));

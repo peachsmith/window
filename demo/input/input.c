@@ -252,18 +252,34 @@ void root_input_handler(eg_app *app)
         }
     }
 
-    // down arrow key
-    if (eg_peek_input(app, EG_KEYCODE_DOWN))
+    if (eg_peek_input(app, EG_KEYCODE_UP))
     {
-        if (!eg_check_flag(target, ENTITY_FLAG_DOWN))
+        if (target->y_vel >= -2)
         {
-            eg_set_flag(target, ENTITY_FLAG_DOWN);
+            target->y_vel -= 2;
         }
     }
-    else if (eg_check_flag(target, ENTITY_FLAG_DOWN))
+
+    if (eg_peek_input(app, EG_KEYCODE_DOWN))
     {
-        eg_clear_flag(target, ENTITY_FLAG_DOWN);
+        if (target->y_vel <= 2)
+        {
+            target->y_vel += 2;
+        }
     }
+
+    // down arrow key
+    // if (eg_peek_input(app, EG_KEYCODE_DOWN))
+    // {
+    //     if (!eg_check_flag(target, ENTITY_FLAG_DOWN))
+    //     {
+    //         eg_set_flag(target, ENTITY_FLAG_DOWN);
+    //     }
+    // }
+    // else if (eg_check_flag(target, ENTITY_FLAG_DOWN))
+    // {
+    //     eg_clear_flag(target, ENTITY_FLAG_DOWN);
+    // }
 
     // jumping
     if (eg_consume_input(app, EG_KEYCODE_SPACE))

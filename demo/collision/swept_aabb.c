@@ -348,6 +348,10 @@ static int ray_v_rect(
     // and the contact normal will not be set.
     if (near_x > near_y)
     {
+        // printf("[DEBUG] near_x: %.2f, near_y: %.2f, dx: %.2f\n",
+        //        near_x,
+        //        near_y,
+        //        dx);
         // If near_x > near_y and Dx < 0, then CN is (-1, 0)
         // If near_x > near_y and Dx > 0, then CN is (1, 0)
         if (dx < 0)
@@ -363,6 +367,10 @@ static int ray_v_rect(
     }
     else if (near_x < near_y)
     {
+        // printf("[DEBUG] near_x: %.2f, near_y: %.2f, dx: %.2f\n",
+        //        near_x,
+        //        near_y,
+        //        dy);
         // If near_x < near_y and Dy < 0, then CN is (0, 1)
         // If near_x < near_y and Dy > 0, then CN is (0, -1)
         if (dy < 0)
