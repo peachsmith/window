@@ -288,7 +288,6 @@ static void collide_block(
     {
         int absx = other->x_vel > 0 ? other->x_vel : -(other->x_vel);
         float correction = t_res->cn.x * absx * t1;
-        int old_xv = other->x_vel;
         other->x_vel += (int)correction;
     }
 
@@ -297,7 +296,6 @@ static void collide_block(
         // Correction factor for landing on top of the block.
         int absy = other->y_vel > 0 ? other->y_vel : -(other->y_vel);
         float correction = t_res->cn.y * absy * t1;
-        int old_yv = other->y_vel;
         other->y_vel += (int)correction;
     }
 
