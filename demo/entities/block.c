@@ -1,20 +1,27 @@
 #include "demo/entities/block.h"
 #include "demo/entities/entity_types.h"
 #include "demo/collision/collision.h"
+#include "demo/util/sprite.h"
 
 #include <stdio.h>
 
 // Renders a standard block
 static void render_block(eg_app *app, eg_entity *block)
 {
-    eg_rect r;
-    r.x = block->x_pos + app->cam.x;
-    r.y = block->y_pos + app->cam.y;
-    r.w = app->registry[block->type].width;
-    r.h = app->registry[block->type].height;
+    sprite_draw_brick(
+        app,
+        block->x_pos + app->cam.x,
+        block->y_pos + app->cam.y);
 
-    eg_set_color(app, EG_COLOR_LIGHT_BLUE);
-    eg_draw_rect(app, &r, 0);
+    // hit box
+    // eg_rect r;
+    // r.x = block->x_pos + app->cam.x;
+    // r.y = block->y_pos + app->cam.y;
+    // r.w = app->registry[block->type].width;
+    // r.h = app->registry[block->type].height;
+
+    // eg_set_color(app, EG_COLOR_LIGHT_BLUE);
+    // eg_draw_rect(app, &r, 0);
 }
 
 // Renders a throughblock
@@ -33,14 +40,22 @@ static void render_throughblock(eg_app *app, eg_entity *block)
 // Renders a moving block
 static void render_moving_block(eg_app *app, eg_entity *block)
 {
-    eg_rect r;
-    r.x = block->x_pos + app->cam.x;
-    r.y = block->y_pos + app->cam.y;
-    r.w = app->registry[block->type].width;
-    r.h = app->registry[block->type].height;
+    sprite_draw_grass_block(
+        app,
+        block->x_pos + app->cam.x,
+        block->y_pos + app->cam.y,
+        app->registry[block->type].width,
+        app->registry[block->type].height);
 
-    eg_set_color(app, EG_COLOR_SEA_GREEN);
-    eg_draw_rect(app, &r, 0);
+    // hit box
+    // eg_rect r;
+    // r.x = block->x_pos + app->cam.x;
+    // r.y = block->y_pos + app->cam.y;
+    // r.w = app->registry[block->type].width;
+    // r.h = app->registry[block->type].height;
+
+    // eg_set_color(app, EG_COLOR_SEA_GREEN);
+    // eg_draw_rect(app, &r, 0);
 }
 
 // Renders a sloped block
@@ -200,12 +215,34 @@ static void collide_block(
 
     if (block->type == ENTITY_TYPE_BLOCK_SLOPE)
     {
+        // Correct the correction factor.
+        // TODO: move this into the line.c file.
+        if ((block->flags & 3) == 2)
+        {
+            int ah = app->registry[other->type].height;
+            int by = block->y_pos + app->cam.y;
+            int check = other->y_pos + ah;
+            int ty = (int)(t_res->ty);
+            int pre = check + (other->y_vel - ty);
+
+            if (pre == by)
+            {
+                if (ty > other->y_vel)
+                {
+                    ty = other->y_vel;
+                    t_res->ty = (float)ty;
+                }
+                else
+                {
+                    t_res->ty--;
+                }
+            }
+        }
+
         // For now, we are assuming that the source entity collided with
         // the diagonal line from above.
         eg_clear_flag(other, ENTITY_FLAG_JUMP);
         eg_set_flag(other, ENTITY_FLAG_GROUND);
-
-        // printf("[DEBUG] line intersection collision (%.2f, %.2f)\n", t_res->tx, t_res->ty);
 
         // The source entity has collided with a diagonal line.
         // We now must determine which direction to resolve the collision
@@ -297,8 +334,8 @@ static void collide_block(
 void block_demo_register(eg_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK;
-    t->width = 12;
-    t->height = 12;
+    t->width = 18;
+    t->height = 18;
     t->render = render_block;
     t->collide = collide_block;
 }
@@ -401,8 +438,8 @@ eg_entity *throughblock_demo_create_long(int x, int y)
 void block_demo_register_moving(eg_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_MOVING;
-    t->width = 60;
-    t->height = 16;
+    t->width = 54;
+    t->height = 18;
     t->render = render_moving_block;
     t->update = update_moving_block;
     t->collide = collide_block;
@@ -451,7 +488,7 @@ eg_entity *block_demo_create_sloped(int x, int y, int dir)
 
     // We use the first flag to indicate the direction of the slope.
     // 1 for incline from left to right, or 0 for incline from right
-    // to left.
+    // to left. 2 for horizontal (used for dismounting slopes).
     block->flags = dir;
 
     return block;

@@ -657,7 +657,8 @@ eg_texture *eg_load_texture(eg_app *, const char *);
  *   eg_rect* - a rectangular region of the texture that will be rendered
  *   eg_rect* - a rectangular region of the screen to which the texture
  *              will be rendered
+ *   int - 1 for horizontal flip, 0 for no flip
  */
-void eg_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *);
+void eg_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
 
 #endif

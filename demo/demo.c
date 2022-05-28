@@ -10,6 +10,7 @@
 #include "demo/dialog/dialog.h"
 #include "demo/font/font.h"
 #include "demo/texture/texture.h"
+#include "demo/util/sprite.h"
 
 #include <stdio.h>
 
@@ -62,6 +63,9 @@ static void update(eg_app *app)
  */
 static void draw(eg_app *app)
 {
+    // Render background
+    // sprite_draw_background(app, 0);
+
     // Render the entities.
     eg_entity *ent = app->entities;
     while (ent != NULL)

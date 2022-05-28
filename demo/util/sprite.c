@@ -1,14 +1,81 @@
-#include "demo/util/ui.h"
+#include "demo/util/sprite.h"
 #include "demo/texture/texture.h"
 
-void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
-{
-    // dimensions of each tile from the sprite sheet
-    int tile_w = 16;
-    int tile_h = 16;
+#include "colors.h"
 
-    // number of pixels between each tile
-    int padding = 2;
+void sprite_draw_character(eg_app *app, int x, int y, int mirror)
+{
+    // tile dimensions
+    int tile_w = 24;
+    int tile_h = 24;
+
+    // tile coordinates
+    int tile_x = 0;
+    int tile_y = 0;
+
+    eg_rect src = {
+        .x = tile_x * tile_w,
+        .y = tile_y * tile_h,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_draw_texture(
+        app,
+        app->textures[DEMO_TEXTURE_CHARACTERS],
+        &src,
+        &dest,
+        mirror);
+}
+
+void sprite_draw_brick(eg_app *app, int x, int y)
+{
+    // tile dimensions
+    int tile_w = 18;
+    int tile_h = 18;
+
+    // tile coordinates
+    int tile_x = 7;
+    int tile_y = 2;
+
+    eg_rect src = {
+        .x = tile_x * tile_w,
+        .y = tile_y * tile_h,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_draw_texture(
+        app,
+        app->textures[DEMO_TEXTURE_SCENERY],
+        &src,
+        &dest,
+        0);
+}
+
+void sprite_draw_grass_block(eg_app *app, int x, int y, int w, int h)
+{
+    // tile dimensions
+    int tile_w = 18;
+    int tile_h = 18;
+
+    // tile coordinates
+    int tile_x_left = 1;
+    int tile_x_mid = 2;
+    int tile_x_right = 3;
+    int tile_y_top = 1;
+    int tile_y_mid = 6;
+    int tile_y_bottom = 7;
 
     // The width and height of the panel cannot be less than the width and
     // height of the tiles used to build it.
@@ -22,15 +89,24 @@ void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
         h = tile_h;
     }
 
-    // tile coordinates in the sprite sheet for the menu elements
-    // These numbers will be multiplied by the tile dimensions to calculate
-    // the pixel coordinates.
-    int tile_x_left = 3;
-    int tile_x_mid = 4;
-    int tile_x_right = 5;
-    int tile_y_top = 18;
-    int tile_y_mid = 19;
-    int tile_y_bottom = 20;
+    // If the height is less than the tile height,
+    // we change the y coordinate to use tiles that have a bottom border.
+    if (h == tile_h)
+    {
+        tile_y_top = 0;
+        tile_y_mid = 0;
+        tile_y_bottom = 0;
+    }
+
+    // If the width is less than the tile width,
+    // we change the x coordinate to use tiles that have
+    // left and right borders.
+    if (w == tile_w)
+    {
+        tile_x_left = 0;
+        tile_x_mid = 0;
+        tile_x_right = 0;
+    }
 
     int sheet_x = tile_x_left;
     int sheet_y = tile_y_top;
@@ -38,8 +114,8 @@ void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
     // source rectangle for menu tiles
     // There is a 2 pixel margin between each tile in the sprite sheet.
     eg_rect src = {
-        .x = sheet_x * (tile_w + padding),
-        .y = sheet_y * (tile_h + padding),
+        .x = sheet_x * tile_w,
+        .y = sheet_y * tile_h,
         .w = tile_w,
         .h = tile_h};
 
@@ -139,75 +215,29 @@ void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
                 }
             }
 
-            src.x = sheet_x * (tile_w + padding);
-            src.y = sheet_y * (tile_h + padding);
+            src.x = sheet_x * tile_w;
+            src.y = sheet_y * tile_h;
             dest.x = col;
             dest.y = row;
 
-            eg_draw_texture(app, app->textures[DEMO_TEXTURE_UI], &src, &dest, 0);
+            eg_draw_texture(
+                app,
+                app->textures[DEMO_TEXTURE_SCENERY],
+                &src,
+                &dest,
+                0);
         }
     }
 }
 
-void ui_draw_text(eg_app *app)
+void sprite_draw_background(eg_app *app, int type)
 {
-}
+    eg_rect dest = {
+        .x = 0,
+        .y = 0,
+        .w = app->screen_width,
+        .h = app->screen_height};
 
-void ui_draw_cursor(eg_app *app, int x, int y)
-{
-    int tile_w = 16;
-    int tile_h = 16;
-    int padding = 2;
-
-    // tile coordinates in the sprite sheet for the cursor
-    int cursor_sheet_x = 5;
-    int cursor_sheet_y = 26;
-
-    eg_rect cusor_src = {
-        .x = cursor_sheet_x * (tile_w + padding),
-        .y = cursor_sheet_y * (tile_h + padding),
-        .w = tile_w,
-        .h = tile_h};
-
-    eg_rect cusor_dest = {
-        .x = x,
-        .y = y,
-        .w = tile_w,
-        .h = tile_h};
-
-    eg_draw_texture(app,
-                    app->textures[DEMO_TEXTURE_UI],
-                    &cusor_src,
-                    &cusor_dest,
-                    0);
-}
-
-void ui_draw_indicator(eg_app *app, int x, int y)
-{
-    int tile_w = 16;
-    int tile_h = 16;
-    int padding = 2;
-
-    // tile coordinates for the dialog advancement indicator
-    int sheet_x = 5;
-    int sheet_y = 10;
-
-    eg_rect ind_src = {
-        .x = sheet_x * (tile_w + padding),
-        .y = sheet_y * (tile_h + padding),
-        .w = tile_w,
-        .h = tile_h};
-
-    eg_rect ind_dest = {
-        .x = x,
-        .y = y,
-        .w = tile_w,
-        .h = tile_h};
-
-    eg_draw_texture(
-        app,
-        app->textures[DEMO_TEXTURE_UI],
-        &ind_src,
-        &ind_dest,
-        0);
+    eg_set_color(app, EG_COLOR_CORNFLOWER_BLUE);
+    eg_draw_rect(app, &dest, 1);
 }

@@ -434,6 +434,16 @@ int demo_swept_aabb(
     r.w = app->registry[b->type].width + aw;
     r.h = app->registry[b->type].height + ah;
 
+    if (aw & 1)
+    {
+        r.x--;
+    }
+
+    if (ah & 1)
+    {
+        r.y--;
+    }
+
     // The origin point P is the center point of source entity A.
     p.x = a->x_pos + aw / 2;
     p.y = a->y_pos + ah / 2;

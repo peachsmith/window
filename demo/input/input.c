@@ -136,9 +136,8 @@ void info_menu_input_handler(eg_app *app)
 
 void pause_menu_input_handler(eg_app *app)
 {
-    if (eg_consume_input(app, EG_KEYCODE_X))
+    if (eg_consume_input(app, EG_KEYCODE_X) || eg_consume_input(app, EG_KEYCODE_Q))
     {
-        printf("[DEBUG] resumed\n");
         app->menu_count--;
         app->pause = 0;
         eg_pop_input_handler(app);
@@ -207,8 +206,6 @@ void root_input_handler(eg_app *app)
     // Pause the application.
     if (eg_consume_input(app, EG_KEYCODE_Q))
     {
-        printf("[DEBUG] paused\n");
-
         demo_open_pause_menu(app);
 
         app->pause = 1;
@@ -240,6 +237,7 @@ void root_input_handler(eg_app *app)
     // left movement
     if (eg_peek_input(app, EG_KEYCODE_LEFT))
     {
+        eg_clear_flag(target, ENTITY_FLAG_MIRROR);
         if (target->x_vel >= -2)
         {
             target->x_vel -= 2;
@@ -249,11 +247,28 @@ void root_input_handler(eg_app *app)
     // right movement
     if (eg_peek_input(app, EG_KEYCODE_RIGHT))
     {
+        eg_set_flag(target, ENTITY_FLAG_MIRROR);
         if (target->x_vel <= 2)
         {
             target->x_vel += 2;
         }
     }
+
+    // if (eg_peek_input(app, EG_KEYCODE_UP))
+    // {
+    //     if (target->y_vel >= -2)
+    //     {
+    //         target->y_vel -= 2;
+    //     }
+    // }
+
+    // if (eg_peek_input(app, EG_KEYCODE_DOWN))
+    // {
+    //     if (target->y_vel <= 2)
+    //     {
+    //         target->y_vel += 2;
+    //     }
+    // }
 
     // down arrow key
     if (eg_peek_input(app, EG_KEYCODE_DOWN))
@@ -301,25 +316,29 @@ void root_input_handler(eg_app *app)
     // TEMP
     // The following W, A, S, D controls are used for debugging
     // sprite sheets.
-    if (eg_consume_input(app, EG_KEYCODE_A) && target->sprite_x > 0)
-    {
-        target->sprite_x--;
-    }
+    // if (eg_consume_input(app, EG_KEYCODE_A)) // && target->sprite_x > 0)
+    // {
+    //     // target->sprite_x--;
+    //     app->registry[ENTITY_TYPE_PLAYER].width--;
+    // }
 
-    if (eg_consume_input(app, EG_KEYCODE_D) && target->sprite_x < 19)
-    {
-        target->sprite_x++;
-    }
+    // if (eg_consume_input(app, EG_KEYCODE_D)) // && target->sprite_x < 19)
+    // {
+    //     // target->sprite_x++;
+    //     app->registry[ENTITY_TYPE_PLAYER].width++;
+    // }
 
-    if (eg_consume_input(app, EG_KEYCODE_W) && target->sprite_y > 0)
-    {
-        target->sprite_y--;
-    }
+    // if (eg_consume_input(app, EG_KEYCODE_W)) // && target->sprite_y > 0)
+    // {
+    //     // target->sprite_y--;
+    //     app->registry[ENTITY_TYPE_PLAYER].height++;
+    // }
 
-    if (eg_consume_input(app, EG_KEYCODE_S) && target->sprite_y < 8)
-    {
-        target->sprite_y++;
-    }
+    // if (eg_consume_input(app, EG_KEYCODE_S)) // && target->sprite_y < 8)
+    // {
+    //     // target->sprite_y++;
+    //     app->registry[ENTITY_TYPE_PLAYER].height--;
+    // }
 
     // END player controls
     //-------------------------------------------------

@@ -40,4 +40,7 @@ typedef uint32_t eg_color;
 #define EG_COLOR_GROOMP ((uint32_t)(0xFF5d6872))
 #define EG_COLOR_PURPLE ((uint32_t)(0xFF433455))
 
+// Other colors
+#define EG_COLOR_CORNFLOWER_BLUE ((uint32_t)(0xFF6495ED))
+
 #endif

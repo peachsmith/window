@@ -78,8 +78,10 @@ int demo_line(
     // Get the vertices for entity A.
 
     // top left vertex
+    // TODO: I forgot why I added the x velocity to the x position,
+    // but didn't do the same with y.
     pa[0].x = ax + a->x_vel;
-    pa[0].y = ay; // + a->y_vel;
+    pa[0].y = ay + a->y_vel;
 
     // top right vertex
     pa[1].x = ax + aw + a->x_vel;
@@ -136,8 +138,8 @@ int demo_line(
         bb = pb[1];
     }
 
-    // Draw the source line.
-    // printf("[DEBUG] C: (%d, %d)\n", c.x, c.y);
+    // // Draw the source line.
+    // // printf("[DEBUG] C: (%d, %d)\n", c.x, c.y);
     // eg_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
     // eg_set_color(app, EG_COLOR_INDIGO);
     // eg_draw_rect(app, &cr, 1);
@@ -145,7 +147,15 @@ int demo_line(
 
     if (intersect(&aa, &ab, &ba, &bb, &(res->tx), &(res->ty)))
     {
-        // printf("[DEBUG] player V0: (%d, %d)\n", a->x_vel, a->y_vel);
+        if (dir == 2)
+        {
+            // Draw the source line.
+            eg_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
+            eg_set_color(app, EG_COLOR_INDIGO);
+            eg_draw_rect(app, &cr, 1);
+            eg_draw_line(app, &aa, &ab);
+        }
+
         return 1;
     }
 
