@@ -1,5 +1,5 @@
-#ifndef EG_DEMO_UI_H
-#define EG_DEMO_UI_H
+#ifndef EG_DEMO_SPRITE_H
+#define EG_DEMO_SPRITE_H
 
 #include "example.h"
 

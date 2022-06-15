@@ -63,7 +63,13 @@ eg_app *eg_create_app()
     // Ensure that all pointers are NULL or have a default value.
     app->impl = NULL;
 
-    app->scale = 1;
+    // Populate the debug structure with the default values.
+    app->debug.overlay = 0;
+    app->debug.hitboxes = 0;
+    app->debug.frame_len = 16;
+    app->debug.frame_by_frame = 0;
+
+    app->scale = 3;
 
     app->update = default_update;
     app->draw = default_draw;

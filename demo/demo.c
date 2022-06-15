@@ -11,6 +11,7 @@
 #include "demo/font/font.h"
 #include "demo/texture/texture.h"
 #include "demo/util/sprite.h"
+#include "demo/util/overlay.h"
 
 #include <stdio.h>
 
@@ -90,6 +91,11 @@ static void draw(eg_app *app)
             eg_dialog *d = app->dialogs[app->dialog_count - 1];
             d->render(app, d);
         }
+    }
+
+    if (app->debug.overlay)
+    {
+        debug_draw_overlay(app);
     }
 }
 
