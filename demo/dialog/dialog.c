@@ -63,6 +63,7 @@ void demo_render_dialog(eg_app *app, eg_dialog *dialog)
         ui_draw_indicator(
             app,
             dialog->position.x + dialog->w - 18,
-            dialog->position.y + dialog->h - 18);
+            dialog->position.y + dialog->h - 18,
+            UI_INDICATOR_ADVANCE);
     }
 }

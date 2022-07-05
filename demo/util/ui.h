@@ -3,6 +3,12 @@
 
 #include "example.h"
 
+#define UI_INDICATOR_ADVANCE 1
+#define UI_INDICATOR_SCROLL_UP 2
+#define UI_INDICATOR_SCROLL_DOWN 3
+#define UI_INDICATOR_SCROLL_LEFT 4
+#define UI_INDICATOR_SCROLL_RIGHT 5
+
 /**
  * Draws a panel.
  *
@@ -36,7 +42,10 @@ void ui_draw_cursor(eg_app *, int, int);
  *
  * Params:
  *   eg_app* - a pointer to an app struct
+ *   int - the x coordinate on the screen
+ *   int - the y coordinate on the screen
+ *   int - the type of indicator to render
  */
-void ui_draw_indicator(eg_app *, int, int);
+void ui_draw_indicator(eg_app *, int, int, int);
 
 #endif

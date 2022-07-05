@@ -4,6 +4,7 @@
 #include "demo/texture/texture.h"
 #include "demo/font/font.h"
 #include "demo/input/input.h"
+#include "colors.h"
 
 #include <stdio.h>
 
@@ -33,6 +34,7 @@ static eg_menu_item *debug_items[4];
 static void debug_item_1_callback(eg_app *app, eg_menu *menu)
 {
     printf("[DEBUG] \"Scenes\" was selected\n");
+    demo_open_scenes_menu(app);
 }
 
 static void debug_item_2_callback(eg_app *app, eg_menu *menu)
@@ -50,6 +52,17 @@ static void debug_item_4_callback(eg_app *app, eg_menu *menu)
     printf("[DEBUG] \"Hit Boxes\" was selected\n");
 }
 
+static void update_debug_menu(eg_app *app, eg_menu *menu)
+{
+    // Update the scroll indicator counter.
+    app->counters[0] += 2;
+
+    if (app->counters[0] >= 120)
+    {
+        app->counters[0] = 0;
+    }
+}
+
 static void render_debug_menu(eg_app *app, eg_menu *menu)
 {
     // Render the menu panel.
@@ -63,13 +76,74 @@ static void render_debug_menu(eg_app *app, eg_menu *menu)
                      menu->items[i]->text,
                      menu->items[i]->position.x,
                      menu->items[i]->position.y);
+
+        if (i == 1)
+        {
+            // Render the selectable options.
+            eg_draw_text(app,
+                         app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
+                         "1",
+                         menu->items[i]->position.x + 100,
+                         menu->items[i]->position.y);
+
+            eg_draw_text(app,
+                         app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
+                         "2",
+                         menu->items[i]->position.x + 120,
+                         menu->items[i]->position.y);
+
+            eg_draw_text(app,
+                         app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
+                         "4",
+                         menu->items[i]->position.x + 140,
+                         menu->items[i]->position.y);
+
+            if (menu->cursor.y == 1)
+            {
+                // Get the scroll indicator counter.
+                int count = app->counters[0];
+                int offset = 0;
+                if (count < 40)
+                {
+                    offset = count / 10;
+                }
+                else if (count < 60)
+                {
+                    offset = 4;
+                }
+                else if (count < 100)
+                {
+                    offset = 4 - ((count - 60) / 10);
+                }
+
+                // Render the left and right indicators.
+                ui_draw_indicator(app,
+                                  menu->items[i]->position.x + 80 - offset,
+                                  menu->items[i]->position.y,
+                                  UI_INDICATOR_SCROLL_LEFT);
+
+                ui_draw_indicator(app,
+                                  menu->items[i]->position.x + 160 + offset,
+                                  menu->items[i]->position.y,
+                                  UI_INDICATOR_SCROLL_RIGHT);
+            }
+
+            // Show which option is currently selected.
+            int selection = 100;
+            eg_set_color(app, EG_COLOR_RED);
+            eg_rect r = {.x = menu->items[i]->position.x + selection - 5,
+                         .y = menu->items[i]->position.y,
+                         .w = 16,
+                         .h = 16};
+            eg_draw_rect(app, &r, 0);
+        }
     }
 
     // Render the cursor.
     ui_draw_cursor(
         app,
-        10 + menu->cursor.x * 80,
-        10 + menu->cursor.y * 24);
+        (menu->position.x + 5) + menu->cursor.x * 80,
+        (menu->position.y + 5) + menu->cursor.y * 24);
 }
 
 void demo_init_debug_menu(eg_app *app)
@@ -125,6 +199,7 @@ void demo_init_debug_menu(eg_app *app)
 
     // Render function.
     debug_menu.render = render_debug_menu;
+    debug_menu.update = update_debug_menu;
 }
 
 void demo_open_debug_menu(eg_app *app)

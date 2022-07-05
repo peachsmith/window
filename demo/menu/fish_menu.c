@@ -91,6 +91,7 @@ void demo_init_fish_menu(eg_app *app)
 
     // Render function.
     fish_menu.render = render_fish_menu;
+    fish_menu.update = NULL;
 }
 
 void demo_open_fish_menu(eg_app *app)

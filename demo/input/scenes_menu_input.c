@@ -3,14 +3,13 @@
 
 #include <stdio.h>
 
-void debug_menu_input_handler(eg_app *app)
+void scenes_menu_input_handler(eg_app *app)
 {
     if (eg_consume_input(app, EG_KEYCODE_X) ||
         eg_consume_input(app, EG_KEYCODE_Q) ||
         eg_consume_input(app, EG_KEYCODE_ESCAPE))
     {
         app->menu_count--;
-        app->pause = 0;
         eg_pop_input_handler(app);
         return;
     }
@@ -50,27 +49,5 @@ void debug_menu_input_handler(eg_app *app)
         eg_menu_item *item = m->items[m->cursor.y];
 
         item->callback(app, NULL);
-    }
-
-    if (eg_consume_input(app, EG_KEYCODE_LEFT))
-    {
-        eg_menu *m = app->menus[app->menu_count - 1];
-
-        if (m->cursor.y == 1 && app->debug.frame_len > 1)
-        {
-            app->debug.frame_len /= 2;
-            printf("[DEBUG] frame length: %d\n", app->debug.frame_len);
-        }
-    }
-
-    if (eg_consume_input(app, EG_KEYCODE_RIGHT))
-    {
-        eg_menu *m = app->menus[app->menu_count - 1];
-
-        if (m->cursor.y == 1 && app->debug.frame_len < 8)
-        {
-            app->debug.frame_len *= 2;
-            printf("[DEBUG] frame length: %d\n", app->debug.frame_len);
-        }
     }
 }

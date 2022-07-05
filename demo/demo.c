@@ -14,6 +14,7 @@
 #include "demo/util/overlay.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 /**
  * Implmentation of the update function.
@@ -23,6 +24,14 @@
  */
 static void update(eg_app *app)
 {
+    // if (app->counters != NULL)
+    // {
+    //     for (int i = 0; i < app->counter_count; i++)
+    //     {
+    //         app->counters[i]++;
+    //     }
+    // }
+
     // Handle input.
     if (app->input != NULL && app->input_count > 0)
     {
@@ -34,6 +43,16 @@ static void update(eg_app *app)
     {
         eg_dialog *d = app->dialogs[app->dialog_count - 1];
         d->update(app, d);
+    }
+
+    // Update dialogs.
+    if (app->menu_count > 0)
+    {
+        eg_menu *m = app->menus[app->menu_count - 1];
+        if (m->update != NULL)
+        {
+            m->update(app, m);
+        }
     }
 
     if (app->pause)
@@ -132,6 +151,20 @@ int demo_prepare(eg_app *app)
 
     // Initialize input.
     demo_init_input(app);
+
+    // Initialize counters.
+    int count = 1;
+    int *counters = (int *)malloc(sizeof(int) * count);
+    if (counters == NULL)
+    {
+        return 0;
+    }
+    app->counters = counters;
+    app->counter_count = count;
+    for (int i = 0; i < app->counter_count; i++)
+    {
+        app->counters[i] = 0;
+    }
 
     // Register the entity types.
     player_demo_register(&reg[ENTITY_TYPE_PLAYER]);

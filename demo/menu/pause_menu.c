@@ -123,6 +123,7 @@ void demo_init_pause_menu(eg_app *app)
 
     // Render function.
     pause_menu.render = render_pause_menu;
+    pause_menu.update = NULL;
 }
 
 void demo_open_pause_menu(eg_app *app)

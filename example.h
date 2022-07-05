@@ -228,6 +228,10 @@ struct eg_app
     eg_callback *input;
     int input_count;
 
+    // counters
+    int *counters;
+    int counter_count;
+
     // A linked list of entities.
     // Entities are updated and rendered in the opposite order from which they
     // were added. The last entity added will be the first entity updated and
@@ -309,6 +313,7 @@ struct eg_menu
     eg_menu_item **items;
     int item_count;
     eg_menu_callback render;
+    eg_menu_callback update;
 
     // for passing values between menus and dialogs.
     int result;

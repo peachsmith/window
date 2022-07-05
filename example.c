@@ -66,7 +66,7 @@ eg_app *eg_create_app()
     // Populate the debug structure with the default values.
     app->debug.overlay = 0;
     app->debug.hitboxes = 0;
-    app->debug.frame_len = 16;
+    app->debug.frame_len = 1;
     app->debug.frame_by_frame = 0;
 
     app->scale = 3;
@@ -93,6 +93,9 @@ eg_app *eg_create_app()
 
     app->dialogs = NULL;
     app->dialog_count = 0;
+
+    app->counters = NULL;
+    app->counter_count = 0;
 
     app->screen_width = EG_DEFAULT_SCREEN_WIDTH;
     app->screen_height = EG_DEFAULT_SCREEN_HEIGHT;
@@ -148,6 +151,11 @@ void eg_destroy_app(eg_app *app)
     for (int i = 0; i < app->texture_count; i++)
     {
         eg_impl_destroy_texture(app->textures[i]);
+    }
+
+    if (app->counters != NULL)
+    {
+        free(app->counters);
     }
 
     // Destroy the entity registry.

@@ -222,7 +222,7 @@ void eg_impl_delay(eg_app *app)
         // Converting from Uint64 to Uint32 will truncate the value, but the
         // difference between the frame length and the elapsed milliseconds
         // should never be greater than UINT32_MAX.
-        SDL_Delay((Uint32)(impl->frame_len - elapsed));
+        SDL_Delay((Uint32)(impl->frame_len * app->debug.frame_len - elapsed));
     }
 }
 

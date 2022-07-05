@@ -107,6 +107,7 @@ void demo_init_info_menu(eg_app *app)
 
     // Render function.
     info_menu.render = render_info_menu;
+    info_menu.update = NULL;
 }
 
 void demo_open_info_menu(eg_app *app)
