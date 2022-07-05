@@ -9,7 +9,7 @@ void load_scene_1(eg_app *app)
 
     // Starting position for building a sequence of blocks.
     int x_start = 50;
-    int y_start = 0;
+    // int y_start = 0; // currently unused
 
     app->cam.x = 0;
     app->cam.y = 0;

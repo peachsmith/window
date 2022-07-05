@@ -1,5 +1,7 @@
 #include "demo/scenes/scenes.h"
 
+#include <stdlib.h>
+
 void clear_scene(eg_app *app)
 {
     eg_pop_input_handler(app);
