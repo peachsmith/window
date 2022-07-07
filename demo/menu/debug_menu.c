@@ -13,9 +13,7 @@ static eg_menu debug_menu;
 
 // debug submenu item callbacks
 static void debug_item_1_callback(eg_app *, eg_menu *);
-static void debug_item_2_callback(eg_app *, eg_menu *);
 static void debug_item_3_callback(eg_app *, eg_menu *);
-static void debug_item_4_callback(eg_app *, eg_menu *);
 static void render_debug_menu(eg_app *, eg_menu *);
 
 // debug submenu item text
