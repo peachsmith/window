@@ -162,6 +162,7 @@ struct eg_debug
 {
     int overlay;
     int hitboxes;
+    int collisions;
     int frame_len;
     int frame_by_frame;
 };

@@ -66,6 +66,7 @@ eg_app *eg_create_app()
     // Populate the debug structure with the default values.
     app->debug.overlay = 0;
     app->debug.hitboxes = 0;
+    app->debug.collisions = 0;
     app->debug.frame_len = 1;
     app->debug.frame_by_frame = 0;
 

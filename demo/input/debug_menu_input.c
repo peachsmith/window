@@ -30,7 +30,7 @@ void debug_menu_input_handler(eg_app *app)
     {
         eg_menu *m = app->menus[app->menu_count - 1];
 
-        if (m->cursor.y < 3)
+        if (m->cursor.y < 4)
         {
             m->cursor.y++;
         }
@@ -47,9 +47,13 @@ void debug_menu_input_handler(eg_app *app)
         // items[1]
         // items[2]
         // items[3]
+        // items[4]
         eg_menu_item *item = m->items[m->cursor.y];
 
-        item->callback(app, NULL);
+        if (item->callback != NULL)
+        {
+            item->callback(app, NULL);
+        }
     }
 
     if (eg_consume_input(app, EG_KEYCODE_LEFT))
@@ -61,6 +65,16 @@ void debug_menu_input_handler(eg_app *app)
             app->debug.frame_len /= 2;
             printf("[DEBUG] frame length: %d\n", app->debug.frame_len);
         }
+
+        if (m->cursor.y == 3 && app->debug.hitboxes)
+        {
+            app->debug.hitboxes = 0;
+        }
+
+        if (m->cursor.y == 4 && app->debug.collisions)
+        {
+            app->debug.collisions = 0;
+        }
     }
 
     if (eg_consume_input(app, EG_KEYCODE_RIGHT))
@@ -71,6 +85,16 @@ void debug_menu_input_handler(eg_app *app)
         {
             app->debug.frame_len *= 2;
             printf("[DEBUG] frame length: %d\n", app->debug.frame_len);
+        }
+
+        if (m->cursor.y == 3 && !(app->debug.hitboxes))
+        {
+            app->debug.hitboxes = 1;
+        }
+
+        if (m->cursor.y == 4 && !(app->debug.collisions))
+        {
+            app->debug.collisions = 1;
         }
     }
 }
