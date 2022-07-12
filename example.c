@@ -70,7 +70,7 @@ eg_app *eg_create_app()
     app->debug.frame_len = 1;
     app->debug.frame_by_frame = 0;
 
-    app->scale = 3;
+    app->scale = 1;
 
     app->update = default_update;
     app->draw = default_draw;

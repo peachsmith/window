@@ -30,8 +30,6 @@ static void render_input_menu(eg_app *app, eg_menu *menu)
 {
     int menu_x = menu->position.x;
     int menu_y = menu->position.y;
-    int cursor_x = menu->cursor.x;
-    int cursor_y = menu->cursor.y;
     eg_font *font = app->fonts[DEMO_FONT_POKEMON_FIRE_RED];
 
     // Render the menu panel.
@@ -55,7 +53,7 @@ static void render_input_menu(eg_app *app, eg_menu *menu)
 
         int pressed = 0;
         int count = 0;
-        eg_keycode key;
+        eg_keycode key = EG_KEYCODE_W;
 
         switch (i)
         {
