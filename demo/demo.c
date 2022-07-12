@@ -131,6 +131,20 @@ int demo_prepare(eg_app *app)
     app->update = update;
     app->draw = draw;
 
+    // Initialize counters.
+    int max_counters = 100;
+    int *counters = (int *)malloc(sizeof(int) * max_counters);
+    if (counters == NULL)
+    {
+        return 0;
+    }
+    app->counters = counters;
+    app->counter_count = max_counters;
+    for (int i = 0; i < app->counter_count; i++)
+    {
+        app->counters[i] = -1;
+    }
+
     // Initialize tetxures.
     if (!demo_init_textures(app))
     {
@@ -144,27 +158,16 @@ int demo_prepare(eg_app *app)
     }
 
     // Initialize menus.
-    demo_init_menus(app);
+    if (!demo_init_menus(app))
+    {
+        return 0;
+    }
 
     // Initialize dialogs.
     demo_init_dialogs(app);
 
     // Initialize input.
     demo_init_input(app);
-
-    // Initialize counters.
-    int count = 1;
-    int *counters = (int *)malloc(sizeof(int) * count);
-    if (counters == NULL)
-    {
-        return 0;
-    }
-    app->counters = counters;
-    app->counter_count = count;
-    for (int i = 0; i < app->counter_count; i++)
-    {
-        app->counters[i] = 0;
-    }
 
     // Register the entity types.
     player_demo_register(&reg[ENTITY_TYPE_PLAYER]);

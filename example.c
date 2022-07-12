@@ -181,6 +181,25 @@ void eg_end_frame(eg_app *app)
     eg_impl_delay(app);
 }
 
+int *eg_reserve_counter(eg_app *app)
+{
+    if (app->counter_count < 1 || app->counters == NULL)
+    {
+        return NULL;
+    }
+
+    for (int i = 0; i < app->counter_count; i++)
+    {
+        if (app->counters[i] == -1)
+        {
+            app->counters[i] = 0;
+            return &(app->counters[i]);
+        }
+    }
+
+    return NULL;
+}
+
 //----------------------------------------------------------------------------
 // drawing functions
 

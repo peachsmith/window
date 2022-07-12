@@ -31,6 +31,9 @@ static eg_menu_item debug_item_4;
 static eg_menu_item debug_item_5;
 static eg_menu_item *debug_items[5];
 
+// used to keep track of animated horizontal arrow indicators
+static int *toggle_counter = NULL;
+
 static void debug_item_1_callback(eg_app *app, eg_menu *menu)
 {
     printf("[DEBUG] \"Scenes\" was selected\n");
@@ -44,12 +47,18 @@ static void debug_item_3_callback(eg_app *app, eg_menu *menu)
 
 static void update_debug_menu(eg_app *app, eg_menu *menu)
 {
-    // Update the scroll indicator counter.
-    app->counters[0] += 2;
-
-    if (app->counters[0] >= 120)
+    if (toggle_counter == NULL)
     {
-        app->counters[0] = 0;
+        return;
+    }
+
+    // Update the scroll indicator counter.
+    // app->counters[0] += 2;
+    *toggle_counter += 2;
+
+    if (*toggle_counter >= 120)
+    {
+        *toggle_counter = 0;
     }
 }
 
@@ -207,7 +216,7 @@ static void render_debug_menu(eg_app *app, eg_menu *menu)
         (menu_y + 5) + cursor_y * 24);
 }
 
-void demo_init_debug_menu(eg_app *app)
+int demo_init_debug_menu(eg_app *app)
 {
     // Initialize cursor position.
     debug_menu.cursor.x = 0;
@@ -268,6 +277,15 @@ void demo_init_debug_menu(eg_app *app)
     // Render function.
     debug_menu.render = render_debug_menu;
     debug_menu.update = update_debug_menu;
+
+    toggle_counter = eg_reserve_counter(app);
+    if (toggle_counter == NULL)
+    {
+        printf("[ERROR] failed to reserve counter\n");
+        return 0;
+    }
+
+    return 1;
 }
 
 void demo_open_debug_menu(eg_app *app)

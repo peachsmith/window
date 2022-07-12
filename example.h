@@ -396,6 +396,8 @@ void eg_begin_frame(eg_app *);
  */
 void eg_end_frame(eg_app *);
 
+int *eg_reserve_counter(eg_app *);
+
 //----------------------------------------------------------------------------
 // drawing functions
 
