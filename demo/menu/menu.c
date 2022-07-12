@@ -21,6 +21,8 @@ int demo_init_menus(eg_app *app)
 
     demo_init_scenes_menu(app);
 
+    demo_init_input_menu(app);
+
     app->menus = &(menus[0]);
     app->menu_count = 0;
 

@@ -117,10 +117,11 @@ eg_app *eg_create_app()
         return NULL;
     }
 
-    // Initialize the key press flags to 0.
+    // Initialize the key press flags and actuation counters to 0.
     for (int i = 0; i < EG_MAX_KEYCODE; i++)
     {
         app->key_captures[i] = 0;
+        app->actuation_counters[i] = 0;
     }
 
     // TEMP: camera boudnaries for debugging.

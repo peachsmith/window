@@ -66,12 +66,12 @@ void debug_menu_input_handler(eg_app *app)
             printf("[DEBUG] frame length: %d\n", app->debug.frame_len);
         }
 
-        if (m->cursor.y == 3 && app->debug.hitboxes)
+        if (m->cursor.y == 2 && app->debug.hitboxes)
         {
             app->debug.hitboxes = 0;
         }
 
-        if (m->cursor.y == 4 && app->debug.collisions)
+        if (m->cursor.y == 3 && app->debug.collisions)
         {
             app->debug.collisions = 0;
         }
@@ -87,12 +87,12 @@ void debug_menu_input_handler(eg_app *app)
             printf("[DEBUG] frame length: %d\n", app->debug.frame_len);
         }
 
-        if (m->cursor.y == 3 && !(app->debug.hitboxes))
+        if (m->cursor.y == 2 && !(app->debug.hitboxes))
         {
             app->debug.hitboxes = 1;
         }
 
-        if (m->cursor.y == 4 && !(app->debug.collisions))
+        if (m->cursor.y == 3 && !(app->debug.collisions))
         {
             app->debug.collisions = 1;
         }

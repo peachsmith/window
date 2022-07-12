@@ -177,6 +177,9 @@ struct eg_app
     // detected.
     unsigned char key_captures[EG_MAX_KEYCODE];
 
+    // Counters to indicate how long an input has been actuated.
+    unsigned char actuation_counters[EG_MAX_KEYCODE];
+
     // For different sized windows.
     int scale;
 

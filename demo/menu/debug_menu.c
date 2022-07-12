@@ -13,15 +13,14 @@ static eg_menu debug_menu;
 
 // debug submenu item callbacks
 static void debug_item_1_callback(eg_app *, eg_menu *);
-static void debug_item_3_callback(eg_app *, eg_menu *);
 static void render_debug_menu(eg_app *, eg_menu *);
 
 // debug submenu item text
 static const char *item_1_text = "Scenes";
 static const char *item_2_text = "Frame Length";
-static const char *item_3_text = "Frame by Frame";
-static const char *item_4_text = "Hit Boxes";
-static const char *item_5_text = "Draw Collisions";
+static const char *item_3_text = "Hit Boxes";
+static const char *item_4_text = "Draw Collisions";
+static const char *item_5_text = "Input Actuation";
 
 // debug submenu items
 static eg_menu_item debug_item_1;
@@ -36,13 +35,12 @@ static int *toggle_counter = NULL;
 
 static void debug_item_1_callback(eg_app *app, eg_menu *menu)
 {
-    printf("[DEBUG] \"Scenes\" was selected\n");
     demo_open_scenes_menu(app);
 }
 
-static void debug_item_3_callback(eg_app *app, eg_menu *menu)
+static void debug_item_6_callback(eg_app *app, eg_menu *menu)
 {
-    printf("[DEBUG] \"Frame by Frame\" was selected\n");
+    demo_open_input_menu(app);
 }
 
 static void update_debug_menu(eg_app *app, eg_menu *menu)
@@ -84,9 +82,10 @@ static void render_debug_menu(eg_app *app, eg_menu *menu)
         if (i == 1)
         {
             // Render the selectable options.
-            eg_draw_text(app, font, "1", item_x + 100, item_y);
-            eg_draw_text(app, font, "2", item_x + 120, item_y);
-            eg_draw_text(app, font, "4", item_x + 140, item_y);
+            eg_draw_text(app, font, "1", item_x + 107, item_y);
+            eg_draw_text(app, font, "2", item_x + 126, item_y);
+            eg_draw_text(app, font, "4", item_x + 146, item_y);
+            eg_draw_text(app, font, "8", item_x + 166, item_y);
 
             if (menu->cursor.y == 1)
             {
@@ -113,24 +112,47 @@ static void render_debug_menu(eg_app *app, eg_menu *menu)
                                   UI_INDICATOR_SCROLL_LEFT);
 
                 ui_draw_indicator(app,
-                                  item_x + 160 + offset,
+                                  item_x + 180 + offset,
                                   item_y,
                                   UI_INDICATOR_SCROLL_RIGHT);
             }
 
             // Show which option is currently selected.
             int selection = 100;
+
+            switch (app->debug.frame_len)
+            {
+            case 1:
+                selection -= 1;
+                break;
+
+            case 2:
+                selection += 20;
+                break;
+
+            case 4:
+                selection += 40;
+                break;
+
+            case 8:
+                selection += 60;
+                break;
+
+            default:
+                break;
+            }
+
             eg_set_color(app, EG_COLOR_RED);
-            eg_rect r = {.x = item_x + selection - 5,
+            eg_rect r = {.x = item_x + selection + 1,
                          .y = item_y,
                          .w = 16,
                          .h = 16};
             eg_draw_rect(app, &r, 0);
         }
 
-        if (i == 3)
+        if (i == 2)
         {
-            if (menu->cursor.y == 3)
+            if (menu->cursor.y == 2)
             {
                 // Get the scroll indicator counter.
                 int count = app->counters[0];
@@ -168,9 +190,9 @@ static void render_debug_menu(eg_app *app, eg_menu *menu)
                 item_y);
         }
 
-        if (i == 4)
+        if (i == 3)
         {
-            if (menu->cursor.y == 4)
+            if (menu->cursor.y == 3)
             {
                 // Get the scroll indicator counter.
                 int count = app->counters[0];
@@ -249,25 +271,25 @@ int demo_init_debug_menu(eg_app *app)
     debug_item_2.callback = NULL;
     debug_items[1] = &debug_item_2;
 
-    // item 3 (Frame by FRame)
+    // item 4 (Hitboxes)
     debug_item_3.position.x = debug_menu.position.x + x_origin;
     debug_item_3.position.y = debug_menu.position.y + y_origin + 2 * y_margin;
     debug_item_3.text = item_3_text;
-    debug_item_3.callback = debug_item_3_callback;
+    debug_item_3.callback = NULL;
     debug_items[2] = &debug_item_3;
 
-    // item 4 (Hitboxes)
+    // item 5 (Draw Collisions)
     debug_item_4.position.x = debug_menu.position.x + x_origin;
     debug_item_4.position.y = debug_menu.position.y + y_origin + 3 * y_margin;
     debug_item_4.text = item_4_text;
     debug_item_4.callback = NULL;
     debug_items[3] = &debug_item_4;
 
-    // item 5 (Draw Collisions)
+    // item 5 (Input Actuation Debugger)
     debug_item_5.position.x = debug_menu.position.x + x_origin;
     debug_item_5.position.y = debug_menu.position.y + y_origin + 4 * y_margin;
     debug_item_5.text = item_5_text;
-    debug_item_5.callback = NULL;
+    debug_item_5.callback = debug_item_6_callback;
     debug_items[4] = &debug_item_5;
 
     // Give the debug menu a reference to its items.

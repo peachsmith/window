@@ -24,14 +24,6 @@
  */
 static void update(eg_app *app)
 {
-    // if (app->counters != NULL)
-    // {
-    //     for (int i = 0; i < app->counter_count; i++)
-    //     {
-    //         app->counters[i]++;
-    //     }
-    // }
-
     // Handle input.
     if (app->input != NULL && app->input_count > 0)
     {
@@ -45,7 +37,7 @@ static void update(eg_app *app)
         d->update(app, d);
     }
 
-    // Update dialogs.
+    // Update menus.
     if (app->menu_count > 0)
     {
         eg_menu *m = app->menus[app->menu_count - 1];
