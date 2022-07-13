@@ -9,6 +9,28 @@
 // temporary counter for animation
 static int tmp_counter = 0;
 
+static int get_player_x_vel(eg_entity *player)
+{
+    // acceleration to velocity conversion table
+    int a_to_v[24] = {
+        1, 1, 1, 1, 1, 1,
+        2, 2, 2, 2, 2, 2,
+        3, 3, 3, 3, 3, 3,
+        4, 4, 4, 4, 4, 4};
+
+    int x_vel = 0;
+    if (player->x_acc > 0)
+    {
+        x_vel = a_to_v[player->x_acc];
+    }
+    else if (player->x_acc < 0)
+    {
+        x_vel = -(a_to_v[-(player->x_acc)]);
+    }
+
+    return x_vel;
+}
+
 static void render_player(eg_app *app, eg_entity *player)
 {
     int tile = 0;
@@ -58,13 +80,6 @@ static void render_player(eg_app *app, eg_entity *player)
 
 static void update_player(eg_app *app, eg_entity *player)
 {
-    // acceleration table
-    int h_acc[24] = {
-        1, 1, 1, 1, 1, 1,
-        2, 2, 2, 2, 2, 2,
-        3, 3, 3, 3, 3, 3,
-        4, 4, 4, 4, 4, 4};
-
     // Get the width and height of the player.
     int w = app->registry[player->type].width;
     int h = app->registry[player->type].height;
@@ -78,15 +93,7 @@ static void update_player(eg_app *app, eg_entity *player)
     //--------------------------------------------------------------------
     // Horizontal Movement
 
-    int avx = 0;
-    if (player->x_acc > 0)
-    {
-        avx = h_acc[player->x_acc];
-    }
-    else if (player->x_acc < 0)
-    {
-        avx = -(h_acc[-(player->x_acc)]);
-    }
+    int avx = get_player_x_vel(player);
 
     // horizontal velocity applied by a carrier
     if (carry && avx == 0)
@@ -217,6 +224,7 @@ void player_demo_register(eg_entity_type *t)
     t->height = 24;
     t->render = render_player;
     t->update = update_player;
+    t->get_x_vel = get_player_x_vel;
 }
 
 eg_entity *player_demo_create(int x, int y)
@@ -233,8 +241,6 @@ eg_entity *player_demo_create(int x, int y)
     player->type = ENTITY_TYPE_PLAYER;
     player->x_pos = x;
     player->y_pos = y;
-    player->sprite_x = 0;
-    player->sprite_y = 0;
 
     return player;
 }

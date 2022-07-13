@@ -276,10 +276,6 @@ struct eg_entity
     int y_vel;     // vertical velocity
     uint8_t flags; // flags
 
-    // TEMP for debugging acceleration
-    int x_acc; // horizontal acceleration
-    int x_t;   // x correction factor
-
     // Used for actions that take multiple iterations of the main loop.
     int ticks;
 
@@ -290,9 +286,9 @@ struct eg_entity
     eg_entity *next;
     eg_entity *previous;
 
-    // TEMP: for debugging sprite sheet
-    int sprite_x;
-    int sprite_y;
+    // Experimental Features
+    int x_acc; // horizontal acceleration
+    int x_t;   // x velocity correction factor
 };
 
 struct eg_entity_type
@@ -303,6 +299,9 @@ struct eg_entity_type
     eg_entity_callback render;
     eg_entity_callback update;
     eg_collider collide;
+
+    // Experimental Features
+    int (*get_x_vel)(eg_entity *); // calculates current velocity.
 };
 
 struct eg_menu_item

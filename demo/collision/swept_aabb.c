@@ -405,21 +405,8 @@ int demo_swept_aabb(
         return 0;
     }
 
-    // acceleration table
-    int h_acc[24] = {
-        1, 1, 1, 1, 1, 1,
-        2, 2, 2, 2, 2, 2,
-        3, 3, 3, 3, 3, 3,
-        4, 4, 4, 4, 4, 4};
-    int avx = 0;
-    if (a->x_acc > 0)
-    {
-        avx = h_acc[a->x_acc];
-    }
-    else if (a->x_acc < 0)
-    {
-        avx = -(h_acc[-(a->x_acc)]);
-    }
+    // Get the effective velocity of entity A.
+    int avx = app->registry[a->type].get_x_vel(a);
 
     // Check for velocity.
     // This function is only intended for a collision scenario in which at
@@ -427,7 +414,6 @@ int demo_swept_aabb(
     // Two entities may be overlapping, and that may have some effect
     // elsewhere, but for the purposes of ray casting, it not considered a
     // collision.
-    // if (a->x_vel == 0 && a->y_vel == 0 && b->x_vel == 0 && b->y_vel == 0)
     if (avx == 0 && a->y_vel == 0 && b->x_vel == 0 && b->y_vel == 0)
     {
         return 0;
@@ -467,7 +453,7 @@ int demo_swept_aabb(
     p.y = a->y_pos + ah / 2;
 
     // The direction vector D is the velocity of source entity A.
-    d.x = avx; // a->x_vel;
+    d.x = avx;
     d.y = a->y_vel;
 
     if (ray_v_rect(&p, &d, &r, res))

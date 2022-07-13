@@ -305,26 +305,9 @@ static void collide_block(
 
     if (t_res->cn.x)
     {
-        // acceleration table
-        int h_acc[24] = {
-            1, 1, 1, 1, 1, 1,
-            2, 2, 2, 2, 2, 2,
-            3, 3, 3, 3, 3, 3,
-            4, 4, 4, 4, 4, 4};
-        int avx = 0;
-        if (other->x_acc > 0)
-        {
-            avx = h_acc[other->x_acc];
-        }
-        else if (other->x_acc < 0)
-        {
-            avx = -(h_acc[-(other->x_acc)]);
-        }
-
-        // int absx = other->x_vel > 0 ? other->x_vel : -(other->x_vel);
+        int avx = app->registry[other->type].get_x_vel(other);
         int absx = avx > 0 ? avx : -(avx);
         float correction = t_res->cn.x * absx * t1;
-        // other->x_vel += (int)correction;
         other->x_t = (int)correction;
     }
 

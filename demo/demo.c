@@ -110,6 +110,11 @@ static void draw(eg_app *app)
     }
 }
 
+int default_get_x_vel(eg_entity *e)
+{
+    return e->x_vel;
+}
+
 int demo_prepare(eg_app *app)
 {
     // Create the entity registry.
@@ -119,6 +124,15 @@ int demo_prepare(eg_app *app)
         fprintf(stderr, "failed to create entity registry\n");
         return 0;
     }
+
+    for (int i = 0; i < ENTITY_TYPE_MAX; i++)
+    {
+        reg[i].render = NULL;
+        reg[i].update = NULL;
+        reg[i].collide = NULL;
+        reg[i].get_x_vel = default_get_x_vel;
+    }
+
     app->registry = reg;
     app->update = update;
     app->draw = draw;
