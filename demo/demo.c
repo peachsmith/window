@@ -11,8 +11,10 @@
 #include "demo/font/font.h"
 #include "demo/texture/texture.h"
 #include "demo/util/sprite.h"
+#include "demo/util/overlay.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 /**
  * Implmentation of the update function.
@@ -33,6 +35,16 @@ static void update(eg_app *app)
     {
         eg_dialog *d = app->dialogs[app->dialog_count - 1];
         d->update(app, d);
+    }
+
+    // Update menus.
+    if (app->menu_count > 0)
+    {
+        eg_menu *m = app->menus[app->menu_count - 1];
+        if (m->update != NULL)
+        {
+            m->update(app, m);
+        }
     }
 
     if (app->pause)
@@ -91,6 +103,11 @@ static void draw(eg_app *app)
             d->render(app, d);
         }
     }
+
+    if (app->debug.overlay)
+    {
+        debug_draw_overlay(app);
+    }
 }
 
 int demo_prepare(eg_app *app)
@@ -106,6 +123,20 @@ int demo_prepare(eg_app *app)
     app->update = update;
     app->draw = draw;
 
+    // Initialize counters.
+    int max_counters = 100;
+    int *counters = (int *)malloc(sizeof(int) * max_counters);
+    if (counters == NULL)
+    {
+        return 0;
+    }
+    app->counters = counters;
+    app->counter_count = max_counters;
+    for (int i = 0; i < app->counter_count; i++)
+    {
+        app->counters[i] = -1;
+    }
+
     // Initialize tetxures.
     if (!demo_init_textures(app))
     {
@@ -119,7 +150,10 @@ int demo_prepare(eg_app *app)
     }
 
     // Initialize menus.
-    demo_init_menus(app);
+    if (!demo_init_menus(app))
+    {
+        return 0;
+    }
 
     // Initialize dialogs.
     demo_init_dialogs(app);

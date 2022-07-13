@@ -182,7 +182,14 @@ void ui_draw_cursor(eg_app *app, int x, int y)
                     0);
 }
 
-void ui_draw_indicator(eg_app *app, int x, int y)
+// Tile coordinates for indicator types:
+// dialog advance: 5, 10
+// scroll up: 20, 25
+// scroll down: 21, 25
+// scroll left: 20, 25
+// scroll right: 21, 26
+
+void ui_draw_indicator(eg_app *app, int x, int y, int type)
 {
     int tile_w = 16;
     int tile_h = 16;
@@ -191,6 +198,37 @@ void ui_draw_indicator(eg_app *app, int x, int y)
     // tile coordinates for the dialog advancement indicator
     int sheet_x = 5;
     int sheet_y = 10;
+
+    switch (type)
+    {
+    case UI_INDICATOR_ADVANCE:
+        sheet_x = 5;
+        sheet_y = 10;
+        break;
+
+    case UI_INDICATOR_SCROLL_UP:
+        sheet_x = 20;
+        sheet_y = 25;
+        break;
+
+    case UI_INDICATOR_SCROLL_DOWN:
+        sheet_x = 21;
+        sheet_y = 25;
+        break;
+
+    case UI_INDICATOR_SCROLL_LEFT:
+        sheet_x = 20;
+        sheet_y = 26;
+        break;
+
+    case UI_INDICATOR_SCROLL_RIGHT:
+        sheet_x = 21;
+        sheet_y = 26;
+        break;
+
+    default:
+        break;
+    }
 
     eg_rect ind_src = {
         .x = sheet_x * (tile_w + padding),

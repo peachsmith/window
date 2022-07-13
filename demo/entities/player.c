@@ -6,25 +6,54 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// temporary counter for animation
+static int tmp_counter = 0;
+
 static void render_player(eg_app *app, eg_entity *player)
 {
+    int tile = 0;
+    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
+    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
+    int grounded = eg_check_flag(player, ENTITY_FLAG_GROUND);
+
+    // Animation logic for walking to the right
+    if ((left_pressed || right_pressed) && grounded)
+    {
+        if (tmp_counter < 6)
+        {
+            tile = 0;
+        }
+        else if (tmp_counter < 16)
+        {
+            tile = 1;
+        }
+    }
+
+    if (!grounded)
+    {
+        tile = 1;
+    }
+
     // Render the player sprite.
     sprite_draw_character(
         app,
         player->x_pos,
         player->y_pos,
-        eg_check_flag(player, ENTITY_FLAG_MIRROR));
+        eg_check_flag(player, ENTITY_FLAG_MIRROR), tile);
 
     // hit box
-    // eg_rect r;
-    // r.x = player->x_pos;
-    // r.y = player->y_pos;
-    // r.w = app->registry[player->type].width;
-    // r.h = app->registry[player->type].height;
+    if (app->debug.hitboxes)
+    {
+        eg_rect hit_box;
+        hit_box.x = player->x_pos;
+        hit_box.y = player->y_pos;
+        hit_box.w = app->registry[player->type].width;
+        hit_box.h = app->registry[player->type].height;
 
-    // // Render the player hit box.
-    // eg_set_color(app, EG_COLOR_ORANGE);
-    // eg_draw_rect(app, &r, 0);
+        // Render the player hit box.
+        eg_set_color(app, EG_COLOR_ORANGE);
+        eg_draw_rect(app, &hit_box, 0);
+    }
 }
 
 static void update_player(eg_app *app, eg_entity *player)
@@ -125,6 +154,20 @@ static void update_player(eg_app *app, eg_entity *player)
     if (player->y_vel < 4)
     {
         player->y_vel++;
+    }
+
+    // Advance the counter for walking to the right
+    if ((eg_peek_input(app, EG_KEYCODE_LEFT) || eg_peek_input(app, EG_KEYCODE_RIGHT)) && eg_check_flag(player, ENTITY_FLAG_GROUND))
+    {
+        tmp_counter++;
+        if (tmp_counter >= 20)
+        {
+            tmp_counter = 0;
+        }
+    }
+    else
+    {
+        tmp_counter = 0;
     }
 }
 

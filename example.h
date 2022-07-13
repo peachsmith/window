@@ -35,6 +35,12 @@ typedef struct eg_app eg_app;
 typedef struct eg_impl eg_impl;
 
 /**
+ * Used for viewing and modifying the internal state of the application.
+ * This is intended primarily for development and debugging.
+ */
+typedef struct eg_debug eg_debug;
+
+/**
  * A node in a list of input handlers.
  */
 typedef struct eg_input_handler eg_input_handler;
@@ -152,14 +158,27 @@ typedef void (*eg_collider)(
     eg_collision *,
     int);
 
+struct eg_debug
+{
+    int overlay;
+    int hitboxes;
+    int collisions;
+    int frame_len;
+    int frame_by_frame;
+};
+
 // definition of the eg_app struct
 struct eg_app
 {
     eg_impl *impl;
+    eg_debug debug;
 
     // This is an array of flags to indicate that a key press has already been
     // detected.
     unsigned char key_captures[EG_MAX_KEYCODE];
+
+    // Counters to indicate how long an input has been actuated.
+    unsigned char actuation_counters[EG_MAX_KEYCODE];
 
     // For different sized windows.
     int scale;
@@ -212,6 +231,10 @@ struct eg_app
     // input handlers
     eg_callback *input;
     int input_count;
+
+    // counters
+    int *counters;
+    int counter_count;
 
     // A linked list of entities.
     // Entities are updated and rendered in the opposite order from which they
@@ -294,6 +317,7 @@ struct eg_menu
     eg_menu_item **items;
     int item_count;
     eg_menu_callback render;
+    eg_menu_callback update;
 
     // for passing values between menus and dialogs.
     int result;
@@ -374,6 +398,8 @@ void eg_begin_frame(eg_app *);
  *   eg_app* - a pointer to an app struct
  */
 void eg_end_frame(eg_app *);
+
+int *eg_reserve_counter(eg_app *);
 
 //----------------------------------------------------------------------------
 // drawing functions

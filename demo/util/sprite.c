@@ -3,14 +3,14 @@
 
 #include "colors.h"
 
-void sprite_draw_character(eg_app *app, int x, int y, int mirror)
+void sprite_draw_character(eg_app *app, int x, int y, int mirror, int tile)
 {
     // tile dimensions
     int tile_w = 24;
     int tile_h = 24;
 
     // tile coordinates
-    int tile_x = 0;
+    int tile_x = tile;
     int tile_y = 0;
 
     eg_rect src = {

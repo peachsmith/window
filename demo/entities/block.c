@@ -14,14 +14,17 @@ static void render_block(eg_app *app, eg_entity *block)
         block->y_pos + app->cam.y);
 
     // hit box
-    // eg_rect r;
-    // r.x = block->x_pos + app->cam.x;
-    // r.y = block->y_pos + app->cam.y;
-    // r.w = app->registry[block->type].width;
-    // r.h = app->registry[block->type].height;
+    if (app->debug.hitboxes)
+    {
+        eg_rect hit_box;
+        hit_box.x = block->x_pos + app->cam.x;
+        hit_box.y = block->y_pos + app->cam.y;
+        hit_box.w = app->registry[block->type].width;
+        hit_box.h = app->registry[block->type].height;
 
-    // eg_set_color(app, EG_COLOR_LIGHT_BLUE);
-    // eg_draw_rect(app, &r, 0);
+        eg_set_color(app, EG_COLOR_LIGHT_BLUE);
+        eg_draw_rect(app, &hit_box, 0);
+    }
 }
 
 // Renders a throughblock
@@ -33,8 +36,21 @@ static void render_throughblock(eg_app *app, eg_entity *block)
     r.w = app->registry[block->type].width;
     r.h = app->registry[block->type].height;
 
-    eg_set_color(app, EG_COLOR_MAUVE);
-    eg_draw_rect(app, &r, 0);
+    eg_set_color(app, EG_COLOR_FOREST_GREEN);
+    eg_draw_rect(app, &r, 1);
+
+    // hit box
+    if (app->debug.hitboxes)
+    {
+        eg_rect hit_box;
+        hit_box.x = block->x_pos + app->cam.x;
+        hit_box.y = block->y_pos + app->cam.y;
+        hit_box.w = app->registry[block->type].width;
+        hit_box.h = app->registry[block->type].height;
+
+        eg_set_color(app, EG_COLOR_LIGHT_BLUE);
+        eg_draw_rect(app, &hit_box, 0);
+    }
 }
 
 // Renders a moving block
@@ -48,14 +64,17 @@ static void render_moving_block(eg_app *app, eg_entity *block)
         app->registry[block->type].height);
 
     // hit box
-    // eg_rect r;
-    // r.x = block->x_pos + app->cam.x;
-    // r.y = block->y_pos + app->cam.y;
-    // r.w = app->registry[block->type].width;
-    // r.h = app->registry[block->type].height;
+    if (app->debug.hitboxes)
+    {
+        eg_rect hit_box;
+        hit_box.x = block->x_pos + app->cam.x;
+        hit_box.y = block->y_pos + app->cam.y;
+        hit_box.w = app->registry[block->type].width;
+        hit_box.h = app->registry[block->type].height;
 
-    // eg_set_color(app, EG_COLOR_SEA_GREEN);
-    // eg_draw_rect(app, &r, 0);
+        eg_set_color(app, EG_COLOR_SEA_GREEN);
+        eg_draw_rect(app, &hit_box, 0);
+    }
 }
 
 // Renders a sloped block

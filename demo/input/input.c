@@ -226,6 +226,28 @@ void root_input_handler(eg_app *app)
         app->done = 1;
     }
 
+    // If the escape key is pressed, terminate the application.
+    if (eg_consume_input(app, EG_KEYCODE_GRAVE))
+    {
+        if (eg_peek_input(app, EG_KEYCODE_LSHIFT) || eg_peek_input(app, EG_KEYCODE_RSHIFT))
+        {
+            demo_open_debug_menu(app);
+            app->pause = 1;
+            return;
+        }
+        else
+        {
+            if (app->debug.overlay)
+            {
+                app->debug.overlay = 0;
+            }
+            else
+            {
+                app->debug.overlay = 1;
+            }
+        }
+    }
+
     //-------------------------------------------------
     // BEGIN player controls
 

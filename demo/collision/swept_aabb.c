@@ -1,5 +1,6 @@
 #include "demo/collision/collision.h"
 #include "demo/entities/entity_types.h"
+#include "demo/util/util.h"
 #include <float.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -454,6 +455,11 @@ int demo_swept_aabb(
 
     if (ray_v_rect(&p, &d, &r, res))
     {
+        if (app->debug.collisions)
+        {
+            demo_draw_collision(app, &r, res, &p, &d);
+        }
+
         return 1;
     }
 
