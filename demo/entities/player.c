@@ -58,6 +58,13 @@ static void render_player(eg_app *app, eg_entity *player)
 
 static void update_player(eg_app *app, eg_entity *player)
 {
+    // acceleration table
+    int h_acc[24] = {
+        1, 1, 1, 1, 1, 1,
+        2, 2, 2, 2, 2, 2,
+        3, 3, 3, 3, 3, 3,
+        4, 4, 4, 4, 4, 4};
+
     // Get the width and height of the player.
     int w = app->registry[player->type].width;
     int h = app->registry[player->type].height;
@@ -65,34 +72,64 @@ static void update_player(eg_app *app, eg_entity *player)
     // Check the MOVE flag to see if the player is being carried by a
     // a moving platform.
     int carry = eg_check_flag(player, ENTITY_FLAG_MOVE);
+    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
+    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
+
+    //--------------------------------------------------------------------
+    // Horizontal Movement
+
+    int avx = 0;
+    if (player->x_acc > 0)
+    {
+        avx = h_acc[player->x_acc];
+    }
+    else if (player->x_acc < 0)
+    {
+        avx = -(h_acc[-(player->x_acc)]);
+    }
+
+    // horizontal velocity applied by a carrier
+    if (carry && avx == 0)
+    {
+        avx += player->x_vel;
+    }
+
+    // horizontal correction factor applied by collision with a solid object
+    if (player->x_t)
+    {
+        avx += player->x_t;
+        player->x_t = 0;
+    }
 
     // Update horizontal position.
-    if (player->x_pos + w >= app->cr && player->x_vel > 0)
+    if (player->x_pos + w >= app->cr && avx > 0)
     {
         player->x_pos = app->cr - w;
-        app->cam.x -= player->x_vel;
+        app->cam.x -= avx;
     }
-    else if (player->x_pos <= app->cl + 1 && player->x_vel < 0)
+    else if (player->x_pos <= app->cl + 1 && avx < 0)
     {
         player->x_pos = app->cl + 1;
-        app->cam.x -= player->x_vel;
+        app->cam.x -= avx;
     }
     else
     {
-        // printf("[DEBUG] player V: (%d, %d)\n", player->x_vel, player->y_vel);
-        player->x_pos += player->x_vel;
+        player->x_pos += avx;
     }
 
     // Perform horizontal inertia.
-    if (player->x_vel > 0)
+    if (player->x_acc > 0 && !right_pressed)
     {
-        player->x_vel--;
+        player->x_acc--;
     }
 
-    if (player->x_vel < 0)
+    if (player->x_acc < 0 && !left_pressed)
     {
-        player->x_vel++;
+        player->x_acc++;
     }
+
+    //--------------------------------------------------------------------
+    // Vertical Movement
 
     // If the player is standing on a moving platform,
     // adjust the y velocity to match the platform.
@@ -155,6 +192,9 @@ static void update_player(eg_app *app, eg_entity *player)
     {
         player->y_vel++;
     }
+
+    //--------------------------------------------------------------------
+    // Animation Logic
 
     // Advance the counter for walking to the right
     if ((eg_peek_input(app, EG_KEYCODE_LEFT) || eg_peek_input(app, EG_KEYCODE_RIGHT)) && eg_check_flag(player, ENTITY_FLAG_GROUND))

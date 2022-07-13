@@ -276,6 +276,10 @@ struct eg_entity
     int y_vel;     // vertical velocity
     uint8_t flags; // flags
 
+    // TEMP for debugging acceleration
+    int x_acc; // horizontal acceleration
+    int x_t;   // x correction factor
+
     // Used for actions that take multiple iterations of the main loop.
     int ticks;
 

@@ -256,24 +256,77 @@ void root_input_handler(eg_app *app)
 
     // TODO: implement a way to locate target entities during input handling.
 
+    int max_walk = 6;
+    int min_walk = 1;
+    int walk_acc = 1;
+
     // left movement
     if (eg_peek_input(app, EG_KEYCODE_LEFT))
     {
-        eg_clear_flag(target, ENTITY_FLAG_MIRROR);
-        if (target->x_vel >= -2)
+        if (app->actuation_counters[EG_KEYCODE_LEFT] < 10)
         {
-            target->x_vel -= 2;
+            app->actuation_counters[EG_KEYCODE_LEFT]++;
         }
+
+        eg_clear_flag(target, ENTITY_FLAG_MIRROR);
+        // if (target->x_vel >= -2)
+        // {
+        //     target->x_vel -= 2;
+        // }
+        if (target->x_acc > -min_walk)
+        {
+            if (target->x_acc < min_walk)
+            {
+                target->x_acc = -min_walk;
+            }
+        }
+        else
+        {
+            target->x_acc -= walk_acc;
+        }
+
+        if (target->x_acc < -max_walk)
+        {
+            target->x_acc = -max_walk;
+        }
+    }
+    else
+    {
+        app->actuation_counters[EG_KEYCODE_LEFT] = 0;
     }
 
     // right movement
     if (eg_peek_input(app, EG_KEYCODE_RIGHT))
     {
-        eg_set_flag(target, ENTITY_FLAG_MIRROR);
-        if (target->x_vel <= 2)
+        if (app->actuation_counters[EG_KEYCODE_RIGHT] < 10)
         {
-            target->x_vel += 2;
+            app->actuation_counters[EG_KEYCODE_RIGHT]++;
         }
+
+        eg_set_flag(target, ENTITY_FLAG_MIRROR);
+        // if (target->x_vel <= 2)
+        // {
+        //     target->x_vel += 2;
+        if (target->x_acc < min_walk)
+        {
+            if (target->x_acc > -min_walk)
+            {
+                target->x_acc = min_walk;
+            }
+        }
+        else
+        {
+            target->x_acc += walk_acc;
+        }
+
+        if (target->x_acc > max_walk)
+        {
+            target->x_acc = max_walk;
+        }
+    }
+    else
+    {
+        app->actuation_counters[EG_KEYCODE_RIGHT] = 0;
     }
 
     // if (eg_peek_input(app, EG_KEYCODE_UP))
