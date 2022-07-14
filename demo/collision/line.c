@@ -75,25 +75,28 @@ int demo_line(
     int bx = b->x_pos + app->cam.x;
     int by = b->y_pos + app->cam.y;
 
+    int avx = app->registry[a->type].get_x_vel(a);
+    int avy = app->registry[a->type].get_y_vel(a);
+
     // Get the vertices for entity A.
 
     // top left vertex
     // TODO: I forgot why I added the x velocity to the x position,
     // but didn't do the same with y.
-    pa[0].x = ax + a->x_vel;
-    pa[0].y = ay + a->y_vel;
+    pa[0].x = ax + avx; // a->x_vel;
+    pa[0].y = ay + avy; // a->y_vel;
 
     // top right vertex
-    pa[1].x = ax + aw + a->x_vel;
-    pa[1].y = ay + a->y_vel;
+    pa[1].x = ax + aw + avx; // a->x_vel;
+    pa[1].y = ay + avy;      // a->y_vel;
 
     // bottom right vertex
-    pa[2].x = ax + aw / 2 + a->x_vel;
-    pa[2].y = ay + ah + a->y_vel;
+    pa[2].x = ax + aw / 2 + avx; // a->x_vel;
+    pa[2].y = ay + ah + avy;     // a->y_vel;
 
     // bottom left vertex
-    pa[3].x = ax + a->x_vel;
-    pa[3].y = ay + ah + a->y_vel;
+    pa[3].x = ax + avx;      // a->x_vel;
+    pa[3].y = ay + ah + avy; // a->y_vel;
 
     // Get the vertices for entity B.
 

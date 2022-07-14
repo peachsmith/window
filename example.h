@@ -289,6 +289,8 @@ struct eg_entity
     // Experimental Features
     int x_acc; // horizontal acceleration
     int x_t;   // x velocity correction factor
+    int y_acc; // vertical acceleration
+    int y_t;   // y velocity correction factor
 };
 
 struct eg_entity_type
@@ -301,7 +303,8 @@ struct eg_entity_type
     eg_collider collide;
 
     // Experimental Features
-    int (*get_x_vel)(eg_entity *); // calculates current velocity.
+    int (*get_x_vel)(eg_entity *); // calculates current x velocity.
+    int (*get_y_vel)(eg_entity *); // calculates current y velocity.
 };
 
 struct eg_menu_item

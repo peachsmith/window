@@ -234,6 +234,8 @@ static void collide_block(
 
     if (block->type == ENTITY_TYPE_BLOCK_SLOPE)
     {
+        int avy = app->registry[other->type].get_y_vel(other);
+
         // Correct the correction factor.
         // TODO: move this into the line.c file.
         if ((block->flags & 3) == 2)
@@ -242,13 +244,16 @@ static void collide_block(
             int by = block->y_pos + app->cam.y;
             int check = other->y_pos + ah;
             int ty = (int)(t_res->ty);
-            int pre = check + (other->y_vel - ty);
+            // int pre = check + (other->y_vel - ty);
+            int pre = check + (avy - ty);
 
             if (pre == by)
             {
-                if (ty > other->y_vel)
+                // if (ty > other->y_vel)
+                if (ty > avy)
                 {
-                    ty = other->y_vel;
+                    // ty = other->y_vel;
+                    ty = avy;
                     t_res->ty = (float)ty;
                 }
                 else
@@ -267,7 +272,8 @@ static void collide_block(
         // We now must determine which direction to resolve the collision
         // based on the source entity's velocity.
 
-        other->y_vel -= ((int)t_res->ty + 1);
+        // other->y_vel -= ((int)t_res->ty + 1);
+        other->y_t = -((int)t_res->ty + 1);
         eg_set_flag(other, ENTITY_FLAG_SLOPE);
 
         return;
@@ -314,9 +320,12 @@ static void collide_block(
     if (t_res->cn.y)
     {
         // Correction factor for landing on top of the block.
-        int absy = other->y_vel > 0 ? other->y_vel : -(other->y_vel);
+        int avy = app->registry[other->type].get_y_vel(other);
+        // int absy = other->y_vel > 0 ? other->y_vel : -(other->y_vel);
+        int absy = avy > 0 ? avy : -(avy);
         float correction = t_res->cn.y * absy * t1;
-        other->y_vel += (int)correction;
+        // other->y_vel += (int)correction;
+        other->y_t = (int)correction;
     }
 
     // If the block is a moving platform, update the source entity's position

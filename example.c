@@ -337,6 +337,8 @@ eg_entity *eg_create_entity()
     // experimental
     entity->x_acc = 0;
     entity->x_t = 0;
+    entity->y_acc = 0;
+    entity->y_t = 0;
 
     return entity;
 }

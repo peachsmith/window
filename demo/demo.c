@@ -115,6 +115,11 @@ int default_get_x_vel(eg_entity *e)
     return e->x_vel;
 }
 
+int default_get_y_vel(eg_entity *e)
+{
+    return e->y_vel;
+}
+
 int demo_prepare(eg_app *app)
 {
     // Create the entity registry.
@@ -131,6 +136,7 @@ int demo_prepare(eg_app *app)
         reg[i].update = NULL;
         reg[i].collide = NULL;
         reg[i].get_x_vel = default_get_x_vel;
+        reg[i].get_y_vel = default_get_y_vel;
     }
 
     app->registry = reg;

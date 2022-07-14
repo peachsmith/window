@@ -31,6 +31,28 @@ static int get_player_x_vel(eg_entity *player)
     return x_vel;
 }
 
+static int get_player_y_vel(eg_entity *player)
+{
+    // acceleration to velocity conversion table
+    int a_to_v[24] = {
+        1, 1, 1, 1, 1, 1,
+        2, 2, 2, 2, 2, 2,
+        3, 3, 3, 3, 3, 3,
+        4, 4, 4, 4, 4, 4};
+
+    int y_vel = 0;
+    if (player->y_acc > 0)
+    {
+        y_vel = a_to_v[player->y_acc];
+    }
+    else if (player->y_acc < 0)
+    {
+        y_vel = -(a_to_v[-(player->y_acc)]);
+    }
+
+    return y_vel;
+}
+
 static void render_player(eg_app *app, eg_entity *player)
 {
     int tile = 0;
@@ -90,10 +112,11 @@ static void update_player(eg_app *app, eg_entity *player)
     int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
     int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
 
+    int avx = get_player_x_vel(player);
+    int avy = get_player_y_vel(player);
+
     //--------------------------------------------------------------------
     // Horizontal Movement
-
-    int avx = get_player_x_vel(player);
 
     // horizontal velocity applied by a carrier
     if (carry && avx == 0)
@@ -157,7 +180,14 @@ static void update_player(eg_app *app, eg_entity *player)
             cf = player->y_vel + player->carrier->y_vel;
         }
 
-        player->y_vel = cf;
+        avy = cf;
+    }
+
+    // vertical correction factor applied by collision with a solid object
+    if (player->y_t && !carry)
+    {
+        avy += player->y_t;
+        player->y_t = 0;
     }
 
     // Set the link pointer to NULL.
@@ -170,19 +200,19 @@ static void update_player(eg_app *app, eg_entity *player)
     eg_clear_flag(player, ENTITY_FLAG_MOVE);
 
     // Update vertical position.
-    if (player->y_pos + h >= app->cb && player->y_vel > 0)
+    if (player->y_pos + h >= app->cb && avy > 0)
     {
         player->y_pos = app->cb - h;
-        app->cam.y -= player->y_vel;
+        app->cam.y -= avy;
     }
-    else if (player->y_pos <= app->ct + 1 && player->y_vel < 0)
+    else if (player->y_pos <= app->ct + 1 && avy < 0)
     {
         player->y_pos = app->ct + 1;
-        app->cam.y -= player->y_vel;
+        app->cam.y -= avy;
     }
     else
     {
-        player->y_pos += player->y_vel;
+        player->y_pos += avy;
     }
 
     // If the player is on a sloped platform, set the y velocity to some
@@ -191,13 +221,13 @@ static void update_player(eg_app *app, eg_entity *player)
     if (eg_check_flag(player, ENTITY_FLAG_SLOPE))
     {
         eg_clear_flag(player, ENTITY_FLAG_SLOPE);
-        player->y_vel = 4;
+        player->y_acc = 23;
     }
 
     // Apply gravity.
-    if (player->y_vel < 4)
+    if (player->y_acc < 23)
     {
-        player->y_vel++;
+        player->y_acc++;
     }
 
     //--------------------------------------------------------------------
@@ -225,6 +255,7 @@ void player_demo_register(eg_entity_type *t)
     t->render = render_player;
     t->update = update_player;
     t->get_x_vel = get_player_x_vel;
+    t->get_y_vel = get_player_y_vel;
 }
 
 eg_entity *player_demo_create(int x, int y)

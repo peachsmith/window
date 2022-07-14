@@ -368,8 +368,9 @@ void root_input_handler(eg_app *app)
             eg_set_flag(target, ENTITY_FLAG_JUMP);
             eg_clear_flag(target, ENTITY_FLAG_MOVE);
             target->carrier = NULL;
-            target->y_vel = 0;
-            target->y_vel -= 12;
+            // target->y_vel = 0;
+            // target->y_vel -= 12;
+            target->y_acc = -18;
         }
     }
 
