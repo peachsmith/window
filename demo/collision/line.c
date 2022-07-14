@@ -83,20 +83,20 @@ int demo_line(
     // top left vertex
     // TODO: I forgot why I added the x velocity to the x position,
     // but didn't do the same with y.
-    pa[0].x = ax + avx; // a->x_vel;
-    pa[0].y = ay + avy; // a->y_vel;
+    pa[0].x = ax + avx;
+    pa[0].y = ay + avy;
 
     // top right vertex
-    pa[1].x = ax + aw + avx; // a->x_vel;
-    pa[1].y = ay + avy;      // a->y_vel;
+    pa[1].x = ax + aw + avx;
+    pa[1].y = ay + avy;
 
     // bottom right vertex
-    pa[2].x = ax + aw / 2 + avx; // a->x_vel;
-    pa[2].y = ay + ah + avy;     // a->y_vel;
+    pa[2].x = ax + aw / 2 + avx;
+    pa[2].y = ay + ah + avy;
 
     // bottom left vertex
-    pa[3].x = ax + avx;      // a->x_vel;
-    pa[3].y = ay + ah + avy; // a->y_vel;
+    pa[3].x = ax + avx;
+    pa[3].y = ay + ah + avy;
 
     // Get the vertices for entity B.
 

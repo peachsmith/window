@@ -193,6 +193,29 @@ void demo_handle_collisions(eg_app *app)
             // }
         }
 
+        // TEMP: print the sorted collision list for debugging
+        // if (source->type == ENTITY_TYPE_PLAYER)
+        // {
+        //     if (count > 1)
+        //     {
+        //         int corner = 0;
+        //         printf("[DEBUG] ");
+        //         for (int i = 0; i < count; i++)
+        //         {
+        //             printf("(%d, %d, %.4f) ",
+        //                    cols[i].col.cn.x,
+        //                    cols[i].col.cn.y,
+        //                    cols[i].col.t);
+        //             if (cols[i].col.cn.x && cols[i].col.cn.y)
+        //             {
+        //                 corner = 1;
+        //                 printf("[CORNER]");
+        //             }
+        //         }
+        //         printf("\n");
+        //     }
+        // }
+
         // Stage 3: Collision Resolution
         for (int i = 0; i < count; i++)
         {
@@ -226,9 +249,15 @@ void demo_handle_collisions(eg_app *app)
             }
             else
             {
-
                 if (demo_swept_aabb(app, a, b, &col))
                 {
+                    // Skip corner collisions since they stop entities
+                    // from moving.
+                    if (col.cn.x && col.cn.y)
+                    {
+                        printf("[DEBUG] corner collision. converting to vertical.\n");
+                        col.cn.x = 0;
+                    }
                     // Call the source entity's collision function.
                     cola = app->registry[a->type].collide;
                     if (cola != NULL)
@@ -242,6 +271,7 @@ void demo_handle_collisions(eg_app *app)
                     {
                         colb(app, b, a, &col, 1);
                     }
+                    // }
                 }
             }
         }
