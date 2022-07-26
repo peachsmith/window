@@ -11,6 +11,9 @@
 // maximum allowable collisions for one entity
 #define COL_LIMIT 64
 
+#define COL_VERTICAL 1
+#define COL_HORIZONTAL 2
+
 typedef struct col_res
 {
     eg_collision col;
@@ -193,28 +196,40 @@ void demo_handle_collisions(eg_app *app)
             // }
         }
 
-        // TEMP: print the sorted collision list for debugging
-        // if (source->type == ENTITY_TYPE_PLAYER)
-        // {
-        //     if (count > 1)
-        //     {
-        //         int corner = 0;
-        //         printf("[DEBUG] ");
-        //         for (int i = 0; i < count; i++)
-        //         {
-        //             printf("(%d, %d, %.4f) ",
-        //                    cols[i].col.cn.x,
-        //                    cols[i].col.cn.y,
-        //                    cols[i].col.t);
-        //             if (cols[i].col.cn.x && cols[i].col.cn.y)
-        //             {
-        //                 corner = 1;
-        //                 printf("[CORNER]");
-        //             }
-        //         }
-        //         printf("\n");
-        //     }
-        // }
+        int corner_resolution = 0;
+        if (count > 1)
+        {
+            int corner = 0;
+            int walls = 0;
+            int floors = 0;
+
+            for (int i = 0; i < count; i++)
+            {
+                if (cols[i].col.cn.x && !cols[i].col.cn.y)
+                {
+                    walls++;
+                }
+
+                if (!cols[i].col.cn.x && cols[i].col.cn.y)
+                {
+                    floors++;
+                }
+
+                if (cols[i].col.cn.x && cols[i].col.cn.y)
+                {
+                    if (walls > floors)
+                    {
+                        corner_resolution = COL_HORIZONTAL;
+                        cols[i].col.cn.y = 0;
+                    }
+                    else
+                    {
+                        corner_resolution = COL_VERTICAL;
+                        cols[i].col.cn.x = 0;
+                    }
+                }
+            }
+        }
 
         // Stage 3: Collision Resolution
         for (int i = 0; i < count; i++)
@@ -251,13 +266,23 @@ void demo_handle_collisions(eg_app *app)
             {
                 if (demo_swept_aabb(app, a, b, &col))
                 {
-                    // Skip corner collisions since they stop entities
-                    // from moving.
+                    // Convert corner collisions to either horizontal or
+                    // vertical resolution.
                     if (col.cn.x && col.cn.y)
                     {
-                        printf("[DEBUG] corner collision. converting to vertical.\n");
-                        col.cn.x = 0;
+                        switch (corner_resolution)
+                        {
+                        case COL_HORIZONTAL:
+                            col.cn.y = 0;
+                            break;
+                        case COL_VERTICAL:
+                            col.cn.x = 0;
+                            break;
+                        default:
+                            break;
+                        }
                     }
+
                     // Call the source entity's collision function.
                     cola = app->registry[a->type].collide;
                     if (cola != NULL)
@@ -271,7 +296,6 @@ void demo_handle_collisions(eg_app *app)
                     {
                         colb(app, b, a, &col, 1);
                     }
-                    // }
                 }
             }
         }

@@ -74,6 +74,21 @@ static void scenes_item_2_callback(eg_app *app, eg_menu *menu)
 static void scenes_item_3_callback(eg_app *app, eg_menu *menu)
 {
     printf("[DEBUG] \"Scene 2\" was selected\n");
+
+    // Close the scenes menu.
+    app->menu_count--;
+    eg_pop_input_handler(app);
+
+    // Close the debug menu.
+    app->menu_count--;
+    eg_pop_input_handler(app);
+
+    // Clear the current scene and load the next scene.
+    clear_scene(app);
+    load_scene_2(app);
+
+    // Unpause the application.
+    app->pause = 0;
 }
 
 static void scenes_item_4_callback(eg_app *app, eg_menu *menu)

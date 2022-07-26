@@ -318,6 +318,13 @@ static void collide_block(
         int avy = app->registry[other->type].get_y_vel(other);
         int absy = avy > 0 ? avy : -(avy);
         float correction = t_res->cn.y * absy * t1;
+
+        // Account for rounding.
+        if (correction < 0)
+        {
+            correction -= 0.5f;
+        }
+
         other->y_t = (int)correction;
     }
 

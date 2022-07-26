@@ -108,18 +108,24 @@ static void update_player(eg_app *app, eg_entity *player)
 
     // Check the MOVE flag to see if the player is being carried by a
     // a moving platform.
-    int carry = eg_check_flag(player, ENTITY_FLAG_MOVE);
+    int carried = eg_check_flag(player, ENTITY_FLAG_MOVE);
+    int grounded = eg_check_flag(player, ENTITY_FLAG_GROUND);
     int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
     int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
 
     int avx = get_player_x_vel(player);
     int avy = get_player_y_vel(player);
 
+    // if (player->y_acc == 0)
+    // {
+    //     printf("[DEBUG] y velocity is 0\n");
+    // }
+
     //--------------------------------------------------------------------
     // Horizontal Movement
 
     // horizontal velocity applied by a carrier
-    if (carry && avx == 0)
+    if (carried && avx == 0)
     {
         avx += player->x_vel;
     }
@@ -163,7 +169,7 @@ static void update_player(eg_app *app, eg_entity *player)
 
     // If the player is standing on a moving platform,
     // adjust the y velocity to match the platform.
-    if (carry && player->carrier != NULL)
+    if (carried && player->carrier != NULL)
     {
         int cf = 0;
 
@@ -184,14 +190,16 @@ static void update_player(eg_app *app, eg_entity *player)
     }
 
     // vertical correction factor applied by collision with a solid object
-    if (player->y_t && !carry)
+    if (player->y_t && !carried)
     {
+        int avy0 = avy;
         avy += player->y_t;
+        player->y_acc = 0;
         player->y_t = 0;
     }
 
     // Set the link pointer to NULL.
-    if (!carry && player->carrier != NULL)
+    if (!carried && player->carrier != NULL)
     {
         player->carrier = NULL;
     }
