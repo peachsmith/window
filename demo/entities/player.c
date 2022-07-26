@@ -109,7 +109,7 @@ static void update_player(eg_app *app, eg_entity *player)
     // Check the MOVE flag to see if the player is being carried by a
     // a moving platform.
     int carried = eg_check_flag(player, ENTITY_FLAG_MOVE);
-    int grounded = eg_check_flag(player, ENTITY_FLAG_GROUND);
+    // int grounded = eg_check_flag(player, ENTITY_FLAG_GROUND);
     int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
     int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
 
@@ -188,7 +188,6 @@ static void update_player(eg_app *app, eg_entity *player)
     // vertical correction factor applied by collision with a solid object
     if (player->y_t && !carried)
     {
-        int avy0 = avy;
         avy += player->y_t;
         player->y_acc = 0;
         player->y_t = 0;

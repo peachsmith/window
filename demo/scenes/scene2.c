@@ -3,6 +3,8 @@
 #include "demo/entities/block.h"
 #include "demo/entities/player.h"
 
+#include <stdlib.h>
+
 void load_scene_2(eg_app *app)
 {
     eg_entity *player;

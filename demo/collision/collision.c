@@ -199,7 +199,7 @@ void demo_handle_collisions(eg_app *app)
         int corner_resolution = 0;
         if (count > 1)
         {
-            int corner = 0;
+            // int corner = 0;
             int walls = 0;
             int floors = 0;
 
