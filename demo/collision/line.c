@@ -150,14 +150,14 @@ int demo_line(
 
     if (intersect(&aa, &ab, &ba, &bb, &(res->tx), &(res->ty)))
     {
-        if (dir == 2)
-        {
-            // Draw the source line.
-            eg_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
-            eg_set_color(app, EG_COLOR_INDIGO);
-            eg_draw_rect(app, &cr, 1);
-            eg_draw_line(app, &aa, &ab);
-        }
+        // if (dir == 2)
+        // {
+        //     // Draw the source line.
+        //     eg_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
+        //     eg_set_color(app, EG_COLOR_INDIGO);
+        //     eg_draw_rect(app, &cr, 1);
+        //     eg_draw_line(app, &aa, &ab);
+        // }
 
         return 1;
     }

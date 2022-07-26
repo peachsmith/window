@@ -162,8 +162,6 @@ void demo_handle_collisions(eg_app *app)
         detect_collisions(app, source, cols, &count, DIR_FORWARD);
         detect_collisions(app, source, cols, &count, DIR_BACKWARD);
 
-        // int dbg_sort = 0;
-
         // Stage 2: Collision Sorting
         int sorted = 0;
         while (!sorted)
@@ -183,23 +181,11 @@ void demo_handle_collisions(eg_app *app)
                     }
                 }
             }
-
-            // if (dbg_sort < 10000)
-            // {
-            //     dbg_sort++;
-            // }
-            // else
-            // {
-            //     printf("[ERROR] infinite collision sorting loop\n");
-            //     sorted = 1;
-            //     app->done = 1;
-            // }
         }
 
         int corner_resolution = 0;
         if (count > 1)
         {
-            // int corner = 0;
             int walls = 0;
             int floors = 0;
 

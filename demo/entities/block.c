@@ -315,8 +315,12 @@ static void collide_block(
         {
             correction -= 0.5f;
         }
+        else if (correction > 0)
+        {
+            correction += 0.5f;
+        }
 
-        other->x_t = (int)correction;
+        other->x_t += (int)correction;
     }
 
     if (t_res->cn.y)
@@ -331,8 +335,12 @@ static void collide_block(
         {
             correction -= 0.5f;
         }
+        else if (correction > 0)
+        {
+            correction += 0.5f;
+        }
 
-        other->y_t = (int)correction;
+        other->y_t += (int)correction;
     }
 
     // If the block is a moving platform, update the source entity's position

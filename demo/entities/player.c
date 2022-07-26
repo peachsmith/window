@@ -28,6 +28,11 @@ static int get_player_x_vel(eg_entity *player)
         x_vel = -(a_to_v[-(player->x_acc)]);
     }
 
+    if (player->x_t)
+    {
+        x_vel += player->x_t;
+    }
+
     return x_vel;
 }
 
@@ -48,6 +53,11 @@ static int get_player_y_vel(eg_entity *player)
     else if (player->y_acc < 0)
     {
         y_vel = -(a_to_v[-(player->y_acc)]);
+    }
+
+    if (player->y_t)
+    {
+        y_vel += player->y_t;
     }
 
     return y_vel;
@@ -128,7 +138,7 @@ static void update_player(eg_app *app, eg_entity *player)
     // horizontal correction factor applied by collision with a solid object
     if (player->x_t)
     {
-        avx += player->x_t;
+        // avx += player->x_t; // TODO: possibly moved to get_x_vel
         player->x_acc = 0;
         player->x_t = 0;
     }
@@ -188,7 +198,7 @@ static void update_player(eg_app *app, eg_entity *player)
     // vertical correction factor applied by collision with a solid object
     if (player->y_t && !carried)
     {
-        avy += player->y_t;
+        // avy += player->y_t; // TODO: possible moved to get_y_vel
         player->y_acc = 0;
         player->y_t = 0;
     }

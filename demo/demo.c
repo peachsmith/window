@@ -191,7 +191,7 @@ int demo_prepare(eg_app *app)
     block_demo_register_sloped(&reg[ENTITY_TYPE_BLOCK_SLOPE]);
 
     // load_scene_0(app);
-    load_scene_1(app);
+    load_scene_3(app);
 
     return 1;
 }
