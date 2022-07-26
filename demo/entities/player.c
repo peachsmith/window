@@ -116,11 +116,6 @@ static void update_player(eg_app *app, eg_entity *player)
     int avx = get_player_x_vel(player);
     int avy = get_player_y_vel(player);
 
-    // if (player->y_acc == 0)
-    // {
-    //     printf("[DEBUG] y velocity is 0\n");
-    // }
-
     //--------------------------------------------------------------------
     // Horizontal Movement
 
@@ -134,6 +129,7 @@ static void update_player(eg_app *app, eg_entity *player)
     if (player->x_t)
     {
         avx += player->x_t;
+        player->x_acc = 0;
         player->x_t = 0;
     }
 
