@@ -270,10 +270,7 @@ void root_input_handler(eg_app *app)
         }
 
         eg_clear_flag(target, ENTITY_FLAG_MIRROR);
-        // if (target->x_vel >= -2)
-        // {
-        //     target->x_vel -= 2;
-        // }
+
         if (target->x_acc > -min_walk)
         {
             if (target->x_acc < min_walk)
@@ -305,9 +302,7 @@ void root_input_handler(eg_app *app)
         }
 
         eg_set_flag(target, ENTITY_FLAG_MIRROR);
-        // if (target->x_vel <= 2)
-        // {
-        //     target->x_vel += 2;
+
         if (target->x_acc < min_walk)
         {
             if (target->x_acc > -min_walk)

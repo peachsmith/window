@@ -219,7 +219,7 @@ static void update_moving_block(eg_app *app, eg_entity *block)
 
     // Set the update flag so that entities being carried by this platform
     // can update their state accordingly.
-    eg_set_flag(block, ENTITY_FLAG_UPDATE);
+    // eg_set_flag(block, ENTITY_FLAG_UPDATE);
 }
 
 static void collide_block(
@@ -264,6 +264,16 @@ static void collide_block(
         // the diagonal line from above.
         eg_clear_flag(other, ENTITY_FLAG_JUMP);
         eg_set_flag(other, ENTITY_FLAG_GROUND);
+
+        // if (other->type == ENTITY_TYPE_BLOCK_SLOPE)
+        // {
+        //     printf("[DEBUG] block to block collision\n");
+        // }
+
+        // if (block->type == ENTITY_TYPE_BLOCK_SLOPE && other->type == ENTITY_TYPE_BLOCK_SLOPE)
+        // {
+        //     printf("[DEBUG] somehow resolving a collision between two slopes\n");
+        // }
 
         // The source entity has collided with a diagonal line.
         // We now must determine which direction to resolve the collision

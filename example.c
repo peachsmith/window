@@ -464,6 +464,11 @@ void eg_set_flag(eg_entity *e, int f)
         return;
     }
 
+    // if (e->type == 9)
+    // {
+    //     printf("[DEBUG] for some reason, we're setting a flag on a sloped platform\n");
+    // }
+
     // Convert the flag index to a bit value.
     uint8_t bit = (uint8_t)(1 << f);
 
@@ -479,6 +484,11 @@ void eg_clear_flag(eg_entity *e, int f)
     {
         return;
     }
+
+    // if (e->type == 9)
+    // {
+    //     printf("[DEBUG] for some reason, we're clearing a flag on a sloped platform\n");
+    // }
 
     // Convert the flag index to a bit value.
     uint8_t bit = (uint8_t)(1 << f);

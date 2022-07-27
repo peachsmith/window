@@ -249,10 +249,6 @@ struct eg_app
     // TEMP: a handle to the player entity.
     // TODO: implement searchable entities.
     eg_entity *player;
-
-    // TEMP: used for debugging collisions.
-    int dbg_collision[10];
-    int col_count;
 };
 
 // definition of the eg_input_handler struct

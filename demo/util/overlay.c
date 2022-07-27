@@ -42,9 +42,13 @@ void debug_draw_overlay(eg_app *app)
         buffer,
         n,
         "x_acc: %d\n"
-        "y_acc: %d\n",
+        "y_acc: %d\n"
+        "x_pos: %d\n"
+        "y_pos: %d\n",
         app->player->x_acc,
-        app->player->y_acc);
+        app->player->y_acc,
+        app->player->x_pos,
+        app->player->y_pos);
 
     // The return value from snprintf must be greater than 0 and less than
     // the limit n.

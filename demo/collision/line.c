@@ -52,15 +52,19 @@ int demo_line(
     eg_entity *b,
     eg_collision *res)
 {
-    // If the source entity is not a collider, then don't bother checking
-    // for a collision.
-    if (a->type != ENTITY_TYPE_PLAYER)
+    eg_point pa[4]; // vertices of entity A
+    eg_point pb[4]; // vertices of entity B
+
+    // Get the velocity of the source entitity A.
+    int avx = app->registry[a->type].get_x_vel(a);
+    int avy = app->registry[a->type].get_y_vel(a);
+
+    // The source entity must have a non zero velocity in order
+    // to collide with a platform.
+    if (avx == 0 && avy == 0)
     {
         return 0;
     }
-
-    eg_point pa[4]; // vertices of entity A
-    eg_point pb[4]; // vertices of entity B
 
     // Get the width and height of each entity.
     int aw = app->registry[a->type].width;
@@ -69,14 +73,18 @@ int demo_line(
     int bh = app->registry[b->type].height;
 
     // Get the positions of each entity.
-    // TODO: account for camera position.
     int ax = a->x_pos;
     int ay = a->y_pos;
     int bx = b->x_pos + app->cam.x;
     int by = b->y_pos + app->cam.y;
 
-    int avx = app->registry[a->type].get_x_vel(a);
-    int avy = app->registry[a->type].get_y_vel(a);
+    // If the source entity does not have camera focus, add the camera
+    // position to the source entity's position.
+    if (a->type != ENTITY_TYPE_PLAYER)
+    {
+        ax += app->cam.x;
+        ay += app->cam.y;
+    }
 
     // Get the vertices for entity A.
 

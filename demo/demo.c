@@ -3,6 +3,7 @@
 #include "demo/entities/player.h"
 #include "demo/entities/block.h"
 #include "demo/entities/sign.h"
+#include "demo/entities/jimbo.h"
 #include "demo/entities/entity_types.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
@@ -172,11 +173,10 @@ int demo_prepare(eg_app *app)
     block_demo_register_moving(&reg[ENTITY_TYPE_BLOCK_MOVING]);
     block_demo_register_sloped(&reg[ENTITY_TYPE_BLOCK_SLOPE]);
     sign_demo_register(&reg[ENTITY_TYPE_SIGN]);
+    jimbo_demo_register(&reg[ENTITY_TYPE_JIMBO]);
 
     // load_scene_0(app);
     load_scene_0(app);
-
-    app->col_count = 0;
 
     return 1;
 }

@@ -3,6 +3,7 @@
 #include "demo/entities/block.h"
 #include "demo/entities/player.h"
 #include "demo/entities/sign.h"
+#include "demo/entities/jimbo.h"
 
 #include <stdio.h>
 
@@ -27,7 +28,7 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create_moving(570, y_start - 32, 0));
 
     // Create the player entity and add it to the app.
-    player = player_demo_create(150, 10);
+    player = player_demo_create(150, 35);
     eg_add_entity(app, player);
 
     // TEMP: remove this once searchable entities are implemented.
@@ -63,6 +64,8 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, throughblock_demo_create_long(x_start - 370, 14));
 
     eg_add_entity(app, sign_demo_create(x_start - 27 + 54, 76)); // an interactable sign
+
+    eg_add_entity(app, jimbo_demo_create(x_start - 27 + 200, 36)); // an interactable NPC
 
     // Create the initial input handler and add it to the app.
     eg_push_input_handler(app, root_input_handler);
