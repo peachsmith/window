@@ -7,9 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// temporary counter for animation
-static int tmp_counter = 0;
-
 static void render_sign(eg_app *app, eg_entity *sign)
 {
     // Render the player sprite.
