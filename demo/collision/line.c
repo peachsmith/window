@@ -81,8 +81,6 @@ int demo_line(
     // Get the vertices for entity A.
 
     // top left vertex
-    // TODO: I forgot why I added the x velocity to the x position,
-    // but didn't do the same with y.
     pa[0].x = ax + avx;
     pa[0].y = ay + avy;
 
@@ -139,25 +137,28 @@ int demo_line(
     {
         ba = pb[0];
         bb = pb[1];
-    }
 
-    // // Draw the source line.
-    // // printf("[DEBUG] C: (%d, %d)\n", c.x, c.y);
-    // eg_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
-    // eg_set_color(app, EG_COLOR_INDIGO);
-    // eg_draw_rect(app, &cr, 1);
-    // eg_draw_line(app, &aa, &ab);
+        // If the source entity is positioned closer to the right
+        // half of the horizontal line, move the starting point
+        // of line a to the other side of the source entity.
+        // Also swap the starting and ending points of line b.
+        if (ax > bx + bw / 2)
+        {
+            ba = pb[1];
+            bb = pb[0];
+            aa.x += aw;
+        }
+    }
 
     if (intersect(&aa, &ab, &ba, &bb, &(res->tx), &(res->ty)))
     {
-        // if (dir == 2)
-        // {
-        //     // Draw the source line.
-        //     eg_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
-        //     eg_set_color(app, EG_COLOR_INDIGO);
-        //     eg_draw_rect(app, &cr, 1);
-        //     eg_draw_line(app, &aa, &ab);
-        // }
+        if (app->debug.collisions)
+        {
+            eg_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
+            eg_set_color(app, EG_COLOR_INDIGO);
+            eg_draw_rect(app, &cr, 1);
+            eg_draw_line(app, &aa, &ab);
+        }
 
         return 1;
     }

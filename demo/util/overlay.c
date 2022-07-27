@@ -58,40 +58,4 @@ void debug_draw_overlay(eg_app *app)
                  buffer,
                  5,
                  20);
-
-    eg_draw_text(app,
-                 app->fonts[DEMO_FONT_KENNY_PIXEL],
-                 "collisions:",
-                 5,
-                 45);
-
-    if (app->col_count > 0)
-    {
-        int x = 15;
-        int y = 55;
-
-        for (int i = 0; i < app->col_count; i++)
-        {
-            res = snprintf(
-                buffer,
-                n,
-                "%s",
-                (app->dbg_collision[i] == 2) ? "LINE" : "BLOCK");
-
-            // The return value from snprintf must be greater than 0 and less than
-            // the limit n.
-            if (res < 0 || res >= n)
-            {
-                return;
-            }
-
-            eg_draw_text(app,
-                         app->fonts[DEMO_FONT_KENNY_PIXEL],
-                         buffer,
-                         x,
-                         y);
-
-            x += 35;
-        }
-    }
 }
