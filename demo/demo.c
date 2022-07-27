@@ -76,7 +76,7 @@ static void update(eg_app *app)
 static void draw(eg_app *app)
 {
     // Render background
-    // sprite_draw_background(app, 0);
+    sprite_draw_background(app, 0);
 
     // Render the entities.
     eg_entity *ent = app->entities;
@@ -110,6 +110,16 @@ static void draw(eg_app *app)
     }
 }
 
+int default_get_x_vel(eg_entity *e)
+{
+    return e->x_vel;
+}
+
+int default_get_y_vel(eg_entity *e)
+{
+    return e->y_vel;
+}
+
 int demo_prepare(eg_app *app)
 {
     // Create the entity registry.
@@ -119,6 +129,16 @@ int demo_prepare(eg_app *app)
         fprintf(stderr, "failed to create entity registry\n");
         return 0;
     }
+
+    for (int i = 0; i < ENTITY_TYPE_MAX; i++)
+    {
+        reg[i].render = NULL;
+        reg[i].update = NULL;
+        reg[i].collide = NULL;
+        reg[i].get_x_vel = default_get_x_vel;
+        reg[i].get_y_vel = default_get_y_vel;
+    }
+
     app->registry = reg;
     app->update = update;
     app->draw = draw;
@@ -170,7 +190,10 @@ int demo_prepare(eg_app *app)
     block_demo_register_moving(&reg[ENTITY_TYPE_BLOCK_MOVING]);
     block_demo_register_sloped(&reg[ENTITY_TYPE_BLOCK_SLOPE]);
 
+    // load_scene_0(app);
     load_scene_0(app);
+
+    app->col_count = 0;
 
     return 1;
 }

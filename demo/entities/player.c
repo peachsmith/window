@@ -9,6 +9,60 @@
 // temporary counter for animation
 static int tmp_counter = 0;
 
+static int get_player_x_vel(eg_entity *player)
+{
+    // acceleration to velocity conversion table
+    int a_to_v[24] = {
+        1, 1, 1, 1, 1, 1,
+        2, 2, 2, 2, 2, 2,
+        3, 3, 3, 3, 3, 3,
+        4, 4, 4, 4, 4, 4};
+
+    int x_vel = 0;
+    if (player->x_acc > 0)
+    {
+        x_vel = a_to_v[player->x_acc];
+    }
+    else if (player->x_acc < 0)
+    {
+        x_vel = -(a_to_v[-(player->x_acc)]);
+    }
+
+    if (player->x_t)
+    {
+        x_vel += player->x_t;
+    }
+
+    return x_vel;
+}
+
+static int get_player_y_vel(eg_entity *player)
+{
+    // acceleration to velocity conversion table
+    int a_to_v[24] = {
+        1, 1, 1, 1, 1, 1,
+        2, 2, 2, 2, 2, 2,
+        3, 3, 3, 3, 3, 3,
+        4, 4, 4, 4, 4, 4};
+
+    int y_vel = 0;
+    if (player->y_acc > 0)
+    {
+        y_vel = a_to_v[player->y_acc];
+    }
+    else if (player->y_acc < 0)
+    {
+        y_vel = -(a_to_v[-(player->y_acc)]);
+    }
+
+    if (player->y_t)
+    {
+        y_vel += player->y_t;
+    }
+
+    return y_vel;
+}
+
 static void render_player(eg_app *app, eg_entity *player)
 {
     int tile = 0;
@@ -64,39 +118,64 @@ static void update_player(eg_app *app, eg_entity *player)
 
     // Check the MOVE flag to see if the player is being carried by a
     // a moving platform.
-    int carry = eg_check_flag(player, ENTITY_FLAG_MOVE);
+    int carried = eg_check_flag(player, ENTITY_FLAG_MOVE);
+    // int grounded = eg_check_flag(player, ENTITY_FLAG_GROUND);
+    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
+    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
+
+    int avx = get_player_x_vel(player);
+    int avy = get_player_y_vel(player);
+
+    //--------------------------------------------------------------------
+    // Horizontal Movement
+
+    // horizontal velocity applied by a carrier
+    if (carried && avx == 0)
+    {
+        avx += player->x_vel;
+    }
+
+    // horizontal correction factor applied by collision with a solid object
+    if (player->x_t)
+    {
+        // avx += player->x_t; // TODO: possibly moved to get_x_vel
+        player->x_acc = 0;
+        player->x_t = 0;
+    }
 
     // Update horizontal position.
-    if (player->x_pos + w >= app->cr && player->x_vel > 0)
+    if (player->x_pos + w >= app->cr && avx > 0)
     {
         player->x_pos = app->cr - w;
-        app->cam.x -= player->x_vel;
+        app->cam.x -= avx;
     }
-    else if (player->x_pos <= app->cl + 1 && player->x_vel < 0)
+    else if (player->x_pos <= app->cl + 1 && avx < 0)
     {
         player->x_pos = app->cl + 1;
-        app->cam.x -= player->x_vel;
+        app->cam.x -= avx;
     }
     else
     {
-        // printf("[DEBUG] player V: (%d, %d)\n", player->x_vel, player->y_vel);
-        player->x_pos += player->x_vel;
+        player->x_pos += avx;
     }
 
     // Perform horizontal inertia.
-    if (player->x_vel > 0)
+    if (player->x_acc > 0 && !right_pressed)
     {
-        player->x_vel--;
+        player->x_acc--;
     }
 
-    if (player->x_vel < 0)
+    if (player->x_acc < 0 && !left_pressed)
     {
-        player->x_vel++;
+        player->x_acc++;
     }
+
+    //--------------------------------------------------------------------
+    // Vertical Movement
 
     // If the player is standing on a moving platform,
     // adjust the y velocity to match the platform.
-    if (carry && player->carrier != NULL)
+    if (carried && player->carrier != NULL)
     {
         int cf = 0;
 
@@ -113,11 +192,19 @@ static void update_player(eg_app *app, eg_entity *player)
             cf = player->y_vel + player->carrier->y_vel;
         }
 
-        player->y_vel = cf;
+        avy = cf;
+    }
+
+    // vertical correction factor applied by collision with a solid object
+    if (player->y_t && !carried)
+    {
+        // avy += player->y_t; // TODO: possible moved to get_y_vel
+        player->y_acc = 0;
+        player->y_t = 0;
     }
 
     // Set the link pointer to NULL.
-    if (!carry && player->carrier != NULL)
+    if (!carried && player->carrier != NULL)
     {
         player->carrier = NULL;
     }
@@ -126,19 +213,19 @@ static void update_player(eg_app *app, eg_entity *player)
     eg_clear_flag(player, ENTITY_FLAG_MOVE);
 
     // Update vertical position.
-    if (player->y_pos + h >= app->cb && player->y_vel > 0)
+    if (player->y_pos + h >= app->cb && avy > 0)
     {
         player->y_pos = app->cb - h;
-        app->cam.y -= player->y_vel;
+        app->cam.y -= avy;
     }
-    else if (player->y_pos <= app->ct + 1 && player->y_vel < 0)
+    else if (player->y_pos <= app->ct + 1 && avy < 0)
     {
         player->y_pos = app->ct + 1;
-        app->cam.y -= player->y_vel;
+        app->cam.y -= avy;
     }
     else
     {
-        player->y_pos += player->y_vel;
+        player->y_pos += avy;
     }
 
     // If the player is on a sloped platform, set the y velocity to some
@@ -147,14 +234,17 @@ static void update_player(eg_app *app, eg_entity *player)
     if (eg_check_flag(player, ENTITY_FLAG_SLOPE))
     {
         eg_clear_flag(player, ENTITY_FLAG_SLOPE);
-        player->y_vel = 4;
+        player->y_acc = 23;
     }
 
     // Apply gravity.
-    if (player->y_vel < 4)
+    if (player->y_acc < 23)
     {
-        player->y_vel++;
+        player->y_acc++;
     }
+
+    //--------------------------------------------------------------------
+    // Animation Logic
 
     // Advance the counter for walking to the right
     if ((eg_peek_input(app, EG_KEYCODE_LEFT) || eg_peek_input(app, EG_KEYCODE_RIGHT)) && eg_check_flag(player, ENTITY_FLAG_GROUND))
@@ -177,6 +267,8 @@ void player_demo_register(eg_entity_type *t)
     t->height = 24;
     t->render = render_player;
     t->update = update_player;
+    t->get_x_vel = get_player_x_vel;
+    t->get_y_vel = get_player_y_vel;
 }
 
 eg_entity *player_demo_create(int x, int y)
@@ -193,8 +285,6 @@ eg_entity *player_demo_create(int x, int y)
     player->type = ENTITY_TYPE_PLAYER;
     player->x_pos = x;
     player->y_pos = y;
-    player->sprite_x = 0;
-    player->sprite_y = 0;
 
     return player;
 }

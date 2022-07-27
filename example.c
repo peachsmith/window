@@ -70,7 +70,7 @@ eg_app *eg_create_app()
     app->debug.frame_len = 1;
     app->debug.frame_by_frame = 0;
 
-    app->scale = 1;
+    app->scale = 3;
 
     app->update = default_update;
     app->draw = default_draw;
@@ -333,6 +333,12 @@ eg_entity *eg_create_entity()
     entity->carrier = NULL;
     entity->next = NULL;
     entity->previous = NULL;
+
+    // experimental
+    entity->x_acc = 0;
+    entity->x_t = 0;
+    entity->y_acc = 0;
+    entity->y_t = 0;
 
     return entity;
 }

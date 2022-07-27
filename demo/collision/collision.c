@@ -11,6 +11,9 @@
 // maximum allowable collisions for one entity
 #define COL_LIMIT 64
 
+#define COL_VERTICAL 1
+#define COL_HORIZONTAL 2
+
 typedef struct col_res
 {
     eg_collision col;
@@ -114,18 +117,15 @@ static int greater(col_res *a, col_res *b)
     //     printf("[WARN] two corner collisions for one source\n");
     // }
 
-    // Collisions with diagonal lines take priority.
-    // if ((tx0 != 0.0f || ty0 != 0.0f && t0 == 0.0f) && (tx1 == 0.0f && ty1 == 0.0f && t1 != 0.0f))
-    // {
-    //     // printf("[DEBUG] diagonal line and AABB\n");
-    //     return 1;
-    // }
+    if ((tx0 || ty0) && (!tx1 && !ty1))
+    {
+        return 0;
+    }
 
-    // if ((tx1 != 0.0f || ty1 != 0.0f && t1 == 0.0f) && (tx0 == 0.0f && ty0 == 0.0f && t0 != 0.0f))
-    // {
-    //     // printf("[DEBUG] diagonal line and AABB\n");
-    //     return 0;
-    // }
+    if ((tx1 || ty1) && (!tx0 && !ty0))
+    {
+        return 1;
+    }
 
     // The t value takes priority.
     // We only check the corner collision into account if
@@ -153,13 +153,17 @@ void demo_handle_collisions(eg_app *app)
     source = app->entities;
     while (source != NULL)
     {
+        // TEMP: reset player collision count
+        if (source->type == ENTITY_TYPE_PLAYER)
+        {
+            app->col_count = 0;
+        }
+
         // Stage 1: Collision Detection
         // We traverse the entity list forwards and backwards from the source
         // entity. This prevents checking an entity for collision with itself.
         detect_collisions(app, source, cols, &count, DIR_FORWARD);
         detect_collisions(app, source, cols, &count, DIR_BACKWARD);
-
-        // int dbg_sort = 0;
 
         // Stage 2: Collision Sorting
         int sorted = 0;
@@ -180,17 +184,40 @@ void demo_handle_collisions(eg_app *app)
                     }
                 }
             }
+        }
 
-            // if (dbg_sort < 10000)
-            // {
-            //     dbg_sort++;
-            // }
-            // else
-            // {
-            //     printf("[ERROR] infinite collision sorting loop\n");
-            //     sorted = 1;
-            //     app->done = 1;
-            // }
+        int corner_resolution = 0;
+        if (count >= 1)
+        {
+            int walls = 0;
+            int floors = 0;
+
+            for (int i = 0; i < count; i++)
+            {
+                if (cols[i].col.cn.x && !cols[i].col.cn.y)
+                {
+                    walls++;
+                }
+
+                if (!cols[i].col.cn.x && cols[i].col.cn.y)
+                {
+                    floors++;
+                }
+
+                if (cols[i].col.cn.x && cols[i].col.cn.y)
+                {
+                    if (walls > floors)
+                    {
+                        corner_resolution = COL_HORIZONTAL;
+                        cols[i].col.cn.y = 0;
+                    }
+                    else
+                    {
+                        corner_resolution = COL_VERTICAL;
+                        cols[i].col.cn.x = 0;
+                    }
+                }
+            }
         }
 
         // Stage 3: Collision Resolution
@@ -226,9 +253,25 @@ void demo_handle_collisions(eg_app *app)
             }
             else
             {
-
                 if (demo_swept_aabb(app, a, b, &col))
                 {
+                    // Convert corner collisions to either horizontal or
+                    // vertical resolution.
+                    if (col.cn.x && col.cn.y)
+                    {
+                        switch (corner_resolution)
+                        {
+                        case COL_HORIZONTAL:
+                            col.cn.y = 0;
+                            break;
+                        case COL_VERTICAL:
+                            col.cn.x = 0;
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+
                     // Call the source entity's collision function.
                     cola = app->registry[a->type].collide;
                     if (cola != NULL)

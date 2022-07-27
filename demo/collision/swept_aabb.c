@@ -405,13 +405,17 @@ int demo_swept_aabb(
         return 0;
     }
 
+    // Get the effective velocity of entity A.
+    int avx = app->registry[a->type].get_x_vel(a);
+    int avy = app->registry[a->type].get_y_vel(a);
+
     // Check for velocity.
     // This function is only intended for a collision scenario in which at
     // least one of the entities has a velocity.
     // Two entities may be overlapping, and that may have some effect
     // elsewhere, but for the purposes of ray casting, it not considered a
     // collision.
-    if (a->x_vel == 0 && a->y_vel == 0 && b->x_vel == 0 && b->y_vel == 0)
+    if (avx == 0 && avy == 0 && b->x_vel == 0 && b->y_vel == 0)
     {
         return 0;
     }
@@ -450,8 +454,8 @@ int demo_swept_aabb(
     p.y = a->y_pos + ah / 2;
 
     // The direction vector D is the velocity of source entity A.
-    d.x = a->x_vel;
-    d.y = a->y_vel;
+    d.x = avx;
+    d.y = avy;
 
     if (ray_v_rect(&p, &d, &r, res))
     {

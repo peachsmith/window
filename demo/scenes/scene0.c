@@ -40,7 +40,7 @@ void load_scene_0(eg_app *app)
 
     // A long, horizontal block.
     // eg_add_entity(app, block_demo_create_long(230, 62));
-    eg_add_entity(app, block_demo_create_sloped(209, 62, 2));
+    eg_add_entity(app, block_demo_create_sloped(209, 62, 2)); // horizontal slope
 
     // A long, horizontal block that can be passed through when holding
     // the down arrow key.
@@ -50,9 +50,16 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create_moving(740, y_start + 32, 1));
 
     // Sloped block
-    eg_add_entity(app, block_demo_create_sloped(89, y_start + 32, 1));
+    eg_add_entity(app, block_demo_create_sloped(89, y_start + 32, 1)); // 32
     eg_add_entity(app, block_demo_create_sloped(330, y_start + 32, 0));
     eg_add_entity(app, block_demo_create_sloped(450, y_start + 32, 1));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 453, 93)); // solid ground to allow transition between sloped blocks
+
+    eg_add_entity(app, block_demo_create_sloped(x_start - 130, 94, 2)); // horizontal slope
+    eg_add_entity(app, block_demo_create_sloped(x_start - 250, 63, 0));
+    eg_add_entity(app, block_demo_create_sloped(x_start - 370, 31, 0));
+    eg_add_entity(app, block_demo_create(x_start - 136, 94)); // solid ground to allow transition between sloped blocks
+    eg_add_entity(app, throughblock_demo_create_long(x_start - 370, 14));
 
     // Create the initial input handler and add it to the app.
     eg_push_input_handler(app, root_input_handler);

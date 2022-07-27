@@ -256,24 +256,77 @@ void root_input_handler(eg_app *app)
 
     // TODO: implement a way to locate target entities during input handling.
 
+    int max_walk = 6;
+    int min_walk = 1;
+    int walk_acc = 1;
+
     // left movement
     if (eg_peek_input(app, EG_KEYCODE_LEFT))
     {
-        eg_clear_flag(target, ENTITY_FLAG_MIRROR);
-        if (target->x_vel >= -2)
+        if (app->actuation_counters[EG_KEYCODE_LEFT] < 10)
         {
-            target->x_vel -= 2;
+            app->actuation_counters[EG_KEYCODE_LEFT]++;
         }
+
+        eg_clear_flag(target, ENTITY_FLAG_MIRROR);
+        // if (target->x_vel >= -2)
+        // {
+        //     target->x_vel -= 2;
+        // }
+        if (target->x_acc > -min_walk)
+        {
+            if (target->x_acc < min_walk)
+            {
+                target->x_acc = -min_walk;
+            }
+        }
+        else
+        {
+            target->x_acc -= walk_acc;
+        }
+
+        if (target->x_acc < -max_walk)
+        {
+            target->x_acc = -max_walk;
+        }
+    }
+    else
+    {
+        app->actuation_counters[EG_KEYCODE_LEFT] = 0;
     }
 
     // right movement
     if (eg_peek_input(app, EG_KEYCODE_RIGHT))
     {
-        eg_set_flag(target, ENTITY_FLAG_MIRROR);
-        if (target->x_vel <= 2)
+        if (app->actuation_counters[EG_KEYCODE_RIGHT] < 10)
         {
-            target->x_vel += 2;
+            app->actuation_counters[EG_KEYCODE_RIGHT]++;
         }
+
+        eg_set_flag(target, ENTITY_FLAG_MIRROR);
+        // if (target->x_vel <= 2)
+        // {
+        //     target->x_vel += 2;
+        if (target->x_acc < min_walk)
+        {
+            if (target->x_acc > -min_walk)
+            {
+                target->x_acc = min_walk;
+            }
+        }
+        else
+        {
+            target->x_acc += walk_acc;
+        }
+
+        if (target->x_acc > max_walk)
+        {
+            target->x_acc = max_walk;
+        }
+    }
+    else
+    {
+        app->actuation_counters[EG_KEYCODE_RIGHT] = 0;
     }
 
     // if (eg_peek_input(app, EG_KEYCODE_UP))
@@ -314,9 +367,13 @@ void root_input_handler(eg_app *app)
             eg_clear_flag(target, ENTITY_FLAG_GROUND);
             eg_set_flag(target, ENTITY_FLAG_JUMP);
             eg_clear_flag(target, ENTITY_FLAG_MOVE);
+
             target->carrier = NULL;
-            target->y_vel = 0;
-            target->y_vel -= 12;
+
+            target->y_acc = -18;
+
+            // clear correction factor.
+            target->y_t = 0;
         }
     }
 
@@ -334,33 +391,6 @@ void root_input_handler(eg_app *app)
         app->cam.x = 0;
         app->cam.y = 0;
     }
-
-    // TEMP
-    // The following W, A, S, D controls are used for debugging
-    // sprite sheets.
-    // if (eg_consume_input(app, EG_KEYCODE_A)) // && target->sprite_x > 0)
-    // {
-    //     // target->sprite_x--;
-    //     app->registry[ENTITY_TYPE_PLAYER].width--;
-    // }
-
-    // if (eg_consume_input(app, EG_KEYCODE_D)) // && target->sprite_x < 19)
-    // {
-    //     // target->sprite_x++;
-    //     app->registry[ENTITY_TYPE_PLAYER].width++;
-    // }
-
-    // if (eg_consume_input(app, EG_KEYCODE_W)) // && target->sprite_y > 0)
-    // {
-    //     // target->sprite_y--;
-    //     app->registry[ENTITY_TYPE_PLAYER].height++;
-    // }
-
-    // if (eg_consume_input(app, EG_KEYCODE_S)) // && target->sprite_y < 8)
-    // {
-    //     // target->sprite_y++;
-    //     app->registry[ENTITY_TYPE_PLAYER].height--;
-    // }
 
     // END player controls
     //-------------------------------------------------

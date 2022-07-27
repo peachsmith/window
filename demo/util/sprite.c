@@ -238,6 +238,6 @@ void sprite_draw_background(eg_app *app, int type)
         .w = app->screen_width,
         .h = app->screen_height};
 
-    eg_set_color(app, EG_COLOR_CORNFLOWER_BLUE);
+    eg_set_color(app, 0xFF2090D0); // EG_COLOR_CORNFLOWER_BLUE);
     eg_draw_rect(app, &dest, 1);
 }

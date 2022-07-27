@@ -3,7 +3,9 @@
 #include "demo/entities/block.h"
 #include "demo/entities/player.h"
 
-void load_scene_1(eg_app *app)
+#include <stdlib.h>
+
+void load_scene_2(eg_app *app)
 {
     eg_entity *player;
 
@@ -28,6 +30,10 @@ void load_scene_1(eg_app *app)
     eg_add_entity(app, block_demo_create(x_start - 27 + 36, 58)); // x = 59
     eg_add_entity(app, block_demo_create(x_start - 27 + 36, 40)); // x = 59
 
+    eg_add_entity(app, block_demo_create(x_start - 27 + 54, 40)); // x = 59
+    // eg_add_entity(app, block_demo_create(x_start - 27 + 72, 40)); // x = 59
+    // eg_add_entity(app, block_demo_create(x_start - 27 + 90, 40)); // x = 59
+
     // Create the player entity and add it to the app.
     player = player_demo_create(100, 55);
     eg_add_entity(app, player);
@@ -41,7 +47,12 @@ void load_scene_1(eg_app *app)
     eg_add_entity(app, block_demo_create(x_start - 27 + 144, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 162, 94));
 
-    eg_add_entity(app, block_demo_create(x_start - 27 + 108, 76)); // x = 131
+    eg_entity *problem_block = block_demo_create(x_start - 27 + 108, 76);
+    if (problem_block != NULL)
+    {
+        problem_block->id = 1337;
+    }
+    eg_add_entity(app, problem_block); // x = 131
 
     // moving platforms added after the player
     // eg_add_entity(app, block_demo_create_moving(x_start - 63, 54, 0)); // vertical
