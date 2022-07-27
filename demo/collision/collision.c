@@ -48,6 +48,13 @@ static void detect_collisions(
                     cols[*count].col = res;
                     cols[*count].target = target;
                     *count = *count + 1;
+
+                    // if (app->col_count < 10 && source->type == ENTITY_TYPE_PLAYER)
+                    // {
+                    //     app->dbg_collision[app->col_count++] = 2;
+                    // }
+
+                    // printf("line_collision %.2f, %.2f\n", res.tx, res.ty);
                 }
             }
         }
@@ -62,6 +69,11 @@ static void detect_collisions(
                     cols[*count].col = res;
                     cols[*count].target = target;
                     *count = *count + 1;
+
+                    // if (app->col_count < 10 && source->type == ENTITY_TYPE_PLAYER)
+                    // {
+                    //     app->dbg_collision[app->col_count++] = 1;
+                    // }
                 }
             }
         }
@@ -117,17 +129,29 @@ static int greater(col_res *a, col_res *b)
     //     printf("[WARN] two corner collisions for one source\n");
     // }
 
+    if ((tx0 || ty0) && (!tx1 && !ty1))
+    {
+        printf("[DEBUG] line collision A\n");
+        return 0;
+    }
+
+    if ((tx1 || ty1) && (!tx0 && !ty0))
+    {
+        printf("[DEBUG] line collision B\n");
+        return 1;
+    }
+
     // Collisions with diagonal lines take priority.
     // if ((tx0 != 0.0f || ty0 != 0.0f && t0 == 0.0f) && (tx1 == 0.0f && ty1 == 0.0f && t1 != 0.0f))
     // {
-    //     // printf("[DEBUG] diagonal line and AABB\n");
-    //     return 1;
+    //     printf("[DEBUG] diagonal line and AABB 1\n");
+    //     return 0;
     // }
 
     // if ((tx1 != 0.0f || ty1 != 0.0f && t1 == 0.0f) && (tx0 == 0.0f && ty0 == 0.0f && t0 != 0.0f))
     // {
-    //     // printf("[DEBUG] diagonal line and AABB\n");
-    //     return 0;
+    //     printf("[DEBUG] diagonal line and AABB 0\n");
+    //     return 1;
     // }
 
     // The t value takes priority.
@@ -156,6 +180,12 @@ void demo_handle_collisions(eg_app *app)
     source = app->entities;
     while (source != NULL)
     {
+        // TEMP: reset player collision count
+        if (source->type == ENTITY_TYPE_PLAYER)
+        {
+            app->col_count = 0;
+        }
+
         // Stage 1: Collision Detection
         // We traverse the entity list forwards and backwards from the source
         // entity. This prevents checking an entity for collision with itself.
@@ -184,13 +214,27 @@ void demo_handle_collisions(eg_app *app)
         }
 
         int corner_resolution = 0;
-        if (count > 1)
+        if (count >= 1)
         {
             int walls = 0;
             int floors = 0;
 
             for (int i = 0; i < count; i++)
             {
+                if (app->col_count < 10 && source->type == ENTITY_TYPE_PLAYER)
+                {
+                    if (cols[i].col.tx || cols[i].col.ty)
+                    {
+                        // line
+                        app->dbg_collision[app->col_count++] = 2;
+                    }
+                    else
+                    {
+                        // block
+                        app->dbg_collision[app->col_count++] = 1;
+                    }
+                }
+
                 if (cols[i].col.cn.x && !cols[i].col.cn.y)
                 {
                     walls++;
@@ -215,6 +259,12 @@ void demo_handle_collisions(eg_app *app)
                     }
                 }
             }
+            // printf("\n");
+        }
+
+        if (count > 1 && (cols[0].col.tx || cols[0].col.ty))
+        {
+            printf("[DEBUG] lin as first collision\n");
         }
 
         // Stage 3: Collision Resolution

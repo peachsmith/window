@@ -50,9 +50,10 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create_moving(740, y_start + 32, 1));
 
     // Sloped block
-    eg_add_entity(app, block_demo_create_sloped(89, y_start + 32, 1));
+    eg_add_entity(app, block_demo_create_sloped(89, y_start + 32, 1)); // 32
     eg_add_entity(app, block_demo_create_sloped(330, y_start + 32, 0));
     eg_add_entity(app, block_demo_create_sloped(450, y_start + 32, 1));
+    eg_add_entity(app, block_demo_create(x_start - 27 + 450, 93));
 
     // Create the initial input handler and add it to the app.
     eg_push_input_handler(app, root_input_handler);

@@ -268,7 +268,7 @@ static void collide_block(
         // The source entity has collided with a diagonal line.
         // We now must determine which direction to resolve the collision
         // based on the source entity's velocity.
-        other->y_t = -((int)t_res->ty + 1);
+        other->y_t += -((int)t_res->ty + 1);
         eg_set_flag(other, ENTITY_FLAG_SLOPE);
 
         return;
