@@ -16,4 +16,7 @@ void demo_open_demo_dialog(eg_app *);
 void demo_init_info_dialog(eg_app *);
 void demo_open_info_dialog(eg_app *);
 
+void demo_init_sign_dialog(eg_app *);
+void demo_open_sign_dialog(eg_app *);
+
 #endif

@@ -2,6 +2,7 @@
 #include "demo/input/input.h"
 #include "demo/entities/block.h"
 #include "demo/entities/player.h"
+#include "demo/entities/sign.h"
 
 #include <stdio.h>
 
@@ -60,6 +61,8 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create_sloped(x_start - 370, 31, 0));
     eg_add_entity(app, block_demo_create(x_start - 136, 94)); // solid ground to allow transition between sloped blocks
     eg_add_entity(app, throughblock_demo_create_long(x_start - 370, 14));
+
+    eg_add_entity(app, sign_demo_create(x_start - 27 + 54, 76)); // an interactable sign
 
     // Create the initial input handler and add it to the app.
     eg_push_input_handler(app, root_input_handler);

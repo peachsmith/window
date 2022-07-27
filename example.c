@@ -279,6 +279,16 @@ void eg_pop_input_handler(eg_app *app)
 //----------------------------------------------------------------------------
 // entity functions
 
+static int default_get_x_vel(eg_entity *e)
+{
+    return e->x_vel;
+}
+
+static int default_get_y_vel(eg_entity *e)
+{
+    return e->y_vel;
+}
+
 eg_entity_type *eg_create_registry(int n)
 {
     eg_entity_type *reg = (eg_entity_type *)
@@ -297,6 +307,10 @@ eg_entity_type *eg_create_registry(int n)
         reg[i].render = NULL;
         reg[i].update = NULL;
         reg[i].collide = NULL;
+        reg[i].get_x_vel = default_get_x_vel;
+        reg[i].get_y_vel = default_get_y_vel;
+        reg[i].interactable = 0;
+        reg[i].interact = NULL;
     }
 
     return reg;

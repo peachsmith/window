@@ -2,6 +2,7 @@
 #include "demo/entities/player.h"
 #include "demo/entities/entity_types.h"
 #include "demo/menu/menu.h"
+#include "demo/collision/collision.h"
 
 #include <stdio.h>
 
@@ -374,6 +375,43 @@ void root_input_handler(eg_app *app)
 
             // clear correction factor.
             target->y_t = 0;
+        }
+    }
+
+    // interaction with interactable entities
+    if (eg_consume_input(app, EG_KEYCODE_Z))
+    {
+        // Scan for interactable entities.
+        eg_entity *interactable = NULL;
+        eg_entity *source = app->entities;
+        while (source != NULL && interactable == NULL)
+        {
+            if (app->registry[source->type].interactable)
+            {
+                // Check for overlap with the interactable entity.
+                eg_rect a = {.x = target->x_pos,
+                             .y = target->y_pos,
+                             .w = app->registry[target->type].width,
+                             .h = app->registry[target->type].height};
+
+                eg_rect b = {.x = source->x_pos + app->cam.x,
+                             .y = source->y_pos + app->cam.y,
+                             .w = app->registry[source->type].width,
+                             .h = app->registry[source->type].height};
+                eg_overlap o;
+
+                if (demo_is_overlapped(&a, &b, &o))
+                {
+                    interactable = source;
+                }
+            }
+
+            source = source->next;
+        }
+
+        if (interactable != NULL)
+        {
+            app->registry[interactable->type].interact(app, interactable, target);
         }
     }
 

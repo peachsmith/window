@@ -306,9 +306,12 @@ struct eg_entity_type
     eg_entity_callback update;
     eg_collider collide;
 
-    // Experimental Features
     int (*get_x_vel)(eg_entity *); // calculates current x velocity.
     int (*get_y_vel)(eg_entity *); // calculates current y velocity.
+
+    // entity interaction
+    int interactable;
+    int (*interact)(eg_app *, eg_entity *, eg_entity *);
 };
 
 struct eg_menu_item

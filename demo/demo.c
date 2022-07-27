@@ -2,6 +2,7 @@
 #include "demo/input/input.h"
 #include "demo/entities/player.h"
 #include "demo/entities/block.h"
+#include "demo/entities/sign.h"
 #include "demo/entities/entity_types.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
@@ -110,16 +111,6 @@ static void draw(eg_app *app)
     }
 }
 
-int default_get_x_vel(eg_entity *e)
-{
-    return e->x_vel;
-}
-
-int default_get_y_vel(eg_entity *e)
-{
-    return e->y_vel;
-}
-
 int demo_prepare(eg_app *app)
 {
     // Create the entity registry.
@@ -128,15 +119,6 @@ int demo_prepare(eg_app *app)
     {
         fprintf(stderr, "failed to create entity registry\n");
         return 0;
-    }
-
-    for (int i = 0; i < ENTITY_TYPE_MAX; i++)
-    {
-        reg[i].render = NULL;
-        reg[i].update = NULL;
-        reg[i].collide = NULL;
-        reg[i].get_x_vel = default_get_x_vel;
-        reg[i].get_y_vel = default_get_y_vel;
     }
 
     app->registry = reg;
@@ -189,6 +171,7 @@ int demo_prepare(eg_app *app)
     throughblock_demo_register_long(&reg[ENTITY_TYPE_THROUGHBLOCK_LONG]);
     block_demo_register_moving(&reg[ENTITY_TYPE_BLOCK_MOVING]);
     block_demo_register_sloped(&reg[ENTITY_TYPE_BLOCK_SLOPE]);
+    sign_demo_register(&reg[ENTITY_TYPE_SIGN]);
 
     // load_scene_0(app);
     load_scene_0(app);

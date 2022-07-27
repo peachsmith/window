@@ -13,6 +13,7 @@ void demo_init_dialogs(eg_app *app)
 {
     demo_init_demo_dialog(app);
     demo_init_info_dialog(app);
+    demo_init_sign_dialog(app);
 
     app->dialogs = &(dialogs[0]);
     app->dialog_count = 0;
