@@ -1,9 +1,7 @@
-#ifndef EG_DEMO_jimbo_H
-#define EG_DEMO_jimbo_H
+#ifndef EG_DEMO_JIMBO_H
+#define EG_DEMO_JIMBO_H
 
-// This file contains examples of a jimbo avatar. It is an entity that is
-// controlled directly by user input. In this example, the jimbo entity can
-// be moved around the screen with the arrow keys.
+// Jimbo is an NPC that has a small amount of dialog.
 
 #include "example.h"
 

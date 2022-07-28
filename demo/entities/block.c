@@ -219,7 +219,7 @@ static void update_moving_block(eg_app *app, eg_entity *block)
 
     // Set the update flag so that entities being carried by this platform
     // can update their state accordingly.
-    // eg_set_flag(block, ENTITY_FLAG_UPDATE);
+    eg_set_flag(block, ENTITY_FLAG_UPDATE);
 }
 
 static void collide_block(
@@ -243,6 +243,10 @@ static void collide_block(
             int ah = app->registry[other->type].height;
             int by = block->y_pos + app->cam.y;
             int check = other->y_pos + ah;
+            if (other->type != ENTITY_TYPE_PLAYER)
+            {
+                check += app->cam.y;
+            }
             int ty = (int)(t_res->ty);
             int pre = check + (avy - ty);
 
@@ -250,13 +254,11 @@ static void collide_block(
             {
                 if (ty > avy)
                 {
-                    printf("[DEBUG] correcting the correction factor 1\n");
                     ty = avy;
                     t_res->ty = (float)ty;
                 }
                 else
                 {
-                    printf("[DEBUG] correcting the correction factor 2\n");
                     t_res->ty--;
                 }
             }
@@ -372,7 +374,13 @@ static void collide_block(
             // change.
             // The entity being carried by the platform should move with the
             // platform regardless of when they were added to the application.
-            other->y_vel = block->y_pos + app->cam.y - (other->y_pos + ah);
+            int camy = 0;
+            if (other->type != ENTITY_TYPE_PLAYER)
+            {
+                camy = app->cam.y;
+            }
+            other->y_vel = block->y_pos + app->cam.y - (other->y_pos + camy + ah);
+            // other->y_vel = block->y_pos + app->cam.y - (other->y_pos + ah);
         }
     }
 }

@@ -108,15 +108,6 @@ static int greater(col_res *a, col_res *b)
         corner = 1;
     }
 
-    // Check if we have two possible perfect corner collisions
-    // for one source. Hopefully, this never happens.
-    // It should only be possible if two targets overlap in
-    // just the right way.
-    // if (cn0.x && cn0.y && cn1.x && cn1.y)
-    // {
-    //     printf("[WARN] two corner collisions for one source\n");
-    // }
-
     if ((tx0 || ty0) && (!tx1 && !ty1))
     {
         return 0;
@@ -146,13 +137,14 @@ void demo_handle_collisions(eg_app *app)
     // Stage 3: Collision Resolution
 
     col_res cols[COL_LIMIT]; // collision result list
-    int count = 0;
-    eg_entity *source; // source entity
+    eg_entity *source;       // source entity
 
     // main collision loop
     source = app->entities;
     while (source != NULL)
     {
+        int count = 0;
+
         // Stage 1: Collision Detection
         // We traverse the entity list forwards and backwards from the source
         // entity. This prevents checking an entity for collision with itself.
@@ -214,9 +206,6 @@ void demo_handle_collisions(eg_app *app)
             }
         }
 
-        // TEMP: used to verify the number of player collisions.
-        int player_count = 0;
-
         // Stage 3: Collision Resolution
         for (int i = 0; i < count; i++)
         {
@@ -233,11 +222,6 @@ void demo_handle_collisions(eg_app *app)
             {
                 if (demo_line(app, a, b, &col))
                 {
-                    if (a->type == ENTITY_TYPE_PLAYER)
-                    {
-                        player_count++;
-                    }
-
                     // Call the source entity's collision function.
                     cola = app->registry[a->type].collide;
                     if (cola != NULL)
@@ -289,11 +273,6 @@ void demo_handle_collisions(eg_app *app)
                     }
                 }
             }
-        }
-
-        if (player_count > 1)
-        {
-            printf("[DEBUG] there was somehow more than one player collision with a slope\n");
         }
 
         // Clear the update flag of the current source entity.

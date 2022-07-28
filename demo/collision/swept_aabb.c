@@ -478,13 +478,20 @@ int demo_swept_aabb(
     // If the source entity is being carried by a moving entity,
     // we verify that the source entity is still in contact with
     // the carrier.
-    // TODO: account for camera position for all entities.
     if (a->carrier != NULL && b->type == ENTITY_TYPE_BLOCK_MOVING)
     {
         int ax = a->x_pos;
+        int ay = a->y_pos;
         int bx = b->x_pos + app->cam.x;
         int by = b->y_pos + app->cam.y;
         int bw = app->registry[b->type].width;
+
+        int camy = 0;
+        if (a->type != ENTITY_TYPE_PLAYER)
+        {
+            ax += app->cam.x;
+            ay += app->cam.y;
+        }
 
         // Verify that the source entity's x position is within the
         // horizontal bounds of the platform.
@@ -492,7 +499,7 @@ int demo_swept_aabb(
         // is equal to the y position of the target.
         if (((ax >= bx && ax <= bx + bw) ||
              (ax + aw >= bx && ax + aw <= bx + bw)) &&
-            a->y_pos + ah == by)
+            ay + ah == by)
         {
             res->cn.x = 0;
             res->cn.y = -1;

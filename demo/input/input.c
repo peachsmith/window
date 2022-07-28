@@ -1,6 +1,8 @@
 #include "demo/input/input.h"
 #include "demo/entities/player.h"
 #include "demo/entities/entity_types.h"
+#include "demo/entities/jimbo.h"
+#include "demo/entities/billy.h"
 #include "demo/menu/menu.h"
 #include "demo/collision/collision.h"
 
@@ -408,6 +410,14 @@ void root_input_handler(eg_app *app)
         {
             app->registry[interactable->type].interact(app, interactable, target);
         }
+    }
+
+    // TEMP: add Billy.
+    if (eg_consume_input(app, EG_KEYCODE_J))
+    {
+        eg_add_entity(app, billy_demo_create(
+                               target->x_pos + 24 - app->cam.x,
+                               target->y_pos - 24 - app->cam.y));
     }
 
     // TEMP: Reset the state of various things.
