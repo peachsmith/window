@@ -486,7 +486,6 @@ int demo_swept_aabb(
         int by = b->y_pos + app->cam.y;
         int bw = app->registry[b->type].width;
 
-        int camy = 0;
         if (a->type != ENTITY_TYPE_PLAYER)
         {
             ax += app->cam.x;

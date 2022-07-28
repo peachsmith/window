@@ -118,7 +118,7 @@ static void update_billy(eg_app *app, eg_entity *billy)
 {
     // Movement constraints for billy.
     int max_walk = 6;
-    int min_walk = 1;
+    // int min_walk = 1;
     int walk_acc = 1;
 
     // Check for animation logic.
@@ -126,7 +126,7 @@ static void update_billy(eg_app *app, eg_entity *billy)
     int walking_right = action_counter >= 300 && action_counter < 450;
 
     // Get the width and height of the billy.
-    int w = app->registry[billy->type].width;
+    // int w = app->registry[billy->type].width;
     int h = app->registry[billy->type].height;
 
     // Check the MOVE flag to see if the billy is being carried by a

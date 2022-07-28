@@ -117,16 +117,16 @@ static void render_jimbo(eg_app *app, eg_entity *jimbo)
 static void update_jimbo(eg_app *app, eg_entity *jimbo)
 {
     // Movement constraints for Jimbo.
-    int max_walk = 6;
-    int min_walk = 1;
-    int walk_acc = 1;
+    // int max_walk = 6;
+    // int min_walk = 1;
+    // int walk_acc = 1;
 
     // Check for animation logic.
     int walking_left = action_counter < 60;
     int walking_right = action_counter >= 300 && action_counter < 450;
 
     // Get the width and height of the jimbo.
-    int w = app->registry[jimbo->type].width;
+    // int w = app->registry[jimbo->type].width;
     int h = app->registry[jimbo->type].height;
 
     // Check the MOVE flag to see if the jimbo is being carried by a
