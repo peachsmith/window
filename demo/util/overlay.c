@@ -38,17 +38,21 @@ void debug_draw_overlay(eg_app *app)
                  5,
                  5);
 
+    int avy = app->registry[app->player->type].get_y_vel(app->player);
+
     res = snprintf(
         buffer,
         n,
         "x_acc: %d\n"
         "y_acc: %d\n"
         "x_pos: %d\n"
-        "y_pos: %d\n",
+        "y_pos: %d\n"
+        "y_vel: %d\n",
         app->player->x_acc,
         app->player->y_acc,
         app->player->x_pos,
-        app->player->y_pos);
+        app->player->y_pos,
+        avy);
 
     // The return value from snprintf must be greater than 0 and less than
     // the limit n.

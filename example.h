@@ -268,7 +268,6 @@ struct eg_input_handler
 // definition of the eg_entity struct
 struct eg_entity
 {
-    int id;        // unique identifier for an entity
     int type;      // identifies the entity type in the registry
     int x_pos;     // horizontal position
     int y_pos;     // vertical position

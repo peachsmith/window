@@ -47,12 +47,7 @@ void load_scene_2(eg_app *app)
     eg_add_entity(app, block_demo_create(x_start - 27 + 144, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 162, 94));
 
-    eg_entity *problem_block = block_demo_create(x_start - 27 + 108, 76);
-    if (problem_block != NULL)
-    {
-        problem_block->id = 1337;
-    }
-    eg_add_entity(app, problem_block); // x = 131
+    eg_add_entity(app, block_demo_create(x_start - 27 + 108, 76));
 
     // moving platforms added after the player
     // eg_add_entity(app, block_demo_create_moving(x_start - 63, 54, 0)); // vertical

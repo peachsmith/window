@@ -223,6 +223,10 @@ static void update_player(eg_app *app, eg_entity *player)
     }
     else
     {
+        // printf("[DEBUG] player y vel: %d\n", avy);
+        // TODO: the player's y velocity is erroneously increased if it
+        // is standing on a sloped platform while another entity walks off
+        // that same platform.
         player->y_pos += avy;
     }
 
@@ -279,7 +283,6 @@ eg_entity *player_demo_create(int x, int y)
         return NULL;
     }
 
-    player->id = DEBUG_PLAYER;
     player->type = ENTITY_TYPE_PLAYER;
     player->x_pos = x;
     player->y_pos = y;

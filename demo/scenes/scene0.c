@@ -18,6 +18,8 @@ void load_scene_0(eg_app *app)
     app->cam.x = 0;
     app->cam.y = 0;
 
+    // eg_add_entity(app, jimbo_demo_create(x_start - 27 + 200, 36)); // an interactable NPC
+
     eg_add_entity(app, block_demo_create(x_start - 27 + 18, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 36, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 54, 94));
@@ -28,7 +30,7 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create_moving(570, y_start - 32, 0));
 
     // Create the player entity and add it to the app.
-    player = player_demo_create(150, 35);
+    player = player_demo_create(150, 40); // 150, 40
     eg_add_entity(app, player);
 
     // TEMP: remove this once searchable entities are implemented.

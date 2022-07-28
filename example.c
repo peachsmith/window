@@ -64,10 +64,10 @@ eg_app *eg_create_app()
     app->impl = NULL;
 
     // Populate the debug structure with the default values.
-    app->debug.overlay = 0;
+    app->debug.overlay = 1;
     app->debug.hitboxes = 0;
-    app->debug.collisions = 0;
-    app->debug.frame_len = 1;
+    app->debug.collisions = 1;
+    app->debug.frame_len = 16; // 1;
     app->debug.frame_by_frame = 0;
 
     app->scale = 3;
@@ -336,7 +336,6 @@ eg_entity *eg_create_entity()
         return NULL;
     }
 
-    entity->id = 0;
     entity->type = 0;
     entity->x_pos = 0;
     entity->y_pos = 0;

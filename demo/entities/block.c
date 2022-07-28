@@ -250,11 +250,13 @@ static void collide_block(
             {
                 if (ty > avy)
                 {
+                    printf("[DEBUG] correcting the correction factor 1\n");
                     ty = avy;
                     t_res->ty = (float)ty;
                 }
                 else
                 {
+                    printf("[DEBUG] correcting the correction factor 2\n");
                     t_res->ty--;
                 }
             }
@@ -264,16 +266,6 @@ static void collide_block(
         // the diagonal line from above.
         eg_clear_flag(other, ENTITY_FLAG_JUMP);
         eg_set_flag(other, ENTITY_FLAG_GROUND);
-
-        // if (other->type == ENTITY_TYPE_BLOCK_SLOPE)
-        // {
-        //     printf("[DEBUG] block to block collision\n");
-        // }
-
-        // if (block->type == ENTITY_TYPE_BLOCK_SLOPE && other->type == ENTITY_TYPE_BLOCK_SLOPE)
-        // {
-        //     printf("[DEBUG] somehow resolving a collision between two slopes\n");
-        // }
 
         // The source entity has collided with a diagonal line.
         // We now must determine which direction to resolve the collision

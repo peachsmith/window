@@ -42,11 +42,6 @@ static void detect_collisions(
         {
             if (demo_line(app, source, target, &res))
             {
-                if (source->type == ENTITY_TYPE_BLOCK_SLOPE && target->type == ENTITY_TYPE_BLOCK_SLOPE)
-                {
-                    printf("[DEBUG] somehow detected a collision between two slopes\n");
-                }
-
                 // Add the collision result to the array.
                 if (*count < COL_LIMIT)
                 {
@@ -61,11 +56,6 @@ static void detect_collisions(
             // Use swept AABB to determine if the two entities will collide.
             if (demo_swept_aabb(app, source, target, &res))
             {
-                if (source->type == ENTITY_TYPE_BLOCK_SLOPE)
-                {
-                    printf("[DEBUG] somehow detected a collision with a slope as the source entity\n");
-                }
-
                 // Add the collision result to the array.
                 if (*count < COL_LIMIT)
                 {
@@ -224,6 +214,9 @@ void demo_handle_collisions(eg_app *app)
             }
         }
 
+        // TEMP: used to verify the number of player collisions.
+        int player_count = 0;
+
         // Stage 3: Collision Resolution
         for (int i = 0; i < count; i++)
         {
@@ -240,9 +233,9 @@ void demo_handle_collisions(eg_app *app)
             {
                 if (demo_line(app, a, b, &col))
                 {
-                    if (a->type == ENTITY_TYPE_BLOCK_SLOPE && b->type == ENTITY_TYPE_BLOCK_SLOPE)
+                    if (a->type == ENTITY_TYPE_PLAYER)
                     {
-                        printf("[DEBUG] somehow detected a line collision between two slopes during resolution\n");
+                        player_count++;
                     }
 
                     // Call the source entity's collision function.
@@ -264,19 +257,6 @@ void demo_handle_collisions(eg_app *app)
             {
                 if (demo_swept_aabb(app, a, b, &col))
                 {
-                    if (a->type == ENTITY_TYPE_BLOCK_SLOPE && b->type == ENTITY_TYPE_BLOCK_SLOPE)
-                    {
-                        printf("[DEBUG] somehow detected an AABB collision between two slopes during resolution\n");
-                    }
-
-                    if (a->type == ENTITY_TYPE_JIMBO || b->type == ENTITY_TYPE_JIMBO)
-                    {
-                        if (a->type == ENTITY_TYPE_PLAYER || b->type == ENTITY_TYPE_PLAYER)
-                        {
-                            printf("[DEBUG] Jimbo and the player have somehow collided\n");
-                        }
-                    }
-
                     // Convert corner collisions to either horizontal or
                     // vertical resolution.
                     if (col.cn.x && col.cn.y)
@@ -309,6 +289,11 @@ void demo_handle_collisions(eg_app *app)
                     }
                 }
             }
+        }
+
+        if (player_count > 1)
+        {
+            printf("[DEBUG] there was somehow more than one player collision with a slope\n");
         }
 
         // Clear the update flag of the current source entity.
