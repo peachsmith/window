@@ -67,12 +67,6 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create(355, 93));           // solid ground to allow transition between sloped blocks
 
     // Long slope built from several sloped platforms.
-    //
-    // \ 
-    //  \ 
-    //   \ 
-    //    \ 
-    //     \___________
     eg_add_entity(app, block_demo_create_sloped(-71, 94, 2));
     eg_add_entity(app, block_demo_create_sloped(-143, 76, 0));
     eg_add_entity(app, block_demo_create_sloped(-215, 58, 0));
