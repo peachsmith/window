@@ -80,39 +80,62 @@ static void render_moving_block(eg_app *app, eg_entity *block)
 // Renders a sloped block
 static void render_sloped_block(eg_app *app, eg_entity *block)
 {
-    eg_rect r;
-    r.x = block->x_pos + app->cam.x;
-    r.y = block->y_pos + app->cam.y;
-    r.w = app->registry[block->type].width;
-    r.h = app->registry[block->type].height;
-
     int dir = block->flags & 3;
 
     if (dir < 2)
     {
-        // Draw the boundaries of the width and height.
-        eg_set_color(app, EG_COLOR_RED);
-        eg_draw_rect(app, &r, 0);
+        sprite_draw_slope(
+            app,
+            block->x_pos + app->cam.x,
+            block->y_pos + app->cam.y,
+            4,
+            !dir ? 1 : 0);
+    }
+    else
+    {
+        sprite_draw_flat_slope(
+            app,
+            block->x_pos + app->cam.x,
+            block->y_pos + app->cam.y,
+            4);
     }
 
-    // Draw the line.
-    // Default is from bottom left to top right.
-    eg_set_color(app, EG_COLOR_FOREST_GREEN);
-    eg_point a = {.x = r.x, .y = r.y + r.h};
-    eg_point b = {.x = r.x + r.w, .y = r.y};
+    if (app->debug.hitboxes)
+    {
+        eg_rect r;
+        r.x = block->x_pos + app->cam.x;
+        r.y = block->y_pos + app->cam.y;
+        r.w = app->registry[block->type].width;
+        r.h = app->registry[block->type].height;
 
-    if (dir == 0)
-    {
-        // from top left to bottom right.
-        a.y -= r.h;
-        b.y += r.h;
+        int dir = block->flags & 3;
+
+        if (dir < 2)
+        {
+            // Draw the boundaries of the width and height.
+            eg_set_color(app, EG_COLOR_RED);
+            eg_draw_rect(app, &r, 0);
+        }
+
+        // Draw the line.
+        // Default is from bottom left to top right.
+        eg_set_color(app, EG_COLOR_FOREST_GREEN);
+        eg_point a = {.x = r.x, .y = r.y + r.h};
+        eg_point b = {.x = r.x + r.w, .y = r.y};
+
+        if (dir == 0)
+        {
+            // from top left to bottom right.
+            a.y -= r.h;
+            b.y += r.h;
+        }
+        else if (dir == 2)
+        {
+            // horizontal line from top left to top right.
+            a.y -= r.h;
+        }
+        eg_draw_line(app, &a, &b);
     }
-    else if (dir == 2)
-    {
-        // horizontal line from top left to top right.
-        a.y -= r.h;
-    }
-    eg_draw_line(app, &a, &b);
 }
 
 static void move_vertical(eg_app *app, eg_entity *block)
@@ -520,8 +543,8 @@ eg_entity *block_demo_create_moving(int x, int y, int type)
 void block_demo_register_sloped(eg_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_SLOPE;
-    t->width = 120;
-    t->height = 32;
+    t->width = 72;
+    t->height = 18;
     t->render = render_sloped_block;
     t->collide = collide_block;
 }

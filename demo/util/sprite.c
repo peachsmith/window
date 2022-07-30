@@ -153,6 +153,102 @@ void sprite_draw_brick(eg_app *app, int x, int y)
         0);
 }
 
+void sprite_draw_slope(eg_app *app, int x, int y, int length, int mirror)
+{
+    // Only slopes from 1 - 4 tiles in length are supported.
+    if (length < 1 || length > 4)
+    {
+        return;
+    }
+
+    // tile dimensions
+    int tile_w = 18;
+    int tile_h = 18;
+
+    // tile coordinates
+    int tile_x = 0;
+    int tile_y = 9;
+
+    if (mirror)
+    {
+        tile_x = 3;
+    }
+
+    eg_rect src = {
+        .x = tile_x * tile_w,
+        .y = tile_y * tile_h,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    for (int i = 0; i < length; i++)
+    {
+        eg_draw_texture(
+            app,
+            app->textures[DEMO_TEXTURE_SCENERY],
+            &src,
+            &dest,
+            mirror);
+
+        if (mirror)
+        {
+            src.x -= tile_w;
+        }
+        else
+        {
+            src.x += tile_w;
+        }
+
+        dest.x += tile_w;
+    }
+}
+
+void sprite_draw_flat_slope(eg_app *app, int x, int y, int length)
+{
+    // Only slopes from 1 - 4 tiles in length are supported.
+    if (length < 1 || length > 4)
+    {
+        return;
+    }
+
+    // tile dimensions
+    int tile_w = 18;
+    int tile_h = 18;
+
+    // tile coordinates
+    int tile_x = 2;
+    int tile_y = 1;
+
+    eg_rect src = {
+        .x = tile_x * tile_w,
+        .y = tile_y * tile_h,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    for (int i = 0; i < length; i++)
+    {
+        eg_draw_texture(
+            app,
+            app->textures[DEMO_TEXTURE_SCENERY],
+            &src,
+            &dest,
+            0);
+
+        dest.x += tile_w;
+    }
+}
+
 void sprite_draw_grass_block(eg_app *app, int x, int y, int w, int h)
 {
     // tile dimensions

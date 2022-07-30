@@ -24,6 +24,10 @@ void sprite_draw_sign(eg_app *app, int x, int y);
 
 void sprite_draw_brick(eg_app *, int, int);
 
+void sprite_draw_slope(eg_app *app, int x, int y, int length, int mirror);
+
+void sprite_draw_flat_slope(eg_app *app, int x, int y, int length);
+
 void sprite_draw_grass_block(eg_app *, int, int, int, int);
 
 void sprite_draw_background(eg_app *, int);
