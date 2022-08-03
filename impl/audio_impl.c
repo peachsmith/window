@@ -4,7 +4,6 @@
 eg_sound *eg_impl_load_sound(eg_app *app, const char *path)
 {
     eg_sound *sound = NULL;
-    eg_impl *impl = app->impl;
 
     // Load the sound effect.
     Mix_Chunk *chunk = Mix_LoadWAV(path);
