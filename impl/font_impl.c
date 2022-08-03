@@ -17,16 +17,6 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
         return 0;
     }
 
-    printf("[DEBUG] Renderer Info\n-------------\n");
-    printf("[DEBUG] Name: %s\n", ri.name);
-    printf("[DEBUG] Number of texture formats: %d\n", ri.num_texture_formats);
-    printf("[DEBUG] Max Width: %d\n", ri.max_texture_width);
-    printf("[DEBUG] Max Height: %d\n", ri.max_texture_height);
-    printf("[DEBUG] SDL_RENDERER_SOFTWARE: %s\n", (ri.flags & SDL_RENDERER_SOFTWARE) ? "yes" : "no");
-    printf("[DEBUG] SDL_RENDERER_ACCELERATED: %s\n", (ri.flags & SDL_RENDERER_ACCELERATED) ? "yes" : "no");
-    printf("[DEBUG] SDL_RENDERER_PRESENTVSYNC: %s\n", (ri.flags & SDL_RENDERER_PRESENTVSYNC) ? "yes" : "no");
-    printf("[DEBUG] SDL_RENDERER_TARGETTEXTURE: %s\n", (ri.flags & SDL_RENDERER_TARGETTEXTURE) ? "yes" : "no");
-
     // Get the current renderer blend mode.
     SDL_GetRenderDrawBlendMode(r, &blend_mode);
 

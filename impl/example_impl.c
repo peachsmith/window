@@ -191,6 +191,21 @@ eg_impl *eg_impl_create(int screen_width, int screen_height, int scale)
     // approximate milliseconds per frame to 16. This is the truncated result
     // of 1000 / 60.
 
+    // Output renderer info in case anyone is interested.
+    SDL_RendererInfo ri;
+    if (!SDL_GetRendererInfo(impl->renderer, &ri))
+    {
+        printf("[DEBUG] Renderer Info\n-------------\n");
+        printf("[DEBUG] Name: %s\n", ri.name);
+        printf("[DEBUG] Number of texture formats: %d\n", ri.num_texture_formats);
+        printf("[DEBUG] Max Width: %d\n", ri.max_texture_width);
+        printf("[DEBUG] Max Height: %d\n", ri.max_texture_height);
+        printf("[DEBUG] SDL_RENDERER_SOFTWARE: %s\n", (ri.flags & SDL_RENDERER_SOFTWARE) ? "yes" : "no");
+        printf("[DEBUG] SDL_RENDERER_ACCELERATED: %s\n", (ri.flags & SDL_RENDERER_ACCELERATED) ? "yes" : "no");
+        printf("[DEBUG] SDL_RENDERER_PRESENTVSYNC: %s\n", (ri.flags & SDL_RENDERER_PRESENTVSYNC) ? "yes" : "no");
+        printf("[DEBUG] SDL_RENDERER_TARGETTEXTURE: %s\n", (ri.flags & SDL_RENDERER_TARGETTEXTURE) ? "yes" : "no");
+    }
+
     return impl;
 }
 
