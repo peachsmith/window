@@ -7,6 +7,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,6 +19,9 @@
 // multiple textures.
 #define FONT_MODE_SINGLE 0
 #define FONT_MODE_MULTI 1
+
+#define AUDIO_TYPE_SOUND_EFFECT 1
+#define AUDIO_TYPE_MUSIC 2
 
 struct eg_texture
 {
@@ -31,6 +35,14 @@ struct eg_font
     SDL_Texture *glyphs[FONT_ATLAS_MAX];
     eg_rect sizes[FONT_ATLAS_MAX];
     int mode; // 0 for single texture, 1 for multiple
+};
+
+struct eg_sound
+{
+    int loaded;       // initialization flag
+    int type;         // 1 for chunk, 2 for music
+    Mix_Chunk *chunk; // sound effect
+    Mix_Music *music; // music
 };
 
 // complete definition of the eg_impl type

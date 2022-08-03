@@ -3,7 +3,7 @@
 
 int eg_impl_init()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
     {
         fprintf(
             stderr,
@@ -15,7 +15,7 @@ int eg_impl_init()
     if (TTF_Init() == -1)
     {
         fprintf(stderr,
-                "failed to initialize SDL_ttf error: %s\n",
+                "failed to initialize SDL_ttf, error: %s\n",
                 TTF_GetError());
         SDL_Quit();
         return 0;
@@ -24,8 +24,33 @@ int eg_impl_init()
     if (!IMG_Init(IMG_INIT_PNG))
     {
         fprintf(stderr,
-                "failed to initialize SDL_image error: %s\n",
+                "failed to initialize SDL_image, error: %s\n",
                 IMG_GetError());
+        TTF_Quit();
+        SDL_Quit();
+        return 0;
+    }
+
+    // Initialize SDL_Mixer to allow playback of OGG files.
+    if (Mix_Init(MIX_INIT_OGG) != MIX_INIT_OGG)
+    {
+        fprintf(stderr,
+                "failed to initialize SDL_mixer, error: %s\n",
+                Mix_GetError());
+        IMG_Quit();
+        TTF_Quit();
+        SDL_Quit();
+        return 0;
+    }
+
+    // Open the SDL_Mixer audio device.
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    {
+        fprintf(stderr,
+                "failed to open audio device, error: %s\n",
+                Mix_GetError());
+        Mix_Quit();
+        IMG_Quit();
         TTF_Quit();
         SDL_Quit();
         return 0;
@@ -38,6 +63,8 @@ int eg_impl_init()
 
 void eg_impl_term()
 {
+    Mix_Quit();       // closes handles to dependencies
+    Mix_CloseAudio(); // terminates the actual SDL_Mixer library
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();
@@ -65,6 +92,19 @@ void eg_impl_destroy_texture(eg_texture *texture)
     {
         SDL_DestroyTexture(texture->img);
         texture->img = NULL;
+    }
+}
+
+void eg_impl_destroy_sound(eg_sound *sound)
+{
+    if (sound->type == AUDIO_TYPE_SOUND_EFFECT)
+    {
+        Mix_FreeChunk(sound->chunk);
+    }
+
+    if (sound->type == AUDIO_TYPE_MUSIC)
+    {
+        Mix_FreeMusic(sound->music);
     }
 }
 
