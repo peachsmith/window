@@ -13,6 +13,7 @@
 #include "demo/dialog/dialog.h"
 #include "demo/font/font.h"
 #include "demo/texture/texture.h"
+#include "demo/audio/audio.h"
 #include "demo/util/sprite.h"
 #include "demo/util/overlay.h"
 
@@ -149,6 +150,12 @@ int demo_prepare(eg_app *app)
 
     // Initialize fonts.
     if (!demo_init_fonts(app))
+    {
+        return 0;
+    }
+
+    // Initialize audio
+    if (!demo_init_audio(app))
     {
         return 0;
     }

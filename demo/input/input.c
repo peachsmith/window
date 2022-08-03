@@ -5,6 +5,7 @@
 #include "demo/entities/billy.h"
 #include "demo/menu/menu.h"
 #include "demo/collision/collision.h"
+#include "demo/audio/audio.h"
 
 #include <stdio.h>
 
@@ -433,6 +434,20 @@ void root_input_handler(eg_app *app)
         // Reset the camera.
         app->cam.x = 0;
         app->cam.y = 0;
+    }
+
+    // TEMP: Play audio
+    if (eg_consume_input(app, EG_KEYCODE_F))
+    {
+        eg_play_sound(app, app->sounds[DEMO_SOUND_EFFECT_CONFIRMATION]);
+    }
+    if (eg_consume_input(app, EG_KEYCODE_G))
+    {
+        eg_play_sound(app, app->sounds[DEMO_SOUND_EFFECT_DROP]);
+    }
+    if (eg_consume_input(app, EG_KEYCODE_H))
+    {
+        eg_play_sound(app, app->sounds[DEMO_SOUND_EFFECT_TOGGLE]);
     }
 
     // END player controls

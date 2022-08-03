@@ -66,6 +66,11 @@ typedef struct eg_texture eg_texture;
 typedef struct eg_font eg_font;
 
 /**
+ * Font data for playing sound.
+ */
+typedef struct eg_sound eg_sound;
+
+/**
  * A point represents the x and y coordinates in 2D space.
  */
 typedef struct eg_point
@@ -219,6 +224,10 @@ struct eg_app
     // fonts
     eg_font **fonts;
     int font_count;
+
+    // sounds
+    eg_sound **sounds;
+    int sound_count;
 
     // menus
     eg_menu **menus;
@@ -694,5 +703,26 @@ eg_texture *eg_load_texture(eg_app *, const char *);
  *   int - 1 for horizontal flip, 0 for no flip
  */
 void eg_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
+
+//----------------------------------------------------------------------------
+// audio functions
+
+/**
+ * Loads a sound from a file.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   const char* - file path of the sound file
+ */
+eg_sound *eg_load_sound(eg_app *app, const char *path);
+
+/**
+ * Plays the contents of a sound file.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_sound* - a pointer to the sound to play
+ */
+void eg_play_sound(eg_app *app, eg_sound *sound);
 
 #endif

@@ -22,9 +22,12 @@ eg_font *eg_impl_load_font(eg_app *, const char *, int);
 void eg_impl_draw_text(eg_app *, eg_font *, const char *, int, int);
 void eg_impl_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
 eg_texture *eg_impl_load_texture(eg_app *, const char *);
+eg_sound *eg_impl_load_sound(eg_app *, const char *);
+void eg_impl_play_sound(eg_app *, eg_sound *);
 void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
 void eg_impl_destroy_font(eg_font *);
 void eg_impl_destroy_texture(eg_texture *);
+void eg_impl_destroy_sound(eg_sound *);
 
 //----------------------------------------------------------------------------
 // core functions
@@ -85,6 +88,9 @@ eg_app *eg_create_app()
 
     app->fonts = NULL;
     app->font_count = 0;
+
+    app->sounds = NULL;
+    app->sound_count = 0;
 
     app->textures = NULL;
     app->texture_count = 0;
@@ -153,6 +159,12 @@ void eg_destroy_app(eg_app *app)
     for (int i = 0; i < app->texture_count; i++)
     {
         eg_impl_destroy_texture(app->textures[i]);
+    }
+
+    // Destroy the sounds.
+    for (int i = 0; i < app->sound_count; i++)
+    {
+        eg_impl_destroy_sound(app->sounds[i]);
     }
 
     if (app->counters != NULL)
@@ -548,4 +560,17 @@ eg_texture *eg_load_texture(eg_app *app, const char *path)
 void eg_draw_texture(eg_app *app, eg_texture *texture, eg_rect *src, eg_rect *dest, int mirror)
 {
     eg_impl_draw_texture(app, texture, src, dest, mirror);
+}
+
+//----------------------------------------------------------------------------
+// audio functions
+
+eg_sound *eg_load_sound(eg_app *app, const char *path)
+{
+    return eg_impl_load_sound(app, path);
+}
+
+void eg_play_sound(eg_app *app, eg_sound *sound)
+{
+    eg_impl_play_sound(app, sound);
 }
