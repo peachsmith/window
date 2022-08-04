@@ -6,6 +6,8 @@
 #define DEMO_SOUND_EFFECT_CONFIRMATION 0
 #define DEMO_SOUND_EFFECT_DROP 1
 #define DEMO_SOUND_EFFECT_TOGGLE 2
+#define DEMO_SONG_FIELD 3
+#define DEMO_SONG_TRACK_4 4
 
 int demo_init_audio(eg_app *);
 

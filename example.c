@@ -22,7 +22,7 @@ eg_font *eg_impl_load_font(eg_app *, const char *, int);
 void eg_impl_draw_text(eg_app *, eg_font *, const char *, int, int);
 void eg_impl_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
 eg_texture *eg_impl_load_texture(eg_app *, const char *);
-eg_sound *eg_impl_load_sound(eg_app *, const char *);
+eg_sound *eg_impl_load_sound(eg_app *, const char *, int);
 void eg_impl_play_sound(eg_app *, eg_sound *);
 void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
 void eg_impl_destroy_font(eg_font *);
@@ -565,9 +565,9 @@ void eg_draw_texture(eg_app *app, eg_texture *texture, eg_rect *src, eg_rect *de
 //----------------------------------------------------------------------------
 // audio functions
 
-eg_sound *eg_load_sound(eg_app *app, const char *path)
+eg_sound *eg_load_sound(eg_app *app, const char *path, int type)
 {
-    return eg_impl_load_sound(app, path);
+    return eg_impl_load_sound(app, path, type);
 }
 
 void eg_play_sound(eg_app *app, eg_sound *sound)
