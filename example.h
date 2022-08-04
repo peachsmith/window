@@ -16,6 +16,10 @@
 #define EG_DEFAULT_SCREEN_WIDTH 240
 #define EG_DEFAULT_SCREEN_HEIGHT 160
 
+// types of audio resources
+#define AUDIO_TYPE_SOUND_EFFECT 1
+#define AUDIO_TYPE_MUSIC 2
+
 // TEMP: debug IDs for identifying certain entities.
 #define DEBUG_PLAYER 1
 #define DEBUG_PLATFORM 2
@@ -714,7 +718,7 @@ void eg_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
  *   eg_app* - a pointer to an app struct
  *   const char* - file path of the sound file
  */
-eg_sound *eg_load_sound(eg_app *app, const char *path);
+eg_sound *eg_load_sound(eg_app *app, const char *path, int type);
 
 /**
  * Plays the contents of a sound file.

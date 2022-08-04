@@ -20,9 +20,6 @@
 #define FONT_MODE_SINGLE 0
 #define FONT_MODE_MULTI 1
 
-#define AUDIO_TYPE_SOUND_EFFECT 1
-#define AUDIO_TYPE_MUSIC 2
-
 struct eg_texture
 {
     SDL_Texture *img;
