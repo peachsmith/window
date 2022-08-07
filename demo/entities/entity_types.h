@@ -4,21 +4,18 @@
 // A lits of all entity types in the application
 
 #define ENTITY_TYPE_PLAYER 0
-#define ENTITY_TYPE_Q 1
-#define ENTITY_TYPE_W 2
-#define ENTITY_TYPE_E 3
-#define ENTITY_TYPE_BLOCK 4
-#define ENTITY_TYPE_BLOCK_BIG 5
-#define ENTITY_TYPE_BLOCK_LONG 6
-#define ENTITY_TYPE_THROUGHBLOCK_LONG 7
-#define ENTITY_TYPE_BLOCK_MOVING 8
-#define ENTITY_TYPE_BLOCK_SLOPE 9
-#define ENTITY_TYPE_SIGN 10
-#define ENTITY_TYPE_JIMBO 11
-#define ENTITY_TYPE_BILLY 12
+#define ENTITY_TYPE_BLOCK 1
+#define ENTITY_TYPE_BLOCK_BIG 2
+#define ENTITY_TYPE_BLOCK_LONG 3
+#define ENTITY_TYPE_THROUGHBLOCK_LONG 4
+#define ENTITY_TYPE_BLOCK_MOVING 5
+#define ENTITY_TYPE_BLOCK_SLOPE 6
+#define ENTITY_TYPE_SIGN 7
+#define ENTITY_TYPE_JIMBO 8
+#define ENTITY_TYPE_BILLY 9
 
 // This is the total number of entity types.
-#define ENTITY_TYPE_MAX 13
+#define ENTITY_TYPE_MAX 10
 
 // flags
 #define ENTITY_FLAG_GROUND 0

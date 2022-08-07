@@ -37,7 +37,7 @@ void demo_init_jimbo_dialog(eg_app *app)
 
 void demo_open_jimbo_dialog(eg_app *app)
 {
-    eg_push_input_handler(app, demo_dialog_input_handler);
+    eg_push_input_handler(app, common_dialog_input_handler);
 
     // Reset the dialog.
     jimbo_dialog.panel = 0;
