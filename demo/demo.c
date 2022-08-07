@@ -188,7 +188,7 @@ int demo_prepare(eg_app *app)
     load_scene_0(app);
 
     // Play music
-    // eg_play_sound(app, app->sounds[DEMO_SONG_FIELD]);
+    eg_play_sound(app, app->sounds[DEMO_SONG_FIELD]);
 
     return 1;
 }

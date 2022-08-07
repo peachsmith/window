@@ -281,12 +281,29 @@ struct eg_input_handler
 // definition of the eg_entity struct
 struct eg_entity
 {
-    int type;      // identifies the entity type in the registry
-    int x_pos;     // horizontal position
-    int y_pos;     // vertical position
-    int x_vel;     // horizontal velocity
-    int y_vel;     // vertical velocity
-    uint8_t flags; // flags
+    int type; // identifies the entity type in the registry
+
+    // position
+    int x_pos;
+    int y_pos;
+
+    // velocity
+    int x_vel;
+    int y_vel;
+
+    // acceleration
+    int x_acc;
+    int y_acc;
+
+    // velocity correction factor
+    int x_t;
+    int y_t;
+
+    // bit flags
+    uint8_t flags;
+
+    // animation counter
+    int animation_ticks;
 
     // Used for actions that take multiple iterations of the main loop.
     int ticks;
@@ -295,14 +312,9 @@ struct eg_entity
     // and velocity.
     eg_entity *carrier;
 
+    // linked list pointers
     eg_entity *next;
     eg_entity *previous;
-
-    // Experimental Features
-    int x_acc; // horizontal acceleration
-    int x_t;   // x velocity correction factor
-    int y_acc; // vertical acceleration
-    int y_t;   // y velocity correction factor
 };
 
 struct eg_entity_type

@@ -7,13 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// This is a tick counter used for moving things around.
-// Much like the tmp_counter from player.c, this is temporary
-// and will most likely be moved to a better location at some point.
-static int action_counter = 0;
-
-static int animation_counter = 0;
-
 static int get_billy_x_vel(eg_entity *billy)
 {
     // acceleration to velocity conversion table
@@ -76,11 +69,11 @@ static void render_billy(eg_app *app, eg_entity *billy)
     // Animation logic for walking to the right
     if ((billy->x_acc) && grounded)
     {
-        if (animation_counter < 6)
+        if (billy->animation_ticks < 6)
         {
             tile = 0;
         }
-        else if (animation_counter < 16)
+        else if (billy->animation_ticks < 16)
         {
             tile = 1;
         }
@@ -122,8 +115,8 @@ static void update_billy(eg_app *app, eg_entity *billy)
     int walk_acc = 1;
 
     // Check for animation logic.
-    int walking_left = action_counter < 60;
-    int walking_right = action_counter >= 300 && action_counter < 450;
+    int walking_left = billy->ticks < 60;
+    int walking_right = billy->ticks >= 300 && billy->ticks < 450;
 
     // Get the width and height of the billy.
     // int w = app->registry[billy->type].width;
@@ -228,24 +221,25 @@ static void update_billy(eg_app *app, eg_entity *billy)
     //--------------------------------------------------------------------
     // Animation Logic
 
-    if (action_counter < 450)
+    // if (billy->ticks < 450)
+    if (billy->ticks < 450)
     {
-        action_counter++;
+        billy->ticks++;
     }
     else
     {
         // Stop the walking animation.
-        animation_counter = 0;
+        billy->animation_ticks = 0;
     }
 
-    // Walk to the left for 120 frames.
-    if (action_counter < 60)
+    // Walk to the left for 60 frames.
+    if (billy->ticks < 60)
     {
         // Progress the walking animation.
-        animation_counter++;
-        if (animation_counter >= 20)
+        billy->animation_ticks++;
+        if (billy->animation_ticks >= 20)
         {
-            animation_counter = 0;
+            billy->animation_ticks = 0;
         }
 
         if (billy->x_acc > -max_walk)
@@ -259,40 +253,40 @@ static void update_billy(eg_app *app, eg_entity *billy)
         }
     }
 
-    // Stand in once place for 180 frames.
+    // Stand in once place for 240 frames.
     // Turn to face left and right a few times.
-    if (action_counter >= 60 && action_counter < 300)
+    if (billy->ticks >= 60 && billy->ticks < 300)
     {
         // Stop the animation.
-        animation_counter = 0;
+        billy->animation_ticks = 0;
 
         // Turn to face right.
-        if (action_counter > 180 && action_counter < 210)
+        if (billy->ticks > 180 && billy->ticks < 210)
         {
             eg_set_flag(billy, ENTITY_FLAG_MIRROR);
         }
 
         // Turn to face left.
-        if (action_counter >= 210 && action_counter < 250)
+        if (billy->ticks >= 210 && billy->ticks < 250)
         {
             eg_clear_flag(billy, ENTITY_FLAG_MIRROR);
         }
 
         // Turn to face right.
-        if (action_counter >= 250)
+        if (billy->ticks >= 250)
         {
             eg_set_flag(billy, ENTITY_FLAG_MIRROR);
         }
     }
 
-    // Walk to the right for 120 frames.
-    if (action_counter >= 300 && action_counter < 450)
+    // Walk to the right for 150 frames.
+    if (billy->ticks >= 300 && billy->ticks < 450)
     {
         // Progress the walking animation.
-        animation_counter++;
-        if (animation_counter >= 20)
+        billy->animation_ticks++;
+        if (billy->animation_ticks >= 20)
         {
-            animation_counter = 0;
+            billy->animation_ticks = 0;
         }
 
         if (billy->x_acc < max_walk)
