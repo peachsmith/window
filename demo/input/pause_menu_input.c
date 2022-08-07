@@ -3,6 +3,8 @@
 #include "demo/entities/entity_types.h"
 #include "demo/menu/menu.h"
 
+#include <stdlib.h>
+
 void pause_menu_input_handler(eg_app *app)
 {
     if (eg_consume_input(app, EG_KEYCODE_X) || eg_consume_input(app, EG_KEYCODE_Q))
