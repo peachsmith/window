@@ -17,11 +17,11 @@ void jimbo_demo_register(eg_entity_type *);
  * Creates a jimbo entity.
  *
  * Params:
- *   int - the jimbo entity's initial x position
- *   int - the jimbo entity's initial y position
+ *   int - Jimbo's initial x position
+ *   int - Jimbo's initial y position
  *
  * Returns:
- *   eg_entity* - a pointer to the new jimbo entity.
+ *   eg_entity* - a pointer to the Jimbo.
  */
 eg_entity *jimbo_demo_create(int, int);
 
