@@ -7,13 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// This is a tick counter used for moving things around.
-// Much like the tmp_counter from player.c, this is temporary
-// and will most likely be moved to a better location at some point.
-static int action_counter = 0;
-
-static int animation_counter = 0;
-
 static int get_jimbo_x_vel(eg_entity *jimbo)
 {
     // acceleration to velocity conversion table
@@ -73,19 +66,6 @@ static void render_jimbo(eg_app *app, eg_entity *jimbo)
     int tile = 0;
     int grounded = eg_check_flag(jimbo, ENTITY_FLAG_GROUND);
 
-    // Animation logic for walking to the right
-    if ((jimbo->x_acc) && grounded)
-    {
-        if (animation_counter < 6)
-        {
-            tile = 0;
-        }
-        else if (animation_counter < 16)
-        {
-            tile = 1;
-        }
-    }
-
     if (!grounded)
     {
         tile = 1;
@@ -116,15 +96,6 @@ static void render_jimbo(eg_app *app, eg_entity *jimbo)
 
 static void update_jimbo(eg_app *app, eg_entity *jimbo)
 {
-    // Movement constraints for Jimbo.
-    // int max_walk = 6;
-    // int min_walk = 1;
-    // int walk_acc = 1;
-
-    // Check for animation logic.
-    int walking_left = action_counter < 60;
-    int walking_right = action_counter >= 300 && action_counter < 450;
-
     // Get the width and height of the jimbo.
     // int w = app->registry[jimbo->type].width;
     int h = app->registry[jimbo->type].height;
@@ -156,12 +127,12 @@ static void update_jimbo(eg_app *app, eg_entity *jimbo)
     jimbo->x_pos += avx;
 
     // Perform horizontal inertia.
-    if (jimbo->x_acc > 0 && !walking_right)
+    if (jimbo->x_acc > 0)
     {
         jimbo->x_acc--;
     }
 
-    if (jimbo->x_acc < 0 && !walking_left)
+    if (jimbo->x_acc < 0)
     {
         jimbo->x_acc++;
     }
@@ -224,87 +195,6 @@ static void update_jimbo(eg_app *app, eg_entity *jimbo)
     {
         jimbo->y_acc++;
     }
-
-    //--------------------------------------------------------------------
-    // Animation Logic
-
-    // if (action_counter < 450)
-    // {
-    //     action_counter++;
-    // }
-    // else
-    // {
-    //     // Stop the walking animation.
-    //     animation_counter = 0;
-    // }
-
-    // // Walk to the left for 120 frames.
-    // if (action_counter < 60)
-    // {
-    //     // Progress the walking animation.
-    //     animation_counter++;
-    //     if (animation_counter >= 20)
-    //     {
-    //         animation_counter = 0;
-    //     }
-
-    //     if (jimbo->x_acc > -max_walk)
-    //     {
-    //         jimbo->x_acc -= walk_acc;
-    //     }
-
-    //     if (jimbo->x_acc < -max_walk)
-    //     {
-    //         jimbo->x_acc = -max_walk;
-    //     }
-    // }
-
-    // // Stand in once place for 180 frames.
-    // // Turn to face left and right a few times.
-    // if (action_counter >= 60 && action_counter < 300)
-    // {
-    //     // Stop the animation.
-    //     animation_counter = 0;
-
-    //     // Turn to face right.
-    //     if (action_counter > 180 && action_counter < 210)
-    //     {
-    //         eg_set_flag(jimbo, ENTITY_FLAG_MIRROR);
-    //     }
-
-    //     // Turn to face left.
-    //     if (action_counter >= 210 && action_counter < 250)
-    //     {
-    //         eg_clear_flag(jimbo, ENTITY_FLAG_MIRROR);
-    //     }
-
-    //     // Turn to face right.
-    //     if (action_counter >= 250)
-    //     {
-    //         eg_set_flag(jimbo, ENTITY_FLAG_MIRROR);
-    //     }
-    // }
-
-    // // Walk to the right for 120 frames.
-    // if (action_counter >= 300 && action_counter < 450)
-    // {
-    //     // Progress the walking animation.
-    //     animation_counter++;
-    //     if (animation_counter >= 20)
-    //     {
-    //         animation_counter = 0;
-    //     }
-
-    //     if (jimbo->x_acc < max_walk)
-    //     {
-    //         jimbo->x_acc += walk_acc;
-    //     }
-
-    //     if (jimbo->x_acc > max_walk)
-    //     {
-    //         jimbo->x_acc = max_walk;
-    //     }
-    // }
 }
 
 static int interact_with_jimbo(eg_app *app, eg_entity *sign, eg_entity *actor)

@@ -349,21 +349,29 @@ eg_entity *eg_create_entity()
     }
 
     entity->type = 0;
+
     entity->x_pos = 0;
     entity->y_pos = 0;
+
     entity->x_vel = 0;
     entity->y_vel = 0;
+
+    entity->x_acc = 0;
+    entity->y_acc = 0;
+
+    entity->x_t = 0;
+    entity->y_t = 0;
+
     entity->flags = 0;
+
+    entity->animation_ticks = 0;
+
     entity->ticks = 0;
+
     entity->carrier = NULL;
+
     entity->next = NULL;
     entity->previous = NULL;
-
-    // experimental
-    entity->x_acc = 0;
-    entity->x_t = 0;
-    entity->y_acc = 0;
-    entity->y_t = 0;
 
     return entity;
 }
