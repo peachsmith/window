@@ -13,9 +13,10 @@
 #define ENTITY_TYPE_SIGN 7
 #define ENTITY_TYPE_JIMBO 8
 #define ENTITY_TYPE_BILLY 9
+#define ENTITY_TYPE_HENRY 10
 
 // This is the total number of entity types.
-#define ENTITY_TYPE_MAX 10
+#define ENTITY_TYPE_MAX 11
 
 // flags
 #define ENTITY_FLAG_GROUND 0
@@ -25,5 +26,6 @@
 #define ENTITY_FLAG_UPDATE 4
 #define ENTITY_FLAG_SLOPE 5
 #define ENTITY_FLAG_MIRROR 6
+#define ENTITY_FLAG_INVINCIBLE 7
 
 #endif

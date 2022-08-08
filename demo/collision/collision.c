@@ -145,6 +145,9 @@ void demo_handle_collisions(eg_app *app)
     {
         int count = 0;
 
+        // Clear the ground flag of the source entity.
+        eg_clear_flag(source, ENTITY_FLAG_GROUND);
+
         // Stage 1: Collision Detection
         // We traverse the entity list forwards and backwards from the source
         // entity. This prevents checking an entity for collision with itself.

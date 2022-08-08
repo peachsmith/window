@@ -205,12 +205,13 @@ void root_input_handler(eg_app *app)
             eg_set_flag(target, ENTITY_FLAG_JUMP);
             eg_clear_flag(target, ENTITY_FLAG_MOVE);
 
+            // Clear the carrier and the correction factor.
             target->carrier = NULL;
-
-            target->y_acc = -18;
-
-            // clear correction factor.
             target->y_t = 0;
+
+            // Set the vertical accleration to some significant negative
+            // value to launch the entity upward.
+            target->y_acc = -18;
         }
     }
 

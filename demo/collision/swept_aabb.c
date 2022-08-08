@@ -461,6 +461,14 @@ int demo_swept_aabb(
         p.y += app->cam.y;
     }
 
+    // If the target entity has camera focus, subtract the camera
+    // position from the target entity's position.
+    if (b->type == ENTITY_TYPE_PLAYER)
+    {
+        r.x -= app->cam.x;
+        r.y -= app->cam.y;
+    }
+
     // The direction vector D is the velocity of source entity A.
     d.x = avx;
     d.y = avy;

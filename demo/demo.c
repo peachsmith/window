@@ -5,6 +5,7 @@
 #include "demo/entities/sign.h"
 #include "demo/entities/jimbo.h"
 #include "demo/entities/billy.h"
+#include "demo/entities/henry.h"
 #include "demo/entities/entity_types.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
@@ -183,12 +184,13 @@ int demo_prepare(eg_app *app)
     sign_demo_register(&reg[ENTITY_TYPE_SIGN]);
     jimbo_demo_register(&reg[ENTITY_TYPE_JIMBO]);
     billy_demo_register(&reg[ENTITY_TYPE_BILLY]);
+    henry_demo_register(&reg[ENTITY_TYPE_HENRY]);
 
     // load_scene_0(app);
-    load_scene_0(app);
+    load_scene_3(app);
 
     // Play music
-    eg_play_sound(app, app->sounds[DEMO_SONG_FIELD]);
+    // eg_play_sound(app, app->sounds[DEMO_SONG_FIELD]);
 
     return 1;
 }

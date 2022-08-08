@@ -20,6 +20,8 @@ void sprite_draw_jimbo(eg_app *, int, int, int, int);
 
 void sprite_draw_billy(eg_app *, int, int, int, int);
 
+void sprite_draw_henry(eg_app *, int, int, int, int);
+
 void sprite_draw_sign(eg_app *app, int x, int y);
 
 void sprite_draw_brick(eg_app *, int, int);

@@ -2,6 +2,7 @@
 #include "demo/input/input.h"
 #include "demo/entities/block.h"
 #include "demo/entities/player.h"
+#include "demo/entities/henry.h"
 
 #include <stdlib.h>
 
@@ -57,6 +58,9 @@ void load_scene_3(eg_app *app)
     eg_add_entity(app, block_demo_create(x_start - 27 + 198, 58));
     eg_add_entity(app, block_demo_create(x_start - 27 + 198, 40));
     eg_add_entity(app, block_demo_create(x_start - 27 + 198, 22));
+
+    // A hostile entity.
+    eg_add_entity(app, henry_demo_create(x_start - 27 + 150, 22));
 
     // Ceiling of varying height.
     // eg_add_entity(app, block_demo_create(x_start - 27 + 90, 22));

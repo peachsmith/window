@@ -149,6 +149,11 @@ eg_impl *eg_impl_create(int screen_width, int screen_height, int scale)
         return NULL;
     }
 
+    // NOTE: to enable transparency when setting the draw color,
+    // we set the blend mode to SDL_BLENDMODE_BLEND.
+    // This is mainly used for debugging.
+    // SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
     // TEMP: get window and screen info for scaling on mac.
     int ww, wh;
     int rw, rh;

@@ -129,9 +129,9 @@ int demo_line(
     eg_point aa = {.x = pa[0].x, .y = pa[0].y + ah / 2};
     eg_point ab = pa[2];
 
-    // Check the flags of the platform to see which direction the diagonal
+    // Check the data of the platform to see which direction the diagonal
     // line is sloped.
-    int dir = b->flags & 3;
+    int dir = b->data & 3;
     eg_point ba = pb[3];
     eg_point bb = pb[1];
 
