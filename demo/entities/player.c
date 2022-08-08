@@ -9,23 +9,40 @@
 // temporary counter for animation
 static int tmp_counter = 0;
 
+#define PLAYER_X_ACC_LIMIT 24
+#define PLAYER_Y_ACC_LIMIT 24
+#define PLAYER_IFRAME_LIMIT 20
+
 static int get_player_x_vel(eg_entity *player)
 {
     // acceleration to velocity conversion table
-    int a_to_v[24] = {
+    int a_to_v[PLAYER_X_ACC_LIMIT] = {
         1, 1, 1, 1, 1, 1,
         2, 2, 2, 2, 2, 2,
         3, 3, 3, 3, 3, 3,
         4, 4, 4, 4, 4, 4};
 
-    int x_vel = 0;
-    if (player->x_acc > 0)
+    // Make sure the acceleration is within the limit.
+    // Any acceleration outside of the limits will result in
+    // maximum velocity.
+    int acc = player->x_acc;
+    if (acc >= PLAYER_X_ACC_LIMIT)
     {
-        x_vel = a_to_v[player->x_acc];
+        acc = PLAYER_X_ACC_LIMIT - 1;
     }
-    else if (player->x_acc < 0)
+    if (acc <= -PLAYER_X_ACC_LIMIT)
     {
-        x_vel = -(a_to_v[-(player->x_acc)]);
+        acc = -PLAYER_X_ACC_LIMIT + 1;
+    }
+
+    int x_vel = 0;
+    if (acc > 0)
+    {
+        x_vel = a_to_v[acc];
+    }
+    else if (acc < 0)
+    {
+        x_vel = -(a_to_v[-acc]);
     }
 
     if (player->x_t)
@@ -39,20 +56,33 @@ static int get_player_x_vel(eg_entity *player)
 static int get_player_y_vel(eg_entity *player)
 {
     // acceleration to velocity conversion table
-    int a_to_v[24] = {
+    int a_to_v[PLAYER_Y_ACC_LIMIT] = {
         1, 1, 1, 1, 1, 1,
         2, 2, 2, 2, 2, 2,
         3, 3, 3, 3, 3, 3,
         4, 4, 4, 4, 4, 4};
 
-    int y_vel = 0;
-    if (player->y_acc > 0)
+    // Make sure the acceleration is within the limit.
+    // Any acceleration outside of the limits will result in
+    // maximum velocity.
+    int acc = player->y_acc;
+    if (acc >= PLAYER_Y_ACC_LIMIT)
     {
-        y_vel = a_to_v[player->y_acc];
+        acc = PLAYER_Y_ACC_LIMIT - 1;
     }
-    else if (player->y_acc < 0)
+    if (acc <= -PLAYER_Y_ACC_LIMIT)
     {
-        y_vel = -(a_to_v[-(player->y_acc)]);
+        acc = -PLAYER_Y_ACC_LIMIT + 1;
+    }
+
+    int y_vel = 0;
+    if (acc > 0)
+    {
+        y_vel = a_to_v[acc];
+    }
+    else if (acc < 0)
+    {
+        y_vel = -(a_to_v[-acc]);
     }
 
     if (player->y_t)
@@ -69,6 +99,7 @@ static void render_player(eg_app *app, eg_entity *player)
     int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
     int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
     int grounded = eg_check_flag(player, ENTITY_FLAG_GROUND);
+    int iframes = 0; // whether or not the player currently has invincibility frames.
 
     // Animation logic for walking to the right
     if ((left_pressed || right_pressed) && grounded)
@@ -88,12 +119,20 @@ static void render_player(eg_app *app, eg_entity *player)
         tile = 1;
     }
 
-    // Render the player sprite.
-    sprite_draw_character(
-        app,
-        player->x_pos,
-        player->y_pos,
-        eg_check_flag(player, ENTITY_FLAG_MIRROR), tile);
+    if (eg_check_flag(player, ENTITY_FLAG_INVINCIBLE) && player->iframes % 2)
+    {
+        iframes = 1;
+    }
+
+    if (!iframes)
+    {
+        // Render the player sprite.
+        sprite_draw_character(
+            app,
+            player->x_pos,
+            player->y_pos,
+            eg_check_flag(player, ENTITY_FLAG_MIRROR), tile);
+    }
 
     // hit box
     if (app->debug.hitboxes)
@@ -119,7 +158,7 @@ static void update_player(eg_app *app, eg_entity *player)
     // Check the MOVE flag to see if the player is being carried by a
     // a moving platform.
     int carried = eg_check_flag(player, ENTITY_FLAG_MOVE);
-    // int grounded = eg_check_flag(player, ENTITY_FLAG_GROUND);
+    int grounded = eg_check_flag(player, ENTITY_FLAG_GROUND);
     int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
     int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
 
@@ -244,8 +283,20 @@ static void update_player(eg_app *app, eg_entity *player)
     //--------------------------------------------------------------------
     // Animation Logic
 
+    // Invincibility frames.
+    if (eg_check_flag(player, ENTITY_FLAG_INVINCIBLE))
+    {
+        player->iframes++;
+
+        if (player->iframes >= PLAYER_IFRAME_LIMIT)
+        {
+            eg_clear_flag(player, ENTITY_FLAG_INVINCIBLE);
+            player->iframes = 0;
+        }
+    }
+
     // Advance the counter for walking to the right
-    if ((eg_peek_input(app, EG_KEYCODE_LEFT) || eg_peek_input(app, EG_KEYCODE_RIGHT)) && eg_check_flag(player, ENTITY_FLAG_GROUND))
+    if ((eg_peek_input(app, EG_KEYCODE_LEFT) || eg_peek_input(app, EG_KEYCODE_RIGHT)) && grounded)
     {
         tmp_counter++;
         if (tmp_counter >= 20)

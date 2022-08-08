@@ -302,11 +302,17 @@ struct eg_entity
     // bit flags
     uint8_t flags;
 
+    // custom data that may have special meaning in each entity
+    uint8_t data;
+
     // animation counter
     int animation_ticks;
 
     // Used for actions that take multiple iterations of the main loop.
     int ticks;
+
+    // Counter for invincibility frames.
+    int iframes;
 
     // The carrier is an entity that is modifying another entity's position
     // and velocity.

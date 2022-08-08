@@ -93,6 +93,36 @@ void sprite_draw_billy(eg_app *app, int x, int y, int mirror, int tile)
         mirror);
 }
 
+void sprite_draw_henry(eg_app *app, int x, int y, int mirror, int tile)
+{
+    // tile dimensions
+    int tile_w = 24;
+    int tile_h = 24;
+
+    // tile coordinates
+    int tile_x = tile + 6;
+    int tile_y = 1;
+
+    eg_rect src = {
+        .x = tile_x * tile_w,
+        .y = tile_y * tile_h,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_draw_texture(
+        app,
+        app->textures[DEMO_TEXTURE_CHARACTERS],
+        &src,
+        &dest,
+        mirror);
+}
+
 void sprite_draw_sign(eg_app *app, int x, int y)
 {
     // tile dimensions

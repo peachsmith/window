@@ -80,7 +80,7 @@ static void render_moving_block(eg_app *app, eg_entity *block)
 // Renders a sloped block
 static void render_sloped_block(eg_app *app, eg_entity *block)
 {
-    int dir = block->flags & 3;
+    int dir = block->data & 3;
 
     if (dir < 2)
     {
@@ -108,7 +108,7 @@ static void render_sloped_block(eg_app *app, eg_entity *block)
         r.w = app->registry[block->type].width;
         r.h = app->registry[block->type].height;
 
-        int dir = block->flags & 3;
+        int dir = block->data & 3;
 
         if (dir < 2)
         {
@@ -222,7 +222,7 @@ static void update_moving_block(eg_app *app, eg_entity *block)
 
     // The first two bit flags are used to determine which update function
     // is called.
-    switch (block->flags & 3)
+    switch (block->data & 3)
     {
     case 0:
         move_vertical(app, block);
@@ -261,7 +261,7 @@ static void collide_block(
 
         // Correct the correction factor.
         // TODO: move this into the line.c file.
-        if ((block->flags & 3) == 2)
+        if ((block->data & 3) == 2)
         {
             int ah = app->registry[other->type].height;
             int by = block->y_pos + app->cam.y;
@@ -535,7 +535,7 @@ eg_entity *block_demo_create_moving(int x, int y, int type)
     block->type = ENTITY_TYPE_BLOCK_MOVING;
     block->x_pos = x;
     block->y_pos = y;
-    block->flags = (uint8_t)(type & 3);
+    block->data = (uint8_t)(type & 3);
 
     return block;
 }
@@ -566,7 +566,7 @@ eg_entity *block_demo_create_sloped(int x, int y, int dir)
     // We use the first flag to indicate the direction of the slope.
     // 1 for incline from left to right, or 0 for incline from right
     // to left. 2 for horizontal (used for dismounting slopes).
-    block->flags = dir;
+    block->data = dir;
 
     return block;
 }

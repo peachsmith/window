@@ -364,6 +364,10 @@ eg_entity *eg_create_entity()
 
     entity->flags = 0;
 
+    entity->data = 0;
+
+    entity->iframes = 0;
+
     entity->animation_ticks = 0;
 
     entity->ticks = 0;
