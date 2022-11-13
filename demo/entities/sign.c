@@ -9,7 +9,7 @@
 
 static void render_sign(eg_app *app, eg_entity *sign)
 {
-    // Render the player sprite.
+    // Render the sign sprite.
     sprite_draw_sign(
         app,
         sign->x_pos + app->cam.x,
@@ -24,13 +24,13 @@ static void render_sign(eg_app *app, eg_entity *sign)
         hit_box.w = app->registry[sign->type].width;
         hit_box.h = app->registry[sign->type].height;
 
-        // Render the player hit box.
+        // Render the sign hit box.
         eg_set_color(app, EG_COLOR_ORANGE);
         eg_draw_rect(app, &hit_box, 0);
     }
 }
 
-static void update_sign(eg_app *app, eg_entity *player)
+static void update_sign(eg_app *app, eg_entity *sign)
 {
 }
 

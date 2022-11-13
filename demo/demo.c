@@ -6,6 +6,7 @@
 #include "demo/entities/jimbo.h"
 #include "demo/entities/billy.h"
 #include "demo/entities/henry.h"
+#include "demo/entities/transition.h"
 #include "demo/entities/entity_types.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
@@ -185,6 +186,7 @@ int demo_prepare(eg_app *app)
     jimbo_demo_register(&reg[ENTITY_TYPE_JIMBO]);
     billy_demo_register(&reg[ENTITY_TYPE_BILLY]);
     henry_demo_register(&reg[ENTITY_TYPE_HENRY]);
+    transition_demo_register(&reg[ENTITY_TYPE_TRANSITION]);
 
     // load_scene_0(app);
     load_scene_3(app);
