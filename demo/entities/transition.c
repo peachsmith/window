@@ -8,6 +8,11 @@
 
 static void render_transition(eg_app *app, eg_entity *transition)
 {
+    if (!transition->data)
+    {
+        return;
+    }
+
     eg_rect transition_rect;
     transition_rect.x = 0;
     transition_rect.y = 0;
@@ -40,6 +45,11 @@ static void render_transition(eg_app *app, eg_entity *transition)
 
 static void update_transition(eg_app *app, eg_entity *transition)
 {
+    if (!transition->data)
+    {
+        return;
+    }
+
     if (transition->ticks < 120)
     {
         transition->ticks++;
@@ -47,6 +57,9 @@ static void update_transition(eg_app *app, eg_entity *transition)
     }
 
     transition->ticks = 0;
+    transition->data = 0;
+
+    printf("transition complete\n");
 }
 
 void transition_demo_register(eg_entity_type *t)

@@ -42,6 +42,10 @@ void common_dialog_input_handler(eg_app *app)
     }
 }
 
+void empty_input_handler(eg_app *app)
+{
+}
+
 void root_input_handler(eg_app *app)
 {
 

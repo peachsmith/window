@@ -18,4 +18,7 @@ void debug_menu_input_handler(eg_app *);
 void scenes_menu_input_handler(eg_app *);
 void input_menu_input_handler(eg_app *);
 
+// used when no input should be processed
+void empty_input_handler(eg_app *);
+
 #endif
