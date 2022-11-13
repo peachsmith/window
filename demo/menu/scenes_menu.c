@@ -5,6 +5,7 @@
 #include "demo/font/font.h"
 #include "demo/input/input.h"
 #include "demo/scenes/scenes.h"
+#include "demo/entities/entity_types.h"
 
 #include <stdio.h>
 
@@ -41,9 +42,20 @@ static void scenes_item_1_callback(eg_app *app, eg_menu *menu)
     app->menu_count--;
     eg_pop_input_handler(app);
 
+    // Start the screen transition.
+    eg_entity *e = app->entities;
+    while (e != NULL)
+    {
+        if (e->type == ENTITY_TYPE_TRANSITION)
+        {
+            e->data = 1;
+        }
+        e = e->next;
+    }
+
     // Clear the current scene and load the next scene.
-    clear_scene(app);
-    load_scene_0(app);
+    // clear_scene(app);
+    // load_scene_0(app);
 
     // Unpause the application.
     app->pause = 0;
