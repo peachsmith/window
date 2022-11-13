@@ -3,6 +3,7 @@
 #include "demo/entities/block.h"
 #include "demo/entities/player.h"
 #include "demo/entities/henry.h"
+#include "demo/entities/transition.h"
 
 #include <stdlib.h>
 
@@ -16,6 +17,11 @@ void load_scene_3(eg_app *app)
 
     app->cam.x = 0;
     app->cam.y = 0;
+
+    // screen transition
+    // This is added first, since it should be rendered on top of all other
+    // entities.
+    eg_add_entity(app, transition_demo_create());
 
     eg_add_entity(app, block_demo_create(x_start - 27 + 18, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 36, 94));

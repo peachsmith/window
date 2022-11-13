@@ -153,6 +153,7 @@ eg_impl *eg_impl_create(int screen_width, int screen_height, int scale)
     // we set the blend mode to SDL_BLENDMODE_BLEND.
     // This is mainly used for debugging.
     // SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
     // TEMP: get window and screen info for scaling on mac.
     int ww, wh;
