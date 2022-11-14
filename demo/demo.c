@@ -11,6 +11,7 @@
 #include "demo/entities/pause_menu.h"
 #include "demo/entities/fish_menu.h"
 #include "demo/entities/demo_dialog.h"
+#include "demo/entities/info_dialog_entity.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
 #include "demo/menu/menu.h"
@@ -230,6 +231,7 @@ int demo_prepare(eg_app *app)
 
     // dialogs
     demo_dialog_demo_register(&reg[ENTITY_TYPE_DEMO_DIALOG]);
+    info_dialog_demo_register(&reg[ENTITY_TYPE_INFO_DIALOG]);
 
     // Load the initial scene.
     load_scene_3(app);

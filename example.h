@@ -332,6 +332,10 @@ struct eg_entity
     // Tick limit (currently used for dialogs, but may be used elsewhere or moved)
     int tick_limit;
 
+    // Result of a function call.
+    // Used by dialogs and menus to get the result of a menu interaction.
+    int result;
+
     // linked list pointers
     eg_entity *next;
     eg_entity *previous;

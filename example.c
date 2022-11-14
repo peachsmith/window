@@ -96,9 +96,11 @@ eg_app *eg_create_app()
     app->texture_count = 0;
 
     app->menus = NULL;
+    app->menu_entities = NULL;
     app->menu_count = 0;
 
     app->dialogs = NULL;
+    app->dialog_entities = NULL;
     app->dialog_count = 0;
 
     app->screen_width = EG_DEFAULT_SCREEN_WIDTH;
@@ -357,6 +359,8 @@ eg_entity *eg_create_entity()
     entity->text_len = 0;
 
     entity->tick_limit = 0;
+
+    entity->result = 0;
 
     entity->next = NULL;
     entity->previous = NULL;
