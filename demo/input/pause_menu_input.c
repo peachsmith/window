@@ -1,6 +1,7 @@
 #include "demo/input/input.h"
 #include "demo/entities/player.h"
 #include "demo/entities/entity_types.h"
+#include "demo/entities/info_dialog_entity.h"
 #include "demo/entities/demo_dialog.h"
 #include "demo/menu/menu.h"
 
@@ -68,11 +69,20 @@ void pause_menu_input_handler(eg_app *app)
         switch (menu_entity->data)
         {
         case 1:
-            printf("info callback\n");
+
+            // Locate the info dialog.
+            eg_entity *dialog = app->entities;
+            while (dialog != NULL && dialog->type != ENTITY_TYPE_INFO_DIALOG)
+            {
+                dialog = dialog->next;
+            }
+
+            info_dialog_demo_open(app, dialog);
+
+            eg_push_input_handler(app, common_dialog_input_handler);
             break;
 
         case 2:
-            printf("submenu callback\n");
 
             // Locate the fish menu.
             eg_entity *fish_menu = app->entities;
@@ -88,13 +98,11 @@ void pause_menu_input_handler(eg_app *app)
             break;
 
         case 3:
-            printf("quit callback\n");
             app->done = 1;
             break;
 
         case 4:
-            printf("dialog callback\n");
-
+            
             // Locate the demo dialog.
             eg_entity *demo_dialog = app->entities;
             while (demo_dialog != NULL && demo_dialog->type != ENTITY_TYPE_DEMO_DIALOG)
@@ -102,7 +110,7 @@ void pause_menu_input_handler(eg_app *app)
                 demo_dialog = demo_dialog->next;
             }
 
-            demo_dialog_open(app, demo_dialog);
+            demo_dialog_demo_open(app, demo_dialog);
 
             eg_push_input_handler(app, common_dialog_input_handler);
 

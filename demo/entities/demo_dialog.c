@@ -76,7 +76,7 @@ eg_entity *demo_dialog_demo_create()
     return dialog;
 }
 
-void demo_dialog_open(eg_app *app, eg_entity *dialog)
+void demo_dialog_demo_open(eg_app *app, eg_entity *dialog)
 {
     // Reset the dialog.
     dialog->data = 0;
