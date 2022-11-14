@@ -1,7 +1,7 @@
 #include "demo/input/input.h"
 #include "demo/entities/player.h"
 #include "demo/entities/entity_types.h"
-#include "demo/entities/demo_dialog_entity.h"
+#include "demo/entities/demo_dialog.h"
 #include "demo/menu/menu.h"
 
 #include <stdlib.h>
@@ -102,7 +102,7 @@ void pause_menu_input_handler(eg_app *app)
                 demo_dialog = demo_dialog->next;
             }
 
-            demo_dialog_entity_open(app, demo_dialog);
+            demo_dialog_open(app, demo_dialog);
 
             eg_push_input_handler(app, common_dialog_input_handler);
 
