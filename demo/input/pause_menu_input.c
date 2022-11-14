@@ -1,7 +1,7 @@
 #include "demo/input/input.h"
 #include "demo/entities/player.h"
 #include "demo/entities/entity_types.h"
-#include "demo/entities/info_dialog_entity.h"
+#include "demo/entities/info_dialog.h"
 #include "demo/entities/demo_dialog.h"
 #include "demo/menu/menu.h"
 

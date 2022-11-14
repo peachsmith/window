@@ -1,4 +1,4 @@
-#include "demo/entities/info_menu_entity.h"
+#include "demo/entities/info_menu.h"
 #include "demo/entities/entity_types.h"
 #include "demo/util/util.h"
 #include "demo/util/ui.h"

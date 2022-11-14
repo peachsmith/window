@@ -15,7 +15,7 @@ static eg_entity *dialog_entities[DEMO_MAX_DIALOGS];
 
 void demo_init_dialogs(eg_app *app)
 {
-    demo_init_info_dialog(app);
+    // demo_init_info_dialog(app);
     demo_init_sign_dialog(app);
     demo_init_jimbo_dialog(app);
 
