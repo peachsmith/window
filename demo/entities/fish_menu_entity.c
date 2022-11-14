@@ -95,6 +95,7 @@ eg_entity *fish_menu_entity_demo_create()
     menu->type = ENTITY_TYPE_FISH_MENU;
     menu->data = 1;
     eg_set_flag(menu, ENTITY_FLAG_PAUSE);
+    eg_set_flag(menu, ENTITY_FLAG_MENU);
 
     return menu;
 }

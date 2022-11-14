@@ -119,6 +119,7 @@ eg_entity *pause_menu_entity_demo_create()
     menu->type = ENTITY_TYPE_PAUSE_MENU;
     menu->data = 1;
     eg_set_flag(menu, ENTITY_FLAG_PAUSE);
+    eg_set_flag(menu, ENTITY_FLAG_MENU);
 
     return menu;
 }

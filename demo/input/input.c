@@ -51,7 +51,17 @@ void root_input_handler(eg_app *app)
     // Pause the application.
     if (eg_consume_input(app, EG_KEYCODE_Q))
     {
-        demo_open_pause_menu(app);
+        // Locate the pause menu.
+        eg_entity *pause_menu = app->entities;
+        while (pause_menu != NULL && pause_menu->type != ENTITY_TYPE_PAUSE_MENU)
+        {
+            pause_menu = pause_menu->next;
+        }
+
+        // Set the pause menu as the active menu.
+        app->menu_entities[app->menu_count++] = pause_menu;
+
+        eg_push_input_handler(app, pause_menu_input_handler);
 
         app->pause = 1;
         return;

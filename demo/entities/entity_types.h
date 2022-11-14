@@ -21,7 +21,7 @@
 // This is the total number of entity types.
 #define ENTITY_TYPE_MAX 14
 
-// flags
+// flags [0, 15]
 #define ENTITY_FLAG_GROUND 0
 #define ENTITY_FLAG_JUMP 1
 #define ENTITY_FLAG_DOWN 2
@@ -30,7 +30,7 @@
 #define ENTITY_FLAG_SLOPE 5
 #define ENTITY_FLAG_MIRROR 6
 #define ENTITY_FLAG_INVINCIBLE 7
-
 #define ENTITY_FLAG_PAUSE 8
+#define ENTITY_FLAG_MENU 9
 
 #endif
