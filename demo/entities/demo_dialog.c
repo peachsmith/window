@@ -1,4 +1,4 @@
-#include "demo/entities/demo_dialog_entity.h"
+#include "demo/entities/demo_dialog.h"
 #include "demo/entities/entity_types.h"
 #include "demo/util/util.h"
 #include "demo/util/ui.h"
@@ -25,7 +25,7 @@ static const char *demo_dialog_panel_2 = "This is the second panel of text in th
 #define DEMO_DIALOG_WIDTH 224
 #define DEMO_DIALOG_HEIGHT 48
 
-static void render_demo_dialog_entity(eg_app *app, eg_entity *dialog)
+static void render_demo_dialog(eg_app *app, eg_entity *dialog)
 {
     char buffer[DEMO_DIALOG_ENTITY_BUFSIZE];
     int buf_len;
@@ -75,7 +75,7 @@ static void render_demo_dialog_entity(eg_app *app, eg_entity *dialog)
     }
 }
 
-static void update_demo_dialog_entity(eg_app *app, eg_entity *dialog)
+static void update_demo_dialog(eg_app *app, eg_entity *dialog)
 {
     if (dialog->ticks < dialog->tick_limit)
     {
@@ -83,7 +83,7 @@ static void update_demo_dialog_entity(eg_app *app, eg_entity *dialog)
     }
 }
 
-static void advance_demo_dialog_entity(eg_app *app, eg_entity *dialog)
+static void advance_demo_dialog(eg_app *app, eg_entity *dialog)
 {
     // We currently use the data field to represent which panel of content
     // should be rendered in the dialog.
@@ -105,18 +105,18 @@ static void advance_demo_dialog_entity(eg_app *app, eg_entity *dialog)
     dialog->data++;
 }
 
-void demo_dialog_entity_demo_register(eg_entity_type *t)
+void demo_dialog_demo_register(eg_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
     t->height = 10;
 
-    t->render = render_demo_dialog_entity;
-    t->update = update_demo_dialog_entity;
-    t->advance = advance_demo_dialog_entity;
+    t->render = render_demo_dialog;
+    t->update = update_demo_dialog;
+    t->advance = advance_demo_dialog;
 }
 
-eg_entity *demo_dialog_entity_demo_create()
+eg_entity *demo_dialog_demo_create()
 {
     eg_entity *dialog = NULL;
 
@@ -136,7 +136,7 @@ eg_entity *demo_dialog_entity_demo_create()
     return dialog;
 }
 
-void demo_dialog_entity_open(eg_app *app, eg_entity *dialog)
+void demo_dialog_open(eg_app *app, eg_entity *dialog)
 {
     // Reset the dialog.
     dialog->data = 0;
