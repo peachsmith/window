@@ -1,4 +1,4 @@
-#include "demo/entities/info_dialog_entity.h"
+#include "demo/entities/info_dialog.h"
 #include "demo/input/input.h"
 #include "demo/dialog/dialog.h"
 #include "demo/entities/entity_types.h"

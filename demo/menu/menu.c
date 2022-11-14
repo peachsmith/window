@@ -20,7 +20,7 @@ int demo_init_menus(eg_app *app)
         return 0;
     }
 
-    demo_init_info_menu(app);
+    // demo_init_info_menu(app);
     demo_init_scenes_menu(app);
     demo_init_input_menu(app);
 
