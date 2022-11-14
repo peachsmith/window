@@ -1,5 +1,5 @@
-#ifndef EG_DEMO_PAUSE_MENU_ENTITY_H
-#define EG_DEMO_PAUSE_MENU_ENTITY_H
+#ifndef EG_DEMO_PAUSE_MENU_H
+#define EG_DEMO_PAUSE_MENU_H
 
 // This file contains an entity that represents the pause menu.
 
@@ -12,7 +12,7 @@
  * Params:
  *   eg_entity_type* - the pause menu entity type definition
  */
-void pause_menu_entity_demo_register(eg_entity_type *);
+void pause_menu_demo_register(eg_entity_type *);
 
 /**
  * Creates a pause menu entity.
@@ -20,6 +20,6 @@ void pause_menu_entity_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new pause menu entity.
  */
-eg_entity *pause_menu_entity_demo_create();
+eg_entity *pause_menu_demo_create();
 
 #endif

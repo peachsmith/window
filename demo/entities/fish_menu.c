@@ -1,4 +1,4 @@
-#include "demo/entities/fish_menu_entity.h"
+#include "demo/entities/fish_menu.h"
 #include "demo/entities/entity_types.h"
 #include "demo/util/util.h"
 #include "demo/util/ui.h"
@@ -12,7 +12,7 @@
 static const char *item_1_text = "Trout";
 static const char *item_2_text = "Salmon";
 
-static void render_fish_menu_entity(eg_app *app, eg_entity *menu)
+static void render_fish_menu(eg_app *app, eg_entity *menu)
 {
     // Render the menu panel.
     ui_draw_panel(
@@ -66,21 +66,21 @@ static void render_fish_menu_entity(eg_app *app, eg_entity *menu)
         59 + cursor_y * 24);
 }
 
-static void update_fish_menu_entity(eg_app *app, eg_entity *menu)
+static void update_fish_menu(eg_app *app, eg_entity *menu)
 {
 }
 
-void fish_menu_entity_demo_register(eg_entity_type *t)
+void fish_menu_demo_register(eg_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
     t->height = 10;
 
-    t->render = render_fish_menu_entity;
-    t->update = update_fish_menu_entity;
+    t->render = render_fish_menu;
+    t->update = update_fish_menu;
 }
 
-eg_entity *fish_menu_entity_demo_create()
+eg_entity *fish_menu_demo_create()
 {
     eg_entity *menu = NULL;
 

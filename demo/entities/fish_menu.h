@@ -1,5 +1,5 @@
-#ifndef EG_DEMO_FISH_MENU_ENTITY_H
-#define EG_DEMO_FISH_MENU_ENTITY_H
+#ifndef EG_DEMO_FISH_MENU_H
+#define EG_DEMO_FISH_MENU_H
 
 // This file contains an entity that represents the fish menu.
 
@@ -12,7 +12,7 @@
  * Params:
  *   eg_entity_type* - the fish menu entity type definition
  */
-void fish_menu_entity_demo_register(eg_entity_type *);
+void fish_menu_demo_register(eg_entity_type *);
 
 /**
  * Creates a fish menu entity.
@@ -20,6 +20,6 @@ void fish_menu_entity_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new fish menu entity.
  */
-eg_entity *fish_menu_entity_demo_create();
+eg_entity *fish_menu_demo_create();
 
 #endif
