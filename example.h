@@ -235,13 +235,15 @@ struct eg_app
     int sound_count;
 
     // menus
-    // TODO: remove the eg_menu point
+    // TODO: remove the eg_menu pointers once all menus are converted to entities
     eg_menu **menus;
     eg_entity **menu_entities;
     int menu_count;
 
     // dialogs
+    // TODO: remove the eg_menu pointers once all dialogs are converted to entities
     eg_dialog **dialogs;
+    eg_entity **dialog_entities;
     int dialog_count;
 
     // input handlers
@@ -323,6 +325,13 @@ struct eg_entity
     // and velocity.
     eg_entity *carrier;
 
+    // A single string of text. (used for UI elements)
+    const char *text;
+    int text_len;
+
+    // Tick limit (currently used for dialogs, but may be used elsewhere or moved)
+    int tick_limit;
+
     // linked list pointers
     eg_entity *next;
     eg_entity *previous;
@@ -335,6 +344,7 @@ struct eg_entity_type
     int height;
     eg_entity_callback render;
     eg_entity_callback update;
+    eg_entity_callback advance;
     eg_collider collide;
 
     int (*get_x_vel)(eg_entity *); // calculates current x velocity.
@@ -344,7 +354,6 @@ struct eg_entity_type
     int interactable;
     int (*interact)(eg_app *, eg_entity *, eg_entity *);
 };
-
 
 //============================================================================
 // BEGIN menu to entity conversion
@@ -396,7 +405,6 @@ struct eg_dialog
     // for passing values between menus and dialogs.
     int result;
 };
-
 
 // END menu to entity conversion
 //============================================================================

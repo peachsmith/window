@@ -296,6 +296,7 @@ eg_entity_type *eg_create_registry(int n)
         reg[i].height = 0;
         reg[i].render = NULL;
         reg[i].update = NULL;
+        reg[i].advance = NULL;
         reg[i].collide = NULL;
         reg[i].get_x_vel = default_get_x_vel;
         reg[i].get_y_vel = default_get_y_vel;
@@ -351,6 +352,11 @@ eg_entity *eg_create_entity()
     entity->ticks = 0;
 
     entity->carrier = NULL;
+
+    entity->text = NULL;
+    entity->text_len = 0;
+
+    entity->tick_limit = 0;
 
     entity->next = NULL;
     entity->previous = NULL;

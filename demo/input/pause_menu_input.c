@@ -1,6 +1,7 @@
 #include "demo/input/input.h"
 #include "demo/entities/player.h"
 #include "demo/entities/entity_types.h"
+#include "demo/entities/demo_dialog_entity.h"
 #include "demo/menu/menu.h"
 
 #include <stdlib.h>
@@ -93,6 +94,18 @@ void pause_menu_input_handler(eg_app *app)
 
         case 4:
             printf("dialog callback\n");
+
+            // Locate the demo dialog.
+            eg_entity *demo_dialog = app->entities;
+            while (demo_dialog != NULL && demo_dialog->type != ENTITY_TYPE_DEMO_DIALOG)
+            {
+                demo_dialog = demo_dialog->next;
+            }
+
+            demo_dialog_entity_open(app, demo_dialog);
+
+            eg_push_input_handler(app, common_dialog_input_handler);
+
             break;
 
         default:

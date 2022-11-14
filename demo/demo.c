@@ -10,6 +10,7 @@
 #include "demo/entities/transition.h"
 #include "demo/entities/pause_menu_entity.h"
 #include "demo/entities/fish_menu_entity.h"
+#include "demo/entities/demo_dialog_entity.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
 #include "demo/menu/menu.h"
@@ -41,20 +42,24 @@ static void update(eg_app *app)
     // Update dialogs.
     if (app->dialog_count > 0)
     {
-        eg_dialog *d = app->dialogs[app->dialog_count - 1];
-        d->update(app, d);
+        // eg_dialog *d = app->dialogs[app->dialog_count - 1];
+        // d->update(app, d);
+        eg_entity *d = app->dialog_entities[app->dialog_count - 1];
+        app->registry[d->type].update(app, d);
     }
 
     // Update menus.
     // TODO: update menus with other entities.
-    // if (app->menu_count > 0)
-    // {
-    //     eg_menu *m = app->menus[app->menu_count - 1];
-    //     if (m->update != NULL)
-    //     {
-    //         m->update(app, m);
-    //     }
-    // }
+    if (app->menu_count > 0)
+    {
+        // eg_menu *m = app->menus[app->menu_count - 1];
+        // if (m->update != NULL)
+        // {
+        //     m->update(app, m);
+        // }
+        eg_entity *m = app->menu_entities[app->menu_count - 1];
+        app->registry[m->type].update(app, m);
+    }
 
     // Handle collisions.
     if (!app->pause)
@@ -68,11 +73,12 @@ static void update(eg_app *app)
     {
         eg_entity_type t = app->registry[ent->type];
         int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
+        int menu_flag = eg_check_flag(ent, ENTITY_FLAG_MENU);
         if (t.update != NULL)
         {
             if (app->pause)
             {
-                if (pause_flag)
+                if (pause_flag && !menu_flag)
                 {
                     t.update(app, ent);
                 }
@@ -135,17 +141,15 @@ static void draw(eg_app *app)
     {
         for (int i = 0; i < app->menu_count; i++)
         {
-            // eg_menu *m = app->menus[i];
             eg_entity *m = app->menu_entities[i];
             app->registry[m->type].render(app, m);
-            // m->render(app, m);
         }
 
-        // if (app->dialog_count > 0)
-        // {
-        //     eg_dialog *d = app->dialogs[app->dialog_count - 1];
-        //     d->render(app, d);
-        // }
+        if (app->dialog_count > 0)
+        {
+            eg_entity *d = app->dialog_entities[app->dialog_count - 1];
+            app->registry[d->type].render(app, d);
+        }
     }
 
     //------------------------------------------------------------------------
@@ -223,6 +227,9 @@ int demo_prepare(eg_app *app)
     // menus
     pause_menu_entity_demo_register(&reg[ENTITY_TYPE_PAUSE_MENU]);
     fish_menu_entity_demo_register(&reg[ENTITY_TYPE_FISH_MENU]);
+
+    // dialogs
+    demo_dialog_entity_demo_register(&reg[ENTITY_TYPE_DEMO_DIALOG]);
 
     // Load the initial scene.
     load_scene_3(app);

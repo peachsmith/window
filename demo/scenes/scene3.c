@@ -6,6 +6,7 @@
 #include "demo/entities/transition.h"
 #include "demo/entities/pause_menu_entity.h"
 #include "demo/entities/fish_menu_entity.h"
+#include "demo/entities/demo_dialog_entity.h"
 
 #include <stdlib.h>
 
@@ -28,6 +29,9 @@ void load_scene_3(eg_app *app)
     // pause menu
     eg_add_entity(app, pause_menu_entity_demo_create());
     eg_add_entity(app, fish_menu_entity_demo_create());
+
+    // dialogs
+    eg_add_entity(app, demo_dialog_entity_demo_create());
 
     eg_add_entity(app, block_demo_create(x_start - 27 + 18, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 36, 94));
