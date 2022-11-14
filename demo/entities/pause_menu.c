@@ -1,4 +1,4 @@
-#include "demo/entities/pause_menu_entity.h"
+#include "demo/entities/pause_menu.h"
 #include "demo/entities/entity_types.h"
 #include "demo/util/util.h"
 #include "demo/util/ui.h"
@@ -14,7 +14,7 @@ static const char *item_2_text = "Quit";
 static const char *item_3_text = "Submenu";
 static const char *item_4_text = "Dialog";
 
-static void render_pause_menu_entity(eg_app *app, eg_entity *menu)
+static void render_pause_menu(eg_app *app, eg_entity *menu)
 {
     // Render the menu panel.
     ui_draw_panel(
@@ -92,19 +92,19 @@ static void render_pause_menu_entity(eg_app *app, eg_entity *menu)
         22 + cursor_y * 24);
 }
 
-static void update_pause_menu_entity(eg_app *app, eg_entity *menu)
+static void update_pause_menu(eg_app *app, eg_entity *menu)
 {
 }
 
-void pause_menu_entity_demo_register(eg_entity_type *t)
+void pause_menu_demo_register(eg_entity_type *t)
 {
     t->width = 172;
     t->height = 77;
-    t->render = render_pause_menu_entity;
-    t->update = update_pause_menu_entity;
+    t->render = render_pause_menu;
+    t->update = update_pause_menu;
 }
 
-eg_entity *pause_menu_entity_demo_create()
+eg_entity *pause_menu_demo_create()
 {
     eg_entity *menu = NULL;
 

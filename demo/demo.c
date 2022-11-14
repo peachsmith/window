@@ -8,8 +8,8 @@
 #include "demo/entities/billy.h"
 #include "demo/entities/henry.h"
 #include "demo/entities/transition.h"
-#include "demo/entities/pause_menu_entity.h"
-#include "demo/entities/fish_menu_entity.h"
+#include "demo/entities/pause_menu.h"
+#include "demo/entities/fish_menu.h"
 #include "demo/entities/demo_dialog_entity.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
@@ -225,8 +225,8 @@ int demo_prepare(eg_app *app)
     transition_demo_register(&reg[ENTITY_TYPE_TRANSITION]);
 
     // menus
-    pause_menu_entity_demo_register(&reg[ENTITY_TYPE_PAUSE_MENU]);
-    fish_menu_entity_demo_register(&reg[ENTITY_TYPE_FISH_MENU]);
+    pause_menu_demo_register(&reg[ENTITY_TYPE_PAUSE_MENU]);
+    fish_menu_demo_register(&reg[ENTITY_TYPE_FISH_MENU]);
 
     // dialogs
     demo_dialog_entity_demo_register(&reg[ENTITY_TYPE_DEMO_DIALOG]);
