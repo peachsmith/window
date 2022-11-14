@@ -14,37 +14,49 @@ void fish_menu_input_handler(eg_app *app)
         return;
     }
 
+    // Locate the pause menu.
+    eg_entity *menu_entity = app->entities;
+    while (menu_entity != NULL && menu_entity->type != ENTITY_TYPE_FISH_MENU)
+    {
+        menu_entity = menu_entity->next;
+    }
+
+    if (menu_entity == NULL)
+    {
+        return;
+    }
+
     if (eg_consume_input(app, EG_KEYCODE_UP))
     {
-        eg_menu *m = app->menus[app->menu_count - 1];
-
-        if (m->cursor.y > 0)
+        if (menu_entity->data > 1)
         {
-            m->cursor.y--;
+            menu_entity->data--;
         }
     }
 
     if (eg_consume_input(app, EG_KEYCODE_DOWN))
     {
-        eg_menu *m = app->menus[app->menu_count - 1];
-
-        if (m->cursor.y < 1)
+        if (menu_entity->data < 2)
         {
-            m->cursor.y++;
+            menu_entity->data++;
         }
     }
 
     // menu item selection
     if (eg_consume_input(app, EG_KEYCODE_Z))
     {
-        eg_menu *m = app->menus[app->menu_count - 1];
+        switch (menu_entity->data)
+        {
+        case 1:
+            printf("trout has been selected\n");
+            break;
 
-        // Determine which menu item has been selected.
-        // Layout:
-        // items[0]
-        // items[1]
-        eg_menu_item *item = m->items[m->cursor.y];
+        case 2:
+            printf("salmon has been selected\n");
+            break;
 
-        item->callback(app, m);
+        default:
+            break;
+        }
     }
 }
