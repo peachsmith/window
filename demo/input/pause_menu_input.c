@@ -69,21 +69,22 @@ void pause_menu_input_handler(eg_app *app)
         switch (menu_entity->data)
         {
         case 1:
-
+        {
             // Locate the info dialog.
-            eg_entity *dialog = app->entities;
-            while (dialog != NULL && dialog->type != ENTITY_TYPE_INFO_DIALOG)
+            eg_entity *info_dialog = app->entities;
+            while (info_dialog != NULL && info_dialog->type != ENTITY_TYPE_INFO_DIALOG)
             {
-                dialog = dialog->next;
+                info_dialog = info_dialog->next;
             }
 
-            info_dialog_demo_open(app, dialog);
+            info_dialog_demo_open(app, info_dialog);
 
             eg_push_input_handler(app, common_dialog_input_handler);
-            break;
+        }
+        break;
 
         case 2:
-
+        {
             // Locate the fish menu.
             eg_entity *fish_menu = app->entities;
             while (fish_menu != NULL && fish_menu->type != ENTITY_TYPE_FISH_MENU)
@@ -95,14 +96,15 @@ void pause_menu_input_handler(eg_app *app)
             app->menu_entities[app->menu_count++] = fish_menu;
 
             eg_push_input_handler(app, fish_menu_input_handler);
-            break;
+        }
+        break;
 
         case 3:
             app->done = 1;
             break;
 
         case 4:
-            
+        {
             // Locate the demo dialog.
             eg_entity *demo_dialog = app->entities;
             while (demo_dialog != NULL && demo_dialog->type != ENTITY_TYPE_DEMO_DIALOG)
@@ -113,8 +115,8 @@ void pause_menu_input_handler(eg_app *app)
             demo_dialog_demo_open(app, demo_dialog);
 
             eg_push_input_handler(app, common_dialog_input_handler);
-
-            break;
+        }
+        break;
 
         default:
             break;

@@ -1,10 +1,12 @@
 #include "demo/entities/info_dialog_entity.h"
+#include "demo/input/input.h"
 #include "demo/dialog/dialog.h"
 #include "demo/entities/entity_types.h"
 #include "demo/util/util.h"
 #include "demo/util/ui.h"
 #include "demo/texture/texture.h"
 #include "demo/font/font.h"
+#include "demo/menu/menu.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,12 +27,21 @@ static void update_info_dialog(eg_app *app, eg_entity *dialog)
         dialog->ticks++;
     }
 
-        // If we've reached the end of the first panel, open the info menu.
+    // If we've reached the end of the first panel, open the info menu.
     if (dialog->data == 0 && dialog->ticks == dialog->tick_limit)
     {
         dialog->ticks++;
-        printf("[DEBUG] here is where we would open the info menu\n");
-        // demo_open_info_menu(app);
+        // Locate the fish menu.
+        eg_entity *info_menu = app->entities;
+        while (info_menu != NULL && info_menu->type != ENTITY_TYPE_INFO_MENU)
+        {
+            info_menu = info_menu->next;
+        }
+
+        // Set the pause menu as the active menu.
+        app->menu_entities[app->menu_count++] = info_menu;
+
+        eg_push_input_handler(app, info_menu_input_handler);
     }
 }
 
