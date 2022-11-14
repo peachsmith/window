@@ -14,13 +14,8 @@ void fish_menu_input_handler(eg_app *app)
         return;
     }
 
-    // Locate the pause menu.
-    eg_entity *menu_entity = app->entities;
-    while (menu_entity != NULL && menu_entity->type != ENTITY_TYPE_FISH_MENU)
-    {
-        menu_entity = menu_entity->next;
-    }
-
+    // Locate the fish menu.
+    eg_entity *menu_entity = app->menu_entities[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;

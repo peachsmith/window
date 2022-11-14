@@ -10,6 +10,7 @@
 #include "demo/entities/transition.h"
 #include "demo/entities/pause_menu.h"
 #include "demo/entities/fish_menu.h"
+#include "demo/entities/info_menu_entity.h"
 #include "demo/entities/demo_dialog.h"
 #include "demo/entities/info_dialog_entity.h"
 #include "demo/collision/collision.h"
@@ -228,6 +229,7 @@ int demo_prepare(eg_app *app)
     // menus
     pause_menu_demo_register(&reg[ENTITY_TYPE_PAUSE_MENU]);
     fish_menu_demo_register(&reg[ENTITY_TYPE_FISH_MENU]);
+    info_menu_demo_register(&reg[ENTITY_TYPE_INFO_MENU]);
 
     // dialogs
     demo_dialog_demo_register(&reg[ENTITY_TYPE_DEMO_DIALOG]);

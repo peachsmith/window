@@ -19,9 +19,10 @@
 #define ENTITY_TYPE_FISH_MENU 13
 #define ENTITY_TYPE_DEMO_DIALOG 14
 #define ENTITY_TYPE_INFO_DIALOG 15
+#define ENTITY_TYPE_INFO_MENU 16
 
 // This is the total number of entity types.
-#define ENTITY_TYPE_MAX 16
+#define ENTITY_TYPE_MAX 17
 
 // flags [0, 15]
 #define ENTITY_FLAG_GROUND 0
