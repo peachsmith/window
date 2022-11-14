@@ -8,6 +8,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// pause menu item text
+static const char *item_1_text = "Info";
+static const char *item_2_text = "Quit";
+static const char *item_3_text = "Submenu";
+static const char *item_4_text = "Dialog";
+
 static void render_pause_menu_entity(eg_app *app, eg_entity *menu)
 {
     // Render the menu panel.
@@ -15,9 +21,39 @@ static void render_pause_menu_entity(eg_app *app, eg_entity *menu)
         app,
         menu->x_pos,
         menu->y_pos,
-        app->registry[menu->type].width,
-        app->registry[menu->type].height);
+        172,
+        77);
 
+    // Render the menu items.
+    eg_draw_text(
+        app,
+        app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
+        item_1_text,
+        menu->x_pos + 30,
+        menu->y_pos + 17);
+
+    eg_draw_text(
+        app,
+        app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
+        item_2_text,
+        menu->x_pos + 30,
+        menu->y_pos + 41);
+
+    eg_draw_text(
+        app,
+        app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
+        item_3_text,
+        menu->x_pos + 110,
+        menu->y_pos + 17);
+
+    eg_draw_text(
+        app,
+        app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
+        item_4_text,
+        menu->x_pos + 110,
+        menu->y_pos + 41);
+
+    // Determine where to render the cursor.
     int cursor_x = 8;
     int cursor_y = 8;
 
@@ -80,7 +116,7 @@ eg_entity *pause_menu_entity_demo_create()
 
     menu->x_pos = 5;
     menu->y_pos = 5;
-    menu->type = ENTITY_TYPE_MENU;
+    menu->type = ENTITY_TYPE_PAUSE_MENU;
     menu->data = 1;
     eg_set_flag(menu, ENTITY_FLAG_PAUSE);
 

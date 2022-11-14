@@ -15,9 +15,9 @@ static void fish_item_1_callback(eg_app *, eg_menu *);
 static void fish_item_2_callback(eg_app *, eg_menu *);
 static void render_fish_menu(eg_app *, eg_menu *);
 
-// fish submenu item text
-static const char *item_1_text = "Trout";
-static const char *item_2_text = "Salmon";
+// // fish submenu item text
+// static const char *item_1_text = "Trout";
+// static const char *item_2_text = "Salmon";
 
 // fish submenu items
 static eg_menu_item fish_item_1;
@@ -74,14 +74,14 @@ void demo_init_fish_menu(eg_app *app)
     // item 1
     fish_item_1.position.x = fish_menu.position.x + 25;
     fish_item_1.position.y = fish_menu.position.y + 9;
-    fish_item_1.text = item_1_text;
+    // fish_item_1.text = item_1_text;
     fish_item_1.callback = fish_item_1_callback;
     fish_items[0] = &fish_item_1;
 
     // item 2
     fish_item_2.position.x = fish_menu.position.x + 25;
     fish_item_2.position.y = fish_menu.position.y + 33;
-    fish_item_2.text = item_2_text;
+    // fish_item_2.text = item_2_text;
     fish_item_2.callback = fish_item_2_callback;
     fish_items[1] = &fish_item_2;
 
@@ -90,7 +90,7 @@ void demo_init_fish_menu(eg_app *app)
     fish_menu.item_count = 2;
 
     // Render function.
-    fish_menu.render = render_fish_menu;
+    fish_menu.render = NULL; // render_fish_menu;
     fish_menu.update = NULL;
 }
 
@@ -98,8 +98,8 @@ void demo_open_fish_menu(eg_app *app)
 {
     eg_push_input_handler(app, fish_menu_input_handler);
 
-    fish_menu.cursor.x = 0;
-    fish_menu.cursor.y = 0;
+    // fish_menu.cursor.x = 0;
+    // fish_menu.cursor.y = 0;
 
-    app->menus[(app->menu_count)++] = &fish_menu;
+    // app->menus[(app->menu_count)++] = &fish_menu;
 }

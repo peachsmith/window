@@ -9,6 +9,7 @@
 #include "demo/entities/henry.h"
 #include "demo/entities/transition.h"
 #include "demo/entities/pause_menu_entity.h"
+#include "demo/entities/fish_menu_entity.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
 #include "demo/menu/menu.h"
@@ -100,9 +101,22 @@ static void draw(eg_app *app)
     eg_entity *ent = app->entities;
     while (ent != NULL)
     {
-        if (app->registry[ent->type].render != NULL)
+        eg_entity_type t = app->registry[ent->type];
+        int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
+        if (t.render != NULL)
         {
-            app->registry[ent->type].render(app, ent);
+            // We render all entities without the pause flag, regardless of
+            // whether or not the application is paused.
+            // However, entities that have the pause flag will only be
+            // rendered if the application is paused.
+            if (pause_flag && app->pause)
+            {
+                t.render(app, ent);
+            }
+            else if (!pause_flag)
+            {
+                t.render(app, ent);
+            }
         }
         ent = ent->next;
     }
@@ -175,20 +189,29 @@ int demo_prepare(eg_app *app)
 
     // Register the entity types.
     player_demo_register(&reg[ENTITY_TYPE_PLAYER]);
+
+    // platforms and other blocks
     block_demo_register(&reg[ENTITY_TYPE_BLOCK]);
     block_demo_register_big(&reg[ENTITY_TYPE_BLOCK_BIG]);
     block_demo_register_long(&reg[ENTITY_TYPE_BLOCK_LONG]);
     throughblock_demo_register_long(&reg[ENTITY_TYPE_THROUGHBLOCK_LONG]);
     block_demo_register_moving(&reg[ENTITY_TYPE_BLOCK_MOVING]);
     block_demo_register_sloped(&reg[ENTITY_TYPE_BLOCK_SLOPE]);
-    sign_demo_register(&reg[ENTITY_TYPE_SIGN]);
-    jimbo_demo_register(&reg[ENTITY_TYPE_JIMBO]);
-    billy_demo_register(&reg[ENTITY_TYPE_BILLY]);
-    henry_demo_register(&reg[ENTITY_TYPE_HENRY]);
-    transition_demo_register(&reg[ENTITY_TYPE_TRANSITION]);
-    pause_menu_entity_demo_register(&reg[ENTITY_TYPE_MENU]);
 
-    // load_scene_0(app);
+    // interactables
+    sign_demo_register(&reg[ENTITY_TYPE_SIGN]);   // npc dialog
+    jimbo_demo_register(&reg[ENTITY_TYPE_JIMBO]); // npc dialog
+    billy_demo_register(&reg[ENTITY_TYPE_BILLY]); // npc movement
+    henry_demo_register(&reg[ENTITY_TYPE_HENRY]); // hostile
+
+    // scene transitions
+    transition_demo_register(&reg[ENTITY_TYPE_TRANSITION]);
+
+    // menus
+    pause_menu_entity_demo_register(&reg[ENTITY_TYPE_PAUSE_MENU]);
+    fish_menu_entity_demo_register(&reg[ENTITY_TYPE_FISH_MENU]);
+
+    // Load the initial scene.
     load_scene_3(app);
     eg_push_input_handler(app, root_input_handler);
 
