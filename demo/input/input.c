@@ -18,26 +18,59 @@ void demo_init_input(eg_app *app)
 
 void common_dialog_input_handler(eg_app *app)
 {
-    eg_dialog *d = app->dialogs[app->dialog_count - 1];
+    // eg_dialog *d = app->dialogs[app->dialog_count - 1];
+
+    // Locate the demo dialog.
+    eg_entity *demo_dialog = app->entities;
+    while (demo_dialog != NULL && demo_dialog->type != ENTITY_TYPE_DEMO_DIALOG)
+    {
+        demo_dialog = demo_dialog->next;
+    }
+
+    if (demo_dialog == NULL)
+    {
+        return;
+    }
+
+    // if (eg_consume_input(app, EG_KEYCODE_Z))
+    // {
+    //     if (d->ticks >= d->tick_limit)
+    //     {
+    //         d->advance(app, d);
+    //         return;
+    //     }
+    // }
+
+    // if (eg_consume_input(app, EG_KEYCODE_X))
+    // {
+    //     if (d->ticks < d->tick_limit)
+    //     {
+    //         d->ticks = d->tick_limit;
+    //     }
+    //     else
+    //     {
+    //         d->advance(app, d);
+    //     }
+    // }
 
     if (eg_consume_input(app, EG_KEYCODE_Z))
     {
-        if (d->ticks >= d->tick_limit)
+        if (demo_dialog->ticks >= demo_dialog->tick_limit)
         {
-            d->advance(app, d);
+            app->registry[demo_dialog->type].advance(app, demo_dialog);
             return;
         }
     }
 
     if (eg_consume_input(app, EG_KEYCODE_X))
     {
-        if (d->ticks < d->tick_limit)
+        if (demo_dialog->ticks < demo_dialog->tick_limit)
         {
-            d->ticks = d->tick_limit;
+            demo_dialog->ticks = demo_dialog->tick_limit;
         }
         else
         {
-            d->advance(app, d);
+            app->registry[demo_dialog->type].advance(app, demo_dialog);
         }
     }
 }
