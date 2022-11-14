@@ -4,6 +4,7 @@
 #include "demo/entities/player.h"
 #include "demo/entities/henry.h"
 #include "demo/entities/transition.h"
+#include "demo/entities/pause_menu_entity.h"
 
 #include <stdlib.h>
 
@@ -22,6 +23,9 @@ void load_scene_3(eg_app *app)
     // This is added first, since it should be rendered on top of all other
     // entities.
     eg_add_entity(app, transition_demo_create());
+
+    // pause menu
+    eg_add_entity(app, pause_menu_entity_demo_create());
 
     eg_add_entity(app, block_demo_create(x_start - 27 + 18, 94));
     eg_add_entity(app, block_demo_create(x_start - 27 + 36, 94));

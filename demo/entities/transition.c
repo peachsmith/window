@@ -1,4 +1,4 @@
-#include "demo/entities/sign.h"
+#include "demo/entities/transition.h"
 #include "demo/entities/entity_types.h"
 #include "demo/texture/texture.h"
 #include "demo/dialog/dialog.h"

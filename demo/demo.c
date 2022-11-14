@@ -1,5 +1,6 @@
 #include "demo/demo.h"
 #include "demo/input/input.h"
+#include "demo/entities/entity_types.h"
 #include "demo/entities/player.h"
 #include "demo/entities/block.h"
 #include "demo/entities/sign.h"
@@ -7,15 +8,15 @@
 #include "demo/entities/billy.h"
 #include "demo/entities/henry.h"
 #include "demo/entities/transition.h"
-#include "demo/entities/entity_types.h"
+#include "demo/entities/pause_menu_entity.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
-#include "demo/util/util.h"
 #include "demo/menu/menu.h"
 #include "demo/dialog/dialog.h"
 #include "demo/font/font.h"
 #include "demo/texture/texture.h"
 #include "demo/audio/audio.h"
+#include "demo/util/util.h"
 #include "demo/util/sprite.h"
 #include "demo/util/overlay.h"
 
@@ -107,20 +108,20 @@ static void draw(eg_app *app)
     }
 
     // TODO: move all rendering into the main render loop.
-    if (app->pause)
-    {
-        for (int i = 0; i < app->menu_count; i++)
-        {
-            eg_menu *m = app->menus[i];
-            m->render(app, m);
-        }
+    // if (app->pause)
+    // {
+    //     for (int i = 0; i < app->menu_count; i++)
+    //     {
+    //         eg_menu *m = app->menus[i];
+    //         m->render(app, m);
+    //     }
 
-        if (app->dialog_count > 0)
-        {
-            eg_dialog *d = app->dialogs[app->dialog_count - 1];
-            d->render(app, d);
-        }
-    }
+    //     if (app->dialog_count > 0)
+    //     {
+    //         eg_dialog *d = app->dialogs[app->dialog_count - 1];
+    //         d->render(app, d);
+    //     }
+    // }
 
     if (app->debug.overlay)
     {
@@ -185,6 +186,7 @@ int demo_prepare(eg_app *app)
     billy_demo_register(&reg[ENTITY_TYPE_BILLY]);
     henry_demo_register(&reg[ENTITY_TYPE_HENRY]);
     transition_demo_register(&reg[ENTITY_TYPE_TRANSITION]);
+    pause_menu_entity_demo_register(&reg[ENTITY_TYPE_MENU]);
 
     // load_scene_0(app);
     load_scene_3(app);

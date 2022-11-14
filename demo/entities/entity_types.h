@@ -15,9 +15,10 @@
 #define ENTITY_TYPE_BILLY 9
 #define ENTITY_TYPE_HENRY 10
 #define ENTITY_TYPE_TRANSITION 11
+#define ENTITY_TYPE_MENU 12
 
 // This is the total number of entity types.
-#define ENTITY_TYPE_MAX 12
+#define ENTITY_TYPE_MAX 13
 
 // flags
 #define ENTITY_FLAG_GROUND 0
