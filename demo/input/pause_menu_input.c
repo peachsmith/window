@@ -72,11 +72,23 @@ void pause_menu_input_handler(eg_app *app)
 
         case 2:
             printf("submenu callback\n");
+
+            // Locate the fish menu.
+            eg_entity *fish_menu = app->entities;
+            while (fish_menu != NULL && fish_menu->type != ENTITY_TYPE_FISH_MENU)
+            {
+                fish_menu = fish_menu->next;
+            }
+
+            // Set the pause menu as the active menu.
+            app->menu_entities[app->menu_count++] = fish_menu;
+
             eg_push_input_handler(app, fish_menu_input_handler);
             break;
 
         case 3:
             printf("quit callback\n");
+            app->done = 1;
             break;
 
         case 4:

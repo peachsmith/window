@@ -46,14 +46,15 @@ static void update(eg_app *app)
     }
 
     // Update menus.
-    if (app->menu_count > 0)
-    {
-        eg_menu *m = app->menus[app->menu_count - 1];
-        if (m->update != NULL)
-        {
-            m->update(app, m);
-        }
-    }
+    // TODO: update menus with other entities.
+    // if (app->menu_count > 0)
+    // {
+    //     eg_menu *m = app->menus[app->menu_count - 1];
+    //     if (m->update != NULL)
+    //     {
+    //         m->update(app, m);
+    //     }
+    // }
 
     // Handle collisions.
     if (!app->pause)
@@ -99,21 +100,28 @@ static void draw(eg_app *app)
 
     // Main render loop.
     eg_entity *ent = app->entities;
+
+    //------------------------------------------------------------------------
+    // Sprite layer
     while (ent != NULL)
     {
         eg_entity_type t = app->registry[ent->type];
         int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
+        int menu_flag = eg_check_flag(ent, ENTITY_FLAG_MENU);
         if (t.render != NULL)
         {
             // We render all entities without the pause flag, regardless of
             // whether or not the application is paused.
             // However, entities that have the pause flag will only be
             // rendered if the application is paused.
-            if (pause_flag && app->pause)
+            if (app->pause)
             {
-                t.render(app, ent);
+                if (!menu_flag)
+                {
+                    t.render(app, ent);
+                }
             }
-            else if (!pause_flag)
+            else if (!pause_flag && !menu_flag)
             {
                 t.render(app, ent);
             }
@@ -121,22 +129,27 @@ static void draw(eg_app *app)
         ent = ent->next;
     }
 
-    // TODO: move all rendering into the main render loop.
-    // if (app->pause)
-    // {
-    //     for (int i = 0; i < app->menu_count; i++)
-    //     {
-    //         eg_menu *m = app->menus[i];
-    //         m->render(app, m);
-    //     }
+    //------------------------------------------------------------------------
+    // Menu layer
+    if (app->pause)
+    {
+        for (int i = 0; i < app->menu_count; i++)
+        {
+            // eg_menu *m = app->menus[i];
+            eg_entity *m = app->menu_entities[i];
+            app->registry[m->type].render(app, m);
+            // m->render(app, m);
+        }
 
-    //     if (app->dialog_count > 0)
-    //     {
-    //         eg_dialog *d = app->dialogs[app->dialog_count - 1];
-    //         d->render(app, d);
-    //     }
-    // }
+        // if (app->dialog_count > 0)
+        // {
+        //     eg_dialog *d = app->dialogs[app->dialog_count - 1];
+        //     d->render(app, d);
+        // }
+    }
 
+    //------------------------------------------------------------------------
+    // Debug layer
     if (app->debug.overlay)
     {
         debug_draw_overlay(app);

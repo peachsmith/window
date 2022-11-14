@@ -235,7 +235,9 @@ struct eg_app
     int sound_count;
 
     // menus
+    // TODO: remove the eg_menu point
     eg_menu **menus;
+    eg_entity **menu_entities;
     int menu_count;
 
     // dialogs
