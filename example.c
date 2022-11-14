@@ -101,9 +101,6 @@ eg_app *eg_create_app()
     app->dialogs = NULL;
     app->dialog_count = 0;
 
-    app->counters = NULL;
-    app->counter_count = 0;
-
     app->screen_width = EG_DEFAULT_SCREEN_WIDTH;
     app->screen_height = EG_DEFAULT_SCREEN_HEIGHT;
 
@@ -167,11 +164,6 @@ void eg_destroy_app(eg_app *app)
         eg_impl_destroy_sound(app->sounds[i]);
     }
 
-    if (app->counters != NULL)
-    {
-        free(app->counters);
-    }
-
     // Destroy the entity registry.
     eg_destroy_registry(app->registry);
 
@@ -192,25 +184,6 @@ void eg_end_frame(eg_app *app)
 {
     eg_impl_render_screen(app);
     eg_impl_delay(app);
-}
-
-int *eg_reserve_counter(eg_app *app)
-{
-    if (app->counter_count < 1 || app->counters == NULL)
-    {
-        return NULL;
-    }
-
-    for (int i = 0; i < app->counter_count; i++)
-    {
-        if (app->counters[i] == -1)
-        {
-            app->counters[i] = 0;
-            return &(app->counters[i]);
-        }
-    }
-
-    return NULL;
 }
 
 //----------------------------------------------------------------------------

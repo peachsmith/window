@@ -142,20 +142,6 @@ int demo_prepare(eg_app *app)
     app->update = update;
     app->draw = draw;
 
-    // Initialize counters.
-    int max_counters = 100;
-    int *counters = (int *)malloc(sizeof(int) * max_counters);
-    if (counters == NULL)
-    {
-        return 0;
-    }
-    app->counters = counters;
-    app->counter_count = max_counters;
-    for (int i = 0; i < app->counter_count; i++)
-    {
-        app->counters[i] = -1;
-    }
-
     // Initialize tetxures.
     if (!demo_init_textures(app))
     {
