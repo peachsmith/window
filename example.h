@@ -107,6 +107,7 @@ typedef struct eg_camera
     int y;
 } eg_camera;
 
+// TODO: Remove these once they are converted to entities.
 typedef struct eg_menu_item eg_menu_item;
 typedef struct eg_menu eg_menu;
 typedef struct eg_dialog eg_dialog;
@@ -251,10 +252,6 @@ struct eg_app
     // input handler for next scene after a transition
     eg_callback transition_input_handler;
 
-    // counters
-    int *counters;
-    int counter_count;
-
     // A linked list of entities.
     // Entities are updated and rendered in the opposite order from which they
     // were added. The last entity added will be the first entity updated and
@@ -346,6 +343,14 @@ struct eg_entity_type
     int (*interact)(eg_app *, eg_entity *, eg_entity *);
 };
 
+
+//============================================================================
+// BEGIN menu to entity conversion
+// The following structs will be converted to entities:
+//   eg_menu
+//   eg_menu_item
+//   eg_dialog
+
 struct eg_menu_item
 {
     eg_point position;
@@ -389,6 +394,10 @@ struct eg_dialog
     // for passing values between menus and dialogs.
     int result;
 };
+
+
+// END menu to entity conversion
+//============================================================================
 
 //----------------------------------------------------------------------------
 // core functions
@@ -443,8 +452,6 @@ void eg_begin_frame(eg_app *);
  *   eg_app* - a pointer to an app struct
  */
 void eg_end_frame(eg_app *);
-
-int *eg_reserve_counter(eg_app *);
 
 //----------------------------------------------------------------------------
 // drawing functions

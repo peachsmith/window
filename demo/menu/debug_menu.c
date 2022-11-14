@@ -31,7 +31,7 @@ static eg_menu_item debug_item_5;
 static eg_menu_item *debug_items[5];
 
 // used to keep track of animated horizontal arrow indicators
-static int *toggle_counter = NULL;
+static int menu_arrow_counter = 0;
 
 static void debug_item_1_callback(eg_app *app, eg_menu *menu)
 {
@@ -45,18 +45,12 @@ static void debug_item_6_callback(eg_app *app, eg_menu *menu)
 
 static void update_debug_menu(eg_app *app, eg_menu *menu)
 {
-    if (toggle_counter == NULL)
-    {
-        return;
-    }
-
     // Update the scroll indicator counter.
-    // app->counters[0] += 2;
-    *toggle_counter += 2;
+    menu_arrow_counter += 2;
 
-    if (*toggle_counter >= 120)
+    if (menu_arrow_counter >= 120)
     {
-        *toggle_counter = 0;
+        menu_arrow_counter = 0;
     }
 }
 
@@ -90,7 +84,7 @@ static void render_debug_menu(eg_app *app, eg_menu *menu)
             if (menu->cursor.y == 1)
             {
                 // Get the scroll indicator counter.
-                int count = app->counters[0];
+                int count = menu_arrow_counter;
                 int offset = 0;
                 if (count < 40)
                 {
@@ -155,7 +149,7 @@ static void render_debug_menu(eg_app *app, eg_menu *menu)
             if (menu->cursor.y == 2)
             {
                 // Get the scroll indicator counter.
-                int count = app->counters[0];
+                int count = menu_arrow_counter;
                 int offset = 0;
                 if (count < 40)
                 {
@@ -195,7 +189,7 @@ static void render_debug_menu(eg_app *app, eg_menu *menu)
             if (menu->cursor.y == 3)
             {
                 // Get the scroll indicator counter.
-                int count = app->counters[0];
+                int count = menu_arrow_counter;
                 int offset = 0;
                 if (count < 40)
                 {
@@ -300,12 +294,7 @@ int demo_init_debug_menu(eg_app *app)
     debug_menu.render = render_debug_menu;
     debug_menu.update = update_debug_menu;
 
-    toggle_counter = eg_reserve_counter(app);
-    if (toggle_counter == NULL)
-    {
-        printf("[ERROR] failed to reserve counter\n");
-        return 0;
-    }
+    menu_arrow_counter = 0;
 
     return 1;
 }
