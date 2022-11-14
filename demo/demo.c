@@ -53,22 +53,33 @@ static void update(eg_app *app)
         }
     }
 
-    if (app->pause)
-    {
-        return;
-    }
-
     // Handle collisions.
-    demo_handle_collisions(app);
+    if (!app->pause)
+    {
+        demo_handle_collisions(app);
+    }
 
     // Update state.
     eg_entity *ent = app->entities;
     while (ent != NULL)
     {
-        if (app->registry[ent->type].update != NULL)
+        eg_entity_type t = app->registry[ent->type];
+        int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
+        if (t.update != NULL)
         {
-            app->registry[ent->type].update(app, ent);
+            if (app->pause)
+            {
+                if (pause_flag)
+                {
+                    t.update(app, ent);
+                }
+            }
+            else if (!pause_flag)
+            {
+                t.update(app, ent);
+            }
         }
+
         ent = ent->next;
     }
 }
@@ -84,7 +95,7 @@ static void draw(eg_app *app)
     // Render background
     // sprite_draw_background(app, 0);
 
-    // Render the entities.
+    // Main render loop.
     eg_entity *ent = app->entities;
     while (ent != NULL)
     {
@@ -95,6 +106,7 @@ static void draw(eg_app *app)
         ent = ent->next;
     }
 
+    // TODO: move all rendering into the main render loop.
     if (app->pause)
     {
         for (int i = 0; i < app->menu_count; i++)
@@ -190,6 +202,7 @@ int demo_prepare(eg_app *app)
 
     // load_scene_0(app);
     load_scene_3(app);
+    eg_push_input_handler(app, root_input_handler);
 
     // Play music
     // eg_play_sound(app, app->sounds[DEMO_SONG_FIELD]);

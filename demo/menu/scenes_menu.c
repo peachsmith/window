@@ -32,6 +32,64 @@ static eg_menu_item scenes_item_3;
 static eg_menu_item scenes_item_4;
 static eg_menu_item *scenes_items[4];
 
+static void transition_callback(eg_app *app, eg_callback load_next_scene)
+{
+    eg_entity transition;
+    eg_entity *entity;
+
+    // Save the transition entity state.
+    entity = app->entities;
+    while (entity != NULL && entity->type != ENTITY_TYPE_TRANSITION)
+    {
+        entity = entity->next;
+    }
+
+    if (entity != NULL)
+    {
+        transition.ticks = entity->ticks;
+        transition.data = entity->data;
+        transition.flags = entity->flags;
+    }
+
+    // Clear the current scene and load the next scene.
+    clear_scene(app);
+    load_next_scene(app);
+
+    // Restore the transition entity state.
+    entity = app->entities;
+    while (entity != NULL && entity->type != ENTITY_TYPE_TRANSITION)
+    {
+        entity = entity->next;
+    }
+
+    if (entity != NULL)
+    {
+        entity->ticks = transition.ticks;
+        entity->data = transition.data;
+        entity->flags = transition.flags;
+    }
+}
+
+static void scene0_transition_callback(eg_app *app)
+{
+    transition_callback(app, load_scene_0);
+}
+
+static void scene1_transition_callback(eg_app *app)
+{
+    transition_callback(app, load_scene_1);
+}
+
+static void scene2_transition_callback(eg_app *app)
+{
+    transition_callback(app, load_scene_2);
+}
+
+static void scene3_transition_callback(eg_app *app)
+{
+    transition_callback(app, load_scene_3);
+}
+
 static void scenes_item_1_callback(eg_app *app, eg_menu *menu)
 {
     // Close the scenes menu.
@@ -42,7 +100,16 @@ static void scenes_item_1_callback(eg_app *app, eg_menu *menu)
     app->menu_count--;
     eg_pop_input_handler(app);
 
-    // Start the screen transition.
+    // Set the transition callback to load scene 0.
+    // Set the next input handler to be the root input handler.
+    app->transition_loader = scene0_transition_callback;
+    app->transition_input_handler = root_input_handler;
+
+    // Remove the input handler of the current scene.
+    eg_pop_input_handler(app);
+
+    // Start the screen transition by marking the data field as 1 for any
+    // entity that has an entity type of ENTITY_TYPE_TRANSITION.
     eg_entity *e = app->entities;
     while (e != NULL)
     {
@@ -52,13 +119,6 @@ static void scenes_item_1_callback(eg_app *app, eg_menu *menu)
         }
         e = e->next;
     }
-
-    // Clear the current scene and load the next scene.
-    // clear_scene(app);
-    // load_scene_0(app);
-
-    // Unpause the application.
-    app->pause = 0;
 }
 
 static void scenes_item_2_callback(eg_app *app, eg_menu *menu)
@@ -71,12 +131,25 @@ static void scenes_item_2_callback(eg_app *app, eg_menu *menu)
     app->menu_count--;
     eg_pop_input_handler(app);
 
-    // Clear the current scene and load the next scene.
-    clear_scene(app);
-    load_scene_1(app);
+    // Set the transition callback to load scene 0.
+    // Set the next input handler to be the root input handler.
+    app->transition_loader = scene1_transition_callback;
+    app->transition_input_handler = root_input_handler;
 
-    // Unpause the application.
-    app->pause = 0;
+    // Remove the input handler of the current scene.
+    eg_pop_input_handler(app);
+
+    // Start the screen transition by marking the data field as 1 for any
+    // entity that has an entity type of ENTITY_TYPE_TRANSITION.
+    eg_entity *e = app->entities;
+    while (e != NULL)
+    {
+        if (e->type == ENTITY_TYPE_TRANSITION)
+        {
+            e->data = 1;
+        }
+        e = e->next;
+    }
 }
 
 static void scenes_item_3_callback(eg_app *app, eg_menu *menu)
@@ -89,12 +162,25 @@ static void scenes_item_3_callback(eg_app *app, eg_menu *menu)
     app->menu_count--;
     eg_pop_input_handler(app);
 
-    // Clear the current scene and load the next scene.
-    clear_scene(app);
-    load_scene_2(app);
+    // Set the transition callback to load scene 0.
+    // Set the next input handler to be the root input handler.
+    app->transition_loader = scene2_transition_callback;
+    app->transition_input_handler = root_input_handler;
 
-    // Unpause the application.
-    app->pause = 0;
+    // Remove the input handler of the current scene.
+    eg_pop_input_handler(app);
+
+    // Start the screen transition by marking the data field as 1 for any
+    // entity that has an entity type of ENTITY_TYPE_TRANSITION.
+    eg_entity *e = app->entities;
+    while (e != NULL)
+    {
+        if (e->type == ENTITY_TYPE_TRANSITION)
+        {
+            e->data = 1;
+        }
+        e = e->next;
+    }
 }
 
 static void scenes_item_4_callback(eg_app *app, eg_menu *menu)
@@ -107,12 +193,25 @@ static void scenes_item_4_callback(eg_app *app, eg_menu *menu)
     app->menu_count--;
     eg_pop_input_handler(app);
 
-    // Clear the current scene and load the next scene.
-    clear_scene(app);
-    load_scene_3(app);
+    // Set the transition callback to load scene 0.
+    // Set the next input handler to be the root input handler.
+    app->transition_loader = scene3_transition_callback;
+    app->transition_input_handler = root_input_handler;
 
-    // Unpause the application.
-    app->pause = 0;
+    // Remove the input handler of the current scene.
+    eg_pop_input_handler(app);
+
+    // Start the screen transition by marking the data field as 1 for any
+    // entity that has an entity type of ENTITY_TYPE_TRANSITION.
+    eg_entity *e = app->entities;
+    while (e != NULL)
+    {
+        if (e->type == ENTITY_TYPE_TRANSITION)
+        {
+            e->data = 1;
+        }
+        e = e->next;
+    }
 }
 
 static void render_scenes_menu(eg_app *app, eg_menu *menu)

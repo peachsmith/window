@@ -21,19 +21,23 @@ static void render_transition(eg_app *app, eg_entity *transition)
 
     uint32_t c = 0x00000000;
     uint32_t a = 0xFF;
-    // printf("transition ticks: %d\n", transition->ticks);
-    if (transition->ticks < 60)
+
+    if (transition->ticks < 30)
     {
-        a = transition->ticks * 4;
-        if (transition->ticks >= 59)
+        a = transition->ticks * 8;
+        if (transition->ticks >= 29)
         {
             a = 0xFF;
         }
     }
+    else if (transition->ticks < 60)
+    {
+        a = 0xFF;
+    }
     else
     {
-        a = 0xFF - ((transition->ticks - 60) * 4);
-        if (transition->ticks >= 119)
+        a = 0xFF - ((transition->ticks - 60) * 8);
+        if (transition->ticks >= 89)
         {
             a = 0x00;
         }
@@ -50,8 +54,17 @@ static void update_transition(eg_app *app, eg_entity *transition)
         return;
     }
 
-    if (transition->ticks < 120)
+    // The screen fades out for 30 frames, followed by 30 frames of blank
+    // screen, followed by 30 frames of the next frame fading in.
+    // During the second 30 frame period, we load the next scene.
+    if (transition->ticks < 90)
     {
+        // Load the next scene.
+        if (transition->ticks == 30)
+        {
+            app->transition_loader(app);
+        }
+
         transition->ticks++;
         return;
     }
@@ -59,7 +72,12 @@ static void update_transition(eg_app *app, eg_entity *transition)
     transition->ticks = 0;
     transition->data = 0;
 
-    printf("transition complete\n");
+    // Once the next scene has been fully loaded and the transition is
+    // complete, we push the input handler of the next scene to give control
+    // back to the user.
+    eg_push_input_handler(app, app->transition_input_handler);
+
+    app->pause = 0;
 }
 
 void transition_demo_register(eg_entity_type *t)
@@ -81,6 +99,7 @@ eg_entity *transition_demo_create()
     }
 
     transition->type = ENTITY_TYPE_TRANSITION;
+    eg_set_flag(transition, ENTITY_FLAG_PAUSE);
 
     return transition;
 }

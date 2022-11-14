@@ -2,6 +2,7 @@
 #include "demo/input/input.h"
 #include "demo/entities/block.h"
 #include "demo/entities/player.h"
+#include "demo/entities/transition.h"
 
 #include <stdlib.h>
 
@@ -15,6 +16,8 @@ void load_scene_2(eg_app *app)
 
     app->cam.x = 0;
     app->cam.y = 0;
+
+    eg_add_entity(app, transition_demo_create());
 
     // moving platforms added before the player
     eg_add_entity(app, block_demo_create_moving(x_start - 63, 54, 0));  // vertical
@@ -53,6 +56,7 @@ void load_scene_2(eg_app *app)
     // eg_add_entity(app, block_demo_create_moving(x_start - 63, 54, 0)); // vertical
     // eg_add_entity(app, block_demo_create_moving(x_start + 253, 94, 1)); // horizontal
 
+    // TODO: push input handler outside of scene loader
     // Create the initial input handler and add it to the app.
-    eg_push_input_handler(app, root_input_handler);
+    // eg_push_input_handler(app, root_input_handler);
 }

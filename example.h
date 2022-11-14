@@ -245,6 +245,12 @@ struct eg_app
     eg_callback *input;
     int input_count;
 
+    // callback function for scene transitions
+    eg_callback transition_loader;
+
+    // input handler for next scene after a transition
+    eg_callback transition_input_handler;
+
     // counters
     int *counters;
     int counter_count;
@@ -300,7 +306,7 @@ struct eg_entity
     int y_t;
 
     // bit flags
-    uint8_t flags;
+    uint16_t flags;
 
     // custom data that may have special meaning in each entity
     uint8_t data;
