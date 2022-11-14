@@ -74,6 +74,7 @@ void load_scene_3(eg_app *app)
     // eg_add_entity(app, block_demo_create(x_start - 27 + 126, 42));
     // eg_add_entity(app, block_demo_create(x_start - 27 + 144, 52));
 
+    // TODO: push input handler outside of scene loader
     // Create the initial input handler and add it to the app.
-    eg_push_input_handler(app, root_input_handler);
+    // eg_push_input_handler(app, root_input_handler);
 }

@@ -29,4 +29,6 @@
 #define ENTITY_FLAG_MIRROR 6
 #define ENTITY_FLAG_INVINCIBLE 7
 
+#define ENTITY_FLAG_PAUSE 8
+
 #endif

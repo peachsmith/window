@@ -4,6 +4,7 @@
 #include "demo/entities/player.h"
 #include "demo/entities/sign.h"
 #include "demo/entities/jimbo.h"
+#include "demo/entities/transition.h"
 
 #include <stdio.h>
 
@@ -17,6 +18,8 @@ void load_scene_0(eg_app *app)
 
     app->cam.x = -320;
     app->cam.y = 40;
+
+    eg_add_entity(app, transition_demo_create());
 
     // eg_add_entity(app, jimbo_demo_create(x_start - 27 + 200, 36)); // an interactable NPC
 
@@ -78,6 +81,7 @@ void load_scene_0(eg_app *app)
     // Vertically moving platform (after before player).
     eg_add_entity(app, block_demo_create_moving(489, -2, 0));
 
+    // TODO: push input handler outside of scene loader
     // Create the initial input handler and add it to the app.
-    eg_push_input_handler(app, root_input_handler);
+    // eg_push_input_handler(app, root_input_handler);
 }

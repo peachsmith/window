@@ -48,7 +48,6 @@ void empty_input_handler(eg_app *app)
 
 void root_input_handler(eg_app *app)
 {
-
     // Pause the application.
     if (eg_consume_input(app, EG_KEYCODE_Q))
     {

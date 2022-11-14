@@ -285,6 +285,11 @@ void eg_pop_input_handler(eg_app *app)
         return;
     }
 
+    if (app->input_count < 1)
+    {
+        return;
+    }
+
     app->input_count--;
 }
 
@@ -459,15 +464,15 @@ eg_entity *eg_remove_entity(eg_app *app, eg_entity *entity)
 
 int eg_check_flag(eg_entity *e, int f)
 {
-    // The flag index must be in the range [0, 7] since we're only dealing
-    // with 8 bits.
-    if (f < 0 || f > 8)
+    // The flag index must be in the range [0, 15] since we're only dealing
+    // with 16 bits.
+    if (f < 0 || f >= 16)
     {
         return 0;
     }
 
     // Convert the flag index to a bit value.
-    uint8_t bit = (uint8_t)(1 << f);
+    uint16_t bit = (uint16_t)(1 << f);
 
     // Check if the flag is set.
     if (e->flags & bit)
@@ -480,15 +485,15 @@ int eg_check_flag(eg_entity *e, int f)
 
 void eg_set_flag(eg_entity *e, int f)
 {
-    // The flag index must be in the range [0, 7] since we're only dealing
-    // with 8 bits.
-    if (f < 0 || f > 8)
+    // The flag index must be in the range [0, 15] since we're only dealing
+    // with 16 bits.
+    if (f < 0 || f >= 16)
     {
         return;
     }
 
     // Convert the flag index to a bit value.
-    uint8_t bit = (uint8_t)(1 << f);
+    uint16_t bit = (uint16_t)(1 << f);
 
     // Set the flag.
     e->flags |= bit;
@@ -496,15 +501,15 @@ void eg_set_flag(eg_entity *e, int f)
 
 void eg_clear_flag(eg_entity *e, int f)
 {
-    // The flag index must be in the range [0, 7] since we're only dealing
-    // with 8 bits.
-    if (f < 0 || f > 8)
+    // The flag index must be in the range [0, 15] since we're only dealing
+    // with 16 bits.
+    if (f < 0 || f >= 16)
     {
         return;
     }
 
     // Convert the flag index to a bit value.
-    uint8_t bit = (uint8_t)(1 << f);
+    uint16_t bit = (uint16_t)(1 << f);
 
     // Clear the flag.
     e->flags &= ~bit;
@@ -512,15 +517,15 @@ void eg_clear_flag(eg_entity *e, int f)
 
 void eg_toggle_flag(eg_entity *e, int f)
 {
-    // The flag index must be in the range [0, 7] since we're only dealing
-    // with 8 bits.
-    if (f < 0 || f > 8)
+    // The flag index must be in the range [0, 15] since we're only dealing
+    // with 16 bits.
+    if (f < 0 || f >= 16)
     {
         return;
     }
 
     // Convert the flag index to a bit value.
-    uint8_t bit = (uint8_t)(1 << f);
+    uint16_t bit = (uint16_t)(1 << f);
 
     // If the flag is already set, then clear it.
     if (e->flags & bit)
