@@ -25,7 +25,4 @@ void demo_common_dialog_renderer(eg_app *, eg_entity *);
 void demo_init_sign_dialog(eg_app *);
 void demo_open_sign_dialog(eg_app *);
 
-void demo_init_jimbo_dialog(eg_app *);
-void demo_open_jimbo_dialog(eg_app *);
-
 #endif

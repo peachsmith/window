@@ -13,6 +13,7 @@
 #include "demo/entities/info_menu.h"
 #include "demo/entities/demo_dialog.h"
 #include "demo/entities/info_dialog.h"
+#include "demo/entities/jimbo_dialog.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
 #include "demo/menu/menu.h"
@@ -44,8 +45,6 @@ static void update(eg_app *app)
     // Update dialogs.
     if (app->dialog_count > 0)
     {
-        // eg_dialog *d = app->dialogs[app->dialog_count - 1];
-        // d->update(app, d);
         eg_entity *d = app->dialog_entities[app->dialog_count - 1];
         app->registry[d->type].update(app, d);
     }
@@ -54,11 +53,6 @@ static void update(eg_app *app)
     // TODO: update menus with other entities.
     if (app->menu_count > 0)
     {
-        // eg_menu *m = app->menus[app->menu_count - 1];
-        // if (m->update != NULL)
-        // {
-        //     m->update(app, m);
-        // }
         eg_entity *m = app->menu_entities[app->menu_count - 1];
         app->registry[m->type].update(app, m);
     }
@@ -234,9 +228,10 @@ int demo_prepare(eg_app *app)
     // dialogs
     demo_dialog_demo_register(&reg[ENTITY_TYPE_DEMO_DIALOG]);
     info_dialog_demo_register(&reg[ENTITY_TYPE_INFO_DIALOG]);
+    jimbo_dialog_demo_register(&reg[ENTITY_TYPE_JIMBO_DIALOG]);
 
     // Load the initial scene.
-    load_scene_3(app);
+    load_scene_0(app);
     eg_push_input_handler(app, root_input_handler);
 
     // Play music
