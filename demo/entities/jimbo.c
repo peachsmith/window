@@ -3,6 +3,8 @@
 #include "demo/texture/texture.h"
 #include "demo/util/sprite.h"
 #include "demo/dialog/dialog.h"
+#include "demo/input/input.h"
+#include "demo/entities/jimbo_dialog.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -197,10 +199,21 @@ static void update_jimbo(eg_app *app, eg_entity *jimbo)
     }
 }
 
-static int interact_with_jimbo(eg_app *app, eg_entity *sign, eg_entity *actor)
+static int interact_with_jimbo(eg_app *app, eg_entity *jimbo, eg_entity *actor)
 {
     app->pause = 1;
-    demo_open_jimbo_dialog(app);
+
+    // Locate jimbo's dialog.
+    eg_entity *jimbo_dialog = app->entities;
+    while (jimbo_dialog != NULL && jimbo_dialog->type != ENTITY_TYPE_JIMBO_DIALOG)
+    {
+        jimbo_dialog = jimbo_dialog->next;
+    }
+
+    jimbo_dialog_demo_open(app, jimbo_dialog);
+
+    eg_push_input_handler(app, common_dialog_input_handler);
+
     return 0;
 }
 

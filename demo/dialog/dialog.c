@@ -17,7 +17,7 @@ void demo_init_dialogs(eg_app *app)
 {
     // demo_init_info_dialog(app);
     demo_init_sign_dialog(app);
-    demo_init_jimbo_dialog(app);
+    // demo_init_jimbo_dialog(app);
 
     app->dialogs = &(dialogs[0]);
     app->dialog_entities = &(dialog_entities[0]);

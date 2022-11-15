@@ -5,6 +5,12 @@
 #include "demo/entities/sign.h"
 #include "demo/entities/jimbo.h"
 #include "demo/entities/transition.h"
+#include "demo/entities/pause_menu.h"
+#include "demo/entities/fish_menu.h"
+#include "demo/entities/info_menu.h"
+#include "demo/entities/info_dialog.h"
+#include "demo/entities/demo_dialog.h"
+#include "demo/entities/jimbo_dialog.h"
 
 #include <stdio.h>
 
@@ -20,6 +26,16 @@ void load_scene_0(eg_app *app)
     app->cam.y = 40;
 
     eg_add_entity(app, transition_demo_create());
+
+    // menus
+    eg_add_entity(app, pause_menu_demo_create());
+    eg_add_entity(app, fish_menu_demo_create());
+    eg_add_entity(app, info_menu_demo_create());
+
+    // dialogs
+    eg_add_entity(app, demo_dialog_demo_create());
+    eg_add_entity(app, info_dialog_demo_create());
+    eg_add_entity(app, jimbo_dialog_demo_create());
 
     // eg_add_entity(app, jimbo_demo_create(x_start - 27 + 200, 36)); // an interactable NPC
 
