@@ -99,7 +99,6 @@ eg_app *eg_create_app()
     app->menu_entities = NULL;
     app->menu_count = 0;
 
-    app->dialogs = NULL;
     app->dialog_entities = NULL;
     app->dialog_count = 0;
 

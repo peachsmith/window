@@ -241,8 +241,6 @@ struct eg_app
     int menu_count;
 
     // dialogs
-    // TODO: remove the eg_menu pointers once all dialogs are converted to entities
-    eg_dialog **dialogs;
     eg_entity **dialog_entities;
     int dialog_count;
 

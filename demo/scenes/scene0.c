@@ -11,6 +11,7 @@
 #include "demo/entities/info_dialog.h"
 #include "demo/entities/demo_dialog.h"
 #include "demo/entities/jimbo_dialog.h"
+#include "demo/entities/sign_dialog.h"
 
 #include <stdio.h>
 
@@ -36,6 +37,7 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, demo_dialog_demo_create());
     eg_add_entity(app, info_dialog_demo_create());
     eg_add_entity(app, jimbo_dialog_demo_create());
+    eg_add_entity(app, sign_dialog_demo_create());
 
     // eg_add_entity(app, jimbo_demo_create(x_start - 27 + 200, 36)); // an interactable NPC
 

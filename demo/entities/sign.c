@@ -1,8 +1,10 @@
 #include "demo/entities/sign.h"
 #include "demo/entities/entity_types.h"
+#include "demo/entities/sign_dialog.h"
 #include "demo/texture/texture.h"
 #include "demo/util/sprite.h"
 #include "demo/dialog/dialog.h"
+#include "demo/input/input.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,7 +39,17 @@ static void update_sign(eg_app *app, eg_entity *sign)
 static int interact_with_sign(eg_app *app, eg_entity *sign, eg_entity *actor)
 {
     app->pause = 1;
-    demo_open_sign_dialog(app);
+
+    // Locate the sign's dialog.
+    eg_entity *sign_dialog = app->entities;
+    while (sign_dialog != NULL && sign_dialog->type != ENTITY_TYPE_SIGN_DIALOG)
+    {
+        sign_dialog = sign_dialog->next;
+    }
+
+    sign_dialog_demo_open(app, sign_dialog);
+
+    eg_push_input_handler(app, common_dialog_input_handler);
     return 0;
 }
 

@@ -13,9 +13,6 @@ void info_menu_input_handler(eg_app *app)
 
         if (app->dialog_count > 0)
         {
-            // eg_dialog *d = app->dialogs[app->dialog_count - 1];
-            // d->result = 0;
-            // d->advance(app, d);
             eg_entity *d = app->dialog_entities[app->dialog_count - 1];
             d->result = 0;
             app->registry[d->type].advance(app, d);

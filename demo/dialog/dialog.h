@@ -15,14 +15,7 @@
 
 void demo_init_dialogs(eg_app *);
 
-// Deprecated
-// TODO: remove this once demo_common_dialog_renderer is fully implemented
-void demo_render_dialog(eg_app *, eg_dialog *);
-
 // new common dialog renderer
 void demo_common_dialog_renderer(eg_app *, eg_entity *);
-
-void demo_init_sign_dialog(eg_app *);
-void demo_open_sign_dialog(eg_app *);
 
 #endif
