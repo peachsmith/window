@@ -1,5 +1,6 @@
 #include "demo/input/input.h"
 #include "demo/menu/menu.h"
+#include "demo/entities/entity_types.h"
 
 #include <stdio.h>
 
@@ -49,9 +50,21 @@ void debug_menu_input_handler(eg_app *app)
             break;
 
         case 4:
-            printf("input actuation callback\n");
-            // TODO: open input actuation menu
-            break;
+        {
+            eg_entity *input_menu = app->entities;
+            while (input_menu != NULL && input_menu->type != ENTITY_TYPE_INPUT_MENU)
+            {
+                input_menu = input_menu->next;
+            }
+            
+            eg_push_input_handler(app, input_menu_input_handler);
+
+            input_menu->cursor_x = 0;
+            input_menu->cursor_y = 0;
+
+            app->menu_entities[app->menu_count++] = input_menu;
+        }
+        break;
 
         default:
             break;
