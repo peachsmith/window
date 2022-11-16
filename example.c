@@ -95,7 +95,6 @@ eg_app *eg_create_app()
     app->textures = NULL;
     app->texture_count = 0;
 
-    app->menus = NULL;
     app->menu_entities = NULL;
     app->menu_count = 0;
 
