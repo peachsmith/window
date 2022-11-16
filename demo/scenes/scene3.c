@@ -7,6 +7,9 @@
 #include "demo/entities/pause_menu.h"
 #include "demo/entities/fish_menu.h"
 #include "demo/entities/info_menu.h"
+#include "demo/entities/debug_menu.h"
+#include "demo/entities/scene_menu.h"
+#include "demo/entities/input_menu.h"
 #include "demo/entities/info_dialog.h"
 #include "demo/entities/demo_dialog.h"
 
@@ -23,10 +26,19 @@ void load_scene_3(eg_app *app)
     app->cam.x = 0;
     app->cam.y = 0;
 
-    // screen transition
-    // This is added first, since it should be rendered on top of all other
-    // entities.
     eg_add_entity(app, transition_demo_create());
+
+    // menus
+    eg_add_entity(app, pause_menu_demo_create());
+    eg_add_entity(app, fish_menu_demo_create());
+    eg_add_entity(app, info_menu_demo_create());
+    eg_add_entity(app, debug_menu_demo_create());
+    eg_add_entity(app, scene_menu_demo_create());
+    eg_add_entity(app, input_menu_demo_create());
+
+    // dialogs
+    eg_add_entity(app, demo_dialog_demo_create());
+    eg_add_entity(app, info_dialog_demo_create());
 
     // menus
     eg_add_entity(app, pause_menu_demo_create());

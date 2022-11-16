@@ -12,6 +12,7 @@
 #include "demo/entities/fish_menu.h"
 #include "demo/entities/info_menu.h"
 #include "demo/entities/debug_menu.h"
+#include "demo/entities/scene_menu.h"
 #include "demo/entities/input_menu.h"
 #include "demo/entities/demo_dialog.h"
 #include "demo/entities/info_dialog.h"
@@ -228,6 +229,7 @@ int demo_prepare(eg_app *app)
     fish_menu_demo_register(&reg[ENTITY_TYPE_FISH_MENU]);
     info_menu_demo_register(&reg[ENTITY_TYPE_INFO_MENU]);
     debug_menu_demo_register(&reg[ENTITY_TYPE_DEBUG_MENU]);
+    scene_menu_demo_register(&reg[ENTITY_TYPE_SCENE_MENU]);
     input_menu_demo_register(&reg[ENTITY_TYPE_INPUT_MENU]);
 
     // dialogs

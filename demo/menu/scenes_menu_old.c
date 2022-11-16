@@ -32,7 +32,7 @@ static eg_menu_item scenes_item_3;
 static eg_menu_item scenes_item_4;
 static eg_menu_item *scenes_items[4];
 
-static void transition_callback(eg_app *app, eg_callback load_next_scene)
+static void do_transition(eg_app *app, eg_callback load_next_scene)
 {
     eg_entity transition;
     eg_entity *entity;
@@ -72,22 +72,22 @@ static void transition_callback(eg_app *app, eg_callback load_next_scene)
 
 static void scene0_transition_callback(eg_app *app)
 {
-    transition_callback(app, load_scene_0);
+    do_transition(app, load_scene_0);
 }
 
 static void scene1_transition_callback(eg_app *app)
 {
-    transition_callback(app, load_scene_1);
+    do_transition(app, load_scene_1);
 }
 
 static void scene2_transition_callback(eg_app *app)
 {
-    transition_callback(app, load_scene_2);
+    do_transition(app, load_scene_2);
 }
 
 static void scene3_transition_callback(eg_app *app)
 {
-    transition_callback(app, load_scene_3);
+    do_transition(app, load_scene_3);
 }
 
 static void scenes_item_1_callback(eg_app *app, eg_menu *menu)
@@ -294,7 +294,7 @@ void demo_init_scenes_menu(eg_app *app)
 
 void demo_open_scenes_menu(eg_app *app)
 {
-    eg_push_input_handler(app, scenes_menu_input_handler);
+    eg_push_input_handler(app, scene_menu_input_handler);
 
     scenes_menu.cursor.x = 0;
     scenes_menu.cursor.y = 0;
