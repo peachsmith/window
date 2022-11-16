@@ -1,9 +1,109 @@
 #include "demo/input/input.h"
 #include "demo/menu/menu.h"
+#include "demo/entities/entity_types.h"
+#include "demo/scenes/scenes.h"
 
 #include <stdio.h>
 
-void scenes_menu_input_handler(eg_app *app)
+static void do_transition(eg_app *app, eg_callback load_next_scene)
+{
+    eg_entity transition;
+    eg_entity *entity;
+
+    // Save the transition entity state.
+    entity = app->entities;
+    while (entity != NULL && entity->type != ENTITY_TYPE_TRANSITION)
+    {
+        entity = entity->next;
+    }
+
+    if (entity != NULL)
+    {
+        transition.ticks = entity->ticks;
+        transition.data = entity->data;
+        transition.flags = entity->flags;
+    }
+
+    // Clear the current scene and load the next scene.
+    clear_scene(app);
+    load_next_scene(app);
+
+    // Restore the transition entity state.
+    entity = app->entities;
+    while (entity != NULL && entity->type != ENTITY_TYPE_TRANSITION)
+    {
+        entity = entity->next;
+    }
+
+    if (entity != NULL)
+    {
+        entity->ticks = transition.ticks;
+        entity->data = transition.data;
+        entity->flags = transition.flags;
+    }
+}
+
+static void scene0_transition(eg_app *app)
+{
+    do_transition(app, load_scene_0);
+}
+
+static void scene1_transition(eg_app *app)
+{
+    do_transition(app, load_scene_1);
+}
+
+static void scene2_transition(eg_app *app)
+{
+    do_transition(app, load_scene_2);
+}
+
+static void scene3_transition(eg_app *app)
+{
+    do_transition(app, load_scene_3);
+}
+
+/**
+ * This function starts the scene transition process.
+ * First, it prepares the scene loader and input handler for the next scene.
+ * Then it locates any transition entities in the current scene and sets their
+ * data field to 1. This tells the transition entity to begin doing whatever
+ * it needs to do. The transition entity will call the scene loader to load
+ * the next scene.
+ *
+ */
+static void begin_transition(eg_app *app, eg_callback transition_loader)
+{
+    // Close the scenes menu.
+    app->menu_count--;
+    eg_pop_input_handler(app);
+
+    // Close the debug menu.
+    app->menu_count--;
+    eg_pop_input_handler(app);
+
+    // Set the transition callback to load scene 0.
+    // Set the next input handler to be the root input handler.
+    app->transition_loader = transition_loader;
+    app->transition_input_handler = root_input_handler;
+
+    // Remove the input handler of the current scene.
+    eg_pop_input_handler(app);
+
+    // Start the screen transition by marking the data field as 1 for any
+    // entity that has an entity type of ENTITY_TYPE_TRANSITION.
+    eg_entity *e = app->entities;
+    while (e != NULL)
+    {
+        if (e->type == ENTITY_TYPE_TRANSITION)
+        {
+            e->data = 1;
+        }
+        e = e->next;
+    }
+}
+
+void scene_menu_input_handler(eg_app *app)
 {
     if (eg_consume_input(app, EG_KEYCODE_X) ||
         eg_consume_input(app, EG_KEYCODE_Q) ||
@@ -14,40 +114,52 @@ void scenes_menu_input_handler(eg_app *app)
         return;
     }
 
+    // Locate the scene menu.
+    eg_entity *menu_entity = app->menu_entities[app->menu_count - 1];
+    if (menu_entity == NULL)
+    {
+        return;
+    }
+
     if (eg_consume_input(app, EG_KEYCODE_UP))
     {
-        // Get the menu at the top of the stack.
-        eg_menu *m = app->menus[app->menu_count - 1];
-
-        if (m->cursor.y > 0)
+        if (menu_entity->cursor_y > 0)
         {
-            m->cursor.y--;
+            menu_entity->cursor_y--;
         }
     }
 
     if (eg_consume_input(app, EG_KEYCODE_DOWN))
     {
-        eg_menu *m = app->menus[app->menu_count - 1];
-
-        if (m->cursor.y < 3)
+        if (menu_entity->cursor_y < 3)
         {
-            m->cursor.y++;
+            menu_entity->cursor_y++;
         }
     }
 
     // menu item selection
     if (eg_consume_input(app, EG_KEYCODE_Z))
     {
-        eg_menu *m = app->menus[app->menu_count - 1];
+        switch (menu_entity->cursor_y)
+        {
+        case 0:
+            begin_transition(app, scene0_transition);
+            break;
 
-        // Determine which menu item has been selected.
-        // Layout:
-        // items[0]
-        // items[1]
-        // items[2]
-        // items[3]
-        eg_menu_item *item = m->items[m->cursor.y];
+        case 1:
+            begin_transition(app, scene1_transition);
+            break;
 
-        item->callback(app, NULL);
+        case 2:
+            begin_transition(app, scene2_transition);
+            break;
+
+        case 3:
+            begin_transition(app, scene3_transition);
+            break;
+
+        default:
+            break;
+        }
     }
 }

@@ -15,7 +15,7 @@ void info_menu_input_handler(eg_app *);
 void pause_menu_input_handler(eg_app *);
 void common_dialog_input_handler(eg_app *);
 void debug_menu_input_handler(eg_app *);
-void scenes_menu_input_handler(eg_app *);
+void scene_menu_input_handler(eg_app *);
 void input_menu_input_handler(eg_app *);
 
 // used when no input should be processed

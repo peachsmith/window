@@ -16,7 +16,7 @@ void debug_menu_input_handler(eg_app *app)
         return;
     }
 
-    // Locate the pause menu.
+    // Locate the debug menu.
     eg_entity *menu_entity = app->menu_entities[app->menu_count - 1];
     if (menu_entity == NULL)
     {
@@ -45,9 +45,21 @@ void debug_menu_input_handler(eg_app *app)
         switch (menu_entity->cursor_y)
         {
         case 0:
-            printf("scene callback\n");
-            // TODO: open scene menu
-            break;
+        {
+            eg_entity *scene_menu = app->entities;
+            while (scene_menu != NULL && scene_menu->type != ENTITY_TYPE_SCENE_MENU)
+            {
+                scene_menu = scene_menu->next;
+            }
+
+            eg_push_input_handler(app, scene_menu_input_handler);
+
+            scene_menu->cursor_x = 0;
+            scene_menu->cursor_y = 0;
+
+            app->menu_entities[app->menu_count++] = scene_menu;
+        }
+        break;
 
         case 4:
         {
@@ -56,7 +68,7 @@ void debug_menu_input_handler(eg_app *app)
             {
                 input_menu = input_menu->next;
             }
-            
+
             eg_push_input_handler(app, input_menu_input_handler);
 
             input_menu->cursor_x = 0;
