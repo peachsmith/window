@@ -107,11 +107,6 @@ typedef struct eg_camera
     int y;
 } eg_camera;
 
-// TODO: Remove these once they are converted to entities.
-typedef struct eg_menu_item eg_menu_item;
-typedef struct eg_menu eg_menu;
-typedef struct eg_dialog eg_dialog;
-
 /**
  * A function that can get all its required input from an app struct.
  *
@@ -134,24 +129,6 @@ typedef void (*eg_callback)(eg_app *);
  *   eg_entity* - an entity that may be affected by the task.
  */
 typedef void (*eg_entity_callback)(eg_app *, eg_entity *);
-
-/**
- * A callback function for a menu or menu item.
- *
- * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_entity* - a menu
- */
-typedef void (*eg_menu_callback)(eg_app *, eg_menu *);
-
-/**
- * A callback function for a dialog.
- *
- * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_entity* - a dialog
- */
-typedef void (*eg_dialog_callback)(eg_app *, eg_dialog *);
 
 /**
  * The behavior of one entity when it collides with another.
@@ -358,60 +335,6 @@ struct eg_entity_type
     int interactable;
     int (*interact)(eg_app *, eg_entity *, eg_entity *);
 };
-
-//============================================================================
-// BEGIN menu to entity conversion
-// The following structs will be converted to entities:
-//   eg_menu
-//   eg_menu_item
-//   eg_dialog
-
-struct eg_menu_item
-{
-    eg_point position;
-    const char *text;
-    eg_menu_callback callback;
-};
-
-struct eg_menu
-{
-    eg_point position;
-    int w;
-    int h;
-    eg_point cursor;
-    eg_menu_item **items;
-    int item_count;
-    eg_menu_callback render;
-    eg_menu_callback update;
-
-    // for passing values between menus and dialogs.
-    int result;
-};
-
-struct eg_dialog
-{
-    eg_point position;
-    int w;
-    int h;
-    int speed_scale;
-    int panel;
-
-    int ticks;
-    int tick_limit;
-
-    const char *text;
-    int text_len;
-
-    eg_dialog_callback render;
-    eg_dialog_callback update;
-    eg_dialog_callback advance;
-
-    // for passing values between menus and dialogs.
-    int result;
-};
-
-// END menu to entity conversion
-//============================================================================
 
 //----------------------------------------------------------------------------
 // core functions
