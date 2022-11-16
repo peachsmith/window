@@ -15,14 +15,15 @@ static eg_entity *menu_entities[MAX_MENUS];
 
 int demo_init_menus(eg_app *app)
 {
-    if (!demo_init_debug_menu(app))
-    {
-        return 0;
-    }
+    // if (!demo_init_debug_menu(app))
+    // {
+    //     return 0;
+    // }
 
+    // TODO: remove these once all menus are converted to entities
     // demo_init_info_menu(app);
-    demo_init_scenes_menu(app);
-    demo_init_input_menu(app);
+    // demo_init_scenes_menu(app);
+    // demo_init_input_menu(app);
 
     app->menus = &(menus[0]);
     app->menu_entities = &(menu_entities[0]);

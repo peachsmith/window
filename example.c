@@ -361,6 +361,9 @@ eg_entity *eg_create_entity()
 
     entity->result = 0;
 
+    entity->cursor_x = 0;
+    entity->cursor_y = 0;
+
     entity->next = NULL;
     entity->previous = NULL;
 

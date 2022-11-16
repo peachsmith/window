@@ -11,6 +11,7 @@
 #include "demo/entities/pause_menu.h"
 #include "demo/entities/fish_menu.h"
 #include "demo/entities/info_menu.h"
+#include "demo/entities/debug_menu.h"
 #include "demo/entities/demo_dialog.h"
 #include "demo/entities/info_dialog.h"
 #include "demo/entities/jimbo_dialog.h"
@@ -225,6 +226,7 @@ int demo_prepare(eg_app *app)
     pause_menu_demo_register(&reg[ENTITY_TYPE_PAUSE_MENU]);
     fish_menu_demo_register(&reg[ENTITY_TYPE_FISH_MENU]);
     info_menu_demo_register(&reg[ENTITY_TYPE_INFO_MENU]);
+    debug_menu_demo_register(&reg[ENTITY_TYPE_DEBUG_MENU]);
 
     // dialogs
     demo_dialog_demo_register(&reg[ENTITY_TYPE_DEMO_DIALOG]);
