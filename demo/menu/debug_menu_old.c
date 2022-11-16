@@ -4,7 +4,6 @@
 #include "demo/texture/texture.h"
 #include "demo/font/font.h"
 #include "demo/input/input.h"
-#include "colors.h"
 
 #include <stdio.h>
 
@@ -35,12 +34,12 @@ static int menu_arrow_counter = 0;
 
 static void debug_item_1_callback(eg_app *app, eg_menu *menu)
 {
-    demo_open_scenes_menu(app);
+    // demo_open_scenes_menu(app);
 }
 
 static void debug_item_6_callback(eg_app *app, eg_menu *menu)
 {
-    demo_open_input_menu(app);
+    // demo_open_input_menu(app);
 }
 
 static void update_debug_menu(eg_app *app, eg_menu *menu)

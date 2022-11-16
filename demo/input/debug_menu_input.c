@@ -15,63 +15,63 @@ void debug_menu_input_handler(eg_app *app)
         return;
     }
 
+    // Locate the pause menu.
+    eg_entity *menu_entity = app->menu_entities[app->menu_count - 1];
+    if (menu_entity == NULL)
+    {
+        return;
+    }
+
     if (eg_consume_input(app, EG_KEYCODE_UP))
     {
-        // Get the menu at the top of the stack.
-        eg_menu *m = app->menus[app->menu_count - 1];
-
-        if (m->cursor.y > 0)
+        if (menu_entity->cursor_y > 0)
         {
-            m->cursor.y--;
+            menu_entity->cursor_y--;
         }
     }
 
     if (eg_consume_input(app, EG_KEYCODE_DOWN))
     {
-        eg_menu *m = app->menus[app->menu_count - 1];
-
-        if (m->cursor.y < 4)
+        if (menu_entity->cursor_y < 4)
         {
-            m->cursor.y++;
+            menu_entity->cursor_y++;
         }
     }
 
     // menu item selection
     if (eg_consume_input(app, EG_KEYCODE_Z))
     {
-        eg_menu *m = app->menus[app->menu_count - 1];
-
-        // Determine which menu item has been selected.
-        // Layout:
-        // items[0]
-        // items[1]
-        // items[2]
-        // items[3]
-        // items[4]
-        eg_menu_item *item = m->items[m->cursor.y];
-
-        if (item->callback != NULL)
+        switch (menu_entity->cursor_y)
         {
-            item->callback(app, NULL);
+        case 0:
+            printf("scene callback\n");
+            // TODO: open scene menu
+            break;
+
+        case 4:
+            printf("input actuation callback\n");
+            // TODO: open input actuation menu
+            break;
+
+        default:
+            break;
         }
     }
 
     if (eg_consume_input(app, EG_KEYCODE_LEFT))
     {
-        eg_menu *m = app->menus[app->menu_count - 1];
-
-        if (m->cursor.y == 1 && app->debug.frame_len > 1)
+        if (menu_entity->cursor_y == 1 && app->debug.frame_len > 1)
         {
             app->debug.frame_len /= 2;
             printf("[DEBUG] frame length: %d\n", app->debug.frame_len);
         }
 
-        if (m->cursor.y == 2 && app->debug.hitboxes)
+        if (menu_entity->cursor_y == 2 && app->debug.hitboxes)
         {
             app->debug.hitboxes = 0;
         }
 
-        if (m->cursor.y == 3 && app->debug.collisions)
+        if (menu_entity->cursor_y == 3 && app->debug.collisions)
         {
             app->debug.collisions = 0;
         }
@@ -79,20 +79,18 @@ void debug_menu_input_handler(eg_app *app)
 
     if (eg_consume_input(app, EG_KEYCODE_RIGHT))
     {
-        eg_menu *m = app->menus[app->menu_count - 1];
-
-        if (m->cursor.y == 1 && app->debug.frame_len < 8)
+        if (menu_entity->cursor_y == 1 && app->debug.frame_len < 8)
         {
             app->debug.frame_len *= 2;
             printf("[DEBUG] frame length: %d\n", app->debug.frame_len);
         }
 
-        if (m->cursor.y == 2 && !(app->debug.hitboxes))
+        if (menu_entity->cursor_y == 2 && !(app->debug.hitboxes))
         {
             app->debug.hitboxes = 1;
         }
 
-        if (m->cursor.y == 3 && !(app->debug.collisions))
+        if (menu_entity->cursor_y == 3 && !(app->debug.collisions))
         {
             app->debug.collisions = 1;
         }

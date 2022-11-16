@@ -91,7 +91,19 @@ void root_input_handler(eg_app *app)
     {
         if (eg_peek_input(app, EG_KEYCODE_LSHIFT) || eg_peek_input(app, EG_KEYCODE_RSHIFT))
         {
-            demo_open_debug_menu(app);
+            // Locate the pause menu.
+            eg_entity *debug_menu = app->entities;
+            while (debug_menu != NULL && debug_menu->type != ENTITY_TYPE_DEBUG_MENU)
+            {
+                debug_menu = debug_menu->next;
+            }
+
+            // Set the pause menu as the active menu.
+            app->menu_entities[app->menu_count++] = debug_menu;
+
+            eg_push_input_handler(app, debug_menu_input_handler);
+
+            app->pause = 1;
             app->pause = 1;
             return;
         }

@@ -19,12 +19,7 @@ void pause_menu_input_handler(eg_app *app)
     }
 
     // Locate the pause menu.
-    eg_entity *menu_entity = app->entities;
-    while (menu_entity != NULL && menu_entity->type != ENTITY_TYPE_PAUSE_MENU)
-    {
-        menu_entity = menu_entity->next;
-    }
-
+    eg_entity *menu_entity = app->menu_entities[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;

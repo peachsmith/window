@@ -334,6 +334,10 @@ struct eg_entity
     // Used by dialogs and menus to get the result of a menu interaction.
     int result;
 
+    // cursor position in a menu
+    int cursor_x;
+    int cursor_y;
+
     // linked list pointers
     eg_entity *next;
     eg_entity *previous;
