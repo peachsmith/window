@@ -63,9 +63,17 @@ static void update_transition(eg_app *app, eg_entity *transition)
         if (transition->ticks == 30)
         {
             app->transition_loader(app);
+
+            // Once the next scene has been loaded, the memory for the
+            // previous scene has been freed. This means the reference
+            // to the transition entity we have been using should be
+            // considered no longer valid. So we return to the update
+            // loop.
+            return;
         }
 
         transition->ticks++;
+
         return;
     }
 

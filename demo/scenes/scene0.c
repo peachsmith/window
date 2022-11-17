@@ -104,8 +104,4 @@ void load_scene_0(eg_app *app)
 
     // Vertically moving platform (after before player).
     eg_add_entity(app, block_demo_create_moving(489, -2, 0));
-
-    // TODO: push input handler outside of scene loader
-    // Create the initial input handler and add it to the app.
-    // eg_push_input_handler(app, root_input_handler);
 }
