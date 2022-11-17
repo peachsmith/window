@@ -50,8 +50,7 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
         entity->data = transition.data;
         entity->flags = transition.flags;
 
-        // TODO: make this work with entity array.
-        // Give the update loop a reference to the new entity list.
+        // Signal to the update loop that it should restart.
         app->transition_complete = 1;
     }
 }

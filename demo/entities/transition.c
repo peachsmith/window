@@ -13,8 +13,6 @@ static void render_transition(eg_app *app, eg_entity *transition)
         return;
     }
 
-    printf("[DEBUG] transition ticks: %d\n", transition->ticks);
-
     eg_rect transition_rect;
     transition_rect.x = 0;
     transition_rect.y = 0;

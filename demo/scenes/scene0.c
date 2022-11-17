@@ -29,8 +29,6 @@ void load_scene_0(eg_app *app)
     app->cam.x = -320;
     app->cam.y = 40;
 
-    eg_add_entity(app, transition_demo_create());
-
     // menus
     eg_add_entity(app, pause_menu_demo_create());
     eg_add_entity(app, fish_menu_demo_create());
@@ -105,4 +103,6 @@ void load_scene_0(eg_app *app)
 
     // Vertically moving platform (after before player).
     eg_add_entity(app, block_demo_create_moving(489, -2, 0));
+
+    eg_add_entity(app, transition_demo_create());
 }
