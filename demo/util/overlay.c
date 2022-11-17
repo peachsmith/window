@@ -47,12 +47,14 @@ void debug_draw_overlay(eg_app *app)
         "y_acc: %d\n"
         "x_pos: %d\n"
         "y_pos: %d\n"
-        "y_vel: %d\n",
+        "y_vel: %d\n"
+        "entity count: %d\n",
         app->player->x_acc,
         app->player->y_acc,
         app->player->x_pos,
         app->player->y_pos,
-        avy);
+        avy,
+        app->entity_count);
 
     // The return value from snprintf must be greater than 0 and less than
     // the limit n.
