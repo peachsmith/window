@@ -229,6 +229,9 @@ struct eg_app
     // input handler for next scene after a transition
     eg_callback transition_input_handler;
 
+    eg_entity *transition_entity;
+    int transition_complete;
+
     // A linked list of entities.
     // Entities are updated and rendered in the opposite order from which they
     // were added. The last entity added will be the first entity updated and

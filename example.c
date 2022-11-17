@@ -101,6 +101,9 @@ eg_app *eg_create_app()
     app->dialog_entities = NULL;
     app->dialog_count = 0;
 
+    app->transition_entity = NULL;
+    app->transition_complete = 0;
+
     app->screen_width = EG_DEFAULT_SCREEN_WIDTH;
     app->screen_height = EG_DEFAULT_SCREEN_HEIGHT;
 
@@ -260,6 +263,7 @@ void eg_pop_input_handler(eg_app *app)
 
     if (app->input_count < 1)
     {
+        printf("[WARN] attempting to pop input handler from empty stack\n");
         return;
     }
 

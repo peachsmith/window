@@ -24,6 +24,8 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
         transition.flags = entity->flags;
     }
 
+    printf("[DEBUG] loading next scene\n");
+
     // Clear the current scene and load the next scene.
     clear_scene(app);
     load_next_scene(app);
@@ -37,9 +39,15 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
 
     if (entity != NULL)
     {
-        entity->ticks = transition.ticks;
+        // Increment the tick count of the new transition entity to
+        // prevent the update function from being called again.
+        entity->ticks = transition.ticks + 1;
         entity->data = transition.data;
         entity->flags = transition.flags;
+
+        // Give the update loop a reference to the new entity list.
+        app->transition_entity = app->entities;
+        app->transition_complete = 1;
     }
 }
 

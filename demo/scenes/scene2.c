@@ -75,8 +75,4 @@ void load_scene_2(eg_app *app)
     // moving platforms added after the player
     // eg_add_entity(app, block_demo_create_moving(x_start - 63, 54, 0)); // vertical
     // eg_add_entity(app, block_demo_create_moving(x_start + 253, 94, 1)); // horizontal
-
-    // TODO: push input handler outside of scene loader
-    // Create the initial input handler and add it to the app.
-    // eg_push_input_handler(app, root_input_handler);
 }

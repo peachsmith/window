@@ -68,6 +68,7 @@ static void update(eg_app *app)
     }
 
     // Update state.
+    // int transition_count = 0;
     eg_entity *ent = app->entities;
     while (ent != NULL)
     {
@@ -80,17 +81,41 @@ static void update(eg_app *app)
             {
                 if (pause_flag && !menu_flag)
                 {
+                    // if (ent->type == ENTITY_TYPE_TRANSITION)
+                    // {
+                    //     transition_count++;
+                    // }
                     t.update(app, ent);
                 }
             }
             else if (!pause_flag)
             {
+                // if (ent->type == ENTITY_TYPE_TRANSITION)
+                // {
+                //     transition_count++;
+                // }
                 t.update(app, ent);
             }
         }
 
-        ent = ent->next;
+        if (app->transition_complete)
+        {
+            // printf("[DEBUG] resetting transition completion\n");
+            ent = app->transition_entity;
+            app->transition_entity = NULL;
+            app->transition_complete = 0;
+            // transition_count = 0;
+        }
+        else
+        {
+            ent = ent->next;
+        }
     }
+
+    // if (transition_count > 1)
+    // {
+    //     printf("[ERROR] somehow had multiple transitions %d\n", transition_count);
+    // }
 }
 
 /**
