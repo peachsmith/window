@@ -66,10 +66,13 @@ void pause_menu_input_handler(eg_app *app)
         case 1:
         {
             // Locate the info dialog.
-            eg_entity *info_dialog = app->entities;
-            while (info_dialog != NULL && info_dialog->type != ENTITY_TYPE_INFO_DIALOG)
+            eg_entity *info_dialog = NULL;
+            for (int i = 0; i < app->entity_count; i++)
             {
-                info_dialog = info_dialog->next;
+                if (app->entity_array[i].type == ENTITY_TYPE_INFO_DIALOG)
+                {
+                    info_dialog = &(app->entity_array[i]);
+                }
             }
 
             info_dialog_demo_open(app, info_dialog);
@@ -81,10 +84,13 @@ void pause_menu_input_handler(eg_app *app)
         case 2:
         {
             // Locate the fish menu.
-            eg_entity *fish_menu = app->entities;
-            while (fish_menu != NULL && fish_menu->type != ENTITY_TYPE_FISH_MENU)
+            eg_entity *fish_menu = NULL;
+            for (int i = 0; i < app->entity_count; i++)
             {
-                fish_menu = fish_menu->next;
+                if (app->entity_array[i].type == ENTITY_TYPE_FISH_MENU)
+                {
+                    fish_menu = &(app->entity_array[i]);
+                }
             }
 
             // Set the pause menu as the active menu.
@@ -101,10 +107,13 @@ void pause_menu_input_handler(eg_app *app)
         case 4:
         {
             // Locate the demo dialog.
-            eg_entity *demo_dialog = app->entities;
-            while (demo_dialog != NULL && demo_dialog->type != ENTITY_TYPE_DEMO_DIALOG)
+            eg_entity *demo_dialog = NULL;
+            for (int i = 0; i < app->entity_count; i++)
             {
-                demo_dialog = demo_dialog->next;
+                if (app->entity_array[i].type == ENTITY_TYPE_DEMO_DIALOG)
+                {
+                    demo_dialog = &(app->entity_array[i]);
+                }
             }
 
             demo_dialog_demo_open(app, demo_dialog);

@@ -8,13 +8,15 @@
 static void do_transition(eg_app *app, eg_callback load_next_scene)
 {
     eg_entity transition;
-    eg_entity *entity;
+    eg_entity *entity = NULL;
 
     // Save the transition entity state.
-    entity = app->entities;
-    while (entity != NULL && entity->type != ENTITY_TYPE_TRANSITION)
+    for (int i = 0; i < app->entity_count; i++)
     {
-        entity = entity->next;
+        if (app->entity_array[i].type == ENTITY_TYPE_TRANSITION)
+        {
+            entity = &(app->entity_array[i]);
+        }
     }
 
     if (entity != NULL)
@@ -31,10 +33,13 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
     load_next_scene(app);
 
     // Restore the transition entity state.
-    entity = app->entities;
-    while (entity != NULL && entity->type != ENTITY_TYPE_TRANSITION)
+    entity = NULL;
+    for (int i = 0; i < app->entity_count; i++)
     {
-        entity = entity->next;
+        if (app->entity_array[i].type == ENTITY_TYPE_TRANSITION)
+        {
+            entity = &(app->entity_array[i]);
+        }
     }
 
     if (entity != NULL)
@@ -45,8 +50,8 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
         entity->data = transition.data;
         entity->flags = transition.flags;
 
+        // TODO: make this work with entity array.
         // Give the update loop a reference to the new entity list.
-        app->transition_entity = app->entities;
         app->transition_complete = 1;
     }
 }
@@ -100,14 +105,12 @@ static void begin_transition(eg_app *app, eg_callback transition_loader)
 
     // Start the screen transition by marking the data field as 1 for any
     // entity that has an entity type of ENTITY_TYPE_TRANSITION.
-    eg_entity *e = app->entities;
-    while (e != NULL)
+    for (int i = 0; i < app->entity_count; i++)
     {
-        if (e->type == ENTITY_TYPE_TRANSITION)
+        if (app->entity_array[i].type == ENTITY_TYPE_TRANSITION)
         {
-            e->data = 1;
+            app->entity_array[i].data = 1;
         }
-        e = e->next;
     }
 }
 

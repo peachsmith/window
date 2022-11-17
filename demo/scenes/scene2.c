@@ -62,7 +62,7 @@ void load_scene_2(eg_app *app)
     eg_add_entity(app, player);
 
     // TEMP: remove this once searchable entities are implemented.
-    app->player = player;
+    // app->player = player;
 
     // Add the rest of the horizontal row.
     eg_add_entity(app, block_demo_create(x_start - 27 + 108, 94));

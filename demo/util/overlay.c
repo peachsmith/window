@@ -17,6 +17,15 @@ void debug_draw_overlay(eg_app *app)
     // Documentation for snprintf:
     // https://cplusplus.com/reference/cstdio/snprintf
 
+    eg_entity *player = NULL;
+    for (int i = 0; i < app->entity_count && player == NULL; i++)
+    {
+        if (app->entity_array[i].type == ENTITY_TYPE_PLAYER)
+        {
+            player = &(app->entity_array[i]);
+        }
+    }
+
     // The nul terminator is appended by the snprintf function.
     int res = snprintf(
         buffer,
@@ -38,7 +47,7 @@ void debug_draw_overlay(eg_app *app)
                  5,
                  5);
 
-    int avy = app->registry[app->player->type].get_y_vel(app->player);
+    int avy = app->registry[player->type].get_y_vel(player);
 
     res = snprintf(
         buffer,
@@ -49,10 +58,10 @@ void debug_draw_overlay(eg_app *app)
         "y_pos: %d\n"
         "y_vel: %d\n"
         "entity count: %d\n",
-        app->player->x_acc,
-        app->player->y_acc,
-        app->player->x_pos,
-        app->player->y_pos,
+        player->x_acc,
+        player->y_acc,
+        player->x_pos,
+        player->y_pos,
         avy,
         app->entity_count);
 

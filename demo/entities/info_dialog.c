@@ -31,11 +31,14 @@ static void update_info_dialog(eg_app *app, eg_entity *dialog)
     if (dialog->data == 0 && dialog->ticks == dialog->tick_limit)
     {
         dialog->ticks++;
-        // Locate the fish menu.
-        eg_entity *info_menu = app->entities;
-        while (info_menu != NULL && info_menu->type != ENTITY_TYPE_INFO_MENU)
+        // Locate the info menu.
+        eg_entity *info_menu = NULL;
+        for (int i = 0; i < app->entity_count; i++)
         {
-            info_menu = info_menu->next;
+            if (app->entity_array[i].type == ENTITY_TYPE_INFO_MENU)
+            {
+                info_menu = &(app->entity_array[i]);
+            }
         }
 
         // Set the pause menu as the active menu.
