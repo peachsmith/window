@@ -7,11 +7,11 @@
 
 #include <stdio.h>
 
-static eg_entity *dialog_entities[DEMO_MAX_DIALOGS];
+static eg_entity *dialogs[DEMO_MAX_DIALOGS];
 
 void demo_init_dialogs(eg_app *app)
 {
-    app->dialog_entities = &(dialog_entities[0]);
+    app->dialogs = &(dialogs[0]);
     app->dialog_count = 0;
 }
 

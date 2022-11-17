@@ -85,5 +85,5 @@ void demo_dialog_demo_open(eg_app *app, eg_entity *dialog)
     dialog->ticks = 0;
     dialog->tick_limit = dialog->text_len * DEMO_DIALOG_SPEED_SCALE;
 
-    app->dialog_entities[app->dialog_count++] = dialog;
+    app->dialogs[app->dialog_count++] = dialog;
 }

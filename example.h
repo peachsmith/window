@@ -199,24 +199,22 @@ struct eg_app
     eg_func update;
     eg_func draw;
 
-    // textures
+    // assets
     eg_texture **textures;
     int texture_count;
 
-    // fonts
     eg_font **fonts;
     int font_count;
 
-    // sounds
     eg_sound **sounds;
     int sound_count;
 
     // menus
-    eg_entity **menu_entities;
+    eg_entity **menus;
     int menu_count;
 
     // dialogs
-    eg_entity **dialog_entities;
+    eg_entity **dialogs;
     int dialog_count;
 
     // input handlers

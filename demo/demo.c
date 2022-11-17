@@ -49,7 +49,7 @@ static void update(eg_app *app)
     // Update dialogs.
     if (app->dialog_count > 0)
     {
-        eg_entity *d = app->dialog_entities[app->dialog_count - 1];
+        eg_entity *d = app->dialogs[app->dialog_count - 1];
         app->registry[d->type].update(app, d);
     }
 
@@ -57,7 +57,7 @@ static void update(eg_app *app)
     // TODO: update menus with other entities.
     if (app->menu_count > 0)
     {
-        eg_entity *m = app->menu_entities[app->menu_count - 1];
+        eg_entity *m = app->menus[app->menu_count - 1];
         app->registry[m->type].update(app, m);
     }
 
@@ -166,13 +166,13 @@ static void draw(eg_app *app)
     {
         for (int i = 0; i < app->menu_count; i++)
         {
-            eg_entity *m = app->menu_entities[i];
+            eg_entity *m = app->menus[i];
             app->registry[m->type].render(app, m);
         }
 
         if (app->dialog_count > 0)
         {
-            eg_entity *d = app->dialog_entities[app->dialog_count - 1];
+            eg_entity *d = app->dialogs[app->dialog_count - 1];
             app->registry[d->type].render(app, d);
         }
     }

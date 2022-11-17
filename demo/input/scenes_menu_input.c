@@ -123,7 +123,7 @@ void scene_menu_input_handler(eg_app *app)
     }
 
     // Locate the scene menu.
-    eg_entity *menu_entity = app->menu_entities[app->menu_count - 1];
+    eg_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;

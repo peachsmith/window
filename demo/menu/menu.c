@@ -6,11 +6,11 @@
 #define MAX_MENUS 10
 
 // list of active menu entities
-static eg_entity *menu_entities[MAX_MENUS];
+static eg_entity *menus[MAX_MENUS];
 
 int demo_init_menus(eg_app *app)
 {
-    app->menu_entities = &(menu_entities[0]);
+    app->menus = &(menus[0]);
     app->menu_count = 0;
 
     return 1;

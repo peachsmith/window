@@ -19,7 +19,7 @@ void pause_menu_input_handler(eg_app *app)
     }
 
     // Locate the pause menu.
-    eg_entity *menu_entity = app->menu_entities[app->menu_count - 1];
+    eg_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;
@@ -88,7 +88,7 @@ void pause_menu_input_handler(eg_app *app)
             }
 
             // Set the pause menu as the active menu.
-            app->menu_entities[app->menu_count++] = fish_menu;
+            app->menus[app->menu_count++] = fish_menu;
 
             eg_push_input_handler(app, fish_menu_input_handler);
         }
