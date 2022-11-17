@@ -19,7 +19,7 @@ void demo_init_input(eg_app *app)
 void common_dialog_input_handler(eg_app *app)
 {
     // Locate the active dialog.
-    eg_entity *dialog = app->dialog_entities[app->dialog_count - 1];
+    eg_entity *dialog = app->dialogs[app->dialog_count - 1];
     if (dialog == NULL)
     {
         return;
@@ -64,7 +64,7 @@ void root_input_handler(eg_app *app)
         }
 
         // Set the pause menu as the active menu.
-        app->menu_entities[app->menu_count++] = pause_menu;
+        app->menus[app->menu_count++] = pause_menu;
 
         eg_push_input_handler(app, pause_menu_input_handler);
 
@@ -99,7 +99,7 @@ void root_input_handler(eg_app *app)
             }
 
             // Set the pause menu as the active menu.
-            app->menu_entities[app->menu_count++] = debug_menu;
+            app->menus[app->menu_count++] = debug_menu;
 
             eg_push_input_handler(app, debug_menu_input_handler);
 

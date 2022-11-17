@@ -95,10 +95,10 @@ eg_app *eg_create_app()
     app->textures = NULL;
     app->texture_count = 0;
 
-    app->menu_entities = NULL;
+    app->menus = NULL;
     app->menu_count = 0;
 
-    app->dialog_entities = NULL;
+    app->dialogs = NULL;
     app->dialog_count = 0;
 
     app->transition_entity = NULL;

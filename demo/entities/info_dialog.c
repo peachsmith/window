@@ -39,7 +39,7 @@ static void update_info_dialog(eg_app *app, eg_entity *dialog)
         }
 
         // Set the pause menu as the active menu.
-        app->menu_entities[app->menu_count++] = info_menu;
+        app->menus[app->menu_count++] = info_menu;
 
         eg_push_input_handler(app, info_menu_input_handler);
     }
@@ -130,5 +130,5 @@ void info_dialog_demo_open(eg_app *app, eg_entity *dialog)
     dialog->ticks = 0;
     dialog->tick_limit = dialog->text_len * DEMO_DIALOG_SPEED_SCALE;
 
-    app->dialog_entities[app->dialog_count++] = dialog;
+    app->dialogs[app->dialog_count++] = dialog;
 }

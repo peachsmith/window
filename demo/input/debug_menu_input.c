@@ -17,7 +17,7 @@ void debug_menu_input_handler(eg_app *app)
     }
 
     // Locate the debug menu.
-    eg_entity *menu_entity = app->menu_entities[app->menu_count - 1];
+    eg_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;
@@ -57,7 +57,7 @@ void debug_menu_input_handler(eg_app *app)
             scene_menu->cursor_x = 0;
             scene_menu->cursor_y = 0;
 
-            app->menu_entities[app->menu_count++] = scene_menu;
+            app->menus[app->menu_count++] = scene_menu;
         }
         break;
 
@@ -74,7 +74,7 @@ void debug_menu_input_handler(eg_app *app)
             input_menu->cursor_x = 0;
             input_menu->cursor_y = 0;
 
-            app->menu_entities[app->menu_count++] = input_menu;
+            app->menus[app->menu_count++] = input_menu;
         }
         break;
 
