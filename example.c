@@ -78,6 +78,7 @@ eg_app *eg_create_app()
     app->update = default_update;
     app->draw = default_draw;
 
+    app->entity_count = 0;
     app->entities = NULL;
 
     // TEMP: remove this once searchable entities are implemented.
@@ -405,6 +406,8 @@ void eg_add_entity(eg_app *app, eg_entity *entity)
     // Update the entity list pointer in the app struct to point to the new
     // entity.
     app->entities = entity;
+
+    app->entity_count++;
 }
 
 eg_entity *eg_remove_entity(eg_app *app, eg_entity *entity)
@@ -440,12 +443,16 @@ eg_entity *eg_remove_entity(eg_app *app, eg_entity *entity)
         // If the next pointer is NULL, then the entity list is now empty.
         app->entities = next;
 
+        app->entity_count--;
+
         return entity;
     }
 
     // The removed entity's next pointer becomes the previous entity's next
     // pointer.
     previous->next = next;
+
+    app->entity_count--;
 
     return entity;
 }

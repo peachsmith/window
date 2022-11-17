@@ -158,7 +158,6 @@ struct eg_debug
 struct eg_app
 {
     eg_impl *impl;
-    eg_debug debug;
 
     // This is an array of flags to indicate that a key press has already been
     // detected.
@@ -194,8 +193,6 @@ struct eg_app
     int ct;
     int cb;
 
-    // The update function initiates the update cycle, wherein each object
-    // that can be updated is advanced to the next stage
     eg_func update;
     eg_func draw;
 
@@ -209,6 +206,11 @@ struct eg_app
     eg_sound **sounds;
     int sound_count;
 
+    // entities
+    int entity_count;
+    eg_entity *entities;
+    eg_entity_type *registry;
+
     // menus
     eg_entity **menus;
     int menu_count;
@@ -221,28 +223,17 @@ struct eg_app
     eg_callback *input;
     int input_count;
 
-    // callback function for scene transitions
+    // scene transition
     eg_callback transition_loader;
-
-    // input handler for next scene after a transition
     eg_callback transition_input_handler;
-
     eg_entity *transition_entity;
     int transition_complete;
-
-    // A linked list of entities.
-    // Entities are updated and rendered in the opposite order from which they
-    // were added. The last entity added will be the first entity updated and
-    // rendered.
-    eg_entity *entities;
-
-    // The entity registry is a collection of entity information common to all
-    // entities of a given type.
-    eg_entity_type *registry;
 
     // TEMP: a handle to the player entity.
     // TODO: implement searchable entities.
     eg_entity *player;
+
+    eg_debug debug;
 };
 
 // definition of the eg_input_handler struct

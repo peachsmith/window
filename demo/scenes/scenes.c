@@ -13,4 +13,5 @@ void clear_scene(eg_app *app)
     }
 
     app->entities = NULL;
+    app->entity_count = 0;
 }
