@@ -228,12 +228,7 @@ struct eg_app
     // scene transition
     eg_callback transition_loader;
     eg_callback transition_input_handler;
-    eg_entity *transition_entity;
     int transition_complete;
-
-    // TEMP: a handle to the player entity.
-    // TODO: implement searchable entities.
-    // eg_entity *player;
 
     eg_debug debug;
 };

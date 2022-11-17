@@ -26,8 +26,6 @@ void load_scene_3(eg_app *app)
     app->cam.x = 0;
     app->cam.y = 0;
 
-    eg_add_entity(app, transition_demo_create());
-
     // menus
     eg_add_entity(app, pause_menu_demo_create());
     eg_add_entity(app, fish_menu_demo_create());
@@ -99,4 +97,6 @@ void load_scene_3(eg_app *app)
     // eg_add_entity(app, block_demo_create(x_start - 27 + 108, 32));
     // eg_add_entity(app, block_demo_create(x_start - 27 + 126, 42));
     // eg_add_entity(app, block_demo_create(x_start - 27 + 144, 52));
+
+    eg_add_entity(app, transition_demo_create());
 }

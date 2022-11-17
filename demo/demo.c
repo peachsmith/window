@@ -74,8 +74,6 @@ static void update(eg_app *app)
         demo_handle_collisions(app);
     }
 
-    //-----------------------------------------------------------
-    // BEGIN array update loop
     // Update state.
     for (int i = 0; i < app->entity_count; i++)
     {
@@ -98,21 +96,12 @@ static void update(eg_app *app)
             }
         }
 
-        // TODO: implement update loop reset logic for the array
         if (app->transition_complete)
         {
-            // ent = app->transition_entity;
             i = 0;
-            // app->transition_entity = NULL;
             app->transition_complete = 0;
         }
-        // else
-        // {
-        //     ent = ent->next;
-        // }
     }
-    // END array update loop
-    //-----------------------------------------------------------
 }
 
 /**

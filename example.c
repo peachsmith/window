@@ -99,7 +99,6 @@ eg_app *eg_create_app()
     app->dialogs = NULL;
     app->dialog_count = 0;
 
-    app->transition_entity = NULL;
     app->transition_complete = 0;
 
     app->screen_width = EG_DEFAULT_SCREEN_WIDTH;

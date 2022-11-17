@@ -129,8 +129,7 @@ void root_input_handler(eg_app *app)
     //-------------------------------------------------
     // BEGIN player controls
 
-    // TODO: remove or replace this once searchable entities have been implemented.
-    // eg_entity *target = app->player;
+    // Locate the player entity.
     eg_entity *target = NULL;
     for (int i = 0; i < app->entity_count && target == NULL; i++)
     {
@@ -139,8 +138,6 @@ void root_input_handler(eg_app *app)
             target = &(app->entity_array[i]);
         }
     }
-
-    // TODO: implement a way to locate target entities during input handling.
 
     int max_walk = 6;
     int min_walk = 1;
