@@ -208,7 +208,9 @@ struct eg_app
 
     // entities
     int entity_count;
-    eg_entity *entities;
+    int entity_cap;
+    // eg_entity *entities;
+    eg_entity *entity_array;
     eg_entity_type *registry;
 
     // menus
@@ -231,7 +233,7 @@ struct eg_app
 
     // TEMP: a handle to the player entity.
     // TODO: implement searchable entities.
-    eg_entity *player;
+    // eg_entity *player;
 
     eg_debug debug;
 };

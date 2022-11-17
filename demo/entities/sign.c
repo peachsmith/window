@@ -41,10 +41,13 @@ static int interact_with_sign(eg_app *app, eg_entity *sign, eg_entity *actor)
     app->pause = 1;
 
     // Locate the sign's dialog.
-    eg_entity *sign_dialog = app->entities;
-    while (sign_dialog != NULL && sign_dialog->type != ENTITY_TYPE_SIGN_DIALOG)
+    eg_entity *sign_dialog = NULL;
+    for (int i = 0; i < app->entity_count; i++)
     {
-        sign_dialog = sign_dialog->next;
+        if (app->entity_array[i].type == ENTITY_TYPE_SIGN_DIALOG)
+        {
+            sign_dialog = &(app->entity_array[i]);
+        }
     }
 
     sign_dialog_demo_open(app, sign_dialog);

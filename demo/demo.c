@@ -32,6 +32,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Capacity of entity array
+// This must match the value of the app->entity_cap field.
+#define ENTITY_MAX 100
+
+// array of entities that will replace the linked list.
+// TODO: determine a better time and place to allocate this.
+static eg_entity entity_array[ENTITY_MAX];
+
 /**
  * Implmentation of the update function.
  *
@@ -54,7 +62,6 @@ static void update(eg_app *app)
     }
 
     // Update menus.
-    // TODO: update menus with other entities.
     if (app->menu_count > 0)
     {
         eg_entity *m = app->menus[app->menu_count - 1];
@@ -67,11 +74,12 @@ static void update(eg_app *app)
         demo_handle_collisions(app);
     }
 
+    //-----------------------------------------------------------
+    // BEGIN array update loop
     // Update state.
-    // int transition_count = 0;
-    eg_entity *ent = app->entities;
-    while (ent != NULL)
+    for (int i = 0; i < app->entity_count; i++)
     {
+        eg_entity *ent = &(app->entity_array[i]);
         eg_entity_type t = app->registry[ent->type];
         int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
         int menu_flag = eg_check_flag(ent, ENTITY_FLAG_MENU);
@@ -81,41 +89,30 @@ static void update(eg_app *app)
             {
                 if (pause_flag && !menu_flag)
                 {
-                    // if (ent->type == ENTITY_TYPE_TRANSITION)
-                    // {
-                    //     transition_count++;
-                    // }
                     t.update(app, ent);
                 }
             }
             else if (!pause_flag)
             {
-                // if (ent->type == ENTITY_TYPE_TRANSITION)
-                // {
-                //     transition_count++;
-                // }
                 t.update(app, ent);
             }
         }
 
+        // TODO: implement update loop reset logic for the array
         if (app->transition_complete)
         {
-            // printf("[DEBUG] resetting transition completion\n");
-            ent = app->transition_entity;
-            app->transition_entity = NULL;
+            // ent = app->transition_entity;
+            i = 0;
+            // app->transition_entity = NULL;
             app->transition_complete = 0;
-            // transition_count = 0;
         }
-        else
-        {
-            ent = ent->next;
-        }
+        // else
+        // {
+        //     ent = ent->next;
+        // }
     }
-
-    // if (transition_count > 1)
-    // {
-    //     printf("[ERROR] somehow had multiple transitions %d\n", transition_count);
-    // }
+    // END array update loop
+    //-----------------------------------------------------------
 }
 
 /**
@@ -129,13 +126,11 @@ static void draw(eg_app *app)
     // Render background
     // sprite_draw_background(app, 0);
 
-    // Main render loop.
-    eg_entity *ent = app->entities;
-
     //------------------------------------------------------------------------
     // Sprite layer
-    while (ent != NULL)
+    for (int i = 0; i < app->entity_count; i++)
     {
+        eg_entity *ent = &(app->entity_array[i]);
         eg_entity_type t = app->registry[ent->type];
         int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
         int menu_flag = eg_check_flag(ent, ENTITY_FLAG_MENU);
@@ -157,7 +152,6 @@ static void draw(eg_app *app)
                 t.render(app, ent);
             }
         }
-        ent = ent->next;
     }
 
     //------------------------------------------------------------------------
@@ -194,6 +188,9 @@ int demo_prepare(eg_app *app)
         fprintf(stderr, "failed to create entity registry\n");
         return 0;
     }
+
+    // Set the entity array
+    app->entity_array = entity_array;
 
     app->registry = reg;
     app->update = update;

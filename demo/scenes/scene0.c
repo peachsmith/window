@@ -20,7 +20,7 @@
 
 void load_scene_0(eg_app *app)
 {
-    eg_entity *player;
+    // eg_entity *player;
 
     // Starting position for building a sequence of blocks.
     // int x_start = 10;
@@ -64,11 +64,12 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, jimbo_demo_create(659, -40)); // jimbo AFTER horizontally moving platform
 
     // Create the player entity and add it to the app.
-    player = player_demo_create(150, 0); // 150, 40
-    eg_add_entity(app, player);
+    // player = player_demo_create(150, 0); // 150, 40
+    // eg_add_entity(app, player);
+    eg_add_entity(app, player_demo_create(150, 0));
 
     // TEMP: remove this once searchable entities are implemented.
-    app->player = player;
+    // app->player = player;
 
     // Add the rest of the horizontal row.
     eg_add_entity(app, block_demo_create(91, 94));

@@ -23,16 +23,25 @@ typedef struct col_res
 static void detect_collisions(
     eg_app *app,
     eg_entity *source,
+    int source_i,
     col_res *cols,
     int *count,
     int direction)
 {
     // If direction has a non zero value, then we check every entity after
     // the source. Otherwise we check every entity before the source.
-    eg_entity *target = direction ? source->next : source->previous;
-
-    while (target != NULL)
+    int target_i = direction ? source_i + 1 : source_i - 1;
+    if (target_i < 0 || target_i >= app->entity_count - 1)
     {
+        return;
+    }
+
+    eg_entity *target = NULL;
+
+    for (int i = target_i; direction ? i < app->entity_count : i >= 0; direction ? i++ : i--)
+    {
+        target = &(app->entity_array[i]);
+
         eg_collision res;
         res.t = 0.0f;
         res.tx = 0.0f;
@@ -65,8 +74,6 @@ static void detect_collisions(
                 }
             }
         }
-
-        target = direction ? target->next : target->previous;
     }
 }
 
@@ -137,13 +144,11 @@ void demo_handle_collisions(eg_app *app)
     // Stage 3: Collision Resolution
 
     col_res cols[COL_LIMIT]; // collision result list
-    eg_entity *source;       // source entity
 
-    // main collision loop
-    source = app->entities;
-    while (source != NULL)
+    for (int i = 0; i < app->entity_count; i++)
     {
         int count = 0;
+        eg_entity *source = &(app->entity_array[i]);
 
         // Clear the ground flag of the source entity.
         eg_clear_flag(source, ENTITY_FLAG_GROUND);
@@ -151,8 +156,8 @@ void demo_handle_collisions(eg_app *app)
         // Stage 1: Collision Detection
         // We traverse the entity list forwards and backwards from the source
         // entity. This prevents checking an entity for collision with itself.
-        detect_collisions(app, source, cols, &count, DIR_FORWARD);
-        detect_collisions(app, source, cols, &count, DIR_BACKWARD);
+        detect_collisions(app, source, i, cols, &count, DIR_FORWARD);
+        detect_collisions(app, source, i, cols, &count, DIR_BACKWARD);
 
         // Stage 2: Collision Sorting
         int sorted = 0;
@@ -280,8 +285,6 @@ void demo_handle_collisions(eg_app *app)
 
         // Clear the update flag of the current source entity.
         eg_clear_flag(source, ENTITY_FLAG_UPDATE);
-
-        source = source->next;
 
     } // END main collision detection loop
 }

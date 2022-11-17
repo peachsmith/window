@@ -79,10 +79,7 @@ eg_app *eg_create_app()
     app->draw = default_draw;
 
     app->entity_count = 0;
-    app->entities = NULL;
-
-    // TEMP: remove this once searchable entities are implemented.
-    app->player = NULL;
+    app->entity_cap = 100;
 
     app->input = NULL;
     app->input_count = 0;
@@ -142,14 +139,6 @@ eg_app *eg_create_app()
 
 void eg_destroy_app(eg_app *app)
 {
-    // Destroy the entities.
-    while (app->entities != NULL)
-    {
-        eg_entity *next = app->entities->next;
-        eg_destroy_entity(app->entities);
-        app->entities = next;
-    }
-
     // Destroy the fonts.
     for (int i = 0; i < app->font_count; i++)
     {
@@ -391,69 +380,22 @@ void eg_add_entity(eg_app *app, eg_entity *entity)
         return;
     }
 
-    // If the entity list is empty, then simply point it to the newly added
-    // entity.
-    if (app->entities == NULL)
+    if (app->entity_count < 100)
     {
-        app->entities = entity;
-        return;
+        app->entity_array[app->entity_count++] = *entity;
+    }
+    else
+    {
+        printf("[WARN] the maximum entity count has been reached\n");
     }
 
-    // Add the entity to the front of the list.
-    entity->next = app->entities;
-    app->entities->previous = entity;
-
-    // Update the entity list pointer in the app struct to point to the new
-    // entity.
-    app->entities = entity;
-
-    app->entity_count++;
+    // TODO: figure out a way to add entities without allocating memory every time.
+    free(entity);
 }
 
+// TODO: implement this with the entity array
 eg_entity *eg_remove_entity(eg_app *app, eg_entity *entity)
 {
-    if (app == NULL || entity == NULL)
-    {
-        return NULL;
-    }
-
-    // Get the entities before and after the current entity.
-    eg_entity *previous = entity->previous;
-    eg_entity *next = entity->next;
-
-    // Set the current entity's next and previous pointers to NULL to remove
-    // it from the list. For the remainder of this function, this entity will
-    // be referred to as the "removed entity".
-    entity->next = NULL;
-    entity->previous = NULL;
-
-    // If the next entity is not NULL, it's previous pointer receives the
-    // value of the removed entity's previous pointer.
-    if (next != NULL)
-    {
-        next->previous = previous;
-    }
-
-    // Only the first entity in the list should have a previous pointer with a
-    // value of NULL. If we're removing the first entity in the list, then we
-    // need to update the pointer in the app struct so the list isn't lost.
-    if (previous == NULL)
-    {
-        // The next entity becomes the first entity in the list.
-        // If the next pointer is NULL, then the entity list is now empty.
-        app->entities = next;
-
-        app->entity_count--;
-
-        return entity;
-    }
-
-    // The removed entity's next pointer becomes the previous entity's next
-    // pointer.
-    previous->next = next;
-
-    app->entity_count--;
-
     return entity;
 }
 

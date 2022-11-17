@@ -57,10 +57,13 @@ void root_input_handler(eg_app *app)
     if (eg_consume_input(app, EG_KEYCODE_Q))
     {
         // Locate the pause menu.
-        eg_entity *pause_menu = app->entities;
-        while (pause_menu != NULL && pause_menu->type != ENTITY_TYPE_PAUSE_MENU)
+        eg_entity *pause_menu = NULL;
+        for (int i = 0; i < app->entity_count; i++)
         {
-            pause_menu = pause_menu->next;
+            if (app->entity_array[i].type == ENTITY_TYPE_PAUSE_MENU)
+            {
+                pause_menu = &(app->entity_array[i]);
+            }
         }
 
         // Set the pause menu as the active menu.
@@ -92,10 +95,13 @@ void root_input_handler(eg_app *app)
         if (eg_peek_input(app, EG_KEYCODE_LSHIFT) || eg_peek_input(app, EG_KEYCODE_RSHIFT))
         {
             // Locate the pause menu.
-            eg_entity *debug_menu = app->entities;
-            while (debug_menu != NULL && debug_menu->type != ENTITY_TYPE_DEBUG_MENU)
+            eg_entity *debug_menu = NULL;
+            for (int i = 0; i < app->entity_count; i++)
             {
-                debug_menu = debug_menu->next;
+                if (app->entity_array[i].type == ENTITY_TYPE_DEBUG_MENU)
+                {
+                    debug_menu = &(app->entity_array[i]);
+                }
             }
 
             // Set the pause menu as the active menu.
@@ -124,7 +130,15 @@ void root_input_handler(eg_app *app)
     // BEGIN player controls
 
     // TODO: remove or replace this once searchable entities have been implemented.
-    eg_entity *target = app->player;
+    // eg_entity *target = app->player;
+    eg_entity *target = NULL;
+    for (int i = 0; i < app->entity_count && target == NULL; i++)
+    {
+        if (app->entity_array[i].type == ENTITY_TYPE_PLAYER)
+        {
+            target = &(app->entity_array[i]);
+        }
+    }
 
     // TODO: implement a way to locate target entities during input handling.
 
@@ -250,10 +264,9 @@ void root_input_handler(eg_app *app)
     {
         // Scan for interactable entities.
         eg_entity *interactable = NULL;
-        eg_entity *source = app->entities;
-        while (source != NULL && interactable == NULL)
+        for (int i = 0; i < app->entity_count && interactable == NULL; i++)
         {
-            if (app->registry[source->type].interactable)
+            if (app->registry[app->entity_array[i].type].interactable)
             {
                 // Check for overlap with the interactable entity.
                 eg_rect a = {.x = target->x_pos,
@@ -261,19 +274,19 @@ void root_input_handler(eg_app *app)
                              .w = app->registry[target->type].width,
                              .h = app->registry[target->type].height};
 
-                eg_rect b = {.x = source->x_pos + app->cam.x,
-                             .y = source->y_pos + app->cam.y,
-                             .w = app->registry[source->type].width,
-                             .h = app->registry[source->type].height};
+                eg_rect b = {.x = app->entity_array[i].x_pos + app->cam.x,
+                             .y = app->entity_array[i].y_pos + app->cam.y,
+                             .w = app->registry[app->entity_array[i].type].width,
+                             .h = app->registry[app->entity_array[i].type].height};
                 eg_overlap o;
 
                 if (demo_is_overlapped(&a, &b, &o))
                 {
-                    interactable = source;
+                    interactable = &(app->entity_array[i]);
                 }
             }
 
-            source = source->next;
+            // source = source->next;
         }
 
         if (interactable != NULL)
