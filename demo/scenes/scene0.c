@@ -20,8 +20,6 @@
 
 void load_scene_0(eg_app *app)
 {
-    // eg_entity *player;
-
     // Starting position for building a sequence of blocks.
     // int x_start = 10;
     // int y_start = 30;
@@ -43,8 +41,6 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, jimbo_dialog_demo_create());
     eg_add_entity(app, sign_dialog_demo_create());
 
-    // eg_add_entity(app, jimbo_demo_create(x_start - 27 + 200, 36)); // an interactable NPC
-
     eg_add_entity(app, block_demo_create(1, 94));
     eg_add_entity(app, block_demo_create(19, 94));
     eg_add_entity(app, block_demo_create(37, 94));
@@ -61,12 +57,13 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create_moving(640, -2, 1));
     eg_add_entity(app, jimbo_demo_create(659, -40)); // jimbo AFTER horizontally moving platform
 
-    // Create the player entity and add it to the app.
-    // player = player_demo_create(150, 0); // 150, 40
-    // eg_add_entity(app, player);
+    // A sign that contains information.
+    eg_add_entity(app, sign_demo_create(37, 76));
+
+    // player
     eg_add_entity(app, player_demo_create(150, 0));
 
-    // scene transition entity
+    // scene transition
     eg_add_entity(app, transition_demo_create());
 
     // Add the rest of the horizontal row.
@@ -98,9 +95,6 @@ void load_scene_0(eg_app *app)
     eg_add_entity(app, block_demo_create_sloped(-215, 58, 0));
     eg_add_entity(app, block_demo_create(-85, 94)); // solid ground to allow transition between sloped blocks
 
-    // A sign that contains information.
-    eg_add_entity(app, sign_demo_create(37, 76));
-
-    // Vertically moving platform (after before player).
+    // Vertically moving platform (after player).
     eg_add_entity(app, block_demo_create_moving(489, -2, 0));
 }
