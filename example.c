@@ -157,7 +157,7 @@ void eg_destroy_app(eg_app *app)
     }
 
     // Destroy the entity registry.
-    eg_destroy_registry(app->registry);
+    eg_destroy_registry(app->entity_types);
 
     // Destroy the implementation.
     eg_impl_destroy(app->impl);
@@ -364,7 +364,7 @@ void eg_add_entity(eg_app *app, eg_entity *entity)
 
     if (app->entity_count < 100)
     {
-        app->entity_array[app->entity_count++] = *entity;
+        app->entities[app->entity_count++] = *entity;
     }
     else
     {

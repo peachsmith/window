@@ -49,9 +49,9 @@ void debug_menu_input_handler(eg_app *app)
             eg_entity *scene_menu = NULL;
             for (int i = 0; i < app->entity_count; i++)
             {
-                if (app->entity_array[i].type == ENTITY_TYPE_SCENE_MENU)
+                if (app->entities[i].type == ENTITY_TYPE_SCENE_MENU)
                 {
-                    scene_menu = &(app->entity_array[i]);
+                    scene_menu = &(app->entities[i]);
                 }
             }
 
@@ -69,9 +69,9 @@ void debug_menu_input_handler(eg_app *app)
             eg_entity *input_menu = NULL;
             for (int i = 0; i < app->entity_count; i++)
             {
-                if (app->entity_array[i].type == ENTITY_TYPE_INPUT_MENU)
+                if (app->entities[i].type == ENTITY_TYPE_INPUT_MENU)
                 {
-                    input_menu = &(app->entity_array[i]);
+                    input_menu = &(app->entities[i]);
                 }
             }
 

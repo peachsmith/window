@@ -56,8 +56,8 @@ int demo_line(
     eg_point pb[4]; // vertices of entity B
 
     // Get the velocity of the source entitity A.
-    int avx = app->registry[a->type].get_x_vel(a);
-    int avy = app->registry[a->type].get_y_vel(a);
+    int avx = app->entity_types[a->type].get_x_vel(a);
+    int avy = app->entity_types[a->type].get_y_vel(a);
 
     // The source entity must have a non zero velocity in order
     // to collide with a platform.
@@ -67,10 +67,10 @@ int demo_line(
     }
 
     // Get the width and height of each entity.
-    int aw = app->registry[a->type].width;
-    int ah = app->registry[a->type].height;
-    int bw = app->registry[b->type].width;
-    int bh = app->registry[b->type].height;
+    int aw = app->entity_types[a->type].width;
+    int ah = app->entity_types[a->type].height;
+    int bw = app->entity_types[b->type].width;
+    int bh = app->entity_types[b->type].height;
 
     // Get the positions of each entity.
     int ax = a->x_pos;

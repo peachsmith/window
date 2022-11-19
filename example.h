@@ -210,8 +210,8 @@ struct eg_app
     int entity_count;
     int entity_cap;
     // eg_entity *entities;
-    eg_entity *entity_array;
-    eg_entity_type *registry;
+    eg_entity *entities;
+    eg_entity_type *entity_types;
 
     // menus
     eg_entity **menus;

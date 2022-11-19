@@ -140,8 +140,8 @@ static void render_player(eg_app *app, eg_entity *player)
         eg_rect hit_box;
         hit_box.x = player->x_pos;
         hit_box.y = player->y_pos;
-        hit_box.w = app->registry[player->type].width;
-        hit_box.h = app->registry[player->type].height;
+        hit_box.w = app->entity_types[player->type].width;
+        hit_box.h = app->entity_types[player->type].height;
 
         // Render the player hit box.
         eg_set_color(app, EG_COLOR_ORANGE);
@@ -152,8 +152,8 @@ static void render_player(eg_app *app, eg_entity *player)
 static void update_player(eg_app *app, eg_entity *player)
 {
     // Get the width and height of the player.
-    int w = app->registry[player->type].width;
-    int h = app->registry[player->type].height;
+    int w = app->entity_types[player->type].width;
+    int h = app->entity_types[player->type].height;
 
     // Check the MOVE flag to see if the player is being carried by a
     // a moving platform.

@@ -98,8 +98,8 @@ static void render_henry(eg_app *app, eg_entity *henry)
         eg_rect hit_box;
         hit_box.x = henry->x_pos + app->cam.x;
         hit_box.y = henry->y_pos + app->cam.y;
-        hit_box.w = app->registry[henry->type].width;
-        hit_box.h = app->registry[henry->type].height;
+        hit_box.w = app->entity_types[henry->type].width;
+        hit_box.h = app->entity_types[henry->type].height;
 
         // Render the henry hit box.
         eg_set_color(app, EG_COLOR_ORANGE);
@@ -119,8 +119,8 @@ static void update_henry(eg_app *app, eg_entity *henry)
     int walking_right = henry->ticks >= 60 && henry->ticks < 120;
 
     // Get the width and height of the henry.
-    // int w = app->registry[henry->type].width;
-    int h = app->registry[henry->type].height;
+    // int w = app->entity_types[henry->type].width;
+    int h = app->entity_types[henry->type].height;
 
     // Check the MOVE flag to see if the henry is being carried by a
     // a moving platform.
@@ -296,7 +296,7 @@ static void collide_henry(
 
         eg_set_flag(other, ENTITY_FLAG_INVINCIBLE);
 
-        int avx = app->registry[other->type].get_x_vel(other);
+        int avx = app->entity_types[other->type].get_x_vel(other);
         if (avx >= 0)
         {
             other->x_acc = -4;

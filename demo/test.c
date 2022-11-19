@@ -38,7 +38,7 @@ int main(int argc, char **argv)
     reg[ENTITY_TYPE_BLOCK].render = NULL;
     reg[ENTITY_TYPE_BLOCK].update = NULL;
     reg[ENTITY_TYPE_BLOCK].collide = NULL;
-    app.registry = reg;
+    app.entity_types = reg;
 
     // P calculation
     // p.x = a->x_pos + aw / 2;

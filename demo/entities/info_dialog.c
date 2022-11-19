@@ -35,9 +35,9 @@ static void update_info_dialog(eg_app *app, eg_entity *dialog)
         eg_entity *info_menu = NULL;
         for (int i = 0; i < app->entity_count; i++)
         {
-            if (app->entity_array[i].type == ENTITY_TYPE_INFO_MENU)
+            if (app->entities[i].type == ENTITY_TYPE_INFO_MENU)
             {
-                info_menu = &(app->entity_array[i]);
+                info_menu = &(app->entities[i]);
             }
         }
 

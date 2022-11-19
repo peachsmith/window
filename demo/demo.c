@@ -38,7 +38,10 @@
 
 // array of entities that will replace the linked list.
 // TODO: determine a better time and place to allocate this.
-static eg_entity entity_array[ENTITY_MAX];
+static eg_entity entities[ENTITY_MAX];
+
+// array of entity types
+static eg_entity_type entity_types[ENTITY_TYPE_MAX];
 
 /**
  * Implmentation of the update function.
@@ -58,14 +61,14 @@ static void update(eg_app *app)
     if (app->dialog_count > 0)
     {
         eg_entity *d = app->dialogs[app->dialog_count - 1];
-        app->registry[d->type].update(app, d);
+        app->entity_types[d->type].update(app, d);
     }
 
     // update menus
     if (app->menu_count > 0)
     {
         eg_entity *m = app->menus[app->menu_count - 1];
-        app->registry[m->type].update(app, m);
+        app->entity_types[m->type].update(app, m);
     }
 
     // handle collisions
@@ -77,8 +80,8 @@ static void update(eg_app *app)
     // main update loop
     for (int i = 0; i < app->entity_count; i++)
     {
-        eg_entity *ent = &(app->entity_array[i]);
-        eg_entity_type t = app->registry[ent->type];
+        eg_entity *ent = &(app->entities[i]);
+        eg_entity_type t = app->entity_types[ent->type];
         int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
         int menu_flag = eg_check_flag(ent, ENTITY_FLAG_MENU);
         if (t.update != NULL)
@@ -120,8 +123,8 @@ static void draw(eg_app *app)
     // sprite layer
     for (int i = 0; i < app->entity_count; i++)
     {
-        eg_entity *ent = &(app->entity_array[i]);
-        eg_entity_type t = app->registry[ent->type];
+        eg_entity *ent = &(app->entities[i]);
+        eg_entity_type t = app->entity_types[ent->type];
         int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
         int menu_flag = eg_check_flag(ent, ENTITY_FLAG_MENU);
         if (t.render != NULL)
@@ -151,13 +154,13 @@ static void draw(eg_app *app)
         for (int i = 0; i < app->menu_count; i++)
         {
             eg_entity *m = app->menus[i];
-            app->registry[m->type].render(app, m);
+            app->entity_types[m->type].render(app, m);
         }
 
         if (app->dialog_count > 0)
         {
             eg_entity *d = app->dialogs[app->dialog_count - 1];
-            app->registry[d->type].render(app, d);
+            app->entity_types[d->type].render(app, d);
         }
     }
 
@@ -180,9 +183,9 @@ int demo_prepare(eg_app *app)
     }
 
     // Set the entity array
-    app->entity_array = entity_array;
+    app->entities = entities;
 
-    app->registry = reg;
+    app->entity_types = reg;
     app->update = update;
     app->draw = draw;
 
