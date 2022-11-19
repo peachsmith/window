@@ -156,9 +156,6 @@ void eg_destroy_app(eg_app *app)
         eg_impl_destroy_sound(app->sounds[i]);
     }
 
-    // Destroy the entity registry.
-    eg_destroy_registry(app->entity_types);
-
     // Destroy the implementation.
     eg_impl_destroy(app->impl);
 
@@ -282,16 +279,6 @@ void eg_pop_input_handler(eg_app *app)
 
 //     return reg;
 // }
-
-void eg_destroy_registry(eg_entity_type *reg)
-{
-    if (reg == NULL)
-    {
-        return;
-    }
-
-    free(reg);
-}
 
 eg_entity *eg_create_entity()
 {
