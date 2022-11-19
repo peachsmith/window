@@ -209,23 +209,6 @@ int eg_consume_input(eg_app *app, int code)
     return eg_impl_consume_key(app, code);
 }
 
-eg_input_handler *eg_create_input_handler(eg_callback callback, eg_entity *target)
-{
-    eg_input_handler *handler = NULL;
-
-    handler = (eg_input_handler *)malloc(sizeof(eg_input_handler));
-    if (handler == NULL)
-    {
-        return NULL;
-    }
-
-    handler->previous = NULL;
-    handler->callback = callback;
-    handler->target = target;
-
-    return handler;
-}
-
 void eg_destroy_input_handler(eg_input_handler *handler)
 {
     free(handler);

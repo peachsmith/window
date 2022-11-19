@@ -447,18 +447,6 @@ int eg_peek_input(eg_app *app, int);
 int eg_consume_input(eg_app *, int);
 
 /**
- * Creates a new input handler.
- *
- * Params:
- *   eg_callback - a function that handles input
- *   eg_entity* - a reference to a target entity
- *
- * Returns:
- *   eg_input_handler* - a pointer to a new input handler
- */
-eg_input_handler *eg_create_input_handler(eg_callback, eg_entity *);
-
-/**
  * Frees the memory allocated for an input handler.
  *
  * Params:

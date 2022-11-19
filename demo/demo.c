@@ -54,27 +54,27 @@ static void update(eg_app *app)
         app->input[app->input_count - 1](app);
     }
 
-    // Update dialogs.
+    // update dialogs
     if (app->dialog_count > 0)
     {
         eg_entity *d = app->dialogs[app->dialog_count - 1];
         app->registry[d->type].update(app, d);
     }
 
-    // Update menus.
+    // update menus
     if (app->menu_count > 0)
     {
         eg_entity *m = app->menus[app->menu_count - 1];
         app->registry[m->type].update(app, m);
     }
 
-    // Handle collisions.
+    // handle collisions
     if (!app->pause)
     {
         demo_handle_collisions(app);
     }
 
-    // Update state.
+    // main update loop
     for (int i = 0; i < app->entity_count; i++)
     {
         eg_entity *ent = &(app->entity_array[i]);
@@ -112,11 +112,12 @@ static void update(eg_app *app)
  */
 static void draw(eg_app *app)
 {
-    // Render background
+    //------------------------------------------------------------------------
+    // background layer
     // sprite_draw_background(app, 0);
 
     //------------------------------------------------------------------------
-    // Sprite layer
+    // sprite layer
     for (int i = 0; i < app->entity_count; i++)
     {
         eg_entity *ent = &(app->entity_array[i]);
@@ -144,7 +145,7 @@ static void draw(eg_app *app)
     }
 
     //------------------------------------------------------------------------
-    // Menu layer
+    // menu layer
     if (app->pause)
     {
         for (int i = 0; i < app->menu_count; i++)
@@ -161,7 +162,7 @@ static void draw(eg_app *app)
     }
 
     //------------------------------------------------------------------------
-    // Debug layer
+    // debug layer
     if (app->debug.overlay)
     {
         debug_draw_overlay(app);

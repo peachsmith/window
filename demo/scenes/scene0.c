@@ -66,8 +66,8 @@ void load_scene_0(eg_app *app)
     // eg_add_entity(app, player);
     eg_add_entity(app, player_demo_create(150, 0));
 
-    // TEMP: remove this once searchable entities are implemented.
-    // app->player = player;
+    // scene transition entity
+    eg_add_entity(app, transition_demo_create());
 
     // Add the rest of the horizontal row.
     eg_add_entity(app, block_demo_create(91, 94));
@@ -103,6 +103,4 @@ void load_scene_0(eg_app *app)
 
     // Vertically moving platform (after before player).
     eg_add_entity(app, block_demo_create_moving(489, -2, 0));
-
-    eg_add_entity(app, transition_demo_create());
 }
