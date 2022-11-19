@@ -58,9 +58,9 @@ void root_input_handler(eg_app *app)
     {
         // Locate the pause menu.
         eg_entity *pause_menu = NULL;
-        for (int i = 0; i < app->entity_count; i++)
+        for (int i = 0; i < app->entity_cap; i++)
         {
-            if (app->entities[i].type == ENTITY_TYPE_PAUSE_MENU)
+            if (app->entities[i].type == ENTITY_TYPE_PAUSE_MENU && app->entities[i].present)
             {
                 pause_menu = &(app->entities[i]);
             }
@@ -96,9 +96,9 @@ void root_input_handler(eg_app *app)
         {
             // Locate the pause menu.
             eg_entity *debug_menu = NULL;
-            for (int i = 0; i < app->entity_count; i++)
+            for (int i = 0; i < app->entity_cap; i++)
             {
-                if (app->entities[i].type == ENTITY_TYPE_DEBUG_MENU)
+                if (app->entities[i].type == ENTITY_TYPE_DEBUG_MENU && app->entities[i].present)
                 {
                     debug_menu = &(app->entities[i]);
                 }
@@ -131,9 +131,9 @@ void root_input_handler(eg_app *app)
 
     // Locate the player entity.
     eg_entity *target = NULL;
-    for (int i = 0; i < app->entity_count && target == NULL; i++)
+    for (int i = 0; i < app->entity_cap && target == NULL; i++)
     {
-        if (app->entities[i].type == ENTITY_TYPE_PLAYER)
+        if (app->entities[i].type == ENTITY_TYPE_PLAYER && app->entities[i].present)
         {
             target = &(app->entities[i]);
         }
@@ -207,22 +207,6 @@ void root_input_handler(eg_app *app)
         app->actuation_counters[EG_KEYCODE_RIGHT] = 0;
     }
 
-    // if (eg_peek_input(app, EG_KEYCODE_UP))
-    // {
-    //     if (target->y_vel >= -2)
-    //     {
-    //         target->y_vel -= 2;
-    //     }
-    // }
-
-    // if (eg_peek_input(app, EG_KEYCODE_DOWN))
-    // {
-    //     if (target->y_vel <= 2)
-    //     {
-    //         target->y_vel += 2;
-    //     }
-    // }
-
     // down arrow key
     if (eg_peek_input(app, EG_KEYCODE_DOWN))
     {
@@ -261,9 +245,9 @@ void root_input_handler(eg_app *app)
     {
         // Scan for interactable entities.
         eg_entity *interactable = NULL;
-        for (int i = 0; i < app->entity_count && interactable == NULL; i++)
+        for (int i = 0; i < app->entity_cap && interactable == NULL; i++)
         {
-            if (app->entity_types[app->entities[i].type].interactable)
+            if (app->entity_types[app->entities[i].type].interactable && app->entities[i].present)
             {
                 // Check for overlap with the interactable entity.
                 eg_rect a = {.x = target->x_pos,
@@ -282,8 +266,6 @@ void root_input_handler(eg_app *app)
                     interactable = &(app->entities[i]);
                 }
             }
-
-            // source = source->next;
         }
 
         if (interactable != NULL)
@@ -298,6 +280,25 @@ void root_input_handler(eg_app *app)
         eg_add_entity(app, billy_demo_create(
                                target->x_pos + 24 - app->cam.x,
                                target->y_pos - 24 - app->cam.y));
+    }
+
+    // TEMP: remove Billy.
+    if (eg_consume_input(app, EG_KEYCODE_K))
+    {
+        eg_entity *b = NULL;
+        int offset = 0;
+        for (int i = 0; i + offset < app->entity_cap && b == NULL; i++)
+        {
+            if (app->entities[i].type == ENTITY_TYPE_BILLY && app->entities[i].present)
+            {
+                b = &(app->entities[i]);
+            }
+        }
+
+        if (b != NULL)
+        {
+            eg_remove_entity(app, b);
+        }
     }
 
     // TEMP: Reset the state of various things.

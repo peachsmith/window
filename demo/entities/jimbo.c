@@ -205,9 +205,9 @@ static int interact_with_jimbo(eg_app *app, eg_entity *jimbo, eg_entity *actor)
 
     // Locate jimbo's dialog.
     eg_entity *jimbo_dialog = NULL;
-    for (int i = 0; i < app->entity_count; i++)
+    for (int i = 0; i < app->entity_cap; i++)
     {
-        if (app->entities[i].type == ENTITY_TYPE_JIMBO_DIALOG)
+        if (app->entities[i].type == ENTITY_TYPE_JIMBO_DIALOG && app->entities[i].present)
         {
             jimbo_dialog = &(app->entities[i]);
         }

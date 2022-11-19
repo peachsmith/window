@@ -18,9 +18,9 @@ void debug_draw_overlay(eg_app *app)
     // https://cplusplus.com/reference/cstdio/snprintf
 
     eg_entity *player = NULL;
-    for (int i = 0; i < app->entity_count && player == NULL; i++)
+    for (int i = 0; i < app->entity_cap && player == NULL; i++)
     {
-        if (app->entities[i].type == ENTITY_TYPE_PLAYER)
+        if (app->entities[i].type == ENTITY_TYPE_PLAYER && app->entities[i].present)
         {
             player = &(app->entities[i]);
         }

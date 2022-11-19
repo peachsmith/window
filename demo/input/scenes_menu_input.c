@@ -11,9 +11,9 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
     eg_entity *entity = NULL;
 
     // Save the transition entity state.
-    for (int i = 0; i < app->entity_count; i++)
+    for (int i = 0; i < app->entity_cap; i++)
     {
-        if (app->entities[i].type == ENTITY_TYPE_TRANSITION)
+        if (app->entities[i].type == ENTITY_TYPE_TRANSITION && app->entities[i].present)
         {
             entity = &(app->entities[i]);
         }
@@ -34,9 +34,9 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
 
     // Restore the transition entity state.
     entity = NULL;
-    for (int i = 0; i < app->entity_count; i++)
+    for (int i = 0; i < app->entity_cap; i++)
     {
-        if (app->entities[i].type == ENTITY_TYPE_TRANSITION)
+        if (app->entities[i].type == ENTITY_TYPE_TRANSITION && app->entities[i].present)
         {
             entity = &(app->entities[i]);
         }
@@ -104,9 +104,9 @@ static void begin_transition(eg_app *app, eg_callback transition_loader)
 
     // Start the screen transition by marking the data field as 1 for any
     // entity that has an entity type of ENTITY_TYPE_TRANSITION.
-    for (int i = 0; i < app->entity_count; i++)
+    for (int i = 0; i < app->entity_cap; i++)
     {
-        if (app->entities[i].type == ENTITY_TYPE_TRANSITION)
+        if (app->entities[i].type == ENTITY_TYPE_TRANSITION && app->entities[i].present)
         {
             app->entities[i].data = 1;
             app->overlays[app->overlay_count++] = &(app->entities[i]);

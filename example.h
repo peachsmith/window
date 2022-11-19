@@ -247,6 +247,8 @@ struct eg_input_handler
 // definition of the eg_entity struct
 struct eg_entity
 {
+    int present;
+
     int type; // identifies the entity type in the registry
 
     // position
@@ -495,27 +497,21 @@ void eg_destroy_entity(eg_entity *);
 
 /**
  * Adds an entity to the entity list.
- * The last entity added is the first entity in the list.
  *
  * Params:
  *   eg_app* - a pointer to an app struct
- *   eg_entity* - the entity to add
+ *   eg_entity* - a pointer to the entity to add
  */
 void eg_add_entity(eg_app *, eg_entity *);
 
 /**
  * Removes an entity from the entity list.
- * This function returns a pointer to the entity that was removed. It does not
- * free any memory allocated for the entity.
  *
  * Params:
  *   eg_app* - a pointer to an app struct
  *   eg_entity* - the entity to remove
- *
- * Returns:
- *   eg_entity* - the entity that was removed
  */
-eg_entity *eg_remove_entity(eg_app *, eg_entity *);
+void eg_remove_entity(eg_app *, eg_entity *);
 
 /**
  * Checks the value of an entity's flag.

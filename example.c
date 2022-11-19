@@ -79,7 +79,7 @@ eg_app *eg_create_app()
     app->draw = default_draw;
 
     app->entity_count = 0;
-    app->entity_cap = 100;
+    app->entity_cap = 256;
 
     app->input = NULL;
     app->input_count = 0;
@@ -250,6 +250,7 @@ eg_entity *eg_create_entity()
         return NULL;
     }
 
+    entity->present = 1;
     entity->type = 0;
 
     entity->x_pos = 0;
@@ -322,10 +323,17 @@ void eg_add_entity(eg_app *app, eg_entity *entity)
     free(entity);
 }
 
-// TODO: implement this with the entity array
-eg_entity *eg_remove_entity(eg_app *app, eg_entity *entity)
+void eg_remove_entity(eg_app *app, eg_entity *entity)
 {
-    return entity;
+    entity->present = 0;
+
+    if (app->entity_count < 1)
+    {
+        printf("[WARN] there are no more entities to remove\n");
+        return;
+    }
+
+    app->entity_count--;
 }
 
 int eg_check_flag(eg_entity *e, int f)
