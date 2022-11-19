@@ -67,9 +67,9 @@ void pause_menu_input_handler(eg_app *app)
         {
             // Locate the info dialog.
             eg_entity *info_dialog = NULL;
-            for (int i = 0; i < app->entity_count; i++)
+            for (int i = 0; i < app->entity_cap; i++)
             {
-                if (app->entities[i].type == ENTITY_TYPE_INFO_DIALOG)
+                if (app->entities[i].type == ENTITY_TYPE_INFO_DIALOG && app->entities[i].present)
                 {
                     info_dialog = &(app->entities[i]);
                 }
@@ -85,9 +85,9 @@ void pause_menu_input_handler(eg_app *app)
         {
             // Locate the fish menu.
             eg_entity *fish_menu = NULL;
-            for (int i = 0; i < app->entity_count; i++)
+            for (int i = 0; i < app->entity_cap; i++)
             {
-                if (app->entities[i].type == ENTITY_TYPE_FISH_MENU)
+                if (app->entities[i].type == ENTITY_TYPE_FISH_MENU && app->entities[i].present)
                 {
                     fish_menu = &(app->entities[i]);
                 }
@@ -108,9 +108,9 @@ void pause_menu_input_handler(eg_app *app)
         {
             // Locate the demo dialog.
             eg_entity *demo_dialog = NULL;
-            for (int i = 0; i < app->entity_count; i++)
+            for (int i = 0; i < app->entity_cap; i++)
             {
-                if (app->entities[i].type == ENTITY_TYPE_DEMO_DIALOG)
+                if (app->entities[i].type == ENTITY_TYPE_DEMO_DIALOG && app->entities[i].present)
                 {
                     demo_dialog = &(app->entities[i]);
                 }

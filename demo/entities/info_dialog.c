@@ -33,9 +33,9 @@ static void update_info_dialog(eg_app *app, eg_entity *dialog)
         dialog->ticks++;
         // Locate the info menu.
         eg_entity *info_menu = NULL;
-        for (int i = 0; i < app->entity_count; i++)
+        for (int i = 0; i < app->entity_cap; i++)
         {
-            if (app->entities[i].type == ENTITY_TYPE_INFO_MENU)
+            if (app->entities[i].type == ENTITY_TYPE_INFO_MENU && app->entities[i].present)
             {
                 info_menu = &(app->entities[i]);
             }

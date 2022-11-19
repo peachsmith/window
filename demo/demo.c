@@ -34,7 +34,7 @@
 
 // Capacity of entity array
 // This must match the value of the app->entity_cap field.
-#define ENTITY_MAX 100
+#define ENTITY_MAX 256
 
 // array of entities that will replace the linked list.
 // TODO: determine a better time and place to allocate this.
@@ -101,13 +101,13 @@ static void update(eg_app *app)
     }
 
     // main update loop
-    for (int i = 0; i < app->entity_count; i++)
+    for (int i = 0; i < app->entity_cap; i++)
     {
         eg_entity *ent = &(app->entities[i]);
         eg_entity_type t = app->entity_types[ent->type];
         int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
         int menu_flag = eg_check_flag(ent, ENTITY_FLAG_MENU);
-        if (t.update != NULL)
+        if (ent->present && t.update != NULL)
         {
             if (app->pause)
             {
@@ -143,13 +143,13 @@ static void draw(eg_app *app)
 
     //------------------------------------------------------------------------
     // foreground layer
-    for (int i = 0; i < app->entity_count; i++)
+    for (int i = 0; i < app->entity_cap; i++)
     {
         eg_entity *ent = &(app->entities[i]);
         eg_entity_type t = app->entity_types[ent->type];
         int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
         int menu_flag = eg_check_flag(ent, ENTITY_FLAG_MENU);
-        if (t.render != NULL)
+        if (ent->present && t.render != NULL)
         {
             // We render all entities without the pause flag, regardless of
             // whether or not the application is paused.
@@ -219,6 +219,35 @@ int demo_prepare(eg_app *app)
         entity_types[i].get_y_vel = default_get_y_vel;
         entity_types[i].interactable = 0;
         entity_types[i].interact = NULL;
+    }
+
+    // default values of entities
+    for (int i = 0; i < app->entity_cap; i++)
+    {
+        entities[i].present = 0;
+        entities[i].type = 0;
+        entities[i].x_pos = 0;
+        entities[i].y_pos = 0;
+        entities[i].x_vel = 0;
+        entities[i].y_vel = 0;
+        entities[i].x_acc = 0;
+        entities[i].y_acc = 0;
+        entities[i].x_t = 0;
+        entities[i].y_t = 0;
+        entities[i].flags = 0;
+        entities[i].data = 0;
+        entities[i].iframes = 0;
+        entities[i].animation_ticks = 0;
+        entities[i].ticks = 0;
+        entities[i].carrier = NULL;
+        entities[i].text = NULL;
+        entities[i].text_len = 0;
+        entities[i].tick_limit = 0;
+        entities[i].result = 0;
+        entities[i].cursor_x = 0;
+        entities[i].cursor_y = 0;
+        entities[i].next = NULL;
+        entities[i].previous = NULL;
     }
 
     app->entities = entities;

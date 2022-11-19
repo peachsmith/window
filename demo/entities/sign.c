@@ -42,9 +42,9 @@ static int interact_with_sign(eg_app *app, eg_entity *sign, eg_entity *actor)
 
     // Locate the sign's dialog.
     eg_entity *sign_dialog = NULL;
-    for (int i = 0; i < app->entity_count; i++)
+    for (int i = 0; i < app->entity_cap; i++)
     {
-        if (app->entities[i].type == ENTITY_TYPE_SIGN_DIALOG)
+        if (app->entities[i].type == ENTITY_TYPE_SIGN_DIALOG && app->entities[i].present)
         {
             sign_dialog = &(app->entities[i]);
         }

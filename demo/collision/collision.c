@@ -28,17 +28,23 @@ static void detect_collisions(
     int *count,
     int direction)
 {
+    // Don't bother checking for collisions with entities that have been removed.
+    if (!source->present)
+    {
+        return;
+    }
+
     // If direction has a non zero value, then we check every entity after
     // the source. Otherwise we check every entity before the source.
     int target_i = direction ? source_i + 1 : source_i - 1;
-    if (target_i < 0 || target_i >= app->entity_count - 1)
+    if (target_i < 0 || target_i >= app->entity_cap - 1)
     {
         return;
     }
 
     eg_entity *target = NULL;
 
-    for (int i = target_i; direction ? i < app->entity_count : i >= 0; direction ? i++ : i--)
+    for (int i = target_i; direction ? i < app->entity_cap : i >= 0; direction ? i++ : i--)
     {
         target = &(app->entities[i]);
 
@@ -47,7 +53,7 @@ static void detect_collisions(
         res.tx = 0.0f;
         res.ty = 0.0f;
 
-        if (target->type == ENTITY_TYPE_BLOCK_SLOPE)
+        if (target->present && target->type == ENTITY_TYPE_BLOCK_SLOPE)
         {
             if (demo_line(app, source, target, &res))
             {
@@ -60,7 +66,7 @@ static void detect_collisions(
                 }
             }
         }
-        else
+        else if (target->present)
         {
             // Use swept AABB to determine if the two entities will collide.
             if (demo_swept_aabb(app, source, target, &res))
@@ -145,7 +151,7 @@ void demo_handle_collisions(eg_app *app)
 
     col_res cols[COL_LIMIT]; // collision result list
 
-    for (int i = 0; i < app->entity_count; i++)
+    for (int i = 0; i < app->entity_cap; i++)
     {
         int count = 0;
         eg_entity *source = &(app->entities[i]);
