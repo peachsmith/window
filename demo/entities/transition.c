@@ -108,6 +108,7 @@ eg_entity *transition_demo_create()
 
     transition->type = ENTITY_TYPE_TRANSITION;
     eg_set_flag(transition, ENTITY_FLAG_PAUSE);
+    eg_set_flag(transition, ENTITY_FLAG_MENU);
 
     return transition;
 }
