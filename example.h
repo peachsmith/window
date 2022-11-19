@@ -216,6 +216,9 @@ struct eg_app
     eg_entity **dialogs;
     int dialog_count;
 
+    eg_entity **overlays;
+    int overlay_count;
+
     // input handlers
     eg_callback *input;
     int input_count;

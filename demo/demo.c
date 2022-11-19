@@ -43,6 +43,12 @@ static eg_entity entities[ENTITY_MAX];
 // array of entity types
 static eg_entity_type entity_types[ENTITY_TYPE_MAX];
 
+// maximum number of overlays
+#define MAX_OVERLAYS 10
+
+// list of active overlays entities
+static eg_entity *overlays[MAX_OVERLAYS];
+
 static int default_get_x_vel(eg_entity *e)
 {
     return e->x_vel;
@@ -81,6 +87,13 @@ static void update(eg_app *app)
         app->entity_types[m->type].update(app, m);
     }
 
+    // update overlays
+    if (app->overlay_count > 0)
+    {
+        eg_entity *o = app->overlays[app->overlay_count - 1];
+        app->entity_types[o->type].update(app, o);
+    }
+
     // handle collisions
     if (!app->pause)
     {
@@ -108,17 +121,16 @@ static void update(eg_app *app)
                 t.update(app, ent);
             }
         }
-
-        if (app->transition_complete)
-        {
-            i = 0;
-            app->transition_complete = 0;
-        }
     }
 }
 
 /**
  * Implmentation of the draw function.
+ * This function renders graphics to the screen in four layers:
+ * 1. background
+ * 2. foreground
+ * 3. menu
+ * 4. debug
  *
  * Params:
  *   eg_app* - a pointer to an app struct
@@ -127,10 +139,10 @@ static void draw(eg_app *app)
 {
     //------------------------------------------------------------------------
     // background layer
-    // sprite_draw_background(app, 0);
+    sprite_draw_background(app, 0);
 
     //------------------------------------------------------------------------
-    // sprite layer
+    // foreground layer
     for (int i = 0; i < app->entity_count; i++)
     {
         eg_entity *ent = &(app->entities[i]);
@@ -161,16 +173,25 @@ static void draw(eg_app *app)
     // menu layer
     if (app->pause)
     {
+        // render all open menus
         for (int i = 0; i < app->menu_count; i++)
         {
             eg_entity *m = app->menus[i];
             app->entity_types[m->type].render(app, m);
         }
 
+        // only render the dialog on the top of the stack
         if (app->dialog_count > 0)
         {
             eg_entity *d = app->dialogs[app->dialog_count - 1];
             app->entity_types[d->type].render(app, d);
+        }
+
+        // render screen overlay effects
+        for (int i = 0; i < app->overlay_count; i++)
+        {
+            eg_entity *o = app->overlays[i];
+            app->entity_types[o->type].render(app, o);
         }
     }
 
@@ -200,36 +221,38 @@ int demo_prepare(eg_app *app)
         entity_types[i].interact = NULL;
     }
 
-    // Set the entity array
     app->entities = entities;
-
     app->entity_types = entity_types;
     app->update = update;
     app->draw = draw;
 
-    // Initialize tetxures.
+    // initialize tetxures
     if (!demo_init_textures(app))
     {
         return 0;
     }
 
-    // Initialize fonts.
+    // initialize fonts
     if (!demo_init_fonts(app))
     {
         return 0;
     }
 
-    // Initialize audio
+    // initialize audio
     if (!demo_init_audio(app))
     {
         return 0;
     }
 
-    // Initialize menus.
+    // initialize menus
     if (!demo_init_menus(app))
     {
         return 0;
     }
+
+    // initialize overlays
+    app->overlays = &(overlays[0]);
+    app->overlay_count = 0;
 
     // Initialize dialogs.
     demo_init_dialogs(app);

@@ -153,12 +153,14 @@ void demo_handle_collisions(eg_app *app)
         // Clear the ground flag of the source entity.
         eg_clear_flag(source, ENTITY_FLAG_GROUND);
 
+        //--------------------------------------------------------
         // Stage 1: Collision Detection
         // We traverse the entity list forwards and backwards from the source
         // entity. This prevents checking an entity for collision with itself.
         detect_collisions(app, source, i, cols, &count, DIR_FORWARD);
         detect_collisions(app, source, i, cols, &count, DIR_BACKWARD);
 
+        //--------------------------------------------------------
         // Stage 2: Collision Sorting
         int sorted = 0;
         while (!sorted)
@@ -214,6 +216,7 @@ void demo_handle_collisions(eg_app *app)
             }
         }
 
+        //--------------------------------------------------------
         // Stage 3: Collision Resolution
         for (int i = 0; i < count; i++)
         {
