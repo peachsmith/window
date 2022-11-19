@@ -20,10 +20,6 @@
 #define AUDIO_TYPE_SOUND_EFFECT 1
 #define AUDIO_TYPE_MUSIC 2
 
-// TEMP: debug IDs for identifying certain entities.
-#define DEBUG_PLAYER 1
-#define DEBUG_PLATFORM 2
-
 /**
  * This structure represents the state of an application.
  * Only one of these should be created in a given program.
@@ -209,7 +205,6 @@ struct eg_app
     // entities
     int entity_count;
     int entity_cap;
-    // eg_entity *entities;
     eg_entity *entities;
     eg_entity_type *entity_types;
 
