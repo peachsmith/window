@@ -226,7 +226,6 @@ struct eg_app
     // scene transition
     eg_callback transition_loader;
     eg_callback transition_input_handler;
-    int transition_complete;
 
     eg_debug debug;
 };

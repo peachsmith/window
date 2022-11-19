@@ -52,9 +52,6 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
 
         // Add the new transition entity to the overlay slice.
         app->overlays[app->overlay_count++] = entity;
-
-        // Signal to the update loop that it should restart.
-        // app->transition_complete = 1;
     }
 }
 
