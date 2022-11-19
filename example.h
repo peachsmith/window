@@ -481,17 +481,6 @@ void eg_pop_input_handler(eg_app *);
 // entity functions
 
 /**
- * Allocates memory for an entity registry.
- *
- * Params:
- *   int - the number of entity types
- *
- * Returns:
- *   eg_entity_type* - a new entity registry
- */
-eg_entity_type *eg_create_registry(int);
-
-/**
  * Frees the memory allocated for an entity registry.
  *
  * Params:

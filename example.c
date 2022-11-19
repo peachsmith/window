@@ -245,43 +245,43 @@ void eg_pop_input_handler(eg_app *app)
 //----------------------------------------------------------------------------
 // entity functions
 
-static int default_get_x_vel(eg_entity *e)
-{
-    return e->x_vel;
-}
+// static int default_get_x_vel(eg_entity *e)
+// {
+//     return e->x_vel;
+// }
 
-static int default_get_y_vel(eg_entity *e)
-{
-    return e->y_vel;
-}
+// static int default_get_y_vel(eg_entity *e)
+// {
+//     return e->y_vel;
+// }
 
-eg_entity_type *eg_create_registry(int n)
-{
-    eg_entity_type *reg = (eg_entity_type *)
-        malloc(sizeof(eg_entity_type) * n);
+// eg_entity_type *eg_create_registry(int n)
+// {
+//     eg_entity_type *reg = (eg_entity_type *)
+//         malloc(sizeof(eg_entity_type) * n);
 
-    if (reg == NULL)
-    {
-        return NULL;
-    }
+//     if (reg == NULL)
+//     {
+//         return NULL;
+//     }
 
-    for (int i = 0; i < n; i++)
-    {
-        reg[i].id = 0;
-        reg[i].width = 0;
-        reg[i].height = 0;
-        reg[i].render = NULL;
-        reg[i].update = NULL;
-        reg[i].advance = NULL;
-        reg[i].collide = NULL;
-        reg[i].get_x_vel = default_get_x_vel;
-        reg[i].get_y_vel = default_get_y_vel;
-        reg[i].interactable = 0;
-        reg[i].interact = NULL;
-    }
+//     for (int i = 0; i < n; i++)
+//     {
+//         reg[i].id = 0;
+//         reg[i].width = 0;
+//         reg[i].height = 0;
+//         reg[i].render = NULL;
+//         reg[i].update = NULL;
+//         reg[i].advance = NULL;
+//         reg[i].collide = NULL;
+//         reg[i].get_x_vel = default_get_x_vel;
+//         reg[i].get_y_vel = default_get_y_vel;
+//         reg[i].interactable = 0;
+//         reg[i].interact = NULL;
+//     }
 
-    return reg;
-}
+//     return reg;
+// }
 
 void eg_destroy_registry(eg_entity_type *reg)
 {

@@ -43,6 +43,16 @@ static eg_entity entities[ENTITY_MAX];
 // array of entity types
 static eg_entity_type entity_types[ENTITY_TYPE_MAX];
 
+static int default_get_x_vel(eg_entity *e)
+{
+    return e->x_vel;
+}
+
+static int default_get_y_vel(eg_entity *e)
+{
+    return e->y_vel;
+}
+
 /**
  * Implmentation of the update function.
  *
@@ -174,18 +184,26 @@ static void draw(eg_app *app)
 
 int demo_prepare(eg_app *app)
 {
-    // Create the entity registry.
-    eg_entity_type *reg = eg_create_registry(ENTITY_TYPE_MAX);
-    if (reg == NULL)
+    // default values for entity types
+    for (int i = 0; i < ENTITY_TYPE_MAX; i++)
     {
-        fprintf(stderr, "failed to create entity registry\n");
-        return 0;
+        entity_types[i].id = 0;
+        entity_types[i].width = 0;
+        entity_types[i].height = 0;
+        entity_types[i].render = NULL;
+        entity_types[i].update = NULL;
+        entity_types[i].advance = NULL;
+        entity_types[i].collide = NULL;
+        entity_types[i].get_x_vel = default_get_x_vel;
+        entity_types[i].get_y_vel = default_get_y_vel;
+        entity_types[i].interactable = 0;
+        entity_types[i].interact = NULL;
     }
 
     // Set the entity array
     app->entities = entities;
 
-    app->entity_types = reg;
+    app->entity_types = entity_types;
     app->update = update;
     app->draw = draw;
 
@@ -220,38 +238,38 @@ int demo_prepare(eg_app *app)
     demo_init_input(app);
 
     // Register the entity types.
-    player_demo_register(&reg[ENTITY_TYPE_PLAYER]);
+    player_demo_register(&(app->entity_types[ENTITY_TYPE_PLAYER]));
 
     // platforms and other blocks
-    block_demo_register(&reg[ENTITY_TYPE_BLOCK]);
-    block_demo_register_big(&reg[ENTITY_TYPE_BLOCK_BIG]);
-    block_demo_register_long(&reg[ENTITY_TYPE_BLOCK_LONG]);
-    throughblock_demo_register_long(&reg[ENTITY_TYPE_THROUGHBLOCK_LONG]);
-    block_demo_register_moving(&reg[ENTITY_TYPE_BLOCK_MOVING]);
-    block_demo_register_sloped(&reg[ENTITY_TYPE_BLOCK_SLOPE]);
+    block_demo_register(&(app->entity_types[ENTITY_TYPE_BLOCK]));
+    block_demo_register_big(&(app->entity_types[ENTITY_TYPE_BLOCK_BIG]));
+    block_demo_register_long(&(app->entity_types[ENTITY_TYPE_BLOCK_LONG]));
+    throughblock_demo_register_long(&(app->entity_types[ENTITY_TYPE_THROUGHBLOCK_LONG]));
+    block_demo_register_moving(&(app->entity_types[ENTITY_TYPE_BLOCK_MOVING]));
+    block_demo_register_sloped(&(app->entity_types[ENTITY_TYPE_BLOCK_SLOPE]));
 
     // interactables
-    sign_demo_register(&reg[ENTITY_TYPE_SIGN]);   // npc dialog
-    jimbo_demo_register(&reg[ENTITY_TYPE_JIMBO]); // npc dialog
-    billy_demo_register(&reg[ENTITY_TYPE_BILLY]); // npc movement
-    henry_demo_register(&reg[ENTITY_TYPE_HENRY]); // hostile
+    sign_demo_register(&(app->entity_types[ENTITY_TYPE_SIGN]));   // npc dialog
+    jimbo_demo_register(&(app->entity_types[ENTITY_TYPE_JIMBO])); // npc dialog
+    billy_demo_register(&(app->entity_types[ENTITY_TYPE_BILLY])); // npc movement
+    henry_demo_register(&(app->entity_types[ENTITY_TYPE_HENRY])); // hostile
 
     // scene transitions
-    transition_demo_register(&reg[ENTITY_TYPE_TRANSITION]);
+    transition_demo_register(&(app->entity_types[ENTITY_TYPE_TRANSITION]));
 
     // menus
-    pause_menu_demo_register(&reg[ENTITY_TYPE_PAUSE_MENU]);
-    fish_menu_demo_register(&reg[ENTITY_TYPE_FISH_MENU]);
-    info_menu_demo_register(&reg[ENTITY_TYPE_INFO_MENU]);
-    debug_menu_demo_register(&reg[ENTITY_TYPE_DEBUG_MENU]);
-    scene_menu_demo_register(&reg[ENTITY_TYPE_SCENE_MENU]);
-    input_menu_demo_register(&reg[ENTITY_TYPE_INPUT_MENU]);
+    pause_menu_demo_register(&(app->entity_types[ENTITY_TYPE_PAUSE_MENU]));
+    fish_menu_demo_register(&(app->entity_types[ENTITY_TYPE_FISH_MENU]));
+    info_menu_demo_register(&(app->entity_types[ENTITY_TYPE_INFO_MENU]));
+    debug_menu_demo_register(&(app->entity_types[ENTITY_TYPE_DEBUG_MENU]));
+    scene_menu_demo_register(&(app->entity_types[ENTITY_TYPE_SCENE_MENU]));
+    input_menu_demo_register(&(app->entity_types[ENTITY_TYPE_INPUT_MENU]));
 
     // dialogs
-    demo_dialog_demo_register(&reg[ENTITY_TYPE_DEMO_DIALOG]);
-    info_dialog_demo_register(&reg[ENTITY_TYPE_INFO_DIALOG]);
-    jimbo_dialog_demo_register(&reg[ENTITY_TYPE_JIMBO_DIALOG]);
-    sign_dialog_demo_register(&reg[ENTITY_TYPE_SIGN_DIALOG]);
+    demo_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_DEMO_DIALOG]));
+    info_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_INFO_DIALOG]));
+    jimbo_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_JIMBO_DIALOG]));
+    sign_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_SIGN_DIALOG]));
 
     // Load the initial scene.
     load_scene_0(app);
