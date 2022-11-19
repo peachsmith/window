@@ -481,14 +481,6 @@ void eg_pop_input_handler(eg_app *);
 // entity functions
 
 /**
- * Frees the memory allocated for an entity registry.
- *
- * Params:
- *   eg_entity_type* - the entity registry to be destroyed
- */
-void eg_destroy_registry(eg_entity_type *);
-
-/**
  * Creates a new entity.
  *
  * Returns:
