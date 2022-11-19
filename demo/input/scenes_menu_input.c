@@ -13,9 +13,9 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
     // Save the transition entity state.
     for (int i = 0; i < app->entity_count; i++)
     {
-        if (app->entity_array[i].type == ENTITY_TYPE_TRANSITION)
+        if (app->entities[i].type == ENTITY_TYPE_TRANSITION)
         {
-            entity = &(app->entity_array[i]);
+            entity = &(app->entities[i]);
         }
     }
 
@@ -36,9 +36,9 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
     entity = NULL;
     for (int i = 0; i < app->entity_count; i++)
     {
-        if (app->entity_array[i].type == ENTITY_TYPE_TRANSITION)
+        if (app->entities[i].type == ENTITY_TYPE_TRANSITION)
         {
-            entity = &(app->entity_array[i]);
+            entity = &(app->entities[i]);
         }
     }
 
@@ -106,9 +106,9 @@ static void begin_transition(eg_app *app, eg_callback transition_loader)
     // entity that has an entity type of ENTITY_TYPE_TRANSITION.
     for (int i = 0; i < app->entity_count; i++)
     {
-        if (app->entity_array[i].type == ENTITY_TYPE_TRANSITION)
+        if (app->entities[i].type == ENTITY_TYPE_TRANSITION)
         {
-            app->entity_array[i].data = 1;
+            app->entities[i].data = 1;
         }
     }
 }

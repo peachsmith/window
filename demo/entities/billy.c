@@ -98,8 +98,8 @@ static void render_billy(eg_app *app, eg_entity *billy)
         eg_rect hit_box;
         hit_box.x = billy->x_pos + app->cam.x;
         hit_box.y = billy->y_pos + app->cam.y;
-        hit_box.w = app->registry[billy->type].width;
-        hit_box.h = app->registry[billy->type].height;
+        hit_box.w = app->entity_types[billy->type].width;
+        hit_box.h = app->entity_types[billy->type].height;
 
         // Render the billy hit box.
         eg_set_color(app, EG_COLOR_ORANGE);
@@ -119,8 +119,8 @@ static void update_billy(eg_app *app, eg_entity *billy)
     int walking_right = billy->ticks >= 300 && billy->ticks < 450;
 
     // Get the width and height of the billy.
-    // int w = app->registry[billy->type].width;
-    int h = app->registry[billy->type].height;
+    // int w = app->entity_types[billy->type].width;
+    int h = app->entity_types[billy->type].height;
 
     // Check the MOVE flag to see if the billy is being carried by a
     // a moving platform.

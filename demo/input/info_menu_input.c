@@ -15,7 +15,7 @@ void info_menu_input_handler(eg_app *app)
         {
             eg_entity *d = app->dialogs[app->dialog_count - 1];
             d->result = 0;
-            app->registry[d->type].advance(app, d);
+            app->entity_types[d->type].advance(app, d);
         }
 
         return;
@@ -56,7 +56,7 @@ void info_menu_input_handler(eg_app *app)
             {
                 eg_entity *d = app->dialogs[app->dialog_count - 1];
                 d->result = 1;
-                app->registry[d->type].advance(app, d);
+                app->entity_types[d->type].advance(app, d);
             }
             break;
 
@@ -68,7 +68,7 @@ void info_menu_input_handler(eg_app *app)
             {
                 eg_entity *d = app->dialogs[app->dialog_count - 1];
                 d->result = 2;
-                app->registry[d->type].advance(app, d);
+                app->entity_types[d->type].advance(app, d);
             }
             break;
 

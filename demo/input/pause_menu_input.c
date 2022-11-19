@@ -69,9 +69,9 @@ void pause_menu_input_handler(eg_app *app)
             eg_entity *info_dialog = NULL;
             for (int i = 0; i < app->entity_count; i++)
             {
-                if (app->entity_array[i].type == ENTITY_TYPE_INFO_DIALOG)
+                if (app->entities[i].type == ENTITY_TYPE_INFO_DIALOG)
                 {
-                    info_dialog = &(app->entity_array[i]);
+                    info_dialog = &(app->entities[i]);
                 }
             }
 
@@ -87,9 +87,9 @@ void pause_menu_input_handler(eg_app *app)
             eg_entity *fish_menu = NULL;
             for (int i = 0; i < app->entity_count; i++)
             {
-                if (app->entity_array[i].type == ENTITY_TYPE_FISH_MENU)
+                if (app->entities[i].type == ENTITY_TYPE_FISH_MENU)
                 {
-                    fish_menu = &(app->entity_array[i]);
+                    fish_menu = &(app->entities[i]);
                 }
             }
 
@@ -110,9 +110,9 @@ void pause_menu_input_handler(eg_app *app)
             eg_entity *demo_dialog = NULL;
             for (int i = 0; i < app->entity_count; i++)
             {
-                if (app->entity_array[i].type == ENTITY_TYPE_DEMO_DIALOG)
+                if (app->entities[i].type == ENTITY_TYPE_DEMO_DIALOG)
                 {
-                    demo_dialog = &(app->entity_array[i]);
+                    demo_dialog = &(app->entities[i]);
                 }
             }
 

@@ -29,7 +29,7 @@ void common_dialog_input_handler(eg_app *app)
     {
         if (dialog->ticks >= dialog->tick_limit)
         {
-            app->registry[dialog->type].advance(app, dialog);
+            app->entity_types[dialog->type].advance(app, dialog);
             return;
         }
     }
@@ -42,7 +42,7 @@ void common_dialog_input_handler(eg_app *app)
         }
         else
         {
-            app->registry[dialog->type].advance(app, dialog);
+            app->entity_types[dialog->type].advance(app, dialog);
         }
     }
 }
@@ -60,9 +60,9 @@ void root_input_handler(eg_app *app)
         eg_entity *pause_menu = NULL;
         for (int i = 0; i < app->entity_count; i++)
         {
-            if (app->entity_array[i].type == ENTITY_TYPE_PAUSE_MENU)
+            if (app->entities[i].type == ENTITY_TYPE_PAUSE_MENU)
             {
-                pause_menu = &(app->entity_array[i]);
+                pause_menu = &(app->entities[i]);
             }
         }
 
@@ -98,9 +98,9 @@ void root_input_handler(eg_app *app)
             eg_entity *debug_menu = NULL;
             for (int i = 0; i < app->entity_count; i++)
             {
-                if (app->entity_array[i].type == ENTITY_TYPE_DEBUG_MENU)
+                if (app->entities[i].type == ENTITY_TYPE_DEBUG_MENU)
                 {
-                    debug_menu = &(app->entity_array[i]);
+                    debug_menu = &(app->entities[i]);
                 }
             }
 
@@ -133,9 +133,9 @@ void root_input_handler(eg_app *app)
     eg_entity *target = NULL;
     for (int i = 0; i < app->entity_count && target == NULL; i++)
     {
-        if (app->entity_array[i].type == ENTITY_TYPE_PLAYER)
+        if (app->entities[i].type == ENTITY_TYPE_PLAYER)
         {
-            target = &(app->entity_array[i]);
+            target = &(app->entities[i]);
         }
     }
 
@@ -263,23 +263,23 @@ void root_input_handler(eg_app *app)
         eg_entity *interactable = NULL;
         for (int i = 0; i < app->entity_count && interactable == NULL; i++)
         {
-            if (app->registry[app->entity_array[i].type].interactable)
+            if (app->entity_types[app->entities[i].type].interactable)
             {
                 // Check for overlap with the interactable entity.
                 eg_rect a = {.x = target->x_pos,
                              .y = target->y_pos,
-                             .w = app->registry[target->type].width,
-                             .h = app->registry[target->type].height};
+                             .w = app->entity_types[target->type].width,
+                             .h = app->entity_types[target->type].height};
 
-                eg_rect b = {.x = app->entity_array[i].x_pos + app->cam.x,
-                             .y = app->entity_array[i].y_pos + app->cam.y,
-                             .w = app->registry[app->entity_array[i].type].width,
-                             .h = app->registry[app->entity_array[i].type].height};
+                eg_rect b = {.x = app->entities[i].x_pos + app->cam.x,
+                             .y = app->entities[i].y_pos + app->cam.y,
+                             .w = app->entity_types[app->entities[i].type].width,
+                             .h = app->entity_types[app->entities[i].type].height};
                 eg_overlap o;
 
                 if (demo_is_overlapped(&a, &b, &o))
                 {
-                    interactable = &(app->entity_array[i]);
+                    interactable = &(app->entities[i]);
                 }
             }
 
@@ -288,7 +288,7 @@ void root_input_handler(eg_app *app)
 
         if (interactable != NULL)
         {
-            app->registry[interactable->type].interact(app, interactable, target);
+            app->entity_types[interactable->type].interact(app, interactable, target);
         }
     }
 

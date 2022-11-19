@@ -23,8 +23,8 @@ static void render_sign(eg_app *app, eg_entity *sign)
         eg_rect hit_box;
         hit_box.x = sign->x_pos + app->cam.x;
         hit_box.y = sign->y_pos + app->cam.y;
-        hit_box.w = app->registry[sign->type].width;
-        hit_box.h = app->registry[sign->type].height;
+        hit_box.w = app->entity_types[sign->type].width;
+        hit_box.h = app->entity_types[sign->type].height;
 
         // Render the sign hit box.
         eg_set_color(app, EG_COLOR_ORANGE);
@@ -44,9 +44,9 @@ static int interact_with_sign(eg_app *app, eg_entity *sign, eg_entity *actor)
     eg_entity *sign_dialog = NULL;
     for (int i = 0; i < app->entity_count; i++)
     {
-        if (app->entity_array[i].type == ENTITY_TYPE_SIGN_DIALOG)
+        if (app->entities[i].type == ENTITY_TYPE_SIGN_DIALOG)
         {
-            sign_dialog = &(app->entity_array[i]);
+            sign_dialog = &(app->entities[i]);
         }
     }
 

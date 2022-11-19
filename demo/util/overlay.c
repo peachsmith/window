@@ -20,9 +20,9 @@ void debug_draw_overlay(eg_app *app)
     eg_entity *player = NULL;
     for (int i = 0; i < app->entity_count && player == NULL; i++)
     {
-        if (app->entity_array[i].type == ENTITY_TYPE_PLAYER)
+        if (app->entities[i].type == ENTITY_TYPE_PLAYER)
         {
-            player = &(app->entity_array[i]);
+            player = &(app->entities[i]);
         }
     }
 
@@ -47,7 +47,7 @@ void debug_draw_overlay(eg_app *app)
                  5,
                  5);
 
-    int avy = app->registry[player->type].get_y_vel(player);
+    int avy = app->entity_types[player->type].get_y_vel(player);
 
     res = snprintf(
         buffer,

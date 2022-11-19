@@ -40,7 +40,7 @@ static void detect_collisions(
 
     for (int i = target_i; direction ? i < app->entity_count : i >= 0; direction ? i++ : i--)
     {
-        target = &(app->entity_array[i]);
+        target = &(app->entities[i]);
 
         eg_collision res;
         res.t = 0.0f;
@@ -148,7 +148,7 @@ void demo_handle_collisions(eg_app *app)
     for (int i = 0; i < app->entity_count; i++)
     {
         int count = 0;
-        eg_entity *source = &(app->entity_array[i]);
+        eg_entity *source = &(app->entities[i]);
 
         // Clear the ground flag of the source entity.
         eg_clear_flag(source, ENTITY_FLAG_GROUND);
@@ -231,14 +231,14 @@ void demo_handle_collisions(eg_app *app)
                 if (demo_line(app, a, b, &col))
                 {
                     // Call the source entity's collision function.
-                    cola = app->registry[a->type].collide;
+                    cola = app->entity_types[a->type].collide;
                     if (cola != NULL)
                     {
                         cola(app, a, b, &col, 0);
                     }
 
                     // Call the target entity's collision function.
-                    colb = app->registry[b->type].collide;
+                    colb = app->entity_types[b->type].collide;
                     if (colb != NULL)
                     {
                         colb(app, b, a, &col, 1);
@@ -267,14 +267,14 @@ void demo_handle_collisions(eg_app *app)
                     }
 
                     // Call the source entity's collision function.
-                    cola = app->registry[a->type].collide;
+                    cola = app->entity_types[a->type].collide;
                     if (cola != NULL)
                     {
                         cola(app, a, b, &col, 0);
                     }
 
                     // Call the target entity's collision function.
-                    colb = app->registry[b->type].collide;
+                    colb = app->entity_types[b->type].collide;
                     if (colb != NULL)
                     {
                         colb(app, b, a, &col, 1);

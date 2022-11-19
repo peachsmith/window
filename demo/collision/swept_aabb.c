@@ -406,8 +406,8 @@ int demo_swept_aabb(
     }
 
     // Get the effective velocity of entity A.
-    int avx = app->registry[a->type].get_x_vel(a);
-    int avy = app->registry[a->type].get_y_vel(a);
+    int avx = app->entity_types[a->type].get_x_vel(a);
+    int avy = app->entity_types[a->type].get_y_vel(a);
 
     // Check for velocity.
     // This function is only intended for a collision scenario in which at
@@ -427,8 +427,8 @@ int demo_swept_aabb(
     }
 
     // Get the width and height of source entity A.
-    int aw = app->registry[a->type].width;
-    int ah = app->registry[a->type].height;
+    int aw = app->entity_types[a->type].width;
+    int ah = app->entity_types[a->type].height;
 
     // Create a rectangle representing the boundaries of target entity B.
     // To construct the target boundary, we add half of the source width to
@@ -436,8 +436,8 @@ int demo_swept_aabb(
     // We also add the camera position.
     r.x = b->x_pos + app->cam.x - (aw / 2);
     r.y = b->y_pos + app->cam.y - (ah / 2);
-    r.w = app->registry[b->type].width + aw;
-    r.h = app->registry[b->type].height + ah;
+    r.w = app->entity_types[b->type].width + aw;
+    r.h = app->entity_types[b->type].height + ah;
 
     if (aw & 1)
     {
@@ -492,7 +492,7 @@ int demo_swept_aabb(
         int ay = a->y_pos;
         int bx = b->x_pos + app->cam.x;
         int by = b->y_pos + app->cam.y;
-        int bw = app->registry[b->type].width;
+        int bw = app->entity_types[b->type].width;
 
         if (a->type != ENTITY_TYPE_PLAYER)
         {

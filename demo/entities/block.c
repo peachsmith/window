@@ -19,8 +19,8 @@ static void render_block(eg_app *app, eg_entity *block)
         eg_rect hit_box;
         hit_box.x = block->x_pos + app->cam.x;
         hit_box.y = block->y_pos + app->cam.y;
-        hit_box.w = app->registry[block->type].width;
-        hit_box.h = app->registry[block->type].height;
+        hit_box.w = app->entity_types[block->type].width;
+        hit_box.h = app->entity_types[block->type].height;
 
         eg_set_color(app, EG_COLOR_LIGHT_BLUE);
         eg_draw_rect(app, &hit_box, 0);
@@ -33,8 +33,8 @@ static void render_throughblock(eg_app *app, eg_entity *block)
     eg_rect r;
     r.x = block->x_pos + app->cam.x;
     r.y = block->y_pos + app->cam.y;
-    r.w = app->registry[block->type].width;
-    r.h = app->registry[block->type].height;
+    r.w = app->entity_types[block->type].width;
+    r.h = app->entity_types[block->type].height;
 
     eg_set_color(app, EG_COLOR_FOREST_GREEN);
     eg_draw_rect(app, &r, 1);
@@ -45,8 +45,8 @@ static void render_throughblock(eg_app *app, eg_entity *block)
         eg_rect hit_box;
         hit_box.x = block->x_pos + app->cam.x;
         hit_box.y = block->y_pos + app->cam.y;
-        hit_box.w = app->registry[block->type].width;
-        hit_box.h = app->registry[block->type].height;
+        hit_box.w = app->entity_types[block->type].width;
+        hit_box.h = app->entity_types[block->type].height;
 
         eg_set_color(app, EG_COLOR_LIGHT_BLUE);
         eg_draw_rect(app, &hit_box, 0);
@@ -60,8 +60,8 @@ static void render_moving_block(eg_app *app, eg_entity *block)
         app,
         block->x_pos + app->cam.x,
         block->y_pos + app->cam.y,
-        app->registry[block->type].width,
-        app->registry[block->type].height);
+        app->entity_types[block->type].width,
+        app->entity_types[block->type].height);
 
     // hit box
     if (app->debug.hitboxes)
@@ -69,8 +69,8 @@ static void render_moving_block(eg_app *app, eg_entity *block)
         eg_rect hit_box;
         hit_box.x = block->x_pos + app->cam.x;
         hit_box.y = block->y_pos + app->cam.y;
-        hit_box.w = app->registry[block->type].width;
-        hit_box.h = app->registry[block->type].height;
+        hit_box.w = app->entity_types[block->type].width;
+        hit_box.h = app->entity_types[block->type].height;
 
         eg_set_color(app, EG_COLOR_SEA_GREEN);
         eg_draw_rect(app, &hit_box, 0);
@@ -105,8 +105,8 @@ static void render_sloped_block(eg_app *app, eg_entity *block)
         eg_rect r;
         r.x = block->x_pos + app->cam.x;
         r.y = block->y_pos + app->cam.y;
-        r.w = app->registry[block->type].width;
-        r.h = app->registry[block->type].height;
+        r.w = app->entity_types[block->type].width;
+        r.h = app->entity_types[block->type].height;
 
         int dir = block->data & 3;
 
@@ -257,13 +257,13 @@ static void collide_block(
 
     if (block->type == ENTITY_TYPE_BLOCK_SLOPE)
     {
-        int avy = app->registry[other->type].get_y_vel(other);
+        int avy = app->entity_types[other->type].get_y_vel(other);
 
         // Correct the correction factor.
         // TODO: move this into the line.c file.
         if ((block->data & 3) == 2)
         {
-            int ah = app->registry[other->type].height;
+            int ah = app->entity_types[other->type].height;
             int by = block->y_pos + app->cam.y;
             int check = other->y_pos + ah;
             if (other->type != ENTITY_TYPE_PLAYER)
@@ -333,7 +333,7 @@ static void collide_block(
 
     if (t_res->cn.x)
     {
-        int avx = app->registry[other->type].get_x_vel(other);
+        int avx = app->entity_types[other->type].get_x_vel(other);
         int absx = avx > 0 ? avx : -(avx);
         float correction = t_res->cn.x * absx * t1;
 
@@ -353,7 +353,7 @@ static void collide_block(
     if (t_res->cn.y)
     {
         // Correction factor for landing on top of the block.
-        int avy = app->registry[other->type].get_y_vel(other);
+        int avy = app->entity_types[other->type].get_y_vel(other);
         int absy = avy > 0 ? avy : -(avy);
         float correction = t_res->cn.y * absy * t1;
 
@@ -377,7 +377,7 @@ static void collide_block(
     {
         if (t_res->cn.y < 0)
         {
-            int ah = app->registry[other->type].height;
+            int ah = app->entity_types[other->type].height;
             eg_set_flag(other, ENTITY_FLAG_MOVE);
             other->carrier = block;
 
