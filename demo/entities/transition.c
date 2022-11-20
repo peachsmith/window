@@ -96,11 +96,11 @@ void transition_demo_register(eg_entity_type *t)
     t->update = update_transition;
 }
 
-eg_entity *transition_demo_create()
+eg_entity *transition_demo_create(eg_app* app)
 {
     eg_entity *transition = NULL;
 
-    transition = eg_create_entity();
+    transition = eg_create_entity(app);
     if (transition == NULL)
     {
         return NULL;

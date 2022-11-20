@@ -232,11 +232,11 @@ void jimbo_demo_register(eg_entity_type *t)
     t->interact = interact_with_jimbo;
 }
 
-eg_entity *jimbo_demo_create(int x, int y)
+eg_entity *jimbo_demo_create(eg_app *app, int x, int y)
 {
     eg_entity *jimbo = NULL;
 
-    jimbo = eg_create_entity();
+    jimbo = eg_create_entity(app);
     if (jimbo == NULL)
     {
         return NULL;

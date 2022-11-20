@@ -321,11 +321,11 @@ void henry_demo_register(eg_entity_type *t)
     t->collide = collide_henry;
 }
 
-eg_entity *henry_demo_create(int x, int y)
+eg_entity *henry_demo_create(eg_app *app, int x, int y)
 {
     eg_entity *henry = NULL;
 
-    henry = eg_create_entity();
+    henry = eg_create_entity(app);
     if (henry == NULL)
     {
         return NULL;

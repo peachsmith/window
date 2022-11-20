@@ -320,11 +320,11 @@ void player_demo_register(eg_entity_type *t)
     t->get_y_vel = get_player_y_vel;
 }
 
-eg_entity *player_demo_create(int x, int y)
+eg_entity *player_demo_create(eg_app *app, int x, int y)
 {
     eg_entity *player = NULL;
 
-    player = eg_create_entity();
+    player = eg_create_entity(app);
     if (player == NULL)
     {
         return NULL;

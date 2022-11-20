@@ -20,6 +20,6 @@ void info_menu_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new info menu entity.
  */
-eg_entity *info_menu_demo_create();
+eg_entity *info_menu_demo_create(eg_app *);
 
 #endif

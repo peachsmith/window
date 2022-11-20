@@ -25,6 +25,6 @@ void player_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new player entity.
  */
-eg_entity *player_demo_create(int, int);
+eg_entity *player_demo_create(eg_app *, int, int);
 
 #endif

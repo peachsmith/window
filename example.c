@@ -240,67 +240,48 @@ void eg_pop_input_handler(eg_app *app)
 //----------------------------------------------------------------------------
 // entity functions
 
-eg_entity *eg_create_entity()
+eg_entity *eg_create_entity(eg_app *app)
 {
     eg_entity *entity = NULL;
 
-    entity = (eg_entity *)malloc(sizeof(eg_entity));
+    // Look for the available entity slot.
+    for (int i = 0; i < app->entity_cap && entity == NULL; i++)
+    {
+        if (!app->entities[i].present)
+        {
+            entity = &(app->entities[i]);
+        }
+    }
+
     if (entity == NULL)
     {
-        return NULL;
+        printf("[ERROR] failed to find space for a new entity\n");
     }
 
     entity->present = 1;
     entity->type = 0;
-
     entity->x_pos = 0;
     entity->y_pos = 0;
-
     entity->x_vel = 0;
     entity->y_vel = 0;
-
     entity->x_acc = 0;
     entity->y_acc = 0;
-
     entity->x_t = 0;
     entity->y_t = 0;
-
     entity->flags = 0;
-
     entity->data = 0;
-
-    entity->iframes = 0;
-
     entity->animation_ticks = 0;
-
     entity->ticks = 0;
-
+    entity->iframes = 0;
     entity->carrier = NULL;
-
     entity->text = NULL;
     entity->text_len = 0;
-
     entity->tick_limit = 0;
-
     entity->result = 0;
-
     entity->cursor_x = 0;
     entity->cursor_y = 0;
 
-    entity->next = NULL;
-    entity->previous = NULL;
-
     return entity;
-}
-
-void eg_destroy_entity(eg_entity *entity)
-{
-    if (entity == NULL)
-    {
-        return;
-    }
-
-    free(entity);
 }
 
 void eg_add_entity(eg_app *app, eg_entity *entity)
@@ -310,17 +291,14 @@ void eg_add_entity(eg_app *app, eg_entity *entity)
         return;
     }
 
-    if (app->entity_count < 100)
+    if (app->entity_count < app->entity_cap)
     {
-        app->entities[app->entity_count++] = *entity;
+        app->entity_count++;
     }
     else
     {
         printf("[WARN] the maximum entity count has been reached\n");
     }
-
-    // TODO: figure out a way to add entities without allocating memory every time.
-    free(entity);
 }
 
 void eg_remove_entity(eg_app *app, eg_entity *entity)

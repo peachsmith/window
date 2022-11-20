@@ -20,6 +20,6 @@ void scene_menu_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new scene menu entity.
  */
-eg_entity *scene_menu_demo_create();
+eg_entity *scene_menu_demo_create(eg_app *);
 
 #endif

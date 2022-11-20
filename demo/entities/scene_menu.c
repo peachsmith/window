@@ -53,11 +53,11 @@ void scene_menu_demo_register(eg_entity_type *t)
     t->update = update_scene_menu;
 }
 
-eg_entity *scene_menu_demo_create()
+eg_entity *scene_menu_demo_create(eg_app* app)
 {
     eg_entity *menu = NULL;
 
-    menu = eg_create_entity();
+    menu = eg_create_entity(app);
     if (menu == NULL)
     {
         return NULL;

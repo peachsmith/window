@@ -236,9 +236,9 @@ int demo_prepare(eg_app *app)
         entities[i].y_t = 0;
         entities[i].flags = 0;
         entities[i].data = 0;
-        entities[i].iframes = 0;
         entities[i].animation_ticks = 0;
         entities[i].ticks = 0;
+        entities[i].iframes = 0;
         entities[i].carrier = NULL;
         entities[i].text = NULL;
         entities[i].text_len = 0;
@@ -246,8 +246,6 @@ int demo_prepare(eg_app *app)
         entities[i].result = 0;
         entities[i].cursor_x = 0;
         entities[i].cursor_y = 0;
-        entities[i].next = NULL;
-        entities[i].previous = NULL;
     }
 
     app->entities = entities;

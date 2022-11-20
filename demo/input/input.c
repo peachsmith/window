@@ -277,9 +277,9 @@ void root_input_handler(eg_app *app)
     // TEMP: add Billy.
     if (eg_consume_input(app, EG_KEYCODE_J))
     {
-        eg_add_entity(app, billy_demo_create(
-                               target->x_pos + 24 - app->cam.x,
-                               target->y_pos - 24 - app->cam.y));
+        eg_add_entity(app, billy_demo_create(app,
+                                             target->x_pos + 24 - app->cam.x,
+                                             target->y_pos - 24 - app->cam.y));
     }
 
     // TEMP: remove Billy.

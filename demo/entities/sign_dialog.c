@@ -47,11 +47,11 @@ void sign_dialog_demo_register(eg_entity_type *t)
     t->advance = advance_sign_dialog;
 }
 
-eg_entity *sign_dialog_demo_create()
+eg_entity *sign_dialog_demo_create(eg_app* app)
 {
     eg_entity *dialog = NULL;
 
-    dialog = eg_create_entity();
+    dialog = eg_create_entity(app);
     if (dialog == NULL)
     {
         return NULL;
