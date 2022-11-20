@@ -3,6 +3,7 @@
 #include "demo/entities/entity_types.h"
 #include "demo/entities/jimbo.h"
 #include "demo/entities/billy.h"
+#include "demo/entities/henry.h"
 #include "demo/menu/menu.h"
 #include "demo/collision/collision.h"
 #include "demo/audio/audio.h"
@@ -277,9 +278,9 @@ void root_input_handler(eg_app *app)
     // TEMP: add Billy.
     if (eg_consume_input(app, EG_KEYCODE_J))
     {
-        eg_add_entity(app, billy_demo_create(app,
-                                             target->x_pos + 24 - app->cam.x,
-                                             target->y_pos - 24 - app->cam.y));
+        billy_demo_create(app,
+                          target->x_pos + 24 - app->cam.x,
+                          target->y_pos - 24 - app->cam.y);
     }
 
     // TEMP: remove Billy.
@@ -290,6 +291,60 @@ void root_input_handler(eg_app *app)
         for (int i = 0; i + offset < app->entity_cap && b == NULL; i++)
         {
             if (app->entities[i].type == ENTITY_TYPE_BILLY && app->entities[i].present)
+            {
+                b = &(app->entities[i]);
+            }
+        }
+
+        if (b != NULL)
+        {
+            eg_remove_entity(app, b);
+        }
+    }
+
+    // TEMP: add jimbo
+    if (eg_consume_input(app, EG_KEYCODE_U))
+    {
+        jimbo_demo_create(app,
+                          target->x_pos + 24 - app->cam.x,
+                          target->y_pos - 24 - app->cam.y);
+    }
+
+    // TEMP: remove jimbo
+    if (eg_consume_input(app, EG_KEYCODE_I))
+    {
+        eg_entity *b = NULL;
+        int offset = 0;
+        for (int i = 0; i + offset < app->entity_cap && b == NULL; i++)
+        {
+            if (app->entities[i].type == ENTITY_TYPE_JIMBO && app->entities[i].present)
+            {
+                b = &(app->entities[i]);
+            }
+        }
+
+        if (b != NULL)
+        {
+            eg_remove_entity(app, b);
+        }
+    }
+
+    // TEMP: add henry
+    if (eg_consume_input(app, EG_KEYCODE_7))
+    {
+        henry_demo_create(app,
+                          target->x_pos + 24 - app->cam.x,
+                          target->y_pos - 24 - app->cam.y);
+    }
+
+    // TEMP: remove henry
+    if (eg_consume_input(app, EG_KEYCODE_8))
+    {
+        eg_entity *b = NULL;
+        int offset = 0;
+        for (int i = 0; i + offset < app->entity_cap && b == NULL; i++)
+        {
+            if (app->entities[i].type == ENTITY_TYPE_HENRY && app->entities[i].present)
             {
                 b = &(app->entities[i]);
             }

@@ -255,7 +255,8 @@ eg_entity *eg_create_entity(eg_app *app)
 
     if (entity == NULL)
     {
-        printf("[ERROR] failed to find space for a new entity\n");
+        printf("[WARN] entity list is full\n");
+        return NULL;
     }
 
     entity->present = 1;
@@ -284,34 +285,9 @@ eg_entity *eg_create_entity(eg_app *app)
     return entity;
 }
 
-void eg_add_entity(eg_app *app, eg_entity *entity)
-{
-    if (app == NULL || entity == NULL)
-    {
-        return;
-    }
-
-    if (app->entity_count < app->entity_cap)
-    {
-        app->entity_count++;
-    }
-    else
-    {
-        printf("[WARN] the maximum entity count has been reached\n");
-    }
-}
-
 void eg_remove_entity(eg_app *app, eg_entity *entity)
 {
     entity->present = 0;
-
-    if (app->entity_count < 1)
-    {
-        printf("[WARN] there are no more entities to remove\n");
-        return;
-    }
-
-    app->entity_count--;
 }
 
 int eg_check_flag(eg_entity *e, int f)

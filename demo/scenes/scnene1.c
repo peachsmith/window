@@ -22,44 +22,42 @@ void load_scene_1(eg_app *app)
     app->cam.y = 0;
 
     // menus
-    eg_add_entity(app, pause_menu_demo_create(app));
-    eg_add_entity(app, fish_menu_demo_create(app));
-    eg_add_entity(app, info_menu_demo_create(app));
-    eg_add_entity(app, debug_menu_demo_create(app));
-    eg_add_entity(app, scene_menu_demo_create(app));
-    eg_add_entity(app, input_menu_demo_create(app));
+    pause_menu_demo_create(app);
+    fish_menu_demo_create(app);
+    info_menu_demo_create(app);
+    debug_menu_demo_create(app);
+    scene_menu_demo_create(app);
+    input_menu_demo_create(app);
 
     // dialogs
-    eg_add_entity(app, demo_dialog_demo_create(app));
-    eg_add_entity(app, info_dialog_demo_create(app));
+    demo_dialog_demo_create(app);
+    info_dialog_demo_create(app);
 
     // moving platforms added before the player
-    eg_add_entity(app, block_demo_create_moving(app, x_start - 63, 54, 0));  // vertical
-    eg_add_entity(app, block_demo_create_moving(app, x_start + 253, 94, 1)); // horizontal
+    block_demo_create_moving(app, x_start - 63, 54, 0);  // vertical
+    block_demo_create_moving(app, x_start + 253, 94, 1); // horizontal
 
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 18, 94));
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 36, 94));
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 54, 94));
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 72, 94));
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 90, 94));
+    block_demo_create(app, x_start - 27 + 18, 94);
+    block_demo_create(app, x_start - 27 + 36, 94);
+    block_demo_create(app, x_start - 27 + 54, 94);
+    block_demo_create(app, x_start - 27 + 72, 94);
+    block_demo_create(app, x_start - 27 + 90, 94);
 
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 36, 76)); // x = 59
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 36, 58)); // x = 59
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 36, 40)); // x = 59
+    block_demo_create(app, x_start - 27 + 36, 76); // x = 59
+    block_demo_create(app, x_start - 27 + 36, 58); // x = 59
+    block_demo_create(app, x_start - 27 + 36, 40); // x = 59
 
     // player
-    eg_add_entity(app, player_demo_create(app, 100, 55));
-
-    eg_add_entity(app, transition_demo_create(app));
-
-    // Add the rest of the horizontal row.
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 108, 94));
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 126, 94));
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 144, 94));
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 162, 94));
-
-    eg_add_entity(app, block_demo_create(app, x_start - 27 + 108, 76)); // x = 131
+    player_demo_create(app, 100, 55);
 
     // scene transition
-    eg_add_entity(app, transition_demo_create(app));
+    transition_demo_create(app);
+
+    // Add the rest of the horizontal row.
+    block_demo_create(app, x_start - 27 + 108, 94);
+    block_demo_create(app, x_start - 27 + 126, 94);
+    block_demo_create(app, x_start - 27 + 144, 94);
+    block_demo_create(app, x_start - 27 + 162, 94);
+
+    block_demo_create(app, x_start - 27 + 108, 76); // x = 131
 }
