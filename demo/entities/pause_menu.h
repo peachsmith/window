@@ -20,6 +20,6 @@ void pause_menu_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new pause menu entity.
  */
-eg_entity *pause_menu_demo_create();
+eg_entity *pause_menu_demo_create(eg_app *);
 
 #endif

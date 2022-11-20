@@ -311,11 +311,11 @@ void billy_demo_register(eg_entity_type *t)
     t->get_y_vel = get_billy_y_vel;
 }
 
-eg_entity *billy_demo_create(int x, int y)
+eg_entity *billy_demo_create(eg_app *app, int x, int y)
 {
     eg_entity *billy = NULL;
 
-    billy = eg_create_entity();
+    billy = eg_create_entity(app);
     if (billy == NULL)
     {
         return NULL;

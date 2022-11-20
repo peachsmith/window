@@ -25,60 +25,60 @@ void load_scene_3(eg_app *app)
     app->cam.y = 0;
 
     // menus
-    eg_add_entity(app, pause_menu_demo_create());
-    eg_add_entity(app, fish_menu_demo_create());
-    eg_add_entity(app, info_menu_demo_create());
-    eg_add_entity(app, debug_menu_demo_create());
-    eg_add_entity(app, scene_menu_demo_create());
-    eg_add_entity(app, input_menu_demo_create());
+    eg_add_entity(app, pause_menu_demo_create(app));
+    eg_add_entity(app, fish_menu_demo_create(app));
+    eg_add_entity(app, info_menu_demo_create(app));
+    eg_add_entity(app, debug_menu_demo_create(app));
+    eg_add_entity(app, scene_menu_demo_create(app));
+    eg_add_entity(app, input_menu_demo_create(app));
 
     // dialogs
-    eg_add_entity(app, demo_dialog_demo_create());
-    eg_add_entity(app, info_dialog_demo_create());
+    eg_add_entity(app, demo_dialog_demo_create(app));
+    eg_add_entity(app, info_dialog_demo_create(app));
 
     // menus
-    eg_add_entity(app, pause_menu_demo_create());
-    eg_add_entity(app, fish_menu_demo_create());
-    eg_add_entity(app, info_menu_demo_create());
+    eg_add_entity(app, pause_menu_demo_create(app));
+    eg_add_entity(app, fish_menu_demo_create(app));
+    eg_add_entity(app, info_menu_demo_create(app));
 
     // dialogs
-    eg_add_entity(app, demo_dialog_demo_create());
-    eg_add_entity(app, info_dialog_demo_create());
+    eg_add_entity(app, demo_dialog_demo_create(app));
+    eg_add_entity(app, info_dialog_demo_create(app));
 
-    eg_add_entity(app, block_demo_create(x_start - 27 + 18, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 36, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 54, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 72, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 90, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 18, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 36, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 54, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 72, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 90, 94));
 
     // player
-    eg_add_entity(app, player_demo_create(100, 55));
+    eg_add_entity(app, player_demo_create(app, 100, 55));
 
     // Add the rest of the horizontal row.
-    eg_add_entity(app, block_demo_create(x_start - 27 + 108, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 126, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 144, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 162, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 180, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 198, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 216, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 234, 94));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 252, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 108, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 126, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 144, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 162, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 180, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 198, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 216, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 234, 94));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 252, 94));
 
     // Vertical column 1.
-    eg_add_entity(app, block_demo_create(x_start - 27 + 18, 76));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 18, 58));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 18, 40));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 18, 22));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 18, 76));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 18, 58));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 18, 40));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 18, 22));
 
     // Vertical column 2
-    eg_add_entity(app, block_demo_create(x_start - 27 + 198, 76));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 198, 58));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 198, 40));
-    eg_add_entity(app, block_demo_create(x_start - 27 + 198, 22));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 198, 76));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 198, 58));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 198, 40));
+    eg_add_entity(app, block_demo_create(app, x_start - 27 + 198, 22));
 
     // A hostile entity.
-    eg_add_entity(app, henry_demo_create(x_start - 27 + 150, 22));
+    eg_add_entity(app, henry_demo_create(app, x_start - 27 + 150, 22));
 
-    eg_add_entity(app, transition_demo_create());
+    eg_add_entity(app, transition_demo_create(app));
 }

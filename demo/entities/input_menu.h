@@ -20,6 +20,6 @@ void input_menu_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new input menu entity.
  */
-eg_entity *input_menu_demo_create();
+eg_entity *input_menu_demo_create(eg_app *);
 
 #endif

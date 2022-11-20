@@ -417,11 +417,11 @@ void block_demo_register(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create(int x, int y)
+eg_entity *block_demo_create(eg_app* app, int x, int y)
 {
     eg_entity *block = NULL;
 
-    block = eg_create_entity();
+    block = eg_create_entity(app);
     if (block == NULL)
     {
         return NULL;
@@ -443,11 +443,11 @@ void block_demo_register_big(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_big(int x, int y)
+eg_entity *block_demo_create_big(eg_app* app, int x, int y)
 {
     eg_entity *block = NULL;
 
-    block = eg_create_entity();
+    block = eg_create_entity(app);
     if (block == NULL)
     {
         return NULL;
@@ -469,11 +469,11 @@ void block_demo_register_long(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_long(int x, int y)
+eg_entity *block_demo_create_long(eg_app* app, int x, int y)
 {
     eg_entity *block = NULL;
 
-    block = eg_create_entity();
+    block = eg_create_entity(app);
     if (block == NULL)
     {
         return NULL;
@@ -495,11 +495,11 @@ void throughblock_demo_register_long(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *throughblock_demo_create_long(int x, int y)
+eg_entity *throughblock_demo_create_long(eg_app* app, int x, int y)
 {
     eg_entity *block = NULL;
 
-    block = eg_create_entity();
+    block = eg_create_entity(app);
     if (block == NULL)
     {
         return NULL;
@@ -522,11 +522,11 @@ void block_demo_register_moving(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_moving(int x, int y, int type)
+eg_entity *block_demo_create_moving(eg_app* app, int x, int y, int type)
 {
     eg_entity *block = NULL;
 
-    block = eg_create_entity();
+    block = eg_create_entity(app);
     if (block == NULL)
     {
         return NULL;
@@ -549,11 +549,11 @@ void block_demo_register_sloped(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_sloped(int x, int y, int dir)
+eg_entity *block_demo_create_sloped(eg_app* app, int x, int y, int dir)
 {
     eg_entity *block = NULL;
 
-    block = eg_create_entity();
+    block = eg_create_entity(app);
     if (block == NULL)
     {
         return NULL;

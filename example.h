@@ -300,10 +300,6 @@ struct eg_entity
     // cursor position in a menu
     int cursor_x;
     int cursor_y;
-
-    // linked list pointers
-    eg_entity *next;
-    eg_entity *previous;
 };
 
 struct eg_entity_type
@@ -485,15 +481,7 @@ void eg_pop_input_handler(eg_app *);
  * Returns:
  *   eg_entity* - a pointer to a new entity
  */
-eg_entity *eg_create_entity();
-
-/**
- * Frees the memory allocated for an entity.
- *
- * Params:
- *   eg_entity* - the entity to be destroyed
- */
-void eg_destroy_entity(eg_entity *);
+eg_entity *eg_create_entity(eg_app *);
 
 /**
  * Adds an entity to the entity list.

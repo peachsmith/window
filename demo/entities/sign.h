@@ -25,6 +25,6 @@ void sign_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new sign entity.
  */
-eg_entity *sign_demo_create(int, int);
+eg_entity *sign_demo_create(eg_app *, int, int);
 
 #endif

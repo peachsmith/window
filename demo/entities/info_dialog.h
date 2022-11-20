@@ -20,7 +20,7 @@ void info_dialog_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new fish menu entity.
  */
-eg_entity *info_dialog_demo_create();
+eg_entity *info_dialog_demo_create(eg_app *);
 
 void info_dialog_demo_open(eg_app *, eg_entity *);
 

@@ -23,6 +23,6 @@ void jimbo_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the Jimbo.
  */
-eg_entity *jimbo_demo_create(int, int);
+eg_entity *jimbo_demo_create(eg_app *, int, int);
 
 #endif

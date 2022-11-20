@@ -66,11 +66,11 @@ void sign_demo_register(eg_entity_type *t)
     t->interact = interact_with_sign;
 }
 
-eg_entity *sign_demo_create(int x, int y)
+eg_entity *sign_demo_create(eg_app *app, int x, int y)
 {
     eg_entity *sign = NULL;
 
-    sign = eg_create_entity();
+    sign = eg_create_entity(app);
     if (sign == NULL)
     {
         return NULL;
