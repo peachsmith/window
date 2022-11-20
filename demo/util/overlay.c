@@ -47,7 +47,7 @@ void debug_draw_overlay(eg_app *app)
                  5,
                  5);
 
-    int avy = app->entity_types[player->type].get_y_vel(player);
+    // int avy = app->entity_types[player->type].get_y_vel(player);
 
     res = snprintf(
         buffer,
@@ -55,15 +55,11 @@ void debug_draw_overlay(eg_app *app)
         "x_acc: %d\n"
         "y_acc: %d\n"
         "x_pos: %d\n"
-        "y_pos: %d\n"
-        "y_vel: %d\n"
-        "entity count: %d\n",
+        "y_pos: %d\n",
         player->x_acc,
         player->y_acc,
         player->x_pos,
-        player->y_pos,
-        avy,
-        app->entity_count);
+        player->y_pos);
 
     // The return value from snprintf must be greater than 0 and less than
     // the limit n.
@@ -77,4 +73,64 @@ void debug_draw_overlay(eg_app *app)
                  buffer,
                  5,
                  20);
+
+    // Render entity array
+    int ex = 160;
+    int ey = 3;
+    eg_rect er = {.w = 5, .h = 5};
+    for (int i = 0; i < app->entity_cap; i++)
+    {
+        er.x = ex + (i / 20) * (er.w + 1);
+        er.y = ey + (i % 20) * (er.h + 1);
+
+        if (app->entities[i].present)
+        {
+            switch (app->entities[i].type)
+            {
+            case ENTITY_TYPE_BILLY:
+                eg_set_color(app, 0xfffa8ee3);
+                break;
+
+            case ENTITY_TYPE_JIMBO:
+                eg_set_color(app, 0xffffed47);
+                break;
+
+            case ENTITY_TYPE_PLAYER:
+                eg_set_color(app, 0xff78eb5b);
+                break;
+
+            case ENTITY_TYPE_BLOCK:
+                eg_set_color(app, 0xffc49f0c);
+                break;
+
+            case ENTITY_TYPE_BLOCK_SLOPE:
+                eg_set_color(app, 0xffbd80d9);
+                break;
+
+            case ENTITY_TYPE_BLOCK_MOVING:
+                eg_set_color(app, 0xff739c3b);
+                break;
+
+            case ENTITY_TYPE_HENRY:
+                eg_set_color(app, 0xfff24202);
+                break;
+
+            default:
+                eg_set_color(app, 0xffa8a8a8);
+                break;
+            }
+
+            if (eg_check_flag(&(app->entities[i]), ENTITY_FLAG_MENU))
+            {
+                eg_set_color(app, 0xff84f0ec);
+            }
+
+            eg_draw_rect(app, &er, 1);
+        }
+        else
+        {
+            eg_set_color(app, 0xffedece8);
+            eg_draw_rect(app, &er, 0);
+        }
+    }
 }

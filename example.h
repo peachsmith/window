@@ -484,15 +484,6 @@ void eg_pop_input_handler(eg_app *);
 eg_entity *eg_create_entity(eg_app *);
 
 /**
- * Adds an entity to the entity list.
- *
- * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_entity* - a pointer to the entity to add
- */
-void eg_add_entity(eg_app *, eg_entity *);
-
-/**
  * Removes an entity from the entity list.
  *
  * Params:
