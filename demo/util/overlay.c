@@ -141,23 +141,6 @@ void debug_draw_overlay(eg_app *app)
     // Render jump height control
 
     int act = app->actuation_counters[EG_KEYCODE_SPACE];
-    int jump_height = 0;
-
-    if (act)
-    {
-        if (act < 4)
-        {
-            jump_height = 1;
-        }
-        else if (act < 7)
-        {
-            jump_height = 2;
-        }
-        else if (act <= 10)
-        {
-            jump_height = 3;
-        }
-    }
 
     res = snprintf(
         buffer,
