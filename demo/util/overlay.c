@@ -116,7 +116,7 @@ void debug_draw_overlay(eg_app *app)
                 break;
 
             case ENTITY_TYPE_FIREBALL:
-                eg_set_color(app, EG_COLOR_ORANGE);
+                eg_set_color(app, 0xfff28918);
                 break;
 
             default:
@@ -137,4 +137,46 @@ void debug_draw_overlay(eg_app *app)
             eg_draw_rect(app, &er, 0);
         }
     }
+
+    // Render jump height control
+
+    int act = app->actuation_counters[EG_KEYCODE_SPACE];
+    int jump_height = 0;
+
+    if (act)
+    {
+        if (act < 4)
+        {
+            jump_height = 1;
+        }
+        else if (act < 7)
+        {
+            jump_height = 2;
+        }
+        else if (act <= 10)
+        {
+            jump_height = 3;
+        }
+    }
+
+    res = snprintf(
+        buffer,
+        n,
+        "actuation: %d\n"
+        "jump: %d\n",
+        act,
+        jump_height);
+
+    // The return value from snprintf must be greater than 0 and less than
+    // the limit n.
+    if (res < 0 || res >= n)
+    {
+        return;
+    }
+
+    eg_draw_text(app,
+                 app->fonts[DEMO_FONT_KENNY_PIXEL],
+                 buffer,
+                 5,
+                 70);
 }

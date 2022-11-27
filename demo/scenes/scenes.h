@@ -36,4 +36,6 @@ void load_scene_2(eg_app *);
  */
 void load_scene_3(eg_app *);
 
+void load_movement_scene(eg_app *);
+
 #endif
