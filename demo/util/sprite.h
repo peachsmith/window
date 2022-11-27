@@ -34,4 +34,6 @@ void sprite_draw_grass_block(eg_app *, int, int, int, int);
 
 void sprite_draw_background(eg_app *, int);
 
+void sprite_draw_fireball(eg_app *, int, int, int, int);
+
 #endif

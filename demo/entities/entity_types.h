@@ -28,8 +28,10 @@
 #define ENTITY_TYPE_JIMBO_DIALOG 20
 #define ENTITY_TYPE_SIGN_DIALOG 21
 
+#define ENTITY_TYPE_FIREBALL 22
+
 // This is the total number of entity types.
-#define ENTITY_TYPE_MAX 22
+#define ENTITY_TYPE_MAX 23
 
 // flags [0, 15]
 #define ENTITY_FLAG_GROUND 0
