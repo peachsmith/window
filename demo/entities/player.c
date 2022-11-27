@@ -56,6 +56,11 @@ static int get_player_x_vel(eg_entity *player)
 static int get_player_y_vel(eg_entity *player)
 {
     // acceleration to velocity conversion table
+    // int a_to_v[PLAYER_Y_ACC_LIMIT] = {
+    //     1, 1, 1, 1, 1, 1,
+    //     2, 2, 2, 2, 2, 2,
+    //     3, 3, 3, 3, 3, 3,
+    //     4, 4, 4, 4, 4, 4};
     int a_to_v[PLAYER_Y_ACC_LIMIT] = {
         1, 1, 1, 1, 1, 1,
         2, 2, 2, 2, 2, 2,
@@ -271,13 +276,32 @@ static void update_player(eg_app *app, eg_entity *player)
     if (eg_check_flag(player, ENTITY_FLAG_SLOPE))
     {
         eg_clear_flag(player, ENTITY_FLAG_SLOPE);
-        player->y_acc = 23;
+        player->y_acc = PLAYER_Y_ACC_LIMIT - 1;
     }
 
     // Apply gravity.
-    if (player->y_acc < 23)
+    if (player->y_acc < PLAYER_Y_ACC_LIMIT - 1)
     {
-        player->y_acc++;
+        // jump height control
+        int act = app->actuation_counters[EG_KEYCODE_SPACE];
+        int delay_acceleration = 0;
+
+        if (act)
+        {
+            if (act < 5)
+            {
+                delay_acceleration = 1;
+            }
+            else if (act < 12)
+            {
+                delay_acceleration = 1;
+            }
+        }
+
+        if (!delay_acceleration)
+        {
+            player->y_acc++;
+        }
     }
 
     //--------------------------------------------------------------------

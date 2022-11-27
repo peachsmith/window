@@ -162,10 +162,8 @@ void debug_draw_overlay(eg_app *app)
     res = snprintf(
         buffer,
         n,
-        "actuation: %d\n"
-        "jump: %d\n",
-        act,
-        jump_height);
+        "acutation: %d\n",
+        act);
 
     // The return value from snprintf must be greater than 0 and less than
     // the limit n.
@@ -179,4 +177,18 @@ void debug_draw_overlay(eg_app *app)
                  buffer,
                  5,
                  70);
+
+    er.x = 55;
+    er.y = 83;
+    er.w = 32;
+    er.h = 7;
+    eg_set_color(app, 0xffedece8);
+    eg_draw_rect(app, &er, 0);
+
+    er.x = 56;
+    er.y = 84;
+    er.w = act * 2;
+    er.h = 5;
+    eg_set_color(app, 0xffe85900);
+    eg_draw_rect(app, &er, 1);
 }
