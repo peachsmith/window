@@ -28,15 +28,15 @@ static void block_row(eg_app *app, int x, int y, int length)
     }
 }
 
-static void block_col(eg_app *app, int x, int y, int length)
-{
-    int block_h = 18;
+// static void block_col(eg_app *app, int x, int y, int length)
+// {
+//     int block_h = 18;
 
-    for (int i = 0; i < length; i++)
-    {
-        block_demo_create(app, x, y + i * block_h);
-    }
-}
+//     for (int i = 0; i < length; i++)
+//     {
+//         block_demo_create(app, x, y + i * block_h);
+//     }
+// }
 
 void load_movement_scene(eg_app *app)
 {
