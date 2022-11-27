@@ -70,44 +70,6 @@ void eg_impl_term()
     SDL_Quit();
 }
 
-void eg_impl_destroy_font(eg_font *font)
-{
-    for (int i = 0; i < FONT_ATLAS_MAX; i++)
-    {
-        if (font->glyphs[i] != NULL)
-        {
-            SDL_DestroyTexture(font->glyphs[i]);
-        }
-    }
-
-    if (font->atlas != NULL)
-    {
-        SDL_DestroyTexture(font->atlas);
-    }
-}
-
-void eg_impl_destroy_texture(eg_texture *texture)
-{
-    if (texture->img != NULL)
-    {
-        SDL_DestroyTexture(texture->img);
-        texture->img = NULL;
-    }
-}
-
-void eg_impl_destroy_sound(eg_sound *sound)
-{
-    if (sound->type == AUDIO_TYPE_SOUND_EFFECT)
-    {
-        Mix_FreeChunk(sound->chunk);
-    }
-
-    if (sound->type == AUDIO_TYPE_MUSIC)
-    {
-        Mix_FreeMusic(sound->music);
-    }
-}
-
 eg_impl *eg_impl_create(int screen_width, int screen_height, int scale)
 {
     eg_impl *impl;
@@ -283,8 +245,16 @@ void eg_impl_delay(eg_app *app)
         // Converting from Uint64 to Uint32 will truncate the value, but the
         // difference between the frame length and the elapsed milliseconds
         // should never be greater than UINT32_MAX.
+
         SDL_Delay((Uint32)(impl->frame_len * app->debug.frame_len - elapsed));
+
+        // TEMP: framerate debugging
+        // Uint64 fps_counter = SDL_GetTicks64() - impl->ticks;
+        // app->debug.fps = (fps_counter > 0) ? 1000.0f / fps_counter : 0.0f;
+        // printf("%.2f\n", app->debug.fps);
     }
+
+    // TODO: implement delta time
 }
 
 void eg_impl_clear_screen(eg_app *app)

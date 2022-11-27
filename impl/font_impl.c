@@ -226,6 +226,22 @@ eg_font *eg_impl_load_font(eg_app *app, const char *path, int p)
     return font;
 }
 
+void eg_impl_destroy_font(eg_font *font)
+{
+    for (int i = 0; i < FONT_ATLAS_MAX; i++)
+    {
+        if (font->glyphs[i] != NULL)
+        {
+            SDL_DestroyTexture(font->glyphs[i]);
+        }
+    }
+
+    if (font->atlas != NULL)
+    {
+        SDL_DestroyTexture(font->atlas);
+    }
+}
+
 /**
  * Renders a string of text to the screen using a font atlas that is composed
  * of multiple textures.

@@ -54,6 +54,34 @@ struct eg_impl
 };
 
 //----------------------------------------------------------------------------
+// core
+
+int eg_impl_init();
+
+void eg_impl_term();
+
+eg_impl *eg_impl_create(int, int, int);
+
+void eg_impl_destroy(eg_impl *);
+
+void eg_impl_process_events(eg_app *);
+
+void eg_impl_delay(eg_app *);
+
+//----------------------------------------------------------------------------
+// graphics
+
+void eg_impl_clear_screen(eg_app *);
+
+void eg_impl_render_screen(eg_app *);
+
+void eg_impl_set_color(eg_app *app, uint32_t color);
+
+void eg_impl_draw_line(eg_app *app, eg_point *a, eg_point *b);
+
+void eg_impl_draw_rect(eg_app *app, eg_rect *r, int filled);
+
+//----------------------------------------------------------------------------
 // keyboard
 
 /**
@@ -83,6 +111,29 @@ SDL_Scancode eg_impl_get_sdl_scancode(eg_keycode k);
  */
 eg_keycode eg_impl_get_eg_keycode(SDL_Scancode sc);
 
+int eg_impl_peek_key(eg_app *, int);
+
+int eg_impl_consume_key(eg_app *, int);
+
+//----------------------------------------------------------------------------
+// textures
+
+eg_texture *eg_impl_load_texture(eg_app *, const char *);
+
+void eg_impl_destroy_texture(eg_texture *);
+
+/**
+ * Renders a portion of a texure to the screen.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_texture* - the texure to render
+ *   eg_rect* - a rectangular region of the texture that will be rendered
+ *   eg_rect* - a rectangular region of the screen to which the texture
+ *              will be rendered
+ */
+void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
+
 //----------------------------------------------------------------------------
 // font
 
@@ -100,8 +151,9 @@ eg_keycode eg_impl_get_eg_keycode(SDL_Scancode sc);
  * Returns:
  *   int - 1 on success, or 0 on failure
  */
-// int eg_impl_load_font(eg_app *, const char *, int);
 eg_font *eg_impl_load_font(eg_app *, const char *, int);
+
+void eg_impl_destroy_font(eg_font *);
 
 /**
  * Reads a sprite sheet from a PNG file.
@@ -127,16 +179,15 @@ int eg_impl_load_sprite_sheet(eg_app *, const char *);
 // void eg_impl_draw_text(eg_app *, const char *, int, int);
 void eg_impl_draw_text(eg_app *, eg_font *, const char *, int, int);
 
-/**
- * Renders a portion of a texure to the screen.
- *
- * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_texture* - the texure to render
- *   eg_rect* - a rectangular region of the texture that will be rendered
- *   eg_rect* - a rectangular region of the screen to which the texture
- *              will be rendered
- */
-void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
+void eg_impl_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
+
+//----------------------------------------------------------------------------
+// audio
+
+eg_sound *eg_impl_load_sound(eg_app *, const char *, int);
+
+void eg_impl_play_sound(eg_app *, eg_sound *);
+
+void eg_impl_destroy_sound(eg_sound *);
 
 #endif
