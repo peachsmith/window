@@ -148,6 +148,7 @@ struct eg_debug
     int collisions;
     int frame_len;
     int frame_by_frame;
+    float fps;
 };
 
 // definition of the eg_app struct

@@ -56,6 +56,19 @@ eg_sound *eg_impl_load_sound(eg_app *app, const char *path, int type)
     return sound;
 }
 
+void eg_impl_destroy_sound(eg_sound *sound)
+{
+    if (sound->type == AUDIO_TYPE_SOUND_EFFECT)
+    {
+        Mix_FreeChunk(sound->chunk);
+    }
+
+    if (sound->type == AUDIO_TYPE_MUSIC)
+    {
+        Mix_FreeMusic(sound->music);
+    }
+}
+
 void eg_impl_play_sound(eg_app *app, eg_sound *sound)
 {
     if (sound->type == AUDIO_TYPE_SOUND_EFFECT)

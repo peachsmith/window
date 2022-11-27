@@ -254,6 +254,9 @@ int demo_prepare(eg_app *app)
     app->update = update;
     app->draw = draw;
 
+    // delta time (under construction)
+    
+
     // initialize tetxures
     if (!demo_init_textures(app))
     {

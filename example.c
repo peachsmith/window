@@ -1,33 +1,9 @@
 #include "example.h"
 #include "colors.h"
+#include "impl/impl.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-
-// defined in example_impl.c.
-int eg_impl_init();
-void eg_impl_term();
-eg_impl *eg_impl_create(int, int, int);
-void eg_impl_destroy(eg_impl *);
-void eg_impl_process_events(eg_app *);
-int eg_impl_delay(eg_app *);
-void eg_impl_clear_screen(eg_app *);
-void eg_impl_render_screen(eg_app *);
-void eg_impl_set_color(eg_app *app, uint32_t color);
-void eg_impl_draw_line(eg_app *app, eg_point *a, eg_point *b);
-void eg_impl_draw_rect(eg_app *app, eg_rect *r, int filled);
-int eg_impl_peek_key(eg_app *, int);
-int eg_impl_consume_key(eg_app *, int);
-eg_font *eg_impl_load_font(eg_app *, const char *, int);
-void eg_impl_draw_text(eg_app *, eg_font *, const char *, int, int);
-void eg_impl_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
-eg_texture *eg_impl_load_texture(eg_app *, const char *);
-eg_sound *eg_impl_load_sound(eg_app *, const char *, int);
-void eg_impl_play_sound(eg_app *, eg_sound *);
-void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
-void eg_impl_destroy_font(eg_font *);
-void eg_impl_destroy_texture(eg_texture *);
-void eg_impl_destroy_sound(eg_sound *);
 
 //----------------------------------------------------------------------------
 // core functions
@@ -72,6 +48,7 @@ eg_app *eg_create_app()
     app->debug.collisions = 0;
     app->debug.frame_len = 1;
     app->debug.frame_by_frame = 0;
+    app->debug.fps = 0;
 
     app->scale = 3;
 

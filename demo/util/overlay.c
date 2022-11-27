@@ -139,9 +139,7 @@ void debug_draw_overlay(eg_app *app)
     }
 
     // Render jump height control
-
     int act = app->actuation_counters[EG_KEYCODE_SPACE];
-
     res = snprintf(
         buffer,
         n,
@@ -174,4 +172,24 @@ void debug_draw_overlay(eg_app *app)
     er.h = 5;
     eg_set_color(app, 0xffe85900);
     eg_draw_rect(app, &er, 1);
+
+    // // Render frame rate information
+    // res = snprintf(
+    //     buffer,
+    //     n,
+    //     "fps: %.2f\n",
+    //     app->debug.fps);
+
+    // // The return value from snprintf must be greater than 0 and less than
+    // // the limit n.
+    // if (res < 0 || res >= n)
+    // {
+    //     return;
+    // }
+
+    // eg_draw_text(app,
+    //              app->fonts[DEMO_FONT_KENNY_PIXEL],
+    //              buffer,
+    //              5,
+    //              85);
 }

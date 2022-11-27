@@ -34,6 +34,15 @@ eg_texture *eg_impl_load_texture(eg_app *app, const char *path)
     return texture;
 }
 
+void eg_impl_destroy_texture(eg_texture *texture)
+{
+    if (texture->img != NULL)
+    {
+        SDL_DestroyTexture(texture->img);
+        texture->img = NULL;
+    }
+}
+
 void eg_impl_draw_texture(eg_app *app, eg_texture *texture, eg_rect *src, eg_rect *dest, int mirror)
 {
     SDL_Renderer *r = app->impl->renderer;
