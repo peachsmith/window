@@ -115,6 +115,10 @@ void debug_draw_overlay(eg_app *app)
                 eg_set_color(app, 0xfff24202);
                 break;
 
+            case ENTITY_TYPE_FIREBALL:
+                eg_set_color(app, EG_COLOR_ORANGE);
+                break;
+
             default:
                 eg_set_color(app, 0xffa8a8a8);
                 break;

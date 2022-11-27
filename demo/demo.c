@@ -18,6 +18,7 @@
 #include "demo/entities/info_dialog.h"
 #include "demo/entities/jimbo_dialog.h"
 #include "demo/entities/sign_dialog.h"
+#include "demo/entities/fireball.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
 #include "demo/menu/menu.h"
@@ -320,6 +321,9 @@ int demo_prepare(eg_app *app)
     info_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_INFO_DIALOG]));
     jimbo_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_JIMBO_DIALOG]));
     sign_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_SIGN_DIALOG]));
+
+    // projectiles
+    fireball_demo_register(&(app->entity_types[ENTITY_TYPE_FIREBALL]));
 
     // Load the initial scene.
     load_scene_0(app);

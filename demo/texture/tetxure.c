@@ -26,7 +26,7 @@ int demo_init_textures(eg_app *app)
     }
 
     // if (eg_load_texture(app, "assets/images/scenery.png") == NULL)
-    if (eg_load_texture(app, "assets/images/scenery_2.png") == NULL)
+    if (eg_load_texture(app, "assets/images/scenery_3.png") == NULL)
     {
         fprintf(stderr, "failed to load scenery image\n");
         return 0;

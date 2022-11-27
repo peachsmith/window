@@ -4,6 +4,7 @@
 #include "demo/entities/jimbo.h"
 #include "demo/entities/billy.h"
 #include "demo/entities/henry.h"
+#include "demo/entities/fireball.h"
 #include "demo/menu/menu.h"
 #include "demo/collision/collision.h"
 #include "demo/audio/audio.h"
@@ -353,6 +354,27 @@ void root_input_handler(eg_app *app)
         if (b != NULL)
         {
             eg_remove_entity(app, b);
+        }
+    }
+
+    // TEMP: lanuch projectile
+    if (eg_consume_input(app, EG_KEYCODE_X))
+    {
+        eg_entity *f = fireball_demo_create(
+            app,
+            target->x_pos - app->cam.x,
+            target->y_pos - app->cam.y + 4);
+        if (f != NULL)
+        {
+            if (eg_check_flag(target, ENTITY_FLAG_MIRROR))
+            {
+                f->x_acc = 1;
+            }
+            else
+            {
+                f->x_acc = -1;
+                eg_set_flag(f, ENTITY_FLAG_MIRROR);
+            }
         }
     }
 
