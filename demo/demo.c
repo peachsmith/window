@@ -326,7 +326,7 @@ int demo_prepare(eg_app *app)
     fireball_demo_register(&(app->entity_types[ENTITY_TYPE_FIREBALL]));
 
     // Load the initial scene.
-    load_scene_0(app);
+    load_movement_scene(app);
     eg_push_input_handler(app, root_input_handler);
 
     // Play music

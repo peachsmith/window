@@ -223,10 +223,11 @@ void root_input_handler(eg_app *app)
     }
 
     // jumping
-    if (eg_consume_input(app, EG_KEYCODE_SPACE))
+    if (eg_peek_input(app, EG_KEYCODE_SPACE))
     {
         if (eg_check_flag(target, ENTITY_FLAG_GROUND) &&
-            !eg_check_flag(target, ENTITY_FLAG_JUMP))
+            !eg_check_flag(target, ENTITY_FLAG_JUMP) &&
+            app->actuation_counters[EG_KEYCODE_SPACE] == 0)
         {
             eg_clear_flag(target, ENTITY_FLAG_GROUND);
             eg_set_flag(target, ENTITY_FLAG_JUMP);
@@ -240,6 +241,17 @@ void root_input_handler(eg_app *app)
             // value to launch the entity upward.
             target->y_acc = -18;
         }
+
+        // Increase the actuation counter to allow jump height control in the
+        // target entity's update function.
+        if (app->actuation_counters[EG_KEYCODE_SPACE] < 10)
+        {
+            app->actuation_counters[EG_KEYCODE_SPACE]++;
+        }
+    }
+    else
+    {
+        app->actuation_counters[EG_KEYCODE_SPACE] = 0;
     }
 
     // interaction with interactable entities
