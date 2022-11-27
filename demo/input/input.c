@@ -239,12 +239,14 @@ void root_input_handler(eg_app *app)
 
             // Set the vertical accleration to some significant negative
             // value to launch the entity upward.
-            target->y_acc = -18;
+            target->y_acc = -13;
+
+            app->actuation_counters[EG_KEYCODE_SPACE]++;
         }
 
         // Increase the actuation counter to allow jump height control in the
         // target entity's update function.
-        if (app->actuation_counters[EG_KEYCODE_SPACE] < 10)
+        else if (app->actuation_counters[EG_KEYCODE_SPACE] > 0 && app->actuation_counters[EG_KEYCODE_SPACE] < 15)
         {
             app->actuation_counters[EG_KEYCODE_SPACE]++;
         }
