@@ -111,15 +111,52 @@ SDL_Scancode eg_impl_get_sdl_scancode(eg_keycode k);
  */
 eg_keycode eg_impl_get_eg_keycode(SDL_Scancode sc);
 
+/**
+ * Checks to see if an input is actuated.
+ * As long as the input is actuated, this function will return 1. This is used
+ * for handling input events where some task must be performed for as long as
+ * the input is actuated.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   int - the scancode of the key to check
+ */
 int eg_impl_peek_key(eg_app *, int);
 
+/**
+ * Checks to see if an input is actuated.
+ * The first time the input is actuated, this function will return 1.
+ * All subsequent calls to this function will return 0 until the state of
+ * the input in question is reset. This is used for handling input events
+ * where a task must be performed a single time for a single input actuation.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   int - the scancode of the key to check
+ */
 int eg_impl_consume_key(eg_app *, int);
 
 //----------------------------------------------------------------------------
 // textures
 
+/**
+ * Loads a texture from a PNG file.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   const char* - file path of the PNG file
+ *
+ * Returns:
+ *   int - 1 on success or 0 on failure
+ */
 eg_texture *eg_impl_load_texture(eg_app *, const char *);
 
+/**
+ * Frees the memory allocated for a texture.
+ *
+ * Params:
+ *   eg_texture* - a pointer to a texture
+ */
 void eg_impl_destroy_texture(eg_texture *);
 
 /**
@@ -153,6 +190,12 @@ void eg_impl_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
  */
 eg_font *eg_impl_load_font(eg_app *, const char *, int);
 
+/**
+ * Frees the memory allocated for a font.
+ *
+ * Params:
+ *   eg_font* - a pointer to a font
+ */
 void eg_impl_destroy_font(eg_font *);
 
 /**
@@ -172,22 +215,56 @@ int eg_impl_load_sprite_sheet(eg_app *, const char *);
  *
  * Params:
  *   eg_app* - a pointer to an app struct
+ *   eg_font* - a pointer to a font
  *   const char* - the text to render
  *   int - the x position of the text on the screen
  *   int - the y position of the text on the screen
  */
-// void eg_impl_draw_text(eg_app *, const char *, int, int);
 void eg_impl_draw_text(eg_app *, eg_font *, const char *, int, int);
 
+/**
+ * Renders a string of text within a rectangular boundary.
+ * Newlines will be rendered to attempt to fit the text within the rectangle.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_font* - a pointer to a font
+ *   const char* - the text to render
+ *   eg_rect* - a pointer to a rectangular area of the screen to hold the text
+ */
 void eg_impl_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
 
 //----------------------------------------------------------------------------
 // audio
 
+/**
+ * Reads audio data from a file.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   const char* - the path to the audio file
+ *   int - the type of sound (1 for sound effect, 2 for music)
+ *
+ * Returns:
+ *   int - 1 on success, or 0 on failure
+ */
 eg_sound *eg_impl_load_sound(eg_app *, const char *, int);
 
+/**
+ * Plays audio.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   eg_sound* - a pointer to a sound
+ */
 void eg_impl_play_sound(eg_app *, eg_sound *);
 
+/**
+ * Frees the memory allocated for a sound.
+ *
+ * Params:
+ *   eg_sound* - a pointer to a sound
+ */
 void eg_impl_destroy_sound(eg_sound *);
 
 #endif

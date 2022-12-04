@@ -181,12 +181,6 @@ int eg_consume_input(eg_app *app, int code)
     return eg_impl_consume_key(app, code);
 }
 
-void eg_destroy_input_handler(eg_input_handler *handler)
-{
-    free(handler);
-}
-
-// void eg_push_input_handler(eg_app *app, eg_input_handler *handler)
 void eg_push_input_handler(eg_app *app, eg_callback handler)
 {
     if (app == NULL || app->input == NULL || handler == NULL)

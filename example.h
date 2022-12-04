@@ -23,14 +23,12 @@
 /**
  * This structure represents the state of an application.
  * Only one of these should be created in a given program.
- *
  */
 typedef struct eg_app eg_app;
 
 /**
  * The underlying implementation of the framework.
  * This handles things like windows and input handling.
- *
  */
 typedef struct eg_impl eg_impl;
 
@@ -39,11 +37,6 @@ typedef struct eg_impl eg_impl;
  * This is intended primarily for development and debugging.
  */
 typedef struct eg_debug eg_debug;
-
-/**
- * A node in a list of input handlers.
- */
-typedef struct eg_input_handler eg_input_handler;
 
 /**
  * An entity is a thing that can interact with other things.
@@ -55,19 +48,9 @@ typedef struct eg_entity eg_entity;
  */
 typedef struct eg_entity_type eg_entity_type;
 
-/**
- * Graphical data that can potentially be rendered to the screen.
- */
+// assets
 typedef struct eg_texture eg_texture;
-
-/**
- * Font data for rendering text.
- */
 typedef struct eg_font eg_font;
-
-/**
- * Font data for playing sound.
- */
 typedef struct eg_sound eg_sound;
 
 /**
@@ -80,8 +63,7 @@ typedef struct eg_point
 } eg_point;
 
 /**
- * A rectangle in this context, is a quadrilateral whose sides are parallel
- * to the x and y axes.
+ * a rectangle
  */
 typedef struct eg_rect
 {
@@ -91,12 +73,6 @@ typedef struct eg_rect
     int h;
 } eg_rect;
 
-/**
- * The result of collision detection.
- * This structure is defined by the consuming application.
- */
-typedef struct eg_collision eg_collision;
-
 typedef struct eg_camera
 {
     int x;
@@ -104,8 +80,17 @@ typedef struct eg_camera
 } eg_camera;
 
 /**
+ * The result of collision detection.
+ * This structure is defined by the consuming application.
+ */
+typedef struct eg_collision eg_collision;
+
+
+/**
  * A function that can get all its required input from an app struct.
- *
+ * 
+ * Params:
+ *   eg_app* - a pointer to an app struct
  */
 typedef void (*eg_func)(eg_app *);
 
@@ -229,20 +214,6 @@ struct eg_app
     eg_callback transition_input_handler;
 
     eg_debug debug;
-};
-
-// definition of the eg_input_handler struct
-struct eg_input_handler
-{
-    // The callback performs some action in response to input events.
-    eg_callback callback;
-
-    // The previous handler will become the top when the node that references
-    // it is popped from the stack.
-    eg_input_handler *previous;
-
-    // The entities that can be directly affected by input.
-    eg_entity *target;
 };
 
 // definition of the eg_entity struct
@@ -443,23 +414,14 @@ int eg_peek_input(eg_app *app, int);
 int eg_consume_input(eg_app *, int);
 
 /**
- * Frees the memory allocated for an input handler.
- *
- * Params:
- *   eg_input_handler* - a pointer to an input handler
- */
-void eg_destroy_input_handler(eg_input_handler *);
-
-/**
  * Pushes an input handler onto the top of the input handler stack.
  * Once pushed, the new input handler will be the current handler as long as
  * remains at the top.
  *
  * Params:
  *   eg_app* - a pointer to an app struct
- *   eg_input_handler* - a pointer to an input handler.
+ *   eg_callback - an input handliner function
  */
-// void eg_push_input_handler(eg_app *, eg_input_handler *);
 void eg_push_input_handler(eg_app *, eg_callback);
 
 /**
