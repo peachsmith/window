@@ -143,7 +143,7 @@ void debug_draw_overlay(eg_app *app)
     res = snprintf(
         buffer,
         n,
-        "acutation: %d\n",
+        "actuation: %d\n",
         act);
 
     // The return value from snprintf must be greater than 0 and less than
