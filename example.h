@@ -20,6 +20,9 @@
 #define AUDIO_TYPE_SOUND_EFFECT 1
 #define AUDIO_TYPE_MUSIC 2
 
+#define TIMING_WAIT 1
+#define TIMING_DELTA 2
+
 /**
  * This structure represents the state of an application.
  * Only one of these should be created in a given program.
@@ -31,6 +34,8 @@ typedef struct eg_app eg_app;
  * This handles things like windows and input handling.
  */
 typedef struct eg_impl eg_impl;
+
+typedef struct eg_timing eg_timing;
 
 /**
  * Used for viewing and modifying the internal state of the application.
@@ -85,10 +90,9 @@ typedef struct eg_camera
  */
 typedef struct eg_collision eg_collision;
 
-
 /**
  * A function that can get all its required input from an app struct.
- * 
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
  */
@@ -150,6 +154,9 @@ struct eg_app
 
     // For different sized windows.
     int scale;
+
+    // 0 for delay, 1 for delta time
+    int time;
 
     // This flag is used as a sentinel value by the main loop.
     // As long as this value is 0, the main loop should continue to execute.

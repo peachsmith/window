@@ -52,6 +52,8 @@ eg_app *eg_create_app()
 
     app->scale = 3;
 
+    app->time = TIMING_WAIT;
+
     app->update = default_update;
     app->draw = default_draw;
 

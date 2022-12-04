@@ -42,6 +42,13 @@ struct eg_sound
     Mix_Music *music; // music
 };
 
+struct eg_timing
+{
+    Uint64 frequency;
+    Uint64 count;
+    float delta;
+};
+
 // complete definition of the eg_impl type
 struct eg_impl
 {
@@ -51,6 +58,7 @@ struct eg_impl
     const Uint8 *keystates;
     Uint64 ticks;
     Uint64 frame_len;
+    eg_timing timing;
 };
 
 //----------------------------------------------------------------------------

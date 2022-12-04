@@ -153,6 +153,9 @@ eg_impl *eg_impl_create(int screen_width, int screen_height, int scale)
     impl->keystates = keystates;
     impl->frame_len = 16;
     impl->ticks = 0;
+    impl->timing.frequency = SDL_GetPerformanceFrequency();
+    impl->timing.count = SDL_GetPerformanceCounter();
+    impl->timing.delta = 0;
 
     // Notes on frame_len field:
     // Since the desired framerate is 60 frames per second, we set the
@@ -201,6 +204,11 @@ void eg_impl_process_events(eg_app *app)
     // First, we get the current tick count for regulating framerate.
     impl->ticks = SDL_GetTicks64();
 
+    // delta time
+    Uint64 count = SDL_GetPerformanceCounter();
+    impl->timing.delta = (float)(count - impl->timing.count) / impl->timing.frequency;
+    impl->timing.count = count;
+
     // According to the wiki, it is common practice to process all events in
     // the event queue at the beginning of each iteration of the main loop.
     // The SDL_PollEvent function also calls SDL_PumpEvents, which updates the
@@ -231,6 +239,11 @@ void eg_impl_delay(eg_app *app)
         return;
     }
 
+    if (app->time == TIMING_DELTA)
+    {
+        return;
+    }
+
     eg_impl *impl = app->impl;
 
     // Get the approximate number of milliseconds since the beginning of the
@@ -245,16 +258,8 @@ void eg_impl_delay(eg_app *app)
         // Converting from Uint64 to Uint32 will truncate the value, but the
         // difference between the frame length and the elapsed milliseconds
         // should never be greater than UINT32_MAX.
-
         SDL_Delay((Uint32)(impl->frame_len * app->debug.frame_len - elapsed));
-
-        // TEMP: framerate debugging
-        // Uint64 fps_counter = SDL_GetTicks64() - impl->ticks;
-        // app->debug.fps = (fps_counter > 0) ? 1000.0f / fps_counter : 0.0f;
-        // printf("%.2f\n", app->debug.fps);
     }
-
-    // TODO: implement delta time
 }
 
 void eg_impl_clear_screen(eg_app *app)
