@@ -241,6 +241,12 @@ void eg_impl_delay(eg_app *app)
 
     if (app->time == TIMING_DELTA)
     {
+        if (app->frame_check >= 1)
+        {
+            app->frame_check = 0;
+        }
+
+        app->frame_check += app->impl->timing.delta * 60;
         return;
     }
 
@@ -269,6 +275,14 @@ void eg_impl_clear_screen(eg_app *app)
         return;
     }
 
+    if (app->time == TIMING_DELTA)
+    {
+        if (app->frame_check < 1)
+        {
+            return;
+        }
+    }
+
     eg_impl *impl = app->impl;
 
     // SDL_SetRenderDrawColor(impl->renderer, 0X04, 0X35, 0X8D, 255);
@@ -281,6 +295,14 @@ void eg_impl_render_screen(eg_app *app)
     if (app == NULL || app->impl == NULL)
     {
         return;
+    }
+
+    if (app->time == TIMING_DELTA)
+    {
+        if (app->frame_check < 1)
+        {
+            return;
+        }
     }
 
     eg_impl *impl = app->impl;

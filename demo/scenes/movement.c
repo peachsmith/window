@@ -62,5 +62,9 @@ void load_movement_scene(eg_app *app)
 
     transition_demo_create(app);
 
-    player_demo_create(app, 100, 70);
+    block_demo_create_moving(app, -60, 60, 0); // vertical before player
+    block_demo_create_moving(app, 200, 75, 1); // horizontal before the player
+    player_demo_create(app, 80, 50);
+    block_demo_create_moving(app, 100, 75, 1);  // horizontal after the player
+    block_demo_create_moving(app, -140, 60, 0); // vertical after player
 }
