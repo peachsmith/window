@@ -5,4 +5,4 @@
 SRC=../*.c ../impl/*.c ../demo/main.c ../demo/demo.c ../demo/util/*.c ../demo/menu/*.c ../demo/dialog/*.c ../demo/entities/*.c ../demo/input/*.c ../demo/collision/*.c ../demo/scenes/*.c ../demo/font/*.c ../demo/texture/*.c ../demo/audio/*.c
 
 all:
-	gcc $(SRC) -I.. -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	gcc $(SRC) -I.. -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
