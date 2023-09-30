@@ -221,6 +221,8 @@ struct eg_app
     eg_callback transition_input_handler;
 
     eg_debug debug;
+
+    float frame_check;
 };
 
 // definition of the eg_entity struct

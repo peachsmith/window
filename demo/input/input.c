@@ -421,6 +421,15 @@ void root_input_handler(eg_app *app)
         eg_play_sound(app, app->sounds[DEMO_SOUND_EFFECT_TOGGLE]);
     }
 
+    if (eg_consume_input(app, EG_KEYCODE_V))
+    {
+        target->x_pos -= 1;
+    }
+    if (eg_consume_input(app, EG_KEYCODE_B))
+    {
+        target->x_pos += 1;
+    }
+
     // END player controls
     //-------------------------------------------------
 }

@@ -189,13 +189,17 @@ static void update_player(eg_app *app, eg_entity *player)
     // Update horizontal position.
     if (player->x_pos + w >= app->cr && avx > 0)
     {
+        int dcam = (player->x_pos + w) - app->cr;
         player->x_pos = app->cr - w;
         app->cam.x -= avx;
+        app->cam.x -= dcam;
     }
     else if (player->x_pos <= app->cl + 1 && avx < 0)
     {
+        int dcam = player->x_pos - (app->cl + 1);
         player->x_pos = app->cl + 1;
         app->cam.x -= avx;
+        app->cam.x -= dcam;
     }
     else
     {
@@ -257,13 +261,17 @@ static void update_player(eg_app *app, eg_entity *player)
     // Update vertical position.
     if (player->y_pos + h >= app->cb && avy > 0)
     {
+        int dcam = (player->y_pos + h) - app->cb;
         player->y_pos = app->cb - h;
         app->cam.y -= avy;
+        app->cam.y -= dcam;
     }
     else if (player->y_pos <= app->ct + 1 && avy < 0)
     {
+        int dcam = player->y_pos - (app->ct + 1);
         player->y_pos = app->ct + 1;
         app->cam.y -= avy;
+        app->cam.y -= dcam;
     }
     else
     {

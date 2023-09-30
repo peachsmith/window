@@ -52,7 +52,7 @@ eg_app *eg_create_app()
 
     app->scale = 3;
 
-    app->time = TIMING_WAIT;
+    app->time = TIMING_DELTA;
 
     app->update = default_update;
     app->draw = default_draw;
@@ -109,6 +109,8 @@ eg_app *eg_create_app()
     app->cr = 180;
     app->ct = 20;
     app->cb = 140;
+
+    app->frame_check = 0;
 
     return app;
 }

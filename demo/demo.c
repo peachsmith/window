@@ -68,6 +68,14 @@ static int default_get_y_vel(eg_entity *e)
  */
 static void update(eg_app *app)
 {
+    if (app->time == TIMING_DELTA)
+    {
+        if (app->frame_check < 1)
+        {
+            return;
+        }
+    }
+
     // Handle input.
     if (app->input != NULL && app->input_count > 0)
     {
@@ -138,6 +146,14 @@ static void update(eg_app *app)
  */
 static void draw(eg_app *app)
 {
+    if (app->time == TIMING_DELTA)
+    {
+        if (app->frame_check < 1)
+        {
+            return;
+        }
+    }
+
     //------------------------------------------------------------------------
     // background layer
     sprite_draw_background(app, 0);
@@ -255,7 +271,6 @@ int demo_prepare(eg_app *app)
     app->draw = draw;
 
     // delta time (under construction)
-    
 
     // initialize tetxures
     if (!demo_init_textures(app))
