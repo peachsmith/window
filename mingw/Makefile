@@ -6,3 +6,6 @@ SRC=../*.c ../impl/*.c ../demo/main.c ../demo/demo.c ../demo/util/*.c ../demo/me
 
 all:
 	gcc $(SRC) -I.. -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+debug:
+	gcc -g $(SRC) -I.. -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
