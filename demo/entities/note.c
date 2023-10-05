@@ -5,6 +5,8 @@
 #include "demo/dialog/dialog.h"
 #include "demo/demo.h"
 
+#include <stdlib.h>
+
 static int get_note_x_vel(eg_entity *note)
 {
     // acceleration to velocity conversion table
@@ -79,21 +81,21 @@ static int get_note_y_vel(eg_entity *note)
 
 static void render_note(eg_app *app, eg_entity *note)
 {
-    int tile = 0;
+    // int tile = 0;
 
     // Animation logic for walking to the right
-    if (note->animation_ticks < 5)
-    {
-        tile = 9;
-    }
-    else if (note->animation_ticks < 10)
-    {
-        tile = 10;
-    }
-    else if (note->animation_ticks < 15)
-    {
-        tile = 11;
-    }
+    // if (note->animation_ticks < 5)
+    // {
+    //     tile = 9;
+    // }
+    // else if (note->animation_ticks < 10)
+    // {
+    //     tile = 10;
+    // }
+    // else if (note->animation_ticks < 15)
+    // {
+    //     tile = 11;
+    // }
 
     // Render the note sprite.
     // sprite_draw_note(

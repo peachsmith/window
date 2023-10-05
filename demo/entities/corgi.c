@@ -4,6 +4,8 @@
 #include "demo/util/sprite.h"
 #include "demo/util/util.h"
 
+#include <stdlib.h>
+
 #define CORGI_X_ACC_LIMIT 24
 #define CORGI_Y_ACC_LIMIT 24
 #define CORGI_IFRAME_LIMIT 20
@@ -43,6 +45,12 @@ static int get_corgi_x_vel(eg_entity *corgi)
     if (corgi->x_t)
     {
         x_vel += corgi->x_t;
+    }
+
+    // effectively halve the velocity
+    if (corgi->ticks % 2)
+    {
+        x_vel = 0;
     }
 
     return x_vel;
@@ -85,33 +93,38 @@ static int get_corgi_y_vel(eg_entity *corgi)
         y_vel += corgi->y_t;
     }
 
+    // effectively halve the velocity
+    if (corgi->ticks % 2)
+    {
+        y_vel = 0;
+    }
+
     return y_vel;
 }
 
 static void render_corgi(eg_app *app, eg_entity *corgi)
 {
-    int tile = 0;
-    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
-    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
-    int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
+    // int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
+    // int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
+    // int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
 
     // Animation logic for walking to the right
-    if ((left_pressed || right_pressed) && grounded)
-    {
-        if (corgi->ticks < 6)
-        {
-            tile = 0;
-        }
-        else if (corgi->ticks < 16)
-        {
-            tile = 1;
-        }
-    }
+    // if ((left_pressed || right_pressed) && grounded)
+    // {
+    //     if (corgi->animation_ticks < 6)
+    //     {
+    //         tile = 0;
+    //     }
+    //     else if (corgi->animation_ticks < 16)
+    //     {
+    //         tile = 1;
+    //     }
+    // }
 
-    if (!grounded)
-    {
-        tile = 1;
-    }
+    // if (!grounded)
+    // {
+    //     tile = 1;
+    // }
 
     // Render the corgi sprite.
     // sprite_draw_character(
@@ -302,20 +315,22 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     }
 
     //--------------------------------------------------------------------
-    // Animation Logic
+    // Behavior Logic
+
+    corgi->ticks++;
 
     // Advance the counter for walking to the right
     if ((eg_peek_input(app, EG_KEYCODE_LEFT) || eg_peek_input(app, EG_KEYCODE_RIGHT)) && grounded)
     {
-        corgi->ticks++;
-        if (corgi->ticks >= 20)
+        corgi->animation_ticks++;
+        if (corgi->animation_ticks >= 20)
         {
-            corgi->ticks = 0;
+            corgi->animation_ticks = 0;
         }
     }
     else
     {
-        corgi->ticks = 0;
+        corgi->animation_ticks = 0;
     }
 }
 

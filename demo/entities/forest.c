@@ -1,6 +1,8 @@
 #include "demo/entities/forest.h"
 #include "demo/entities/entity_types.h"
 
+#include <stdlib.h>
+
 static void render_forest(eg_app *app, eg_entity *hud)
 {
     // canopy

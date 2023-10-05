@@ -51,8 +51,8 @@ void load_forest_scene(eg_app *app)
 
     // floor and walls
     block_demo_create_floor(app, 0, 142);
-    block_demo_create_wall(app, -23, 2);
-    block_demo_create_wall(app, 239, 2);
+    block_demo_create_wall(app, -24, 2);
+    block_demo_create_wall(app, 240, 2);
 
     // player
     app->primary = corgi_demo_create(app, 80, 80);
