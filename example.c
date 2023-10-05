@@ -45,6 +45,7 @@ eg_app *eg_create_app()
     // Populate the debug structure with the default values.
     app->debug.overlay = 0;
     app->debug.hitboxes = 0;
+    app->debug.camera = 0;
     app->debug.collisions = 0;
     app->debug.frame_len = 1;
     app->debug.frame_by_frame = 0;
@@ -83,8 +84,13 @@ eg_app *eg_create_app()
 
     app->done = 0;
     app->pause = 0;
+
     app->cam.x = 0;
     app->cam.y = 0;
+    app->cam.cl = 50;
+    app->cam.cr = 180;
+    app->cam.ct = 20;
+    app->cam.cb = 140;
 
     // Create the implementation struct.
     app->impl = eg_impl_create(
@@ -104,13 +110,14 @@ eg_app *eg_create_app()
         app->actuation_counters[i] = 0;
     }
 
-    // TEMP: camera boudnaries for debugging.
-    app->cl = 50;
-    app->cr = 180;
-    app->ct = 20;
-    app->cb = 140;
-
     app->frame_check = 0;
+
+    // generic values
+    app->primary = NULL;
+    for (int i = 0; i < 10; i++)
+    {
+        app->counters[i] = 0;
+    }
 
     return app;
 }
@@ -256,6 +263,8 @@ eg_entity *eg_create_entity(eg_app *app)
     entity->result = 0;
     entity->cursor_x = 0;
     entity->cursor_y = 0;
+    entity->scroll_y = 0;
+    entity->scroll_y = 0;
 
     return entity;
 }

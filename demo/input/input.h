@@ -18,6 +18,9 @@ void debug_menu_input_handler(eg_app *);
 void scene_menu_input_handler(eg_app *);
 void input_menu_input_handler(eg_app *);
 
+// Toot n Sploot input handlers
+void tns_root_input_handler(eg_app *);
+
 // used when no input should be processed
 void empty_input_handler(eg_app *);
 

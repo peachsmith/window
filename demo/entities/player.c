@@ -2,6 +2,7 @@
 #include "demo/entities/entity_types.h"
 #include "demo/texture/texture.h"
 #include "demo/util/sprite.h"
+#include "demo/util/util.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -187,17 +188,17 @@ static void update_player(eg_app *app, eg_entity *player)
     }
 
     // Update horizontal position.
-    if (player->x_pos + w >= app->cr && avx > 0)
+    if (app->cam.config == EG_CAMERA_ALL && player->x_pos + w >= app->cam.cr && avx > 0)
     {
-        int dcam = (player->x_pos + w) - app->cr;
-        player->x_pos = app->cr - w;
+        int dcam = (player->x_pos + w) - app->cam.cr;
+        player->x_pos = app->cam.cr - w;
         app->cam.x -= avx;
         app->cam.x -= dcam;
     }
-    else if (player->x_pos <= app->cl + 1 && avx < 0)
+    else if (app->cam.config == EG_CAMERA_ALL && player->x_pos <= app->cam.cl + 1 && avx < 0)
     {
-        int dcam = player->x_pos - (app->cl + 1);
-        player->x_pos = app->cl + 1;
+        int dcam = player->x_pos - (app->cam.cl + 1);
+        player->x_pos = app->cam.cl + 1;
         app->cam.x -= avx;
         app->cam.x -= dcam;
     }
@@ -259,17 +260,17 @@ static void update_player(eg_app *app, eg_entity *player)
     eg_clear_flag(player, ENTITY_FLAG_MOVE);
 
     // Update vertical position.
-    if (player->y_pos + h >= app->cb && avy > 0)
+    if (app->cam.config == EG_CAMERA_ALL && player->y_pos + h >= app->cam.cb && avy > 0)
     {
-        int dcam = (player->y_pos + h) - app->cb;
-        player->y_pos = app->cb - h;
+        int dcam = (player->y_pos + h) - app->cam.cb;
+        player->y_pos = app->cam.cb - h;
         app->cam.y -= avy;
         app->cam.y -= dcam;
     }
-    else if (player->y_pos <= app->ct + 1 && avy < 0)
+    else if (app->cam.config == EG_CAMERA_ALL && player->y_pos <= app->cam.ct + 1 && avy < 0)
     {
-        int dcam = player->y_pos - (app->ct + 1);
-        player->y_pos = app->ct + 1;
+        int dcam = player->y_pos - (app->cam.ct + 1);
+        player->y_pos = app->cam.ct + 1;
         app->cam.y -= avy;
         app->cam.y -= dcam;
     }

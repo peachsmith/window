@@ -80,8 +80,18 @@ typedef struct eg_rect
 
 typedef struct eg_camera
 {
+    // position
     int x;
     int y;
+
+    // boundaries
+    int cl;
+    int cr;
+    int ct;
+    int cb;
+
+    // boundary configuration
+    int config;
 } eg_camera;
 
 /**
@@ -135,6 +145,7 @@ struct eg_debug
     int overlay;
     int hitboxes;
     int collisions;
+    int camera;
     int frame_len;
     int frame_by_frame;
     float fps;
@@ -175,13 +186,6 @@ struct eg_app
 
     eg_camera cam;
 
-    // TEMP: camera boundaries for debugging
-    // TODO: organize camera struct
-    int cl;
-    int cr;
-    int ct;
-    int cb;
-
     eg_func update;
     eg_func draw;
 
@@ -196,9 +200,11 @@ struct eg_app
     int sound_count;
 
     // entities
+    eg_entity *entities;
     int entity_count;
     int entity_cap;
-    eg_entity *entities;
+
+    // entity type registry
     eg_entity_type *entity_types;
 
     // menus
@@ -223,6 +229,10 @@ struct eg_app
     eg_debug debug;
 
     float frame_check;
+
+    // Generic values that can be used in any way.
+    eg_entity *primary; // an entity of significance
+    int counters[10];   // generic counters
 };
 
 // definition of the eg_entity struct
@@ -281,6 +291,8 @@ struct eg_entity
     // cursor position in a menu
     int cursor_x;
     int cursor_y;
+    int scroll_x;
+    int scroll_y;
 };
 
 struct eg_entity_type

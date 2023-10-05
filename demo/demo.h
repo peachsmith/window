@@ -3,6 +3,8 @@
 
 #include "example.h"
 
+#define DEMO_COUNTER_NOTES 0
+
 /**
  * Populates am app struct with the data needed for runtime.
  * 

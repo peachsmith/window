@@ -9,6 +9,6 @@
  * Params:
  *   eg_app* - a pointer to an app struct
  */
-void debug_draw_overlay(eg_app *);
+void demo_draw_overlay(eg_app *);
 
 #endif

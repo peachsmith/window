@@ -75,6 +75,16 @@ static void scene3_transition(eg_app *app)
     do_transition(app, load_scene_3);
 }
 
+static void movement_transition(eg_app *app)
+{
+    do_transition(app, load_movement_scene);
+}
+
+static void forest_transition(eg_app *app)
+{
+    do_transition(app, load_forest_scene);
+}
+
 /**
  * This function starts the scene transition process.
  * First, it prepares the scene loader and input handler for the next scene.
@@ -84,7 +94,7 @@ static void scene3_transition(eg_app *app)
  * the next scene.
  *
  */
-static void begin_transition(eg_app *app, eg_callback transition_loader)
+static void begin_transition(eg_app *app, eg_callback transition_loader, eg_callback handler)
 {
     // Close the scenes menu.
     app->menu_count--;
@@ -97,7 +107,7 @@ static void begin_transition(eg_app *app, eg_callback transition_loader)
     // Set the transition callback to load scene 0.
     // Set the next input handler to be the root input handler.
     app->transition_loader = transition_loader;
-    app->transition_input_handler = root_input_handler;
+    app->transition_input_handler = handler;
 
     // Remove the input handler of the current scene.
     eg_pop_input_handler(app);
@@ -138,6 +148,10 @@ void scene_menu_input_handler(eg_app *app)
         {
             menu_entity->cursor_y--;
         }
+        else if (menu_entity->scroll_y > 0)
+        {
+            menu_entity->scroll_y--;
+        }
     }
 
     if (eg_consume_input(app, EG_KEYCODE_DOWN))
@@ -146,27 +160,39 @@ void scene_menu_input_handler(eg_app *app)
         {
             menu_entity->cursor_y++;
         }
+        else if (menu_entity->scroll_y < 2)
+        {
+            menu_entity->scroll_y++;
+        }
     }
 
     // menu item selection
     if (eg_consume_input(app, EG_KEYCODE_Z))
     {
-        switch (menu_entity->cursor_y)
+        switch (menu_entity->cursor_y + menu_entity->scroll_y)
         {
         case 0:
-            begin_transition(app, scene0_transition);
+            begin_transition(app, scene0_transition, root_input_handler);
             break;
 
         case 1:
-            begin_transition(app, scene1_transition);
+            begin_transition(app, scene1_transition, root_input_handler);
             break;
 
         case 2:
-            begin_transition(app, scene2_transition);
+            begin_transition(app, scene2_transition, root_input_handler);
             break;
 
         case 3:
-            begin_transition(app, scene3_transition);
+            begin_transition(app, scene3_transition, root_input_handler);
+            break;
+
+        case 4:
+            begin_transition(app, forest_transition, tns_root_input_handler);
+            break;
+
+        case 5:
+            begin_transition(app, movement_transition, root_input_handler);
             break;
 
         default:

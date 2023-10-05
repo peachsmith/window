@@ -38,4 +38,9 @@ void load_scene_3(eg_app *);
 
 void load_movement_scene(eg_app *);
 
+
+//============================================================================
+// Toot n Sploot scenes
+void load_forest_scene(eg_app *);
+
 #endif

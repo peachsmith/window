@@ -12,6 +12,8 @@
 #include "demo/entities/input_menu.h"
 #include "demo/entities/info_dialog.h"
 #include "demo/entities/demo_dialog.h"
+#include "demo/entities/jimbo_dialog.h"
+#include "demo/util/util.h"
 
 #include <stdlib.h>
 
@@ -20,6 +22,8 @@ void load_scene_3(eg_app *app)
     // Starting position for building a sequence of blocks.
     int x_start = 50;
     // int y_start = 0; // currently unused
+
+    demo_set_camera(app, EG_CAMERA_ALL);
 
     app->cam.x = 0;
     app->cam.y = 0;
@@ -35,6 +39,7 @@ void load_scene_3(eg_app *app)
     // dialogs
     demo_dialog_demo_create(app);
     info_dialog_demo_create(app);
+    jimbo_dialog_demo_create(app);
 
     block_demo_create(app, x_start - 27 + 18, 94);
     block_demo_create(app, x_start - 27 + 36, 94);
@@ -43,7 +48,7 @@ void load_scene_3(eg_app *app)
     block_demo_create(app, x_start - 27 + 90, 94);
 
     // player
-    player_demo_create(app, 100, 55);
+    app->primary = player_demo_create(app, 100, 55);
 
     // Add the rest of the horizontal row.
     block_demo_create(app, x_start - 27 + 108, 94);

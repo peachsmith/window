@@ -8,6 +8,7 @@
 #include "demo/menu/menu.h"
 #include "demo/collision/collision.h"
 #include "demo/audio/audio.h"
+#include "demo/util/util.h"
 
 #include <stdio.h>
 
@@ -132,14 +133,7 @@ void root_input_handler(eg_app *app)
     // BEGIN player controls
 
     // Locate the player entity.
-    eg_entity *target = NULL;
-    for (int i = 0; i < app->entity_cap && target == NULL; i++)
-    {
-        if (app->entities[i].type == ENTITY_TYPE_PLAYER && app->entities[i].present)
-        {
-            target = &(app->entities[i]);
-        }
-    }
+    eg_entity *target = app->primary;
 
     int max_walk = 6;
     int min_walk = 1;
@@ -371,7 +365,7 @@ void root_input_handler(eg_app *app)
         }
     }
 
-    // TEMP: lanuch projectile
+    // lanuch projectile
     if (eg_consume_input(app, EG_KEYCODE_X))
     {
         eg_entity *f = fireball_demo_create(
@@ -421,6 +415,7 @@ void root_input_handler(eg_app *app)
         eg_play_sound(app, app->sounds[DEMO_SOUND_EFFECT_TOGGLE]);
     }
 
+    // The V and B keys will move the player left or right.
     if (eg_consume_input(app, EG_KEYCODE_V))
     {
         target->x_pos -= 1;
@@ -428,6 +423,23 @@ void root_input_handler(eg_app *app)
     if (eg_consume_input(app, EG_KEYCODE_B))
     {
         target->x_pos += 1;
+    }
+
+    // The [ and ] keys will toggle the rendering of hitboxes and camera
+    // boundaries respectively
+    if (eg_consume_input(app, EG_KEYCODE_LEFTBRACKET))
+    {
+        app->debug.hitboxes = app->debug.hitboxes ? 0 : 1;
+    }
+    if (eg_consume_input(app, EG_KEYCODE_RIGHTBRACKET))
+    {
+        app->debug.camera = app->debug.camera ? 0 : 1;
+    }
+
+    // The ' key will toggle the camera configuration
+    if (eg_consume_input(app, EG_KEYCODE_APOSTROPHE))
+    {
+        app->cam.config = app->cam.config == EG_CAMERA_ALL ? EG_CAMERA_NONE : EG_CAMERA_ALL;
     }
 
     // END player controls

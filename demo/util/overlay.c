@@ -7,7 +7,7 @@
 
 #define DEBUG_BUFSIZE 256
 
-void debug_draw_overlay(eg_app *app)
+void demo_draw_overlay(eg_app *app)
 {
     char buffer[DEBUG_BUFSIZE];
     int n = DEBUG_BUFSIZE - 1;
@@ -17,14 +17,7 @@ void debug_draw_overlay(eg_app *app)
     // Documentation for snprintf:
     // https://cplusplus.com/reference/cstdio/snprintf
 
-    eg_entity *player = NULL;
-    for (int i = 0; i < app->entity_cap && player == NULL; i++)
-    {
-        if (app->entities[i].type == ENTITY_TYPE_PLAYER && app->entities[i].present)
-        {
-            player = &(app->entities[i]);
-        }
-    }
+    eg_entity *player = app->primary;
 
     // The nul terminator is appended by the snprintf function.
     int res = snprintf(
@@ -48,6 +41,11 @@ void debug_draw_overlay(eg_app *app)
                  5);
 
     // int avy = app->entity_types[player->type].get_y_vel(player);
+
+    if (player == NULL)
+    {
+        return;
+    }
 
     res = snprintf(
         buffer,

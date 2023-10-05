@@ -15,6 +15,7 @@
 #include "demo/entities/demo_dialog.h"
 #include "demo/entities/jimbo_dialog.h"
 #include "demo/entities/sign_dialog.h"
+#include "demo/util/util.h"
 
 #include <stdio.h>
 
@@ -24,6 +25,7 @@ void load_scene_0(eg_app *app)
     // int x_start = 10;
     // int y_start = 30;
 
+    demo_set_camera(app, EG_CAMERA_ALL);
     app->cam.x = -320;
     app->cam.y = 40;
 
@@ -61,7 +63,7 @@ void load_scene_0(eg_app *app)
     sign_demo_create(app, 37, 76);
 
     // player
-    player_demo_create(app, 150, 0);
+    app->primary = player_demo_create(app, 150, 0);
 
     // scene transition
     transition_demo_create(app);

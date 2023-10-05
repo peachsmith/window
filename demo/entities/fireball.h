@@ -1,5 +1,5 @@
-#ifndef EG_DEMO_FIRBALL_H
-#define EG_DEMO_FIRBALL_H
+#ifndef EG_DEMO_FIREBALL_H
+#define EG_DEMO_FIREBALL_H
 
 // fireball is a hostile entity. We call him "Hostile fireball".
 

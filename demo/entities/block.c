@@ -255,6 +255,12 @@ static void collide_block(
     // The collision resolution correction factor formula is pulled from
     // the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.
 
+    // Don't collide with musical notes.
+    if (other->type == ENTITY_TYPE_NOTE)
+    {
+        return;
+    }
+
     if (block->type == ENTITY_TYPE_BLOCK_SLOPE)
     {
         int avy = app->entity_types[other->type].get_y_vel(other);
@@ -417,7 +423,7 @@ void block_demo_register(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create(eg_app* app, int x, int y)
+eg_entity *block_demo_create(eg_app *app, int x, int y)
 {
     eg_entity *block = NULL;
 
@@ -443,7 +449,7 @@ void block_demo_register_big(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_big(eg_app* app, int x, int y)
+eg_entity *block_demo_create_big(eg_app *app, int x, int y)
 {
     eg_entity *block = NULL;
 
@@ -469,7 +475,7 @@ void block_demo_register_long(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_long(eg_app* app, int x, int y)
+eg_entity *block_demo_create_long(eg_app *app, int x, int y)
 {
     eg_entity *block = NULL;
 
@@ -495,7 +501,7 @@ void throughblock_demo_register_long(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *throughblock_demo_create_long(eg_app* app, int x, int y)
+eg_entity *throughblock_demo_create_long(eg_app *app, int x, int y)
 {
     eg_entity *block = NULL;
 
@@ -522,7 +528,7 @@ void block_demo_register_moving(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_moving(eg_app* app, int x, int y, int type)
+eg_entity *block_demo_create_moving(eg_app *app, int x, int y, int type)
 {
     eg_entity *block = NULL;
 
@@ -549,7 +555,7 @@ void block_demo_register_sloped(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_sloped(eg_app* app, int x, int y, int dir)
+eg_entity *block_demo_create_sloped(eg_app *app, int x, int y, int dir)
 {
     eg_entity *block = NULL;
 
@@ -569,4 +575,119 @@ eg_entity *block_demo_create_sloped(eg_app* app, int x, int y, int dir)
     block->data = dir;
 
     return block;
+}
+
+void block_demo_row(eg_app *app, int x, int y, int length)
+{
+    int block_w = 18;
+
+    for (int i = 0; i < length; i++)
+    {
+        block_demo_create(app, x + i * block_w, y);
+    }
+}
+
+void block_demo_col(eg_app *app, int x, int y, int length)
+{
+    int block_h = 18;
+
+    for (int i = 0; i < length; i++)
+    {
+        block_demo_create(app, x, y + i * block_h);
+    }
+}
+
+// Renders a standard block
+static void render_floor(eg_app *app, eg_entity *floor)
+{
+    eg_rect r = {
+        .x = floor->x_pos,
+        .y = floor->y_pos,
+        .w = app->entity_types[floor->type].width,
+        .h = app->entity_types[floor->type].height};
+
+    eg_set_color(app, EG_COLOR_BROWN);
+    eg_draw_rect(app, &r, 1);
+
+    // hit box
+    if (app->debug.hitboxes)
+    {
+        eg_rect hit_box;
+        hit_box.x = floor->x_pos + app->cam.x;
+        hit_box.y = floor->y_pos + app->cam.y;
+        hit_box.w = app->entity_types[floor->type].width;
+        hit_box.h = app->entity_types[floor->type].height;
+
+        eg_set_color(app, EG_COLOR_SEA_GREEN);
+        eg_draw_rect(app, &hit_box, 0);
+    }
+}
+
+// Renders a standard block
+static void render_wall(eg_app *app, eg_entity *wall)
+{
+    // hit box
+    if (app->debug.hitboxes)
+    {
+        eg_rect hit_box;
+        hit_box.x = wall->x_pos + app->cam.x;
+        hit_box.y = wall->y_pos + app->cam.y;
+        hit_box.w = app->entity_types[wall->type].width;
+        hit_box.h = app->entity_types[wall->type].height;
+
+        eg_set_color(app, EG_COLOR_YELLOW);
+        eg_draw_rect(app, &hit_box, 0);
+    }
+}
+
+void block_demo_register_floor(eg_entity_type *t)
+{
+    t->id = ENTITY_TYPE_FLOOR;
+    t->width = 240;
+    t->height = 18;
+    t->render = render_floor;
+    t->collide = collide_block;
+}
+
+eg_entity *block_demo_create_floor(eg_app *app, int x, int y)
+{
+    eg_entity *floor = NULL;
+
+    floor = eg_create_entity(app);
+    if (floor == NULL)
+    {
+        return NULL;
+    }
+
+    floor->type = ENTITY_TYPE_FLOOR;
+    floor->x_pos = x;
+    floor->y_pos = y;
+
+    return floor;
+}
+
+void block_demo_register_wall(eg_entity_type *t)
+{
+    t->id = ENTITY_TYPE_WALL;
+    t->width = 24;
+    t->height = 140;
+    t->render = render_wall;
+    t->collide = collide_block;
+}
+
+eg_entity *block_demo_create_wall(eg_app *app, int x, int y)
+{
+    eg_entity *wall = NULL;
+
+    wall = eg_create_entity(app);
+    if (wall == NULL)
+    {
+        return NULL;
+    }
+
+    wall->type = ENTITY_TYPE_WALL;
+    wall->x_pos = x;
+    wall->y_pos = y;
+
+    return wall;
 }

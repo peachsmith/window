@@ -19,6 +19,10 @@
 #include "demo/entities/jimbo_dialog.h"
 #include "demo/entities/sign_dialog.h"
 #include "demo/entities/fireball.h"
+#include "demo/entities/hud.h"
+#include "demo/entities/forest.h"
+#include "demo/entities/corgi.h"
+#include "demo/entities/note.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
 #include "demo/menu/menu.h"
@@ -214,9 +218,15 @@ static void draw(eg_app *app)
 
     //------------------------------------------------------------------------
     // debug layer
+
+    if (app->debug.camera)
+    {
+        demo_draw_camera(app);
+    }
+
     if (app->debug.overlay)
     {
-        debug_draw_overlay(app);
+        demo_draw_overlay(app);
     }
 }
 
@@ -308,6 +318,7 @@ int demo_prepare(eg_app *app)
 
     // Register the entity types.
     player_demo_register(&(app->entity_types[ENTITY_TYPE_PLAYER]));
+    corgi_demo_register(&(app->entity_types[ENTITY_TYPE_CORGI]));
 
     // platforms and other blocks
     block_demo_register(&(app->entity_types[ENTITY_TYPE_BLOCK]));
@@ -316,6 +327,8 @@ int demo_prepare(eg_app *app)
     throughblock_demo_register_long(&(app->entity_types[ENTITY_TYPE_THROUGHBLOCK_LONG]));
     block_demo_register_moving(&(app->entity_types[ENTITY_TYPE_BLOCK_MOVING]));
     block_demo_register_sloped(&(app->entity_types[ENTITY_TYPE_BLOCK_SLOPE]));
+    block_demo_register_floor(&(app->entity_types[ENTITY_TYPE_FLOOR]));
+    block_demo_register_wall(&(app->entity_types[ENTITY_TYPE_WALL]));
 
     // interactables
     sign_demo_register(&(app->entity_types[ENTITY_TYPE_SIGN]));   // npc dialog
@@ -334,6 +347,12 @@ int demo_prepare(eg_app *app)
     scene_menu_demo_register(&(app->entity_types[ENTITY_TYPE_SCENE_MENU]));
     input_menu_demo_register(&(app->entity_types[ENTITY_TYPE_INPUT_MENU]));
 
+    // heads up display
+    hud_demo_register(&(app->entity_types[ENTITY_TYPE_HUD]));
+
+    // scenery
+    forest_demo_register(&(app->entity_types[ENTITY_TYPE_FOREST]));
+
     // dialogs
     demo_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_DEMO_DIALOG]));
     info_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_INFO_DIALOG]));
@@ -342,10 +361,13 @@ int demo_prepare(eg_app *app)
 
     // projectiles
     fireball_demo_register(&(app->entity_types[ENTITY_TYPE_FIREBALL]));
+    note_demo_register(&(app->entity_types[ENTITY_TYPE_NOTE]));
+
+    eg_push_input_handler(app, empty_input_handler);
 
     // Load the initial scene.
-    load_movement_scene(app);
-    eg_push_input_handler(app, root_input_handler);
+    load_forest_scene(app);
+    eg_push_input_handler(app, tns_root_input_handler);
 
     // Play music
     // eg_play_sound(app, app->sounds[DEMO_SONG_FIELD]);

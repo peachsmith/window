@@ -118,16 +118,16 @@ void demo_draw_camera(eg_app *app)
     eg_set_color(app, EG_COLOR_MAUVE);
 
     // left boundary
-    l0.x = app->cl;
+    l0.x = app->cam.cl;
     l0.y = 0;
-    l1.x = app->cl;
+    l1.x = app->cam.cl;
     l1.y = app->screen_height;
     eg_draw_line(app, &l0, &l1);
 
     // right boundary
-    r0.x = app->cr;
+    r0.x = app->cam.cr;
     r0.y = 0;
-    r1.x = app->cr;
+    r1.x = app->cam.cr;
     r1.y = app->screen_height;
     eg_draw_line(app, &r0, &r1);
 
@@ -135,15 +135,38 @@ void demo_draw_camera(eg_app *app)
 
     // top boundary
     t0.x = 0;
-    t0.y = app->ct;
+    t0.y = app->cam.ct;
     t1.x = app->screen_width;
-    t1.y = app->ct;
+    t1.y = app->cam.ct;
     eg_draw_line(app, &t0, &t1);
 
     // bottom boundary
     b0.x = 0;
-    b0.y = app->cb;
+    b0.y = app->cam.cb;
     b1.x = app->screen_width;
-    b1.y = app->cb;
+    b1.y = app->cam.cb;
     eg_draw_line(app, &b0, &b1);
+}
+
+void demo_set_camera(eg_app *app, int config)
+{
+    app->cam.config = config;
+
+    if (config == EG_CAMERA_ALL)
+    {
+        app->cam.cl = 50;
+        app->cam.cr = 180;
+        app->cam.ct = 20;
+        app->cam.cb = 140;
+        return;
+    }
+
+    if (config == EG_CAMERA_ALL)
+    {
+        app->cam.cl = 0;
+        app->cam.cr = 0;
+        app->cam.ct = 0;
+        app->cam.cb = 0;
+        return;
+    }
 }

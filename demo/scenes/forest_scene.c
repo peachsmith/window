@@ -15,14 +15,17 @@
 #include "demo/entities/demo_dialog.h"
 #include "demo/entities/jimbo_dialog.h"
 #include "demo/entities/sign_dialog.h"
+#include "demo/entities/hud.h"
+#include "demo/entities/forest.h"
+#include "demo/entities/corgi.h"
 #include "demo/util/util.h"
+#include "demo/demo.h"
 
-#include <stdio.h>
-
-void load_movement_scene(eg_app *app)
+void load_forest_scene(eg_app *app)
 {
-    demo_set_camera(app, EG_CAMERA_ALL);
+    app->counters[DEMO_COUNTER_NOTES] = 0;
 
+    demo_set_camera(app, EG_CAMERA_NONE);
     app->cam.x = 0;
     app->cam.y = 0;
 
@@ -40,13 +43,20 @@ void load_movement_scene(eg_app *app)
     jimbo_dialog_demo_create(app);
     sign_dialog_demo_create(app);
 
-    block_demo_row(app, 0, 120, 15);
-
+    // scene transition
     transition_demo_create(app);
 
-    block_demo_create_moving(app, -60, 60, 0); // vertical before player
-    block_demo_create_moving(app, 200, 75, 1); // horizontal before the player
-    app->primary = player_demo_create(app, 80, 50);
-    block_demo_create_moving(app, 100, 75, 1);  // horizontal after the player
-    block_demo_create_moving(app, -140, 60, 0); // vertical after player
+    // background
+    forest_demo_create(app, 0, 22);
+
+    // floor and walls
+    block_demo_create_floor(app, 0, 142);
+    block_demo_create_wall(app, -23, 2);
+    block_demo_create_wall(app, 239, 2);
+
+    // player
+    app->primary = corgi_demo_create(app, 80, 80);
+
+    // heads up display
+    hud_demo_create(app, 0, 0);
 }

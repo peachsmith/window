@@ -45,4 +45,15 @@ void demo_draw_sat(
  */
 void demo_draw_camera(eg_app *);
 
+//============================================================================
+// camera boundary configurations
+
+// no camera boundaries
+#define EG_CAMERA_NONE 0
+
+// left, right, top and bottom boundaries
+#define EG_CAMERA_ALL 1
+
+void demo_set_camera(eg_app *, int);
+
 #endif

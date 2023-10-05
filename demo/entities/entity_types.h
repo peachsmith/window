@@ -30,8 +30,16 @@
 
 #define ENTITY_TYPE_FIREBALL 22
 
+// Toot n Sploot entities
+#define ENTITY_TYPE_FLOOR 23
+#define ENTITY_TYPE_WALL 24
+#define ENTITY_TYPE_HUD 25
+#define ENTITY_TYPE_CORGI 26
+#define ENTITY_TYPE_NOTE 27
+#define ENTITY_TYPE_FOREST 28
+
 // This is the total number of entity types.
-#define ENTITY_TYPE_MAX 23
+#define ENTITY_TYPE_MAX 29
 
 // flags [0, 15]
 #define ENTITY_FLAG_GROUND 0
