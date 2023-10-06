@@ -23,6 +23,7 @@
 #include "demo/entities/forest.h"
 #include "demo/entities/corgi.h"
 #include "demo/entities/note.h"
+#include "demo/entities/critter.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
 #include "demo/menu/menu.h"
@@ -36,6 +37,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <limits.h>
 
 // Capacity of entity array
 // This must match the value of the app->entity_cap field.
@@ -79,6 +82,8 @@ static void update(eg_app *app)
             return;
         }
     }
+
+    app->ticks++;
 
     // Handle input.
     if (app->input != NULL && app->input_count > 0)
@@ -133,6 +138,18 @@ static void update(eg_app *app)
             {
                 t.update(app, ent);
             }
+        }
+    }
+
+    // Additional actions
+    if (app->scene == DEMO_SCENE_FOREST)
+    {
+        if (!(app->ticks % 120) && app->counters[DEMO_COUNTER_CRITTERS] < 4)
+        {
+            // generate random number from 0 to 7
+            int x = rand() % 8;
+            critter_demo_create(app, 4 + x * 20 + x * 10, 25);
+            app->counters[DEMO_COUNTER_CRITTERS]++;
         }
     }
 }
@@ -246,6 +263,8 @@ int demo_prepare(eg_app *app)
         entity_types[i].get_y_vel = default_get_y_vel;
         entity_types[i].interactable = 0;
         entity_types[i].interact = NULL;
+        entity_types[i].control = 0;
+        entity_types[i].spur = 0;
     }
 
     // default values of entities
@@ -335,6 +354,7 @@ int demo_prepare(eg_app *app)
     jimbo_demo_register(&(app->entity_types[ENTITY_TYPE_JIMBO])); // npc dialog
     billy_demo_register(&(app->entity_types[ENTITY_TYPE_BILLY])); // npc movement
     henry_demo_register(&(app->entity_types[ENTITY_TYPE_HENRY])); // hostile
+    critter_demo_register(&(app->entity_types[ENTITY_TYPE_CRITTER]));
 
     // scene transitions
     transition_demo_register(&(app->entity_types[ENTITY_TYPE_TRANSITION]));
@@ -371,6 +391,10 @@ int demo_prepare(eg_app *app)
 
     // Play music
     // eg_play_sound(app, app->sounds[DEMO_SONG_FIELD]);
+
+    // Seed random number generation.
+    time_t t;
+    srand((unsigned int)(time(&t) & INT_MAX));
 
     return 1;
 }

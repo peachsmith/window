@@ -16,11 +16,14 @@
 #include "demo/entities/jimbo_dialog.h"
 #include "demo/entities/sign_dialog.h"
 #include "demo/util/util.h"
+#include "demo/demo.h"
 
 #include <stdio.h>
 
 void load_movement_scene(eg_app *app)
 {
+    app->scene = DEMO_SCENE_MOVEMENT;
+    
     demo_set_camera(app, EG_CAMERA_ALL);
 
     app->cam.x = 0;

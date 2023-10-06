@@ -5,6 +5,7 @@
 #include "demo/dialog/dialog.h"
 #include "demo/demo.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 static int get_note_x_vel(eg_entity *note)
@@ -34,17 +35,7 @@ static int get_note_x_vel(eg_entity *note)
         x_vel += note->x_t;
     }
 
-    // Adjust velocity based on time.
-    if (note->ticks > 35 && note->ticks % 4)
-    {
-        x_vel = 0;
-    }
-    else if (note->ticks > 20 && note->ticks % 2)
-    {
-        x_vel = 0;
-    }
-
-    return x_vel; // adjusted;
+    return x_vel;
 }
 
 static int get_note_y_vel(eg_entity *note)
@@ -69,11 +60,6 @@ static int get_note_y_vel(eg_entity *note)
     if (note->y_t)
     {
         y_vel += note->y_t;
-    }
-
-    if (note->ticks % 2)
-    {
-        y_vel = 0;
     }
 
     return y_vel;
@@ -138,7 +124,24 @@ static void update_note(eg_app *app, eg_entity *note)
     // Horizontal Movement
 
     // Update horizontal position.
-    note->x_pos += avx;
+    if (note->ticks > 35)
+    {
+        if (!(note->ticks % 4))
+        {
+            note->x_pos += avx;
+        }
+    }
+    else if (note->ticks > 20)
+    {
+        if (!(note->ticks % 2))
+        {
+            note->x_pos += avx;
+        }
+    }
+    else
+    {
+        note->x_pos += avx;
+    }
 
     // Update horizontal acceleration.
     if (note->ticks < 35)
@@ -168,7 +171,10 @@ static void update_note(eg_app *app, eg_entity *note)
     // Vertical Movement
 
     // Update vertical position.
+    // if (app->ticks % 2)
+    // {
     note->y_pos += avy;
+    // }
 
     // Update vertical acceleration.
     if (note->ticks == 35)
@@ -201,7 +207,6 @@ static void collide_note(
     eg_collision *t_res,
     int is_b)
 {
-    // TODO: implement music note collision
 }
 
 void note_demo_register(eg_entity_type *t)
@@ -213,6 +218,7 @@ void note_demo_register(eg_entity_type *t)
     t->get_x_vel = get_note_x_vel;
     t->get_y_vel = get_note_y_vel;
     t->collide = collide_note;
+    t->spur = 1;
 }
 
 eg_entity *note_demo_create(eg_app *app, int x, int y)

@@ -231,7 +231,7 @@ void root_input_handler(eg_app *app)
             target->carrier = NULL;
             target->y_t = 0;
 
-            // Set the vertical accleration to some significant negative
+            // Set the vertical acceleration to some significant negative
             // value to launch the entity upward.
             target->y_acc = -13;
 
@@ -243,6 +243,13 @@ void root_input_handler(eg_app *app)
         else if (app->actuation_counters[EG_KEYCODE_SPACE] > 0 && app->actuation_counters[EG_KEYCODE_SPACE] < 15)
         {
             app->actuation_counters[EG_KEYCODE_SPACE]++;
+        }
+        else
+        {
+            // Prevent automatic jumping when holding the spacebar while
+            // landing on the ground. This requires that the player's update
+            // function not perform any logic for actuation counters above 15.
+            app->actuation_counters[EG_KEYCODE_SPACE] = 16;
         }
     }
     else

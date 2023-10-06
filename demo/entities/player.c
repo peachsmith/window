@@ -295,7 +295,7 @@ static void update_player(eg_app *app, eg_entity *player)
         int act = app->actuation_counters[EG_KEYCODE_SPACE];
         int delay_acceleration = 0;
 
-        if (act)
+        if (act && act <= 15)
         {
             if (act < 5)
             {
@@ -351,6 +351,7 @@ void player_demo_register(eg_entity_type *t)
     t->update = update_player;
     t->get_x_vel = get_player_x_vel;
     t->get_y_vel = get_player_y_vel;
+    t->control = 1;
 }
 
 eg_entity *player_demo_create(eg_app *app, int x, int y)

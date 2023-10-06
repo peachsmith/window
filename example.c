@@ -55,6 +55,11 @@ eg_app *eg_create_app()
 
     app->time = TIMING_DELTA;
 
+    app->done = 0;
+    app->pause = 0;
+    app->ticks = 0;
+    app->scene = 0;
+
     app->update = default_update;
     app->draw = default_draw;
 
@@ -81,9 +86,6 @@ eg_app *eg_create_app()
 
     app->screen_width = EG_DEFAULT_SCREEN_WIDTH;
     app->screen_height = EG_DEFAULT_SCREEN_HEIGHT;
-
-    app->done = 0;
-    app->pause = 0;
 
     app->cam.x = 0;
     app->cam.y = 0;

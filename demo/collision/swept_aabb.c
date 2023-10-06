@@ -320,6 +320,7 @@ static int ray_v_rect(
 
     // Prevent spurious collisions due to the source rectangle sitting flush
     // with the target rectangle behind it.
+    // We only perform this check if the spur flag is 0.
     //
     //  +---------++---------+
     //  | target  || source  |
@@ -426,6 +427,12 @@ int demo_swept_aabb(
         return 0;
     }
 
+    int spur = 0;
+    if (app->entity_types[a->type].spur && app->entity_types[b->type].spur)
+    {
+        spur = 1;
+    }
+
     // Get the width and height of source entity A.
     int aw = app->entity_types[a->type].width;
     int ah = app->entity_types[a->type].height;
@@ -481,6 +488,29 @@ int demo_swept_aabb(
         }
 
         return 1;
+    }
+    else if (spur)
+    {
+        // If both entities are moving, then their collision may be
+        // missed by the normal swept AABB method. So we check for
+        // overlap between the two entities.
+        eg_rect arect = {
+            .x = a->x_pos,
+            .y = a->y_pos,
+            .w = app->entity_types[a->type].width,
+            .h = app->entity_types[a->type].height,
+        };
+        eg_rect brect = {
+            .x = b->x_pos,
+            .y = b->y_pos,
+            .w = app->entity_types[b->type].width,
+            .h = app->entity_types[b->type].height,
+        };
+        eg_overlap o;
+        if (demo_is_overlapped(&arect, &brect, &o))
+        {
+            return 1;
+        }
     }
 
     // If the source entity is being carried by a moving entity,

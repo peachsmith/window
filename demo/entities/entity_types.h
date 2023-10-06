@@ -37,9 +37,10 @@
 #define ENTITY_TYPE_CORGI 26
 #define ENTITY_TYPE_NOTE 27
 #define ENTITY_TYPE_FOREST 28
+#define ENTITY_TYPE_CRITTER 29
 
 // This is the total number of entity types.
-#define ENTITY_TYPE_MAX 29
+#define ENTITY_TYPE_MAX 30
 
 // flags [0, 15]
 #define ENTITY_FLAG_GROUND 0

@@ -180,6 +180,11 @@ struct eg_app
     // menus and dialogs.
     int pause;
 
+    // common tick counter
+    int ticks;
+
+    int scene;
+
     // screen dimensions
     int screen_width;
     int screen_height;
@@ -311,6 +316,12 @@ struct eg_entity_type
     // entity interaction
     int interactable;
     int (*interact)(eg_app *, eg_entity *, eg_entity *);
+
+    // indicates whether this entity represents the user
+    int control;
+
+    // indicates that this entity shoudl override the spurious collision check.
+    int spur;
 };
 
 //----------------------------------------------------------------------------

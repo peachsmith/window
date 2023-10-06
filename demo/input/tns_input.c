@@ -55,26 +55,20 @@ void tns_root_input_handler(eg_app *app)
     // BEGIN player controls
 
     // Locate the player entity.
-    eg_entity *target = NULL;
-    for (int i = 0; i < app->entity_cap && target == NULL; i++)
-    {
-        if (app->entities[i].type == ENTITY_TYPE_CORGI && app->entities[i].present)
-        {
-            target = &(app->entities[i]);
-        }
-    }
-
+    eg_entity *target = app->primary;
     if (target == NULL)
     {
         return;
     }
+
+    int splooting = app->actuation_counters[EG_KEYCODE_SPACE] >= 20;
 
     int max_walk = 6;
     int min_walk = 1;
     int walk_acc = 1;
 
     // left movement
-    if (eg_peek_input(app, EG_KEYCODE_LEFT))
+    if (eg_peek_input(app, EG_KEYCODE_LEFT) && !splooting)
     {
         if (app->actuation_counters[EG_KEYCODE_LEFT] < 10)
         {
@@ -106,7 +100,7 @@ void tns_root_input_handler(eg_app *app)
     }
 
     // right movement
-    if (eg_peek_input(app, EG_KEYCODE_RIGHT))
+    if (eg_peek_input(app, EG_KEYCODE_RIGHT) && !splooting)
     {
         if (app->actuation_counters[EG_KEYCODE_RIGHT] < 10)
         {
@@ -165,7 +159,7 @@ void tns_root_input_handler(eg_app *app)
             target->carrier = NULL;
             target->y_t = 0;
 
-            // Set the vertical accleration to some significant negative
+            // Set the vertical acceleration to some significant negative
             // value to launch the entity upward.
             target->y_acc = -13;
 
@@ -174,7 +168,7 @@ void tns_root_input_handler(eg_app *app)
 
         // Increase the actuation counter to allow jump height control in the
         // target entity's update function.
-        else if (app->actuation_counters[EG_KEYCODE_SPACE] > 0 && app->actuation_counters[EG_KEYCODE_SPACE] < 15)
+        else if (app->actuation_counters[EG_KEYCODE_SPACE] < 20)
         {
             app->actuation_counters[EG_KEYCODE_SPACE]++;
         }
@@ -185,7 +179,7 @@ void tns_root_input_handler(eg_app *app)
     }
 
     // play a musical note
-    if (eg_consume_input(app, EG_KEYCODE_X))
+    if (eg_consume_input(app, EG_KEYCODE_X) && !splooting)
     {
         // Limit the number of notes to 3 at any given time.
         if (app->counters[DEMO_COUNTER_NOTES] < 3)

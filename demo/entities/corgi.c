@@ -47,7 +47,12 @@ static int get_corgi_x_vel(eg_entity *corgi)
         x_vel += corgi->x_t;
     }
 
-    // effectively halve the velocity
+    // Effectively halve the velocity.
+    // If this is done in the velocity getter, then it will affect collision
+    // detection. If it's done in the update function, then collisions can
+    // still be detected even when the entity's position wouldn't actually
+    // update on the current frame. This behavior may be desireable in some/
+    // situations.
     if (corgi->ticks % 2)
     {
         x_vel = 0;
@@ -93,12 +98,6 @@ static int get_corgi_y_vel(eg_entity *corgi)
         y_vel += corgi->y_t;
     }
 
-    // effectively halve the velocity
-    if (corgi->ticks % 2)
-    {
-        y_vel = 0;
-    }
-
     return y_vel;
 }
 
@@ -107,6 +106,7 @@ static void render_corgi(eg_app *app, eg_entity *corgi)
     // int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
     // int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
     // int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
+    int splooting = app->actuation_counters[EG_KEYCODE_SPACE] >= 20;
 
     // Animation logic for walking to the right
     // if ((left_pressed || right_pressed) && grounded)
@@ -141,6 +141,31 @@ static void render_corgi(eg_app *app, eg_entity *corgi)
     eg_set_color(app, EG_COLOR_ORANGE);
     eg_draw_rect(app, &r, 1);
 
+    // render sploot
+    if (splooting)
+    {
+        r.x = corgi->x_pos - 5;
+        r.y = corgi->y_pos + app->entity_types[corgi->type].height - 5;
+        r.w = 10;
+        r.h = 10;
+
+        eg_set_color(app, EG_COLOR_BLUE);
+        eg_draw_rect(app, &r, 1);
+
+        r.x += app->entity_types[corgi->type].width;
+        eg_draw_rect(app, &r, 1);
+    }
+
+    // TEMP debugging critter rendering
+    // eg_rect c = {
+    //     .x = 10,
+    //     .y = 25,
+    //     .w = 220,
+    //     .h = 12};
+
+    // eg_set_color(app, EG_COLOR_PINK);
+    // eg_draw_rect(app, &c, 1);
+
     // hit box
     if (app->debug.hitboxes)
     {
@@ -168,6 +193,7 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
     int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
     int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
+    int splooting = app->actuation_counters[EG_KEYCODE_SPACE] >= 20;
 
     int avx = get_corgi_x_vel(corgi);
     int avy = get_corgi_y_vel(corgi);
@@ -209,12 +235,12 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     }
 
     // Perform horizontal inertia.
-    if (corgi->x_acc > 0 && !right_pressed)
+    if (corgi->x_acc > 0 && (!right_pressed || splooting))
     {
         corgi->x_acc--;
     }
 
-    if (corgi->x_acc < 0 && !left_pressed)
+    if (corgi->x_acc < 0 && (!left_pressed || splooting))
     {
         corgi->x_acc++;
     }
@@ -261,21 +287,31 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     eg_clear_flag(corgi, ENTITY_FLAG_MOVE);
 
     // Update vertical position.
-    if (app->cam.config == EG_CAMERA_ALL && corgi->y_pos + h >= app->cam.cb && avy > 0)
+    // We effectively halve the velocity by reducing the tick count modulo 2.
+    // Since the modulo happens outside of the get_y_vel function, this is
+    // mainly visual. Collision detection will still happen as if the velocity
+    // is unchanged.
+    if (app->cam.config == EG_CAMERA_ALL &&
+        corgi->y_pos + h >= app->cam.cb &&
+        avy > 0 &&
+        app->ticks % 2)
     {
         int dcam = (corgi->y_pos + h) - app->cam.cb;
         corgi->y_pos = app->cam.cb - h;
         app->cam.y -= avy;
         app->cam.y -= dcam;
     }
-    else if (app->cam.config == EG_CAMERA_ALL && corgi->y_pos <= app->cam.ct + 1 && avy < 0)
+    else if (app->cam.config == EG_CAMERA_ALL &&
+             corgi->y_pos <= app->cam.ct + 1 &&
+             avy < 0 &&
+             app->ticks % 2)
     {
         int dcam = corgi->y_pos - (app->cam.ct + 1);
         corgi->y_pos = app->cam.ct + 1;
         app->cam.y -= avy;
         app->cam.y -= dcam;
     }
-    else
+    else if (app->ticks % 2)
     {
         corgi->y_pos += avy;
     }
@@ -292,26 +328,7 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     // Apply gravity.
     if (corgi->y_acc < CORGI_Y_ACC_LIMIT - 1)
     {
-        // jump height control
-        int act = app->actuation_counters[EG_KEYCODE_SPACE];
-        int delay_acceleration = 0;
-
-        if (act)
-        {
-            if (act < 5)
-            {
-                delay_acceleration = 1;
-            }
-            else if (act < 12)
-            {
-                delay_acceleration = 1;
-            }
-        }
-
-        if (!delay_acceleration)
-        {
-            corgi->y_acc++;
-        }
+        corgi->y_acc++;
     }
 
     //--------------------------------------------------------------------
@@ -342,6 +359,7 @@ void corgi_demo_register(eg_entity_type *t)
     t->update = update_corgi;
     t->get_x_vel = get_corgi_x_vel;
     t->get_y_vel = get_corgi_y_vel;
+    t->control = 1;
 }
 
 eg_entity *corgi_demo_create(eg_app *app, int x, int y)

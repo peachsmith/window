@@ -14,14 +14,16 @@
 #include "demo/entities/demo_dialog.h"
 #include "demo/entities/jimbo_dialog.h"
 #include "demo/util/util.h"
+#include "demo/demo.h"
 
 #include <stdlib.h>
 
 void load_scene_3(eg_app *app)
 {
+    app->scene = DEMO_SCENE_3;
+
     // Starting position for building a sequence of blocks.
     int x_start = 50;
-    // int y_start = 0; // currently unused
 
     demo_set_camera(app, EG_CAMERA_ALL);
 

@@ -32,7 +32,7 @@ static void render_hud(eg_app *app, eg_entity *hud)
         buffer,
         n,
         "SCORE: %d",
-        corgi->data);
+        app->counters[DEMO_COUNTER_SCORE]);
     if (res < 0 || res >= n)
     {
         return;
@@ -45,9 +45,9 @@ static void render_hud(eg_app *app, eg_entity *hud)
     for (int i = 0; i < 3 - app->counters[DEMO_COUNTER_NOTES]; i++)
     {
         r.x = 35 + i * 13;
-        r.y = 10;
+        r.y = 11;
         r.w = 11;
-        r.h = 11;
+        r.h = 10;
         eg_draw_rect(app, &r, 1);
     }
 }
