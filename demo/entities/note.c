@@ -171,10 +171,10 @@ static void update_note(eg_app *app, eg_entity *note)
     // Vertical Movement
 
     // Update vertical position.
-    // if (app->ticks % 2)
-    // {
-    note->y_pos += avy;
-    // }
+    if (app->ticks % 2)
+    {
+        note->y_pos += avy;
+    }
 
     // Update vertical acceleration.
     if (note->ticks == 35)

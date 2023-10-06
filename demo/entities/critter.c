@@ -131,7 +131,7 @@ static void update_critter(eg_app *app, eg_entity *critter)
 {
     int avx = get_critter_x_vel(critter);
     int avy = get_critter_y_vel(critter);
-    int mirror = eg_check_flag(critter, ENTITY_FLAG_MIRROR);
+    // int mirror = eg_check_flag(critter, ENTITY_FLAG_MIRROR);
 
     //--------------------------------------------------------------------
     // Horizontal Movement
@@ -143,10 +143,10 @@ static void update_critter(eg_app *app, eg_entity *critter)
     // Vertical Movement
 
     // Update vertical position.
-    // if (app->ticks % 2)
-    // {
-    critter->y_pos += avy;
-    // }
+    if (app->ticks % 2)
+    {
+        critter->y_pos += avy;
+    }
 
     //--------------------------------------------------------------------
     // Behavior Logic
