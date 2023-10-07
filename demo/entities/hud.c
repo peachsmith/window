@@ -2,6 +2,7 @@
 #include "demo/font/font.h"
 #include "demo/entities/entity_types.h"
 #include "demo/demo.h"
+#include "demo/util/sprite.h"
 
 #include <stdio.h>
 
@@ -41,14 +42,9 @@ static void render_hud(eg_app *app, eg_entity *hud)
 
     // render the available music notes
     eg_draw_text(app, app->fonts[DEMO_FONT_KENNY_PIXEL], "BREATH:", 2, 10);
-    eg_set_color(app, EG_COLOR_PURPLE);
     for (int i = 0; i < 3 - app->counters[DEMO_COUNTER_NOTES]; i++)
     {
-        r.x = 40 + i * 13;
-        r.y = 11;
-        r.w = 11;
-        r.h = 11;
-        eg_draw_rect(app, &r, 1);
+        sprite_draw_note(app, 40 + i * 13, 11);
     }
 }
 
