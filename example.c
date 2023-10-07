@@ -116,10 +116,6 @@ eg_app *eg_create_app()
 
     // generic values
     app->primary = NULL;
-    for (int i = 0; i < 10; i++)
-    {
-        app->counters[i] = 0;
-    }
 
     return app;
 }

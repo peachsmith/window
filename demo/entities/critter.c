@@ -156,10 +156,11 @@ static void update_critter(eg_app *app, eg_entity *critter)
     // 120 frames of waiting in the canopy
     // fall
     // lie on the ground
-    if (critter->ticks >= 480)
+    if (critter->ticks >= 420 && critter->present)
     {
         critter->present = 0;
         app->counters[DEMO_COUNTER_CRITTERS]--;
+        app->counters[critter->data]--;
     }
 }
 
@@ -178,8 +179,12 @@ static void collide_critter(
             app->counters[DEMO_COUNTER_NOTES]--;
         }
 
-        critter->present = 0;
-        app->counters[DEMO_COUNTER_CRITTERS]--;
+        if (critter->present)
+        {
+            critter->present = 0;
+            app->counters[DEMO_COUNTER_CRITTERS]--;
+            app->counters[critter->data]--;
+        }
 
         if (app->counters[DEMO_COUNTER_SCORE] < 100)
         {
@@ -192,7 +197,7 @@ static void collide_critter(
     }
 }
 
-void critter_demo_register(eg_entity_type *t)
+void tns_register_critter(eg_entity_type *t)
 {
     t->width = 20;
     t->height = 12;
@@ -204,7 +209,7 @@ void critter_demo_register(eg_entity_type *t)
     t->spur = 1;
 }
 
-eg_entity *critter_demo_create(eg_app *app, int x, int y)
+eg_entity *tns_create_critter(eg_app *app, int x, int y)
 {
     eg_entity *critter = NULL;
 

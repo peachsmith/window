@@ -67,37 +67,10 @@ static int get_note_y_vel(eg_entity *note)
 
 static void render_note(eg_app *app, eg_entity *note)
 {
-    // int tile = 0;
-
-    // Animation logic for walking to the right
-    // if (note->animation_ticks < 5)
-    // {
-    //     tile = 9;
-    // }
-    // else if (note->animation_ticks < 10)
-    // {
-    //     tile = 10;
-    // }
-    // else if (note->animation_ticks < 15)
-    // {
-    //     tile = 11;
-    // }
-
-    // Render the note sprite.
-    // sprite_draw_note(
-    //     app,
-    //     note->x_pos + app->cam.x - 3,
-    //     note->y_pos + app->cam.y - 4,
-    //     eg_check_flag(note, ENTITY_FLAG_MIRROR),
-    //     tile);
-    eg_rect r = {
-        .x = note->x_pos,
-        .y = note->y_pos,
-        .w = app->entity_types[note->type].width,
-        .h = app->entity_types[note->type].height};
-
-    eg_set_color(app, EG_COLOR_PURPLE);
-    eg_draw_rect(app, &r, 1);
+    sprite_draw_note(
+        app,
+        note->x_pos,
+        note->y_pos);
 
     // hit box
     if (app->debug.hitboxes)
@@ -209,7 +182,7 @@ static void collide_note(
 {
 }
 
-void note_demo_register(eg_entity_type *t)
+void tns_register_note(eg_entity_type *t)
 {
     t->width = 11;
     t->height = 11;
@@ -221,7 +194,7 @@ void note_demo_register(eg_entity_type *t)
     t->spur = 1;
 }
 
-eg_entity *note_demo_create(eg_app *app, int x, int y)
+eg_entity *tns_create_note(eg_app *app, int x, int y)
 {
     eg_entity *note = NULL;
 

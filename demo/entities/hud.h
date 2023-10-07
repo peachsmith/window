@@ -11,7 +11,7 @@
  * Params:
  *   eg_entity_type* - the hud's entity type definition
  */
-void hud_demo_register(eg_entity_type *);
+void tns_register_hud(eg_entity_type *);
 
 /**
  * Creates a hud entity.
@@ -23,6 +23,6 @@ void hud_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new hud entity.
  */
-eg_entity *hud_demo_create(eg_app *, int, int);
+eg_entity *tns_create_hud(eg_app *, int, int);
 
 #endif

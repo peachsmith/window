@@ -13,7 +13,7 @@
  * Params:
  *   eg_entity_type* - the corgi's entity type definition
  */
-void corgi_demo_register(eg_entity_type *);
+void tns_register_corgi(eg_entity_type *);
 
 /**
  * Creates a corgi entity.
@@ -25,6 +25,6 @@ void corgi_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new corgi entity.
  */
-eg_entity *corgi_demo_create(eg_app *, int, int);
+eg_entity *tns_create_corgi(eg_app *, int, int);
 
 #endif

@@ -184,7 +184,7 @@ void tns_root_input_handler(eg_app *app)
         // Limit the number of notes to 3 at any given time.
         if (app->counters[DEMO_COUNTER_NOTES] < 3)
         {
-            eg_entity *f = note_demo_create(
+            eg_entity *f = tns_create_note(
                 app,
                 target->x_pos - app->cam.x,
                 target->y_pos - app->cam.y + 4);

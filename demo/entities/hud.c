@@ -37,22 +37,22 @@ static void render_hud(eg_app *app, eg_entity *hud)
     {
         return;
     }
-    eg_draw_text(app, app->fonts[DEMO_FONT_KENNY_PIXEL], buffer, 2, 0);
+    eg_draw_text(app, app->fonts[DEMO_FONT_KENNY_PIXEL], buffer, 2, -1);
 
     // render the available music notes
-    eg_draw_text(app, app->fonts[DEMO_FONT_KENNY_PIXEL], "MUSIC:", 2, 10);
+    eg_draw_text(app, app->fonts[DEMO_FONT_KENNY_PIXEL], "BREATH:", 2, 10);
     eg_set_color(app, EG_COLOR_PURPLE);
     for (int i = 0; i < 3 - app->counters[DEMO_COUNTER_NOTES]; i++)
     {
-        r.x = 35 + i * 13;
+        r.x = 40 + i * 13;
         r.y = 11;
         r.w = 11;
-        r.h = 10;
+        r.h = 11;
         eg_draw_rect(app, &r, 1);
     }
 }
 
-void hud_demo_register(eg_entity_type *t)
+void tns_register_hud(eg_entity_type *t)
 {
     t->id = ENTITY_TYPE_HUD;
     t->width = 240;
@@ -61,7 +61,7 @@ void hud_demo_register(eg_entity_type *t)
     t->collide = NULL;
 }
 
-eg_entity *hud_demo_create(eg_app *app, int x, int y)
+eg_entity *tns_create_hud(eg_app *app, int x, int y)
 {
     eg_entity *hud = NULL;
 

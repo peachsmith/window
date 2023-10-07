@@ -51,6 +51,12 @@ static eg_entity entities[ENTITY_MAX];
 // array of entity types
 static eg_entity_type entity_types[ENTITY_TYPE_MAX];
 
+// 0 notes
+// 1 critters
+// 2 score
+// [3:10] critter slots (8 slots)
+static int counters[DEMO_COUNTER_MAX];
+
 // maximum number of overlays
 #define MAX_OVERLAYS 10
 
@@ -141,15 +147,22 @@ static void update(eg_app *app)
         }
     }
 
-    // Additional actions
+    // scene behavior
     if (app->scene == DEMO_SCENE_FOREST)
     {
         if (!(app->ticks % 120) && app->counters[DEMO_COUNTER_CRITTERS] < 4)
         {
-            // generate random number from 0 to 7
-            int x = rand() % 8;
-            critter_demo_create(app, 4 + x * 20 + x * 10, 25);
-            app->counters[DEMO_COUNTER_CRITTERS]++;
+            // Generate random number from 0 to 7. This is the critter slot.
+            // If the slot is unoccupied, then create a critter and mark the
+            // slot as occupied.
+            int slot = rand() % 8;
+            if (!app->counters[slot + DEMO_COUNTER_CRITTER_SLOT_OFFSET])
+            {
+                eg_entity *critter = tns_create_critter(app, 4 + slot * 20 + slot * 10, 25);
+                app->counters[DEMO_COUNTER_CRITTERS]++;
+                app->counters[slot + DEMO_COUNTER_CRITTER_SLOT_OFFSET] = 1;
+                critter->data = slot + DEMO_COUNTER_CRITTER_SLOT_OFFSET;
+            }
         }
     }
 }
@@ -294,6 +307,12 @@ int demo_prepare(eg_app *app)
         entities[i].cursor_y = 0;
     }
 
+    for (int i = 0; i < DEMO_COUNTER_MAX; i++)
+    {
+        counters[i] = 0;
+    }
+    app->counters = counters;
+
     app->entities = entities;
     app->entity_types = entity_types;
     app->update = update;
@@ -335,9 +354,11 @@ int demo_prepare(eg_app *app)
     // Initialize input.
     demo_init_input(app);
 
-    // Register the entity types.
+    //====================================================================
+    // Demo entity types
+
+    // the player avatar
     player_demo_register(&(app->entity_types[ENTITY_TYPE_PLAYER]));
-    corgi_demo_register(&(app->entity_types[ENTITY_TYPE_CORGI]));
 
     // platforms and other blocks
     block_demo_register(&(app->entity_types[ENTITY_TYPE_BLOCK]));
@@ -346,15 +367,12 @@ int demo_prepare(eg_app *app)
     throughblock_demo_register_long(&(app->entity_types[ENTITY_TYPE_THROUGHBLOCK_LONG]));
     block_demo_register_moving(&(app->entity_types[ENTITY_TYPE_BLOCK_MOVING]));
     block_demo_register_sloped(&(app->entity_types[ENTITY_TYPE_BLOCK_SLOPE]));
-    block_demo_register_floor(&(app->entity_types[ENTITY_TYPE_FLOOR]));
-    block_demo_register_wall(&(app->entity_types[ENTITY_TYPE_WALL]));
 
     // interactables
     sign_demo_register(&(app->entity_types[ENTITY_TYPE_SIGN]));   // npc dialog
     jimbo_demo_register(&(app->entity_types[ENTITY_TYPE_JIMBO])); // npc dialog
     billy_demo_register(&(app->entity_types[ENTITY_TYPE_BILLY])); // npc movement
     henry_demo_register(&(app->entity_types[ENTITY_TYPE_HENRY])); // hostile
-    critter_demo_register(&(app->entity_types[ENTITY_TYPE_CRITTER]));
 
     // scene transitions
     transition_demo_register(&(app->entity_types[ENTITY_TYPE_TRANSITION]));
@@ -367,9 +385,6 @@ int demo_prepare(eg_app *app)
     scene_menu_demo_register(&(app->entity_types[ENTITY_TYPE_SCENE_MENU]));
     input_menu_demo_register(&(app->entity_types[ENTITY_TYPE_INPUT_MENU]));
 
-    // heads up display
-    hud_demo_register(&(app->entity_types[ENTITY_TYPE_HUD]));
-
     // scenery
     forest_demo_register(&(app->entity_types[ENTITY_TYPE_FOREST]));
 
@@ -381,7 +396,15 @@ int demo_prepare(eg_app *app)
 
     // projectiles
     fireball_demo_register(&(app->entity_types[ENTITY_TYPE_FIREBALL]));
-    note_demo_register(&(app->entity_types[ENTITY_TYPE_NOTE]));
+
+    //====================================================================
+    // Toot n Sploot entity types
+    tns_register_hud(&(app->entity_types[ENTITY_TYPE_HUD]));
+    tns_register_note(&(app->entity_types[ENTITY_TYPE_NOTE]));
+    tns_register_critter(&(app->entity_types[ENTITY_TYPE_CRITTER]));
+    tns_register_corgi(&(app->entity_types[ENTITY_TYPE_CORGI]));
+    tns_register_floor(&(app->entity_types[ENTITY_TYPE_FLOOR]));
+    tns_register_wall(&(app->entity_types[ENTITY_TYPE_WALL]));
 
     eg_push_input_handler(app, empty_input_handler);
 

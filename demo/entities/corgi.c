@@ -103,68 +103,42 @@ static int get_corgi_y_vel(eg_entity *corgi)
 
 static void render_corgi(eg_app *app, eg_entity *corgi)
 {
-    // int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
-    // int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
-    // int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
+    int tile = 0;
+    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
+    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
+    int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
     int splooting = app->actuation_counters[EG_KEYCODE_SPACE] >= 20;
 
     // Animation logic for walking to the right
-    // if ((left_pressed || right_pressed) && grounded)
-    // {
-    //     if (corgi->animation_ticks < 6)
-    //     {
-    //         tile = 0;
-    //     }
-    //     else if (corgi->animation_ticks < 16)
-    //     {
-    //         tile = 1;
-    //     }
-    // }
-
-    // if (!grounded)
-    // {
-    //     tile = 1;
-    // }
-
-    // Render the corgi sprite.
-    // sprite_draw_character(
-    //     app,
-    //     corgi->x_pos,
-    //     corgi->y_pos,
-    //     eg_check_flag(corgi, ENTITY_FLAG_MIRROR), tile);
-    eg_rect r = {
-        .x = corgi->x_pos,
-        .y = corgi->y_pos,
-        .w = app->entity_types[corgi->type].width,
-        .h = app->entity_types[corgi->type].height};
-
-    eg_set_color(app, EG_COLOR_ORANGE);
-    eg_draw_rect(app, &r, 1);
-
-    // render sploot
-    if (splooting)
+    if ((left_pressed || right_pressed) && grounded)
     {
-        r.x = corgi->x_pos - 5;
-        r.y = corgi->y_pos + app->entity_types[corgi->type].height - 5;
-        r.w = 10;
-        r.h = 10;
-
-        eg_set_color(app, EG_COLOR_BLUE);
-        eg_draw_rect(app, &r, 1);
-
-        r.x += app->entity_types[corgi->type].width;
-        eg_draw_rect(app, &r, 1);
+        // running on the ground
+        if (corgi->animation_ticks < 6)
+        {
+            tile = 1;
+        }
+        else if (corgi->animation_ticks < 16)
+        {
+            tile = 2;
+        }
+    }
+    else if (!grounded)
+    {
+        // in the air
+        tile = 2;
     }
 
-    // TEMP debugging critter rendering
-    // eg_rect c = {
-    //     .x = 10,
-    //     .y = 25,
-    //     .w = 220,
-    //     .h = 12};
+    if (splooting)
+    {
+        tile = 3;
+    }
 
-    // eg_set_color(app, EG_COLOR_PINK);
-    // eg_draw_rect(app, &c, 1);
+    // Render the corgi sprite.
+    sprite_draw_corgi(
+        app,
+        corgi->x_pos,
+        corgi->y_pos,
+        eg_check_flag(corgi, ENTITY_FLAG_MIRROR), tile);
 
     // hit box
     if (app->debug.hitboxes)
@@ -337,7 +311,7 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     corgi->ticks++;
 
     // Advance the counter for walking to the right
-    if ((eg_peek_input(app, EG_KEYCODE_LEFT) || eg_peek_input(app, EG_KEYCODE_RIGHT)) && grounded)
+    if ((left_pressed || right_pressed) && grounded)
     {
         corgi->animation_ticks++;
         if (corgi->animation_ticks >= 20)
@@ -351,7 +325,7 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     }
 }
 
-void corgi_demo_register(eg_entity_type *t)
+void tns_register_corgi(eg_entity_type *t)
 {
     t->width = 24;
     t->height = 24;
@@ -362,7 +336,7 @@ void corgi_demo_register(eg_entity_type *t)
     t->control = 1;
 }
 
-eg_entity *corgi_demo_create(eg_app *app, int x, int y)
+eg_entity *tns_create_corgi(eg_app *app, int x, int y)
 {
     eg_entity *corgi = NULL;
 

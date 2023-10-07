@@ -15,7 +15,7 @@
  * Params:
  *   eg_entity_type* - the critter's entity type definition
  */
-void critter_demo_register(eg_entity_type *);
+void tns_register_critter(eg_entity_type *);
 
 /**
  * Creates a critter entity.
@@ -27,6 +27,6 @@ void critter_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new critter entity.
  */
-eg_entity *critter_demo_create(eg_app *, int, int);
+eg_entity *tns_create_critter(eg_app *, int, int);
 
 #endif

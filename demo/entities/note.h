@@ -11,7 +11,7 @@
  * Params:
  *   eg_entity_type* - the note's entity type definition
  */
-void note_demo_register(eg_entity_type *);
+void tns_register_note(eg_entity_type *);
 
 /**
  * Creates a note entity.
@@ -23,6 +23,6 @@ void note_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new note entity.
  */
-eg_entity *note_demo_create(eg_app *, int, int);
+eg_entity *tns_create_note(eg_app *, int, int);
 
 #endif

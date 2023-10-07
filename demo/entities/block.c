@@ -640,7 +640,7 @@ static void render_wall(eg_app *app, eg_entity *wall)
     }
 }
 
-void block_demo_register_floor(eg_entity_type *t)
+void tns_register_floor(eg_entity_type *t)
 {
     t->id = ENTITY_TYPE_FLOOR;
     t->width = 240;
@@ -649,7 +649,7 @@ void block_demo_register_floor(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_floor(eg_app *app, int x, int y)
+eg_entity *tns_create_floor(eg_app *app, int x, int y)
 {
     eg_entity *floor = NULL;
 
@@ -666,7 +666,7 @@ eg_entity *block_demo_create_floor(eg_app *app, int x, int y)
     return floor;
 }
 
-void block_demo_register_wall(eg_entity_type *t)
+void tns_register_wall(eg_entity_type *t)
 {
     t->id = ENTITY_TYPE_WALL;
     t->width = 24;
@@ -675,7 +675,7 @@ void block_demo_register_wall(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_wall(eg_app *app, int x, int y)
+eg_entity *tns_create_wall(eg_app *app, int x, int y)
 {
     eg_entity *wall = NULL;
 

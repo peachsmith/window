@@ -237,7 +237,7 @@ struct eg_app
 
     // Generic values that can be used in any way.
     eg_entity *primary; // an entity of significance
-    int counters[10];   // generic counters
+    int *counters;      // generic counters
 };
 
 // definition of the eg_entity struct

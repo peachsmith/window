@@ -32,5 +32,12 @@ int demo_init_textures(eg_app *app)
         return 0;
     }
 
+    // Toot n Sploot textures
+    if (eg_load_texture(app, "assets/images/tootnsploot2.png") == NULL)
+    {
+        fprintf(stderr, "failed to load Toot n Sploot sprite sheet\n");
+        return 0;
+    }
+
     return 1;
 }

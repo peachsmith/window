@@ -52,13 +52,13 @@ void load_forest_scene(eg_app *app)
     forest_demo_create(app, 0, 22);
 
     // floor and walls
-    block_demo_create_floor(app, 0, 142);
-    block_demo_create_wall(app, -24, 2);
-    block_demo_create_wall(app, 240, 2);
+    tns_create_floor(app, 0, 142);
+    tns_create_wall(app, -24, 2);
+    tns_create_wall(app, 240, 2);
 
     // player
-    app->primary = corgi_demo_create(app, 80, 80);
+    app->primary = tns_create_corgi(app, 80, 80);
 
     // heads up display
-    hud_demo_create(app, 0, 0);
+    tns_create_hud(app, 0, 0);
 }

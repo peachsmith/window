@@ -487,3 +487,65 @@ void sprite_draw_fireball(eg_app *app, int x, int y, int mirror, int tile)
         &dest,
         mirror);
 }
+
+void sprite_draw_corgi(eg_app *app, int x, int y, int mirror, int tile)
+{
+    // tile dimensions
+    int tile_w = 24;
+    int tile_h = 24;
+
+    // tile coordinates
+    int tile_x = tile;
+    int tile_y = 3;
+
+    eg_rect src = {
+        .x = tile_x * tile_w,
+        .y = tile_y * tile_h,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_draw_texture(
+        app,
+        app->textures[TNS_TEXTURE_SPRITES],
+        &src,
+        &dest,
+        mirror);
+}
+
+void sprite_draw_note(eg_app *app, int x, int y)
+{
+    // tile dimensions
+    int tile_w = 24;
+    int tile_h = 24;
+
+    // tile coordinates
+    int tile_x = 4;
+    int tile_y = 3;
+
+    // The note sprite is 11 x 11 pixels, so we subtract 13
+    // from the tile width and height.
+    eg_rect src = {
+        .x = tile_x * tile_w,
+        .y = tile_y * tile_h,
+        .w = tile_w - 13,
+        .h = tile_h - 13};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w - 13,
+        .h = tile_h - 13};
+
+    eg_draw_texture(
+        app,
+        app->textures[TNS_TEXTURE_SPRITES],
+        &src,
+        &dest,
+        0);
+}
