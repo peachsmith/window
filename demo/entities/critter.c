@@ -30,10 +30,12 @@ static int get_critter_x_vel(eg_entity *critter)
         x_vel = -(a_to_v[-(critter->x_acc)]);
     }
 
-    if (critter->x_t)
-    {
-        x_vel += critter->x_t;
-    }
+    // The critter has no reason to collide with a solid block from
+    // the side.
+    // if (critter->x_t)
+    // {
+    //     x_vel += critter->x_t;
+    // }
 
     return x_vel; // adjusted;
 }
@@ -72,45 +74,50 @@ static int get_critter_y_vel(eg_entity *critter)
 
 static void render_critter(eg_app *app, eg_entity *critter)
 {
-    // int tile = 0;
+    int tile = 0;
+    int grounded = eg_check_flag(critter, ENTITY_FLAG_GROUND);
 
-    // Animation logic for walking to the right
-    // if (critter->animation_ticks < 5)
-    // {
-    //     tile = 9;
-    // }
-    // else if (critter->animation_ticks < 10)
-    // {
-    //     tile = 10;
-    // }
-    // else if (critter->animation_ticks < 15)
-    // {
-    //     tile = 11;
-    // }
+    // If the critter has fallen from the tree, is still in the air, and has
+    // not yet been healed with the power of music, render it upside down.
+    if (!grounded && !critter->result)
+    {
+        tile = 2;
+    }
+    else if (grounded && critter->result)
+    {
+        if (critter->animation_ticks < 5)
+        {
+            tile = 1;
+        }
+    }
+    else if (!critter->result)
+    {
+        tile = 2;
+    }
 
     // Render the critter sprite.
-    // sprite_draw_critter(
-    //     app,
-    //     critter->x_pos + app->cam.x - 3,
-    //     critter->y_pos + app->cam.y - 4,
-    //     eg_check_flag(critter, ENTITY_FLAG_MIRROR),
-    //     tile);
-    eg_rect r = {
-        .x = critter->x_pos,
-        .y = critter->y_pos,
-        .w = app->entity_types[critter->type].width,
-        .h = app->entity_types[critter->type].height};
-
-    if (critter->ticks < 120)
+    if (critter->ticks >= 120)
     {
-        eg_set_color(app, EG_COLOR_MILITARY_GREEN);
+        sprite_draw_critter(
+            app,
+            critter->x_pos,
+            critter->y_pos,
+            eg_check_flag(critter, ENTITY_FLAG_MIRROR),
+            tile);
     }
     else
     {
-        eg_set_color(app, EG_COLOR_LIGHT_BLUE);
-    }
+        // TODO: render shaking leaves to indicate that a critter is about
+        // to fall from the trees.
+        eg_rect r = {
+            .x = critter->x_pos,
+            .y = critter->y_pos,
+            .w = app->entity_types[critter->type].width,
+            .h = app->entity_types[critter->type].height};
 
-    eg_draw_rect(app, &r, 1);
+        eg_set_color(app, EG_COLOR_MILITARY_GREEN);
+        eg_draw_rect(app, &r, 1);
+    }
 
     // hit box
     if (app->debug.hitboxes)
@@ -131,16 +138,28 @@ static void update_critter(eg_app *app, eg_entity *critter)
 {
     int avx = get_critter_x_vel(critter);
     int avy = get_critter_y_vel(critter);
-    // int mirror = eg_check_flag(critter, ENTITY_FLAG_MIRROR);
+    int grounded = eg_check_flag(critter, ENTITY_FLAG_GROUND);
+    int mirror = eg_check_flag(critter, ENTITY_FLAG_MIRROR);
 
     //--------------------------------------------------------------------
     // Horizontal Movement
+
+    if (critter->result && grounded)
+    {
+        critter->x_acc = mirror ? 1 : -1;
+    }
 
     // Update horizontal position.
     critter->x_pos += avx;
 
     //--------------------------------------------------------------------
     // Vertical Movement
+
+    // vertical correction factor applied by collision with a solid object
+    if (critter->y_t)
+    {
+        critter->y_t = 0;
+    }
 
     // Update vertical position.
     if (app->ticks % 2)
@@ -153,10 +172,31 @@ static void update_critter(eg_app *app, eg_entity *critter)
 
     critter->ticks++;
 
-    // 120 frames of waiting in the canopy
-    // fall
-    // lie on the ground
-    if (critter->ticks >= 420 && critter->present)
+    // running animation
+    if (critter->result && grounded)
+    {
+        critter->animation_ticks++;
+        if (critter->animation_ticks >= 10)
+        {
+            critter->animation_ticks = 0;
+        }
+    }
+
+    // TODO: pre fall animation
+    // TODO: expiration animation
+    // TODO: healing animation (may require the use of an additional counter)
+
+    // If 400 ticks have passed and the critter has not yet been healed by
+    // the power of music, then send it to live on a farm.
+    if (critter->ticks >= 400 && !critter->result && critter->present)
+    {
+        critter->present = 0;
+        app->counters[DEMO_COUNTER_CRITTERS]--;
+        app->counters[critter->data]--;
+    }
+
+    // If the critter runs off the screen, remove it from the scene.
+    if ((critter->x_pos < -20 || critter->x_pos > 240) && critter->present)
     {
         critter->present = 0;
         app->counters[DEMO_COUNTER_CRITTERS]--;
@@ -171,29 +211,30 @@ static void collide_critter(
     eg_collision *t_res,
     int is_b)
 {
-    if (critter->ticks >= 120 && other->type == ENTITY_TYPE_NOTE)
+    if (critter->ticks < 120 || critter->result || other->type != ENTITY_TYPE_NOTE)
     {
-        if (other->present)
-        {
-            other->present = 0;
-            app->counters[DEMO_COUNTER_NOTES]--;
-        }
+        return;
+    }
 
-        if (critter->present)
-        {
-            critter->present = 0;
-            app->counters[DEMO_COUNTER_CRITTERS]--;
-            app->counters[critter->data]--;
-        }
+    if (other->present)
+    {
+        other->present = 0;
+        app->counters[DEMO_COUNTER_NOTES]--;
+    }
 
-        if (app->counters[DEMO_COUNTER_SCORE] < 100)
-        {
-            app->counters[DEMO_COUNTER_SCORE]++;
-        }
-        else
-        {
-            app->done = 1;
-        }
+    if (!critter->result)
+    {
+        critter->result = 1;
+    }
+
+    // If a certain score is reached, the game ends.
+    if (app->counters[DEMO_COUNTER_SCORE] < 100)
+    {
+        app->counters[DEMO_COUNTER_SCORE]++;
+    }
+    else
+    {
+        app->done = 1;
     }
 }
 

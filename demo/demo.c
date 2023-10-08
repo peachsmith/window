@@ -162,6 +162,10 @@ static void update(eg_app *app)
                 app->counters[DEMO_COUNTER_CRITTERS]++;
                 app->counters[slot + DEMO_COUNTER_CRITTER_SLOT_OFFSET] = 1;
                 critter->data = slot + DEMO_COUNTER_CRITTER_SLOT_OFFSET;
+                if (slot > 3)
+                {
+                    eg_set_flag(critter, ENTITY_FLAG_MIRROR);
+                }
             }
         }
     }

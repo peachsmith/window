@@ -54,4 +54,6 @@ void sprite_draw_corgi(eg_app *, int, int, int, int);
 
 void sprite_draw_note(eg_app *, int, int);
 
+void sprite_draw_critter(eg_app *, int, int, int, int);
+
 #endif

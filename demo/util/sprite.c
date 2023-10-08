@@ -496,7 +496,7 @@ void sprite_draw_corgi(eg_app *app, int x, int y, int mirror, int tile)
 
     // tile coordinates
     int tile_x = tile;
-    int tile_y = 3;
+    int tile_y = 0;
 
     eg_rect src = {
         .x = tile_x * tile_w,
@@ -526,7 +526,7 @@ void sprite_draw_note(eg_app *app, int x, int y)
 
     // tile coordinates
     int tile_x = 4;
-    int tile_y = 3;
+    int tile_y = 0;
 
     // The note sprite is 11 x 11 pixels, so we subtract 13
     // from the tile width and height.
@@ -548,4 +548,34 @@ void sprite_draw_note(eg_app *app, int x, int y)
         &src,
         &dest,
         0);
+}
+
+void sprite_draw_critter(eg_app *app, int x, int y, int mirror, int tile)
+{
+    // tile dimensions
+    int tile_w = 20;
+    int tile_h = 12;
+
+    // tile coordinates
+    int tile_x = tile;
+    int tile_y = 9;
+
+    eg_rect src = {
+        .x = 96 + tile * tile_w,
+        .y = 11,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_draw_texture(
+        app,
+        app->textures[TNS_TEXTURE_SPRITES],
+        &src,
+        &dest,
+        mirror);
 }
