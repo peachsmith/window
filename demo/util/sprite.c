@@ -579,3 +579,29 @@ void sprite_draw_critter(eg_app *app, int x, int y, int mirror, int tile)
         &dest,
         mirror);
 }
+
+void sprite_draw_sparkle(eg_app *app, int x, int y, int tile)
+{
+    // tile dimensions
+    int tile_w = 19;
+    int tile_h = 9;
+
+    eg_rect src = {
+        .x = 116 + tile * tile_w,
+        .y = 0,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_draw_texture(
+        app,
+        app->textures[TNS_TEXTURE_SPRITES],
+        &src,
+        &dest,
+        0);
+}

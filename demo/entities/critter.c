@@ -119,6 +119,21 @@ static void render_critter(eg_app *app, eg_entity *critter)
         eg_draw_rect(app, &r, 1);
     }
 
+    // Render the sparkle animation.
+    if (critter->cursor_x && critter->cursor_x < 60)
+    {
+        // 5 animation frames rendered over the course of 60 game loop frames
+        int sparkle_tile = critter->cursor_x < 12 ? 0 : critter->cursor_x < 24 ? 1
+                                                    : critter->cursor_x < 36   ? 2
+                                                    : critter->cursor_x < 48   ? 3
+                                                                               : 4;
+        sprite_draw_sparkle(
+            app,
+            critter->x_pos,
+            critter->y_pos,
+            sparkle_tile);
+    }
+
     // hit box
     if (app->debug.hitboxes)
     {
@@ -184,7 +199,12 @@ static void update_critter(eg_app *app, eg_entity *critter)
 
     // TODO: pre fall animation
     // TODO: expiration animation
-    // TODO: healing animation (may require the use of an additional counter)
+
+    // healing animation
+    if (critter->cursor_x && critter->cursor_x < 60)
+    {
+        critter->cursor_x++;
+    }
 
     // If 400 ticks have passed and the critter has not yet been healed by
     // the power of music, then send it to live on a farm.
@@ -225,6 +245,11 @@ static void collide_critter(
     if (!critter->result)
     {
         critter->result = 1;
+        // Start the sparkle animation.
+        // For this, we appropriate the cursor_x field, since it's not used
+        // for anything else in this entity. In the future, we may want to
+        // find a smarter way of doing this.
+        critter->cursor_x = 1;
     }
 
     // If a certain score is reached, the game ends.
