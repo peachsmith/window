@@ -605,3 +605,29 @@ void sprite_draw_sparkle(eg_app *app, int x, int y, int tile)
         &dest,
         0);
 }
+
+void sprite_draw_puff(eg_app *app, int x, int y, int tile)
+{
+    // tile dimensions
+    int tile_w = 16;
+    int tile_h = 8;
+
+    eg_rect src = {
+        .x = 158 + tile * tile_w,
+        .y = 10,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_draw_texture(
+        app,
+        app->textures[TNS_TEXTURE_SPRITES],
+        &src,
+        &dest,
+        0);
+}

@@ -98,12 +98,15 @@ static void render_critter(eg_app *app, eg_entity *critter)
     // Render the critter sprite.
     if (critter->ticks >= 120)
     {
-        sprite_draw_critter(
-            app,
-            critter->x_pos,
-            critter->y_pos,
-            eg_check_flag(critter, ENTITY_FLAG_MIRROR),
-            tile);
+        if (critter->result || critter->ticks < 400)
+        {
+            sprite_draw_critter(
+                app,
+                critter->x_pos,
+                critter->y_pos,
+                eg_check_flag(critter, ENTITY_FLAG_MIRROR),
+                tile);
+        }
     }
     else
     {
@@ -120,7 +123,7 @@ static void render_critter(eg_app *app, eg_entity *critter)
     }
 
     // Render the sparkle animation.
-    if (critter->cursor_x && critter->cursor_x < 60)
+    if (critter->result && critter->cursor_x && critter->cursor_x < 60)
     {
         // 5 animation frames rendered over the course of 60 game loop frames
         int sparkle_tile = critter->cursor_x < 12 ? 0 : critter->cursor_x < 24 ? 1
@@ -132,6 +135,19 @@ static void render_critter(eg_app *app, eg_entity *critter)
             critter->x_pos,
             critter->y_pos,
             sparkle_tile);
+    }
+
+    // Render the expiration animation.
+    if (!critter->result && critter->cursor_x && critter->cursor_x < 45)
+    {
+        // 3 animation frames rendered over the course of 45 game loop frames
+        int puff_tile = critter->cursor_x < 15 ? 0 : critter->cursor_x < 30 ? 1
+                                                                            : 2;
+        sprite_draw_puff(
+            app,
+            critter->x_pos + 2,
+            critter->y_pos + 3,
+            puff_tile);
     }
 
     // hit box
@@ -200,7 +216,7 @@ static void update_critter(eg_app *app, eg_entity *critter)
     // TODO: pre fall animation
     // TODO: expiration animation
 
-    // healing animation
+    // healing and expiration animations
     if (critter->cursor_x && critter->cursor_x < 60)
     {
         critter->cursor_x++;
@@ -208,7 +224,13 @@ static void update_critter(eg_app *app, eg_entity *critter)
 
     // If 400 ticks have passed and the critter has not yet been healed by
     // the power of music, then send it to live on a farm.
-    if (critter->ticks >= 400 && !critter->result && critter->present)
+    if (critter->ticks == 400 && !critter->result)
+    {
+        // start the expiration animation
+        critter->cursor_x = 1;
+    }
+
+    if (critter->ticks >= 445 && !critter->result && critter->present)
     {
         critter->present = 0;
         app->counters[DEMO_COUNTER_CRITTERS]--;
@@ -232,6 +254,13 @@ static void collide_critter(
     int is_b)
 {
     if (critter->ticks < 120 || critter->result || other->type != ENTITY_TYPE_NOTE)
+    {
+        return;
+    }
+
+    // If the critter has reached its expiration time and has still not been
+    // healed, then no more collision should occur.
+    if (critter->ticks >= 400 && !critter->result)
     {
         return;
     }

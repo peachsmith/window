@@ -84,4 +84,15 @@ void sprite_draw_critter(eg_app *, int, int, int, int);
  */
 void sprite_draw_sparkle(eg_app *, int, int, int);
 
+/**
+ * Renders a puff of smoke.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   int - the x coordinate on the screen
+ *   int - the y coordinate on the screen
+ *   int - indicates which tile from the sprite sheet should be rendered
+ */
+void sprite_draw_puff(eg_app *, int, int, int);
+
 #endif
