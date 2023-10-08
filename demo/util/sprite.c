@@ -556,10 +556,6 @@ void sprite_draw_critter(eg_app *app, int x, int y, int mirror, int tile)
     int tile_w = 20;
     int tile_h = 12;
 
-    // tile coordinates
-    int tile_x = tile;
-    int tile_y = 9;
-
     eg_rect src = {
         .x = 96 + tile * tile_w,
         .y = 11,
