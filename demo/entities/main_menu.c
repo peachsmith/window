@@ -4,6 +4,7 @@
 #include "demo/util/ui.h"
 #include "demo/texture/texture.h"
 #include "demo/font/font.h"
+#include "demo/texture/texture.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,13 +14,13 @@ static char *items[3] = {
     "CONTROLS",
     "MEET THE CHARACTERS"};
 
-#define ITEM_HEIGHT 24
+#define ITEM_HEIGHT 20
 
 static void render_main_menu(eg_app *app, eg_entity *menu)
 {
     eg_font *font = app->fonts[DEMO_FONT_PRESS_START];
     int x_origin = 60;
-    int y_origin = 80;
+    int y_origin = 90;
 
     int w = app->entity_types[menu->type].width;
     int h = app->entity_types[menu->type].height;
@@ -35,12 +36,22 @@ static void render_main_menu(eg_app *app, eg_entity *menu)
     eg_draw_rect(app, &r, 1);
 
     // Render the title.
-    r.x = 45;
-    r.y = 5;
-    r.w = 150;
-    r.h = 60;
-    eg_set_color(app, EG_COLOR_ORANGE);
-    eg_draw_rect(app, &r, 1);
+    eg_rect src = {
+        .x = 0,
+        .y = 0,
+        .w = 140,
+        .h = 70};
+    eg_rect dest = {
+        .x = 45,
+        .y = 5,
+        .w = 140,
+        .h = 70};
+    eg_draw_texture(
+        app,
+        app->textures[TNS_TEXTURE_TITLE],
+        &src,
+        &dest,
+        0);
 
     // Render menu items.
     int i;

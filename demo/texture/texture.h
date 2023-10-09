@@ -10,6 +10,7 @@
 
 // Toot n Sploot textures
 #define TNS_TEXTURE_SPRITES 3
+#define TNS_TEXTURE_TITLE 4
 
 int demo_init_textures(eg_app *);
 
