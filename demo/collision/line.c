@@ -80,7 +80,7 @@ int demo_line(
 
     // If the source entity does not have camera focus, add the camera
     // position to the source entity's position.
-    if (a->type != ENTITY_TYPE_PLAYER)
+    if (!app->entity_types[a->type].control)
     {
         ax += app->cam.x;
         ay += app->cam.y;

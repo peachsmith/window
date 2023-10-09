@@ -9,22 +9,28 @@
 #define DEMO_COUNTER_CRITTER_SLOT_OFFSET 3
 #define DEMO_COUNTER_MAX 20
 
+//============================================================================
+// Demo scenes
 #define DEMO_SCENE_0 0
 #define DEMO_SCENE_1 1
 #define DEMO_SCENE_2 2
 #define DEMO_SCENE_3 3
-#define DEMO_SCENE_FOREST 4
-#define DEMO_SCENE_MOVEMENT 5
+#define DEMO_SCENE_MOVEMENT 4
+
+//============================================================================
+// Toot n Sploot scenes
+#define DEMO_SCENE_TITLE_SCREEN 5
+#define DEMO_SCENE_FOREST 6
 
 /**
  * Populates am app struct with the data needed for runtime.
- * 
+ *
  * Params:
  *   eg_app* - a pointer to an app struct
- * 
+ *
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-int demo_prepare(eg_app*);
+int demo_prepare(eg_app *);
 
 #endif

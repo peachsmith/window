@@ -32,19 +32,19 @@ static void render_hud(eg_app *app, eg_entity *hud)
     int res = snprintf(
         buffer,
         n,
-        "SCORE: %d",
+        "SCORE %d",
         app->counters[DEMO_COUNTER_SCORE]);
     if (res < 0 || res >= n)
     {
         return;
     }
-    eg_draw_text(app, app->fonts[DEMO_FONT_KENNY_PIXEL], buffer, 2, -1);
+    eg_draw_text(app, app->fonts[DEMO_FONT_PRESS_START], buffer, 2, 2);
 
     // render the available music notes
-    eg_draw_text(app, app->fonts[DEMO_FONT_KENNY_PIXEL], "BREATH:", 2, 10);
+    eg_draw_text(app, app->fonts[DEMO_FONT_PRESS_START], "BREATH", 2, 12);
     for (int i = 0; i < app->counters[DEMO_COUNTER_BREATH]; i++)
     {
-        sprite_draw_note(app, 40 + i * 13, 11);
+        sprite_draw_note(app, 55 + i * 13, 10);
     }
 }
 

@@ -19,9 +19,11 @@ void scene_menu_input_handler(eg_app *);
 void input_menu_input_handler(eg_app *);
 
 // Toot n Sploot input handlers
-void tns_root_input_handler(eg_app *);
+void tns_main_menu_input_handler(eg_app *);
+void tns_forest_input_handler(eg_app *);
 
-// used when no input should be processed
-void empty_input_handler(eg_app *);
+// The default input handler functions as a way for the user to exit the
+// application if all other input handlers have been removed.
+void default_input_handler(eg_app *);
 
 #endif

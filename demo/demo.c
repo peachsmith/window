@@ -24,6 +24,9 @@
 #include "demo/entities/corgi.h"
 #include "demo/entities/note.h"
 #include "demo/entities/critter.h"
+#include "demo/entities/floor.h"
+#include "demo/entities/wall.h"
+#include "demo/entities/main_menu.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
 #include "demo/menu/menu.h"
@@ -411,12 +414,14 @@ int demo_prepare(eg_app *app)
     tns_register_corgi(&(app->entity_types[ENTITY_TYPE_CORGI]));
     tns_register_floor(&(app->entity_types[ENTITY_TYPE_FLOOR]));
     tns_register_wall(&(app->entity_types[ENTITY_TYPE_WALL]));
+    tns_register_main_menu(&(app->entity_types[ENTITY_TYPE_MAIN_MENU]));
 
-    eg_push_input_handler(app, empty_input_handler);
+    // push the default input handler
+    eg_push_input_handler(app, default_input_handler);
 
     // Load the initial scene.
-    load_forest_scene(app);
-    eg_push_input_handler(app, tns_root_input_handler);
+    load_title_screen(app);
+    eg_push_input_handler(app, tns_main_menu_input_handler);
 
     // Play music
     // eg_play_sound(app, app->sounds[DEMO_SONG_FIELD]);

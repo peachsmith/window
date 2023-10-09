@@ -18,13 +18,15 @@
 #include "demo/entities/hud.h"
 #include "demo/entities/forest.h"
 #include "demo/entities/corgi.h"
+#include "demo/entities/floor.h"
+#include "demo/entities/wall.h"
 #include "demo/util/util.h"
 #include "demo/demo.h"
 
 void load_forest_scene(eg_app *app)
 {
     app->scene = DEMO_SCENE_FOREST;
-    
+
     app->counters[DEMO_COUNTER_BREATH] = 3;
 
     demo_set_camera(app, EG_CAMERA_NONE);
@@ -42,8 +44,6 @@ void load_forest_scene(eg_app *app)
     // dialogs
     demo_dialog_demo_create(app);
     info_dialog_demo_create(app);
-    jimbo_dialog_demo_create(app);
-    sign_dialog_demo_create(app);
 
     // scene transition
     transition_demo_create(app);

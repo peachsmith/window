@@ -462,7 +462,7 @@ int demo_swept_aabb(
 
     // If the source entity does not have camera focus, add the camera
     // position to the source entity's position.
-    if (a->type != ENTITY_TYPE_PLAYER)
+    if (!app->entity_types[a->type].control)
     {
         p.x += app->cam.x;
         p.y += app->cam.y;
@@ -470,7 +470,7 @@ int demo_swept_aabb(
 
     // If the target entity has camera focus, subtract the camera
     // position from the target entity's position.
-    if (b->type == ENTITY_TYPE_PLAYER)
+    if (app->entity_types[b->type].control)
     {
         r.x -= app->cam.x;
         r.y -= app->cam.y;
@@ -524,7 +524,7 @@ int demo_swept_aabb(
         int by = b->y_pos + app->cam.y;
         int bw = app->entity_types[b->type].width;
 
-        if (a->type != ENTITY_TYPE_PLAYER)
+        if (!app->entity_types[a->type].control)
         {
             ax += app->cam.x;
             ay += app->cam.y;

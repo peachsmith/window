@@ -50,8 +50,13 @@ void common_dialog_input_handler(eg_app *app)
     }
 }
 
-void empty_input_handler(eg_app *app)
+void default_input_handler(eg_app *app)
 {
+    // If the escape key is pressed, terminate the application.
+    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    {
+        app->done = 1;
+    }
 }
 
 void root_input_handler(eg_app *app)
@@ -87,8 +92,6 @@ void root_input_handler(eg_app *app)
     // If the escape key is pressed, terminate the application.
     if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
     {
-        printf("The escape key was pressed. "
-               "The application should now terminate.\n");
         app->done = 1;
     }
 

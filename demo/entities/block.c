@@ -255,12 +255,6 @@ static void collide_block(
     // The collision resolution correction factor formula is pulled from
     // the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.
 
-    // Don't collide with musical notes.
-    if (other->type == ENTITY_TYPE_NOTE)
-    {
-        return;
-    }
-
     if (block->type == ENTITY_TYPE_BLOCK_SLOPE)
     {
         int avy = app->entity_types[other->type].get_y_vel(other);
@@ -272,7 +266,7 @@ static void collide_block(
             int ah = app->entity_types[other->type].height;
             int by = block->y_pos + app->cam.y;
             int check = other->y_pos + ah;
-            if (other->type != ENTITY_TYPE_PLAYER)
+            if (!app->entity_types[other->type].control)
             {
                 check += app->cam.y;
             }
@@ -404,7 +398,7 @@ static void collide_block(
             // The entity being carried by the platform should move with the
             // platform regardless of when they were added to the application.
             int camy = 0;
-            if (other->type != ENTITY_TYPE_PLAYER)
+            if (!app->entity_types[other->type].control)
             {
                 camy = app->cam.y;
             }
@@ -595,97 +589,4 @@ void block_demo_col(eg_app *app, int x, int y, int length)
     {
         block_demo_create(app, x, y + i * block_h);
     }
-}
-
-// Renders a standard block
-static void render_floor(eg_app *app, eg_entity *floor)
-{
-    int w = app->entity_types[floor->type].width;
-
-    for (int i = 0; i < 10; i++)
-    {
-        sprite_draw_ground(app, i * (w / 10), floor->y_pos);
-    }
-
-    // hit box
-    if (app->debug.hitboxes)
-    {
-        eg_rect hit_box;
-        hit_box.x = floor->x_pos + app->cam.x;
-        hit_box.y = floor->y_pos + app->cam.y;
-        hit_box.w = app->entity_types[floor->type].width;
-        hit_box.h = app->entity_types[floor->type].height;
-
-        eg_set_color(app, EG_COLOR_SEA_GREEN);
-        eg_draw_rect(app, &hit_box, 0);
-    }
-}
-
-// Renders a standard block
-static void render_wall(eg_app *app, eg_entity *wall)
-{
-    // hit box
-    if (app->debug.hitboxes)
-    {
-        eg_rect hit_box;
-        hit_box.x = wall->x_pos + app->cam.x;
-        hit_box.y = wall->y_pos + app->cam.y;
-        hit_box.w = app->entity_types[wall->type].width;
-        hit_box.h = app->entity_types[wall->type].height;
-
-        eg_set_color(app, EG_COLOR_YELLOW);
-        eg_draw_rect(app, &hit_box, 0);
-    }
-}
-
-void tns_register_floor(eg_entity_type *t)
-{
-    t->id = ENTITY_TYPE_FLOOR;
-    t->width = 240;
-    t->height = 18;
-    t->render = render_floor;
-    t->collide = collide_block;
-}
-
-eg_entity *tns_create_floor(eg_app *app, int x, int y)
-{
-    eg_entity *floor = NULL;
-
-    floor = eg_create_entity(app);
-    if (floor == NULL)
-    {
-        return NULL;
-    }
-
-    floor->type = ENTITY_TYPE_FLOOR;
-    floor->x_pos = x;
-    floor->y_pos = y;
-
-    return floor;
-}
-
-void tns_register_wall(eg_entity_type *t)
-{
-    t->id = ENTITY_TYPE_WALL;
-    t->width = 24;
-    t->height = 140;
-    t->render = render_wall;
-    t->collide = collide_block;
-}
-
-eg_entity *tns_create_wall(eg_app *app, int x, int y)
-{
-    eg_entity *wall = NULL;
-
-    wall = eg_create_entity(app);
-    if (wall == NULL)
-    {
-        return NULL;
-    }
-
-    wall->type = ENTITY_TYPE_WALL;
-    wall->x_pos = x;
-    wall->y_pos = y;
-
-    return wall;
 }

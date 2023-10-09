@@ -3,6 +3,8 @@
 
 // A lits of all entity types in the application
 
+//============================================================================
+// Demo Entity Types
 #define ENTITY_TYPE_PLAYER 0
 #define ENTITY_TYPE_BLOCK 1
 #define ENTITY_TYPE_BLOCK_BIG 2
@@ -30,7 +32,8 @@
 
 #define ENTITY_TYPE_FIREBALL 22
 
-// Toot n Sploot entities
+//============================================================================
+// Toot n Sploot Entity Types
 #define ENTITY_TYPE_FLOOR 23
 #define ENTITY_TYPE_WALL 24
 #define ENTITY_TYPE_HUD 25
@@ -38,9 +41,10 @@
 #define ENTITY_TYPE_NOTE 27
 #define ENTITY_TYPE_FOREST 28
 #define ENTITY_TYPE_CRITTER 29
+#define ENTITY_TYPE_MAIN_MENU 30
 
 // This is the total number of entity types.
-#define ENTITY_TYPE_MAX 30
+#define ENTITY_TYPE_MAX 31
 
 // flags [0, 15]
 #define ENTITY_FLAG_GROUND 0

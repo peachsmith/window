@@ -4,6 +4,7 @@
 #include "demo/util/sprite.h"
 #include "demo/dialog/dialog.h"
 #include "demo/demo.h"
+#include "demo/audio/audio.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -288,6 +289,9 @@ static void collide_critter(
         // for anything else in this entity. In the future, we may want to
         // find a smarter way of doing this.
         critter->cursor_x = 1;
+
+        // play a whimsical sound effect
+        eg_play_sound(app, app->sounds[DEMO_SOUND_EFFECT_CONFIRMATION]);
     }
 
     // If a certain score is reached, the game ends.

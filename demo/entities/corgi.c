@@ -105,12 +105,16 @@ static int get_corgi_y_vel(eg_entity *corgi)
 static void render_corgi(eg_app *app, eg_entity *corgi)
 {
     int tile = 0;
-    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
-    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
-    int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
     int mirror = eg_check_flag(corgi, ENTITY_FLAG_MIRROR);
-    int tooting = eg_peek_input(app, EG_KEYCODE_X);
+    int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
     int splooting = app->actuation_counters[EG_KEYCODE_SPACE] >= 20;
+
+    // input checks
+    // When the user has control over the corgi, we expect there to be two
+    // input handlers.
+    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT) && app->input_count == 2;
+    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT) && app->input_count == 2;
+    int tooting = eg_peek_input(app, EG_KEYCODE_X) && app->input_count == 2;
 
     // Animation logic for walking to the right
     if ((left_pressed || right_pressed) && grounded)
@@ -178,9 +182,13 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     // a moving platform.
     int carried = eg_check_flag(corgi, ENTITY_FLAG_MOVE);
     int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
-    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
-    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
     int splooting = app->actuation_counters[EG_KEYCODE_SPACE] >= 20;
+
+    // input checks
+    // When the user has control over the corgi, we expect there to be two
+    // input handlers.
+    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT) && app->input_count == 2;
+    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT) && app->input_count == 2;
 
     int avx = get_corgi_x_vel(corgi);
     int avy = get_corgi_y_vel(corgi);

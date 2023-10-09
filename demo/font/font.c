@@ -13,16 +13,6 @@ int demo_init_fonts(eg_app *app)
     app->fonts = &(fonts[0]);
     app->font_count = 0;
 
-    // if (!eg_load_font(app, "assets/fonts/Alegreya-VariableFont_wght.ttf", 16))
-    // {
-    //     fprintf(stderr, "failed to load font\n");
-    // }
-
-    // if (!eg_load_font(app, "assets/fonts/JetBrainsMonoNL-Regular.ttf", 16))
-    // {
-    //     fprintf(stderr, "failed to load font\n");
-    // }
-
     if (eg_load_font(app, "assets/fonts/Kenney Pixel.ttf", 16) == NULL)
     {
         fprintf(stderr, "failed to load font\n");
@@ -30,6 +20,13 @@ int demo_init_fonts(eg_app *app)
     }
 
     if (eg_load_font(app, "assets/fonts/pokemon_fire_red.ttf", 16) == NULL)
+    {
+        fprintf(stderr, "failed to load font\n");
+        return 0;
+    }
+
+    // source: https://www.1001fonts.com/press-start-font.html
+    if (eg_load_font(app, "assets/fonts/press-start.regular.ttf", 8) == NULL)
     {
         fprintf(stderr, "failed to load font\n");
         return 0;

@@ -36,8 +36,7 @@ eg_entity *block_demo_create_sloped(eg_app *, int, int, int);
 // register and create functions for Toot n Sploot
 void tns_register_floor(eg_entity_type *);
 eg_entity *tns_create_floor(eg_app *, int, int);
-void tns_register_wall(eg_entity_type *);
-eg_entity *tns_create_wall(eg_app *, int, int);
+
 
 /**
  * add a row of blocks to a scene

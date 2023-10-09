@@ -5,6 +5,7 @@
 
 #define DEMO_FONT_KENNY_PIXEL 0
 #define DEMO_FONT_POKEMON_FIRE_RED 1
+#define DEMO_FONT_PRESS_START 2
 
 int demo_init_fonts(eg_app *);
 

@@ -41,6 +41,7 @@ void load_movement_scene(eg_app *);
 
 //============================================================================
 // Toot n Sploot scenes
+void load_title_screen(eg_app *);
 void load_forest_scene(eg_app *);
 
 #endif

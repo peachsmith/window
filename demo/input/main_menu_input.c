@@ -26,6 +26,10 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
         transition.flags = entity->flags;
     }
 
+    // Close the main menu and remove its input handler.
+    app->menu_count--;
+    eg_pop_input_handler(app);
+
     // Clear the current scene and load the next scene.
     clear_scene(app);
     load_next_scene(app);
@@ -53,31 +57,6 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
     }
 }
 
-static void scene0_transition(eg_app *app)
-{
-    do_transition(app, load_scene_0);
-}
-
-static void scene1_transition(eg_app *app)
-{
-    do_transition(app, load_scene_1);
-}
-
-static void scene2_transition(eg_app *app)
-{
-    do_transition(app, load_scene_2);
-}
-
-static void scene3_transition(eg_app *app)
-{
-    do_transition(app, load_scene_3);
-}
-
-static void movement_transition(eg_app *app)
-{
-    do_transition(app, load_movement_scene);
-}
-
 static void forest_transition(eg_app *app)
 {
     do_transition(app, load_forest_scene);
@@ -94,21 +73,10 @@ static void forest_transition(eg_app *app)
  */
 static void begin_transition(eg_app *app, eg_callback transition_loader, eg_callback handler)
 {
-    // Close the scenes menu.
-    app->menu_count--;
-    eg_pop_input_handler(app);
-
-    // Close the debug menu.
-    app->menu_count--;
-    eg_pop_input_handler(app);
-
     // Set the transition callback to load scene 0.
     // Set the next input handler to be the root input handler.
     app->transition_loader = transition_loader;
     app->transition_input_handler = handler;
-
-    // Remove the input handler of the current scene.
-    eg_pop_input_handler(app);
 
     // Start the screen transition by marking the data field as 1 for any
     // entity that has an entity type of ENTITY_TYPE_TRANSITION.
@@ -122,22 +90,19 @@ static void begin_transition(eg_app *app, eg_callback transition_loader, eg_call
     }
 }
 
-void scene_menu_input_handler(eg_app *app)
+void tns_main_menu_input_handler(eg_app *app)
 {
-    if (eg_consume_input(app, EG_KEYCODE_X) ||
-        eg_consume_input(app, EG_KEYCODE_Q) ||
-        eg_consume_input(app, EG_KEYCODE_ESCAPE))
-    {
-        app->menu_count--;
-        eg_pop_input_handler(app);
-        return;
-    }
-
-    // Locate the scene menu.
+    // Locate the main menu.
     eg_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;
+    }
+
+    // If the escape key is pressed, terminate the application.
+    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    {
+        app->done = 1;
     }
 
     if (eg_consume_input(app, EG_KEYCODE_UP))
@@ -146,51 +111,31 @@ void scene_menu_input_handler(eg_app *app)
         {
             menu_entity->cursor_y--;
         }
-        else if (menu_entity->scroll_y > 0)
-        {
-            menu_entity->scroll_y--;
-        }
     }
 
     if (eg_consume_input(app, EG_KEYCODE_DOWN))
     {
-        if (menu_entity->cursor_y < 3)
+        if (menu_entity->cursor_y < 2)
         {
             menu_entity->cursor_y++;
-        }
-        else if (menu_entity->scroll_y < 2)
-        {
-            menu_entity->scroll_y++;
         }
     }
 
     // menu item selection
     if (eg_consume_input(app, EG_KEYCODE_Z))
     {
-        switch (menu_entity->cursor_y + menu_entity->scroll_y)
+        switch (menu_entity->cursor_y)
         {
         case 0:
-            begin_transition(app, scene0_transition, root_input_handler);
-            break;
-
-        case 1:
-            begin_transition(app, scene1_transition, root_input_handler);
-            break;
-
-        case 2:
-            begin_transition(app, scene2_transition, root_input_handler);
-            break;
-
-        case 3:
-            begin_transition(app, scene3_transition, root_input_handler);
-            break;
-
-        case 4:
             begin_transition(app, forest_transition, tns_forest_input_handler);
             break;
 
-        case 5:
-            begin_transition(app, movement_transition, root_input_handler);
+        case 1:
+            printf("controls\n");
+            break;
+
+        case 2:
+            printf("meet the characters\n");
             break;
 
         default:
