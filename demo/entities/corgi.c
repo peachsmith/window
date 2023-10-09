@@ -3,6 +3,7 @@
 #include "demo/texture/texture.h"
 #include "demo/util/sprite.h"
 #include "demo/util/util.h"
+#include "demo/demo.h"
 
 #include <stdlib.h>
 
@@ -107,6 +108,8 @@ static void render_corgi(eg_app *app, eg_entity *corgi)
     int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
     int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
     int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
+    int mirror = eg_check_flag(corgi, ENTITY_FLAG_MIRROR);
+    int tooting = eg_peek_input(app, EG_KEYCODE_X);
     int splooting = app->actuation_counters[EG_KEYCODE_SPACE] >= 20;
 
     // Animation logic for walking to the right
@@ -138,7 +141,17 @@ static void render_corgi(eg_app *app, eg_entity *corgi)
         app,
         corgi->x_pos,
         corgi->y_pos,
-        eg_check_flag(corgi, ENTITY_FLAG_MIRROR), tile);
+        mirror,
+        tile);
+
+    if (tooting && !splooting)
+    {
+        sprite_draw_trumpet(
+            app,
+            mirror ? corgi->x_pos + 23 : corgi->x_pos - 12,
+            corgi->y_pos + 7,
+            mirror);
+    }
 
     // hit box
     if (app->debug.hitboxes)
@@ -309,6 +322,28 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     // Behavior Logic
 
     corgi->ticks++;
+
+    // If the corgi is splooting, initiate a power nap to restore breath.
+    // In the same way that the critter entity appropriates the cursor_x
+    // field for use in animation, we use it here for regulating the rate
+    // of breath recovery.
+    if (splooting)
+    {
+        if (corgi->cursor_x && !(corgi->cursor_x % 60) && app->counters[DEMO_COUNTER_BREATH] < 3)
+        {
+            app->counters[DEMO_COUNTER_BREATH]++;
+        }
+
+        if (corgi->cursor_x < 181)
+        {
+            corgi->cursor_x++;
+        }
+    }
+    else
+    {
+        // stop splooting
+        corgi->cursor_x = 0;
+    }
 
     // Advance the counter for walking to the right
     if ((left_pressed || right_pressed) && grounded)

@@ -1,29 +1,31 @@
 #include "demo/entities/forest.h"
 #include "demo/entities/entity_types.h"
+#include "demo/util/sprite.h"
 
 #include <stdlib.h>
 
-static void render_forest(eg_app *app, eg_entity *hud)
+static void render_forest(eg_app *app, eg_entity *forest)
 {
-    // canopy
-    eg_rect canopy = {
-        .x = hud->x_pos,
-        .y = hud->y_pos,
-        .w = app->entity_types[hud->type].width,
-        .h = 20};
+    sprite_draw_forest(app, forest->x_pos, forest->y_pos);
+    // // canopy
+    // eg_rect canopy = {
+    //     .x = hud->x_pos,
+    //     .y = hud->y_pos,
+    //     .w = app->entity_types[hud->type].width,
+    //     .h = 20};
 
-    eg_set_color(app, EG_COLOR_FOREST_GREEN);
-    eg_draw_rect(app, &canopy, 1);
+    // eg_set_color(app, EG_COLOR_FOREST_GREEN);
+    // eg_draw_rect(app, &canopy, 1);
 
-    // trunks and branches
-    eg_rect trees_and_branches = {
-        .x = hud->x_pos,
-        .y = hud->y_pos + 20,
-        .w = app->entity_types[hud->type].width,
-        .h = app->entity_types[hud->type].height - 20};
+    // // trunks and branches
+    // eg_rect trees_and_branches = {
+    //     .x = forest->x_pos,
+    //     .y = forest->y_pos,
+    //     .w = app->entity_types[forest->type].width,
+    //     .h = app->entity_types[forest->type].height};
 
-    eg_set_color(app, EG_COLOR_GREEN_GRAY);
-    eg_draw_rect(app, &trees_and_branches, 1);
+    // eg_set_color(app, EG_COLOR_RED);
+    // eg_draw_rect(app, &trees_and_branches, 0);
 }
 
 void forest_demo_register(eg_entity_type *t)

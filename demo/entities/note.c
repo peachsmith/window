@@ -169,7 +169,6 @@ static void update_note(eg_app *app, eg_entity *note)
     if (note->ticks >= 185)
     {
         note->present = 0;
-        app->counters[DEMO_COUNTER_NOTES]--;
     }
 }
 

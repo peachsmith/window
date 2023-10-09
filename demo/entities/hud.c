@@ -42,7 +42,7 @@ static void render_hud(eg_app *app, eg_entity *hud)
 
     // render the available music notes
     eg_draw_text(app, app->fonts[DEMO_FONT_KENNY_PIXEL], "BREATH:", 2, 10);
-    for (int i = 0; i < 3 - app->counters[DEMO_COUNTER_NOTES]; i++)
+    for (int i = 0; i < app->counters[DEMO_COUNTER_BREATH]; i++)
     {
         sprite_draw_note(app, 40 + i * 13, 11);
     }

@@ -110,16 +110,16 @@ static void render_critter(eg_app *app, eg_entity *critter)
     }
     else
     {
-        // TODO: render shaking leaves to indicate that a critter is about
-        // to fall from the trees.
-        eg_rect r = {
-            .x = critter->x_pos,
-            .y = critter->y_pos,
-            .w = app->entity_types[critter->type].width,
-            .h = app->entity_types[critter->type].height};
-
-        eg_set_color(app, EG_COLOR_MILITARY_GREEN);
-        eg_draw_rect(app, &r, 1);
+        tile = 0;
+        if (critter->animation_ticks < 8)
+        {
+            tile = 1;
+        }
+        sprite_draw_leaves(
+            app,
+            critter->x_pos,
+            critter->y_pos,
+            tile);
     }
 
     // Render the sparkle animation.
@@ -203,6 +203,16 @@ static void update_critter(eg_app *app, eg_entity *critter)
 
     critter->ticks++;
 
+    // rustling leaves animation
+    if (critter->ticks < 120)
+    {
+        critter->animation_ticks++;
+        if (critter->animation_ticks >= 16)
+        {
+            critter->animation_ticks = 0;
+        }
+    }
+
     // running animation
     if (critter->result && grounded)
     {
@@ -268,7 +278,6 @@ static void collide_critter(
     if (other->present)
     {
         other->present = 0;
-        app->counters[DEMO_COUNTER_NOTES]--;
     }
 
     if (!critter->result)

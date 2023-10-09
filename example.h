@@ -361,6 +361,12 @@ eg_app *eg_create_app();
 void eg_destroy_app(eg_app *);
 
 /**
+ * Sets the title of the application. This string will be used by the
+ * underlying platform to label the window.
+ */
+void eg_set_title(eg_app *, const char *);
+
+/**
  * Initiates the current frame.
  * This should be called at the beginning of each iteration of the main loop.
  *

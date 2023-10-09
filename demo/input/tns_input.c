@@ -182,7 +182,7 @@ void tns_root_input_handler(eg_app *app)
     if (eg_consume_input(app, EG_KEYCODE_X) && !splooting)
     {
         // Limit the number of notes to 3 at any given time.
-        if (app->counters[DEMO_COUNTER_NOTES] < 3)
+        if (app->counters[DEMO_COUNTER_BREATH] > 0)
         {
             eg_entity *f = tns_create_note(
                 app,
@@ -202,7 +202,7 @@ void tns_root_input_handler(eg_app *app)
                 }
             }
 
-            app->counters[DEMO_COUNTER_NOTES]++;
+            app->counters[DEMO_COUNTER_BREATH]--;
         }
     }
 

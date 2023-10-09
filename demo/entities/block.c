@@ -600,14 +600,13 @@ void block_demo_col(eg_app *app, int x, int y, int length)
 // Renders a standard block
 static void render_floor(eg_app *app, eg_entity *floor)
 {
-    eg_rect r = {
-        .x = floor->x_pos,
-        .y = floor->y_pos,
-        .w = app->entity_types[floor->type].width,
-        .h = app->entity_types[floor->type].height};
+    int w = app->entity_types[floor->type].width;
+    int h = app->entity_types[floor->type].height;
 
-    eg_set_color(app, EG_COLOR_BROWN);
-    eg_draw_rect(app, &r, 1);
+    for (int i = 0; i < 10; i++)
+    {
+        sprite_draw_ground(app, i * (w / 10), floor->y_pos);
+    }
 
     // hit box
     if (app->debug.hitboxes)

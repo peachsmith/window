@@ -95,4 +95,46 @@ void sprite_draw_sparkle(eg_app *, int, int, int);
  */
 void sprite_draw_puff(eg_app *, int, int, int);
 
+/**
+ * Renders some leaves rustling in the trees.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   int - the x coordinate on the screen
+ *   int - the y coordinate on the screen
+ *   int - indicates which tile from the sprite sheet should be rendered
+ */
+void sprite_draw_leaves(eg_app *, int, int, int);
+
+/**
+ * Renders a tiny trumpet.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   int - the x coordinate on the screen
+ *   int - the y coordinate on the screen
+ *   int - 1 for mirrored, or 0 for not mirrored
+ */
+void sprite_draw_trumpet(eg_app *, int, int, int);
+
+/**
+ * Renders a piece of the forest floor.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   int - the x coordinate on the screen
+ *   int - the y coordinate on the screen
+ */
+void sprite_draw_ground(eg_app *, int, int);
+
+/**
+ * Renders the forest background.
+ *
+ * Params:
+ *   eg_app* - a pointer to an app struct
+ *   int - the x coordinate on the screen
+ *   int - the y coordinate on the screen
+ */
+void sprite_draw_forest(eg_app *, int, int);
+
 #endif

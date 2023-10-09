@@ -72,6 +72,8 @@ eg_impl *eg_impl_create(int, int, int);
 
 void eg_impl_destroy(eg_impl *);
 
+void eg_impl_set_title(eg_app *, const char *);
+
 void eg_impl_process_events(eg_app *);
 
 void eg_impl_delay(eg_app *);

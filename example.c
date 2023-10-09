@@ -147,6 +147,11 @@ void eg_destroy_app(eg_app *app)
     free(app);
 }
 
+void eg_set_title(eg_app *app, const char *title)
+{
+    eg_impl_set_title(app, title);
+}
+
 void eg_begin_frame(eg_app *app)
 {
     eg_impl_process_events(app);

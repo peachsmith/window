@@ -25,7 +25,7 @@ void load_forest_scene(eg_app *app)
 {
     app->scene = DEMO_SCENE_FOREST;
     
-    app->counters[DEMO_COUNTER_NOTES] = 0;
+    app->counters[DEMO_COUNTER_BREATH] = 3;
 
     demo_set_camera(app, EG_CAMERA_NONE);
     app->cam.x = 0;

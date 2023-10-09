@@ -266,6 +266,8 @@ static void draw(eg_app *app)
 
 int demo_prepare(eg_app *app)
 {
+    eg_set_title(app, "Toot n Sploot");
+
     // default values for entity types
     for (int i = 0; i < ENTITY_TYPE_MAX; i++)
     {

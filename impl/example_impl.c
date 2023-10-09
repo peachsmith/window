@@ -192,6 +192,18 @@ void eg_impl_destroy(eg_impl *impl)
     free(impl);
 }
 
+void eg_impl_set_title(eg_app *app, const char *title)
+{
+    if (app == NULL || app->impl == NULL)
+    {
+        return;
+    }
+
+    eg_impl *impl = app->impl;
+
+    SDL_SetWindowTitle(impl->window, title);
+}
+
 void eg_impl_process_events(eg_app *app)
 {
     if (app == NULL || app->impl == NULL)

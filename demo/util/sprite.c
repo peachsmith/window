@@ -631,3 +631,95 @@ void sprite_draw_puff(eg_app *app, int x, int y, int tile)
         &dest,
         0);
 }
+
+void sprite_draw_leaves(eg_app *app, int x, int y, int tile)
+{
+    // tile dimensions
+    int tile_w = 20;
+    int tile_h = 12;
+
+    eg_rect src = {
+        .x = 96 + tile * tile_w,
+        .y = 24,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = tile_w,
+        .h = tile_h};
+
+    eg_draw_texture(
+        app,
+        app->textures[TNS_TEXTURE_SPRITES],
+        &src,
+        &dest,
+        0);
+}
+
+void sprite_draw_trumpet(eg_app *app, int x, int y, int mirror)
+{
+    eg_rect src = {
+        .x = 137,
+        .y = 25,
+        .w = 14,
+        .h = 8};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = 14,
+        .h = 8};
+
+    eg_draw_texture(
+        app,
+        app->textures[TNS_TEXTURE_SPRITES],
+        &src,
+        &dest,
+        mirror);
+}
+
+void sprite_draw_ground(eg_app *app, int x, int y)
+{
+    eg_rect src = {
+        .x = 0,
+        .y = 24,
+        .w = 24,
+        .h = 18};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = 24,
+        .h = 18};
+
+    eg_draw_texture(
+        app,
+        app->textures[TNS_TEXTURE_SPRITES],
+        &src,
+        &dest,
+        0);
+}
+
+void sprite_draw_forest(eg_app * app, int x, int y)
+{
+    eg_rect src = {
+        .x = 0,
+        .y = 44,
+        .w = 240,
+        .h = 120};
+
+    eg_rect dest = {
+        .x = x,
+        .y = y,
+        .w = 240,
+        .h = 120};
+
+    eg_draw_texture(
+        app,
+        app->textures[TNS_TEXTURE_SPRITES],
+        &src,
+        &dest,
+        0);
+}
