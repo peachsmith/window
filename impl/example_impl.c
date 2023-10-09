@@ -100,10 +100,12 @@ eg_impl *eg_impl_create(int screen_width, int screen_height, int scale)
     }
 
     // Create the renderer.
+    // We used SDL_RENDERER_PRESENTVSYNC to prevent screen tearing on things
+    // like MacBook.
     renderer = SDL_CreateRenderer(
         window,
         -1,
-        SDL_RENDERER_ACCELERATED);
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == NULL)
     {
         SDL_DestroyWindow(window);

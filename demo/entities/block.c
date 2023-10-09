@@ -601,7 +601,6 @@ void block_demo_col(eg_app *app, int x, int y, int length)
 static void render_floor(eg_app *app, eg_entity *floor)
 {
     int w = app->entity_types[floor->type].width;
-    int h = app->entity_types[floor->type].height;
 
     for (int i = 0; i < 10; i++)
     {
