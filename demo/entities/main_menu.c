@@ -55,7 +55,7 @@ static void render_main_menu(eg_app *app, eg_entity *menu)
 
     // Render menu items.
     int i;
-    for (i = 0 + menu->scroll_y; i < 3; i++)
+    for (i = 0; i < 3; i++)
     {
         eg_draw_text(
             app,

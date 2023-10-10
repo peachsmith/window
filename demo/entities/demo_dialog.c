@@ -12,7 +12,7 @@
 static const char *demo_dialog_panel_1 = "This is a dialog. This is a test of the line\nbreak functionality. How long can we go?";
 #define PANEL_1_LEN 85
 
-static const char *demo_dialog_panel_2 = "This is the second panel of text in the demo dialog.";
+static const char *demo_dialog_panel_2 = "This is the second panel of text in the demo\ndialog.";
 #define PANEL_2_LEN 52
 
 static void update_demo_dialog(eg_app *app, eg_entity *dialog)

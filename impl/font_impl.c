@@ -1,6 +1,8 @@
 #include "example.h"
 #include "impl.h"
 
+#include <stdlib.h>
+
 // 95 printable ASCII characters [32:126]
 //  !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 
@@ -253,7 +255,8 @@ static void impl_draw_text_multi(
     int x,
     int y,
     int line_width,
-    int line_height)
+    int line_height,
+    int *result)
 {
     eg_impl *impl = app->impl;
 
@@ -283,11 +286,13 @@ static void impl_draw_text_single(
     int x,
     int y,
     int line_width,
-    int line_height)
+    int line_height,
+    int *result)
 {
     eg_impl *impl = app->impl;
 
     int x0 = x;
+    int y0 = y;
 
     // If the line height is 0, default to the line height of the
     // 'A' character.
@@ -315,7 +320,7 @@ static void impl_draw_text_single(
         // Detect line breaks.
         // Line breaks can occur due to the text exceeding the specified
         // line width, or the presence of a newline character.
-        if ((line_width > 0 && x >= line_width) || msg[i] == '\n')
+        if ((line_width > 0 && x - x0 >= line_width) || msg[i] == '\n')
         {
             x = x0;
             y += dy;
@@ -333,6 +338,11 @@ static void impl_draw_text_single(
             }
         }
     }
+
+    if (result != NULL)
+    {
+        *result = (y - y0) + dy;
+    }
 }
 
 void eg_impl_draw_text(
@@ -344,12 +354,12 @@ void eg_impl_draw_text(
 {
     if (font->mode == FONT_MODE_MULTI)
     {
-        impl_draw_text_multi(app, font, msg, x, y, 0, 0);
+        impl_draw_text_multi(app, font, msg, x, y, 0, 0, NULL);
     }
 
     if (font->mode == FONT_MODE_SINGLE)
     {
-        impl_draw_text_single(app, font, msg, x, y, 0, 0);
+        impl_draw_text_single(app, font, msg, x, y, 0, 0, NULL);
     }
 }
 
@@ -357,7 +367,8 @@ void eg_impl_draw_text_bounded(
     eg_app *app,
     eg_font *font,
     const char *msg,
-    eg_rect *bounds)
+    eg_rect *bounds,
+    int *result)
 {
     if (font->mode == FONT_MODE_MULTI)
     {
@@ -368,7 +379,8 @@ void eg_impl_draw_text_bounded(
             bounds->x,
             bounds->y,
             bounds->w,
-            bounds->h);
+            bounds->h,
+            result);
     }
 
     if (font->mode == FONT_MODE_SINGLE)
@@ -380,6 +392,7 @@ void eg_impl_draw_text_bounded(
             bounds->x,
             bounds->y,
             bounds->w,
-            bounds->h);
+            bounds->h,
+            result);
     }
 }

@@ -577,7 +577,7 @@ void eg_draw_text(eg_app *, eg_font *, const char *, int, int);
  *   int - the x position of the text on the screen
  *   int - the y position of the text on the screen
  */
-void eg_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
+void eg_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *, int *);
 
 //----------------------------------------------------------------------------
 // texture functions

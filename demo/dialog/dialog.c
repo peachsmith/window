@@ -52,7 +52,8 @@ void demo_common_dialog_renderer(eg_app *app, eg_entity *dialog)
         app,
         app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
         buffer,
-        &bounds);
+        &bounds,
+        NULL);
 
     // Render the panel advance indicator.
     if (buf_len == dialog->text_len)

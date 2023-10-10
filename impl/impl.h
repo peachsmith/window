@@ -242,7 +242,7 @@ void eg_impl_draw_text(eg_app *, eg_font *, const char *, int, int);
  *   const char* - the text to render
  *   eg_rect* - a pointer to a rectangular area of the screen to hold the text
  */
-void eg_impl_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *);
+void eg_impl_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *, int *);
 
 //----------------------------------------------------------------------------
 // audio

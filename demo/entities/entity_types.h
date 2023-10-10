@@ -42,9 +42,12 @@
 #define ENTITY_TYPE_FOREST 28
 #define ENTITY_TYPE_CRITTER 29
 #define ENTITY_TYPE_MAIN_MENU 30
+#define ENTITY_TYPE_CONTROLS_MENU 31
+#define ENTITY_TYPE_CHARACTERS_MENU 32
+#define ENTITY_TYPE_TNS_PAUSE_MENU 33
 
 // This is the total number of entity types.
-#define ENTITY_TYPE_MAX 31
+#define ENTITY_TYPE_MAX 34
 
 // flags [0, 15]
 #define ENTITY_FLAG_GROUND 0

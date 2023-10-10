@@ -1,9 +1,9 @@
 #ifndef EG_DEMO_CORGI_H
 #define EG_DEMO_CORGI_H
 
-// This file contains examples of a corgi avatar. It is an entity that is
-// controlled directly by user input. In this example, the corgi entity can
-// be moved around the screen with the arrow keys.
+// The corgi entity is named Skippy.
+// His job is to restore the woodland critters' will to live with the power
+// of music.
 
 #include "example.h"
 

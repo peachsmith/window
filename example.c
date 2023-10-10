@@ -366,9 +366,9 @@ void eg_draw_text(eg_app *app, eg_font *font, const char *msg, int x, int y)
     eg_impl_draw_text(app, font, msg, x, y);
 }
 
-void eg_draw_text_bounded(eg_app *app, eg_font *font, const char *msg, eg_rect *bounds)
+void eg_draw_text_bounded(eg_app *app, eg_font *font, const char *msg, eg_rect *bounds, int *result)
 {
-    eg_impl_draw_text_bounded(app, font, msg, bounds);
+    eg_impl_draw_text_bounded(app, font, msg, bounds, result);
 }
 
 //----------------------------------------------------------------------------

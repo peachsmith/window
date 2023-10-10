@@ -131,12 +131,42 @@ void tns_main_menu_input_handler(eg_app *app)
             break;
 
         case 1:
-            printf("controls\n");
-            break;
+        {
+            // Locate the controls menu.
+            eg_entity *controls_menu = NULL;
+            for (int i = 0; i < app->entity_cap && controls_menu == NULL; i++)
+            {
+                if (app->entities[i].type == ENTITY_TYPE_CONTROLS_MENU && app->entities[i].present)
+                {
+                    controls_menu = &(app->entities[i]);
+                }
+            }
+
+            // Set the pause menu as the active menu.
+            app->menus[app->menu_count++] = controls_menu;
+
+            eg_push_input_handler(app, tns_controls_menu_input_handler);
+        }
+        break;
 
         case 2:
-            printf("meet the characters\n");
-            break;
+        {
+            // Locate the characters menu.
+            eg_entity *characters_menu = NULL;
+            for (int i = 0; i < app->entity_cap && characters_menu == NULL; i++)
+            {
+                if (app->entities[i].type == ENTITY_TYPE_CHARACTERS_MENU && app->entities[i].present)
+                {
+                    characters_menu = &(app->entities[i]);
+                }
+            }
+
+            // Set the pause menu as the active menu.
+            app->menus[app->menu_count++] = characters_menu;
+
+            eg_push_input_handler(app, tns_characters_menu_input_handler);
+        }
+        break;
 
         default:
             break;

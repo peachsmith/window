@@ -57,7 +57,7 @@ void load_forest_scene(eg_app *app)
     tns_create_wall(app, 240, 2);
 
     // player
-    app->primary = tns_create_corgi(app, 80, 80);
+    app->primary = tns_create_corgi(app, 80, 118);
 
     // heads up display
     tns_create_hud(app, 0, 0);

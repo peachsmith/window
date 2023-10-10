@@ -1,5 +1,5 @@
-#ifndef EG_DEMO_MAIN_MENU_H
-#define EG_DEMO_MAIN_MENU_H
+#ifndef EG_TNS_MAIN_MENU_H
+#define EG_TNS_MAIN_MENU_H
 
 // The main menu for Toot n Sploot.
 // This represents the content of the title screen.
