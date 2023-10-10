@@ -3,7 +3,8 @@
 #include "demo/entities/entity_types.h"
 #include "demo/scenes/scenes.h"
 
-#include <stdio.h>
+// TODO: I definitely need to move the transition functions into some
+// other file.
 
 static void do_transition(eg_app *app, eg_callback load_next_scene)
 {
@@ -21,17 +22,19 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
 
     if (entity != NULL)
     {
-        // Set the update flag on the transition entity so that the next scene
-        // doesn't start in a paused state.
-        eg_set_flag(entity, ENTITY_FLAG_UPDATE);
+        // We don't set the update flag here, because we're transitioning
+        // into the main menu, which starts in a paused state.
 
         transition.ticks = entity->ticks;
         transition.data = entity->data;
         transition.flags = entity->flags;
     }
 
-    // Close the main menu and remove its input handler.
+    // Close the pause menu and remove its input handler.
     app->menu_count--;
+    eg_pop_input_handler(app);
+
+    // Remove the current scene's input handler.
     eg_pop_input_handler(app);
 
     // Clear the current scene and load the next scene.
@@ -61,9 +64,9 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
     }
 }
 
-static void forest_transition(eg_app *app)
+static void main_menu_transition(eg_app *app)
 {
-    do_transition(app, load_forest_scene);
+    do_transition(app, load_title_screen);
 }
 
 /**
@@ -94,19 +97,22 @@ static void begin_transition(eg_app *app, eg_callback transition_loader, eg_call
     }
 }
 
-void tns_main_menu_input_handler(eg_app *app)
+void tns_pause_menu_input_handler(eg_app *app)
 {
-    // Locate the main menu.
+    // Locate the pause menu.
     eg_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;
     }
 
-    // If the escape key is pressed, terminate the application.
-    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    // Close the pause menu if the escape key or x key is pressed.
+    if (eg_consume_input(app, EG_KEYCODE_X) || eg_consume_input(app, EG_KEYCODE_ESCAPE))
     {
-        app->done = 1;
+        app->menu_count--;
+        app->pause = 0;
+        eg_pop_input_handler(app);
+        return;
     }
 
     if (eg_consume_input(app, EG_KEYCODE_UP))
@@ -125,53 +131,24 @@ void tns_main_menu_input_handler(eg_app *app)
         }
     }
 
-    // menu item selection
+    // Resume
+    // Main Menu
+    // Quit
     if (eg_consume_input(app, EG_KEYCODE_Z))
     {
         switch (menu_entity->cursor_y)
         {
         case 0:
-            begin_transition(app, forest_transition, tns_forest_input_handler);
+            app->menu_count--;
+            app->pause = 0;
+            eg_pop_input_handler(app);
             break;
-
         case 1:
-        {
-            // Locate the controls menu.
-            eg_entity *controls_menu = NULL;
-            for (int i = 0; i < app->entity_cap && controls_menu == NULL; i++)
-            {
-                if (app->entities[i].type == ENTITY_TYPE_CONTROLS_MENU && app->entities[i].present)
-                {
-                    controls_menu = &(app->entities[i]);
-                }
-            }
-
-            // Set the pause menu as the active menu.
-            app->menus[app->menu_count++] = controls_menu;
-
-            eg_push_input_handler(app, tns_controls_menu_input_handler);
-        }
-        break;
-
+            begin_transition(app, main_menu_transition, tns_main_menu_input_handler);
+            break;
         case 2:
-        {
-            // Locate the characters menu.
-            eg_entity *characters_menu = NULL;
-            for (int i = 0; i < app->entity_cap && characters_menu == NULL; i++)
-            {
-                if (app->entities[i].type == ENTITY_TYPE_CHARACTERS_MENU && app->entities[i].present)
-                {
-                    characters_menu = &(app->entities[i]);
-                }
-            }
-
-            // Set the pause menu as the active menu.
-            app->menus[app->menu_count++] = characters_menu;
-
-            eg_push_input_handler(app, tns_characters_menu_input_handler);
-        }
-        break;
-
+            app->done = 1;
+            break;
         default:
             break;
         }

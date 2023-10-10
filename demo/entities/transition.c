@@ -85,7 +85,12 @@ static void update_transition(eg_app *app, eg_entity *transition)
     // back to the user.
     eg_push_input_handler(app, app->transition_input_handler);
 
-    app->pause = 0;
+    // If the update flag is set, unpause the application so the next scene
+    // doesn't start in a paused state.
+    if (eg_check_flag(transition, ENTITY_FLAG_UPDATE))
+    {
+        app->pause = 0;
+    }
 }
 
 void transition_demo_register(eg_entity_type *t)
@@ -96,7 +101,7 @@ void transition_demo_register(eg_entity_type *t)
     t->update = update_transition;
 }
 
-eg_entity *transition_demo_create(eg_app* app)
+eg_entity *transition_demo_create(eg_app *app)
 {
     eg_entity *transition = NULL;
 

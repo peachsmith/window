@@ -10,7 +10,7 @@
 
 void load_title_screen(eg_app *app)
 {
-    app->scene = DEMO_SCENE_TITLE_SCREEN;
+    app->scene = TNS_SCENE_TITLE_SCREEN;
 
     demo_set_camera(app, EG_CAMERA_NONE);
     app->cam.x = 0;

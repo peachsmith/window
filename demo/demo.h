@@ -19,8 +19,8 @@
 
 //============================================================================
 // Toot n Sploot scenes
-#define DEMO_SCENE_TITLE_SCREEN 5
-#define DEMO_SCENE_FOREST 6
+#define TNS_SCENE_TITLE_SCREEN 5
+#define TNS_SCENE_FOREST 6
 
 /**
  * Populates am app struct with the data needed for runtime.

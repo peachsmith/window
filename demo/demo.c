@@ -29,6 +29,7 @@
 #include "demo/entities/main_menu.h"
 #include "demo/entities/controls_menu.h"
 #include "demo/entities/characters_menu.h"
+#include "demo/entities/tns_pause_menu.h"
 #include "demo/collision/collision.h"
 #include "demo/scenes/scenes.h"
 #include "demo/menu/menu.h"
@@ -153,7 +154,8 @@ static void update(eg_app *app)
     }
 
     // scene behavior
-    if (app->scene == DEMO_SCENE_FOREST)
+    // TODO: move scene behavior functions into more appropriate locations.
+    if (!app->pause && app->scene == TNS_SCENE_FOREST)
     {
         if (!(app->ticks % 120) && app->counters[DEMO_COUNTER_CRITTERS] < 4)
         {
@@ -419,6 +421,7 @@ int demo_prepare(eg_app *app)
     tns_register_main_menu(&(app->entity_types[ENTITY_TYPE_MAIN_MENU]));
     tns_register_controls_menu(&(app->entity_types[ENTITY_TYPE_CONTROLS_MENU]));
     tns_register_characters_menu(&(app->entity_types[ENTITY_TYPE_CHARACTERS_MENU]));
+    tns_register_pause_menu(&(app->entity_types[ENTITY_TYPE_TNS_PAUSE_MENU]));
 
     // push the default input handler
     eg_push_input_handler(app, default_input_handler);

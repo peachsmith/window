@@ -21,6 +21,12 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
 
     if (entity != NULL)
     {
+        // Set the update flag on the transition entity so that the next scene
+        // doesn't start in a paused state. If we were transitioning to a scene
+        // that should start in a paused state, we wouldn't do this, but the
+        // scenese menu only contains scenes that don't start paused.
+        eg_set_flag(entity, ENTITY_FLAG_UPDATE);
+
         transition.ticks = entity->ticks;
         transition.data = entity->data;
         transition.flags = entity->flags;

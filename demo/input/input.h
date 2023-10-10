@@ -23,6 +23,7 @@ void tns_main_menu_input_handler(eg_app *);
 void tns_controls_menu_input_handler(eg_app *);
 void tns_characters_menu_input_handler(eg_app *);
 void tns_forest_input_handler(eg_app *);
+void tns_pause_menu_input_handler(eg_app *);
 
 // The default input handler functions as a way for the user to exit the
 // application if all other input handlers have been removed.

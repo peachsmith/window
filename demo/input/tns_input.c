@@ -16,13 +16,13 @@
 void tns_forest_input_handler(eg_app *app)
 {
     // Pause the application.
-    if (eg_consume_input(app, EG_KEYCODE_Q))
+    if (eg_consume_input(app, EG_KEYCODE_ESCAPE) || eg_consume_input(app, EG_KEYCODE_Q))
     {
         // Locate the pause menu.
         eg_entity *pause_menu = NULL;
         for (int i = 0; i < app->entity_cap; i++)
         {
-            if (app->entities[i].type == ENTITY_TYPE_PAUSE_MENU && app->entities[i].present)
+            if (app->entities[i].type == ENTITY_TYPE_TNS_PAUSE_MENU && app->entities[i].present)
             {
                 pause_menu = &(app->entities[i]);
             }
@@ -31,24 +31,10 @@ void tns_forest_input_handler(eg_app *app)
         // Set the pause menu as the active menu.
         app->menus[app->menu_count++] = pause_menu;
 
-        eg_push_input_handler(app, pause_menu_input_handler);
+        eg_push_input_handler(app, tns_pause_menu_input_handler);
 
         app->pause = 1;
         return;
-    }
-
-    // Print some empty space for debugging.
-    if (eg_consume_input(app, EG_KEYCODE_M))
-    {
-        puts("");
-    }
-
-    // If the escape key is pressed, terminate the application.
-    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
-    {
-        printf("The escape key was pressed. "
-               "The application should now terminate.\n");
-        app->done = 1;
     }
 
     //-------------------------------------------------
