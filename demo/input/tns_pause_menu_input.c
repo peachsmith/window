@@ -3,6 +3,8 @@
 #include "demo/entities/entity_types.h"
 #include "demo/scenes/scenes.h"
 
+#include <stdlib.h>
+
 // TODO: I definitely need to move the transition functions into some
 // other file.
 

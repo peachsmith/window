@@ -3,6 +3,8 @@
 #include "demo/entities/entity_types.h"
 #include "demo/scenes/scenes.h"
 
+#include <stdlib.h>
+
 void tns_characters_menu_input_handler(eg_app *app)
 {
     // Locate the characters menu.

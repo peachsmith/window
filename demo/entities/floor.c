@@ -3,6 +3,8 @@
 #include "demo/collision/collision.h"
 #include "demo/util/sprite.h"
 
+#include <stdlib.h>
+
 static void collide_block(
     eg_app *app,
     eg_entity *block,
