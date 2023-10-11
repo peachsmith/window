@@ -1,9 +1,10 @@
+#include "demo/demo.h"
 #include "demo/input/input.h"
-#include "demo/menu/menu.h"
 #include "demo/entities/entity_types.h"
 #include "demo/scenes/scenes.h"
 
-#include <stdio.h>
+#include "common/util.h"
+#include "common/menu.h"
 
 static void do_transition(eg_app *app, eg_callback load_next_scene)
 {
@@ -79,14 +80,9 @@ static void scene3_transition(eg_app *app)
     do_transition(app, load_scene_3);
 }
 
-static void movement_transition(eg_app *app)
+static void scene4_transition(eg_app *app)
 {
-    do_transition(app, load_movement_scene);
-}
-
-static void forest_transition(eg_app *app)
-{
-    do_transition(app, load_forest_scene);
+    do_transition(app, load_scene_4);
 }
 
 /**
@@ -164,7 +160,7 @@ void scene_menu_input_handler(eg_app *app)
         {
             menu_entity->cursor_y++;
         }
-        else if (menu_entity->scroll_y < 2)
+        else if (menu_entity->scroll_y < 1)
         {
             menu_entity->scroll_y++;
         }
@@ -192,11 +188,7 @@ void scene_menu_input_handler(eg_app *app)
             break;
 
         case 4:
-            begin_transition(app, forest_transition, tns_forest_input_handler);
-            break;
-
-        case 5:
-            begin_transition(app, movement_transition, root_input_handler);
+            begin_transition(app, scene4_transition, root_input_handler);
             break;
 
         default:

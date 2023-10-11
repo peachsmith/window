@@ -1,10 +1,10 @@
+#include "demo/demo.h"
 #include "demo/entities/transition.h"
 #include "demo/entities/entity_types.h"
-#include "demo/texture/texture.h"
-#include "demo/dialog/dialog.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common/util.h"
+#include "common/texture.h"
+#include "common/dialog.h"
 
 static void render_transition(eg_app *app, eg_entity *transition)
 {

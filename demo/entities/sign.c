@@ -1,9 +1,9 @@
 #include "demo/entities/sign.h"
 #include "demo/entities/entity_types.h"
 #include "demo/entities/sign_dialog.h"
-#include "demo/texture/texture.h"
+#include "common/texture.h"
 #include "demo/util/sprite.h"
-#include "demo/dialog/dialog.h"
+#include "common/dialog.h"
 #include "demo/input/input.h"
 
 #include <stdio.h>

@@ -3,28 +3,14 @@
 
 #include "example.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <limits.h>
+
 // Implementation Detail:
 // Get access to SDL's entry point.
 #include <SDL2/SDL.h>
-
-#define DEMO_COUNTER_BREATH 0
-#define DEMO_COUNTER_CRITTERS 1
-#define DEMO_COUNTER_SCORE 2
-#define DEMO_COUNTER_CRITTER_SLOT_OFFSET 3
-#define DEMO_COUNTER_MAX 20
-
-//============================================================================
-// Demo scenes
-#define DEMO_SCENE_0 0
-#define DEMO_SCENE_1 1
-#define DEMO_SCENE_2 2
-#define DEMO_SCENE_3 3
-#define DEMO_SCENE_MOVEMENT 4
-
-//============================================================================
-// Toot n Sploot scenes
-#define TNS_SCENE_TITLE_SCREEN 5
-#define TNS_SCENE_FOREST 6
 
 /**
  * Populates am app struct with the data needed for runtime.

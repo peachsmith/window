@@ -1,12 +1,12 @@
-#include "demo/entities/pause_menu.h"
+#include "demo/demo.h"
+#include "demo/assets.h"
 #include "demo/entities/entity_types.h"
-#include "demo/util/util.h"
+#include "demo/entities/pause_menu.h"
 #include "demo/util/ui.h"
-#include "demo/texture/texture.h"
-#include "demo/font/font.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common/util.h"
+#include "common/texture.h"
+#include "common/font.h"
 
 // pause menu item text
 static const char *item_1_text = "Info";

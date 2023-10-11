@@ -1,9 +1,11 @@
+#include "demo/demo.h"
+#include "demo/assets.h"
 #include "demo/util/overlay.h"
-#include "demo/font/font.h"
 #include "demo/entities/entity_types.h"
-#include "demo/collision/collision.h"
 
-#include <stdio.h>
+#include "common/util.h"
+#include "common/font.h"
+#include "common/collision.h"
 
 #define DEBUG_BUFSIZE 256
 

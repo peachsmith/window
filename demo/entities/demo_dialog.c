@@ -1,13 +1,13 @@
-#include "demo/entities/demo_dialog.h"
-#include "demo/dialog/dialog.h"
+#include "demo/demo.h"
+#include "demo/assets.h"
 #include "demo/entities/entity_types.h"
-#include "demo/util/util.h"
+#include "demo/entities/demo_dialog.h"
 #include "demo/util/ui.h"
-#include "demo/texture/texture.h"
-#include "demo/font/font.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common/util.h"
+#include "common/dialog.h"
+#include "common/texture.h"
+#include "common/font.h"
 
 static const char *demo_dialog_panel_1 = "This is a dialog. This is a test of the line\nbreak functionality. How long can we go?";
 #define PANEL_1_LEN 85
@@ -40,9 +40,38 @@ static void advance_demo_dialog(eg_app *app, eg_entity *dialog)
     dialog->text_len = PANEL_2_LEN;
 
     dialog->ticks = 0;
-    dialog->tick_limit = dialog->text_len * DEMO_DIALOG_SPEED_SCALE;
+    dialog->tick_limit = dialog->text_len * COMMON_DIALOG_SPEED_SCALE;
 
     dialog->data++;
+}
+
+static void render_dialog_panel(eg_app *app, eg_entity *dialog)
+{
+    ui_draw_panel(
+        app,
+        dialog->x_pos,
+        dialog->y_pos,
+        COMMON_DIALOG_WIDTH,
+        COMMON_DIALOG_HEIGHT);
+}
+
+static void render_dialog_indicator(eg_app *app, eg_entity *dialog)
+{
+    ui_draw_indicator(
+        app,
+        dialog->x_pos + COMMON_DIALOG_WIDTH - 18,
+        dialog->y_pos + COMMON_DIALOG_HEIGHT - 18,
+        UI_INDICATOR_ADVANCE);
+}
+
+static void render_dialog(eg_app *app, eg_entity *dialog)
+{
+    common_dialog_renderer(
+        app,
+        dialog,
+        app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
+        render_dialog_panel,
+        render_dialog_indicator);
 }
 
 void demo_dialog_demo_register(eg_entity_type *t)
@@ -51,12 +80,12 @@ void demo_dialog_demo_register(eg_entity_type *t)
     t->width = 10;
     t->height = 10;
 
-    t->render = demo_common_dialog_renderer;
+    t->render = render_dialog;
     t->update = update_demo_dialog;
     t->advance = advance_demo_dialog;
 }
 
-eg_entity *demo_dialog_demo_create(eg_app* app)
+eg_entity *demo_dialog_demo_create(eg_app *app)
 {
     eg_entity *dialog = NULL;
 
@@ -83,7 +112,7 @@ void demo_dialog_demo_open(eg_app *app, eg_entity *dialog)
     dialog->text = demo_dialog_panel_1;
     dialog->text_len = PANEL_1_LEN;
     dialog->ticks = 0;
-    dialog->tick_limit = dialog->text_len * DEMO_DIALOG_SPEED_SCALE;
+    dialog->tick_limit = dialog->text_len * COMMON_DIALOG_SPEED_SCALE;
 
     app->dialogs[app->dialog_count++] = dialog;
 }

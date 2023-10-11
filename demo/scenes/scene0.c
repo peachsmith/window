@@ -1,5 +1,6 @@
-#include "demo/scenes/scenes.h"
+#include "demo/demo.h"
 #include "demo/input/input.h"
+#include "demo/scenes/scenes.h"
 #include "demo/entities/block.h"
 #include "demo/entities/player.h"
 #include "demo/entities/sign.h"
@@ -15,16 +16,14 @@
 #include "demo/entities/demo_dialog.h"
 #include "demo/entities/jimbo_dialog.h"
 #include "demo/entities/sign_dialog.h"
-#include "demo/util/util.h"
-#include "demo/demo.h"
 
-#include <stdio.h>
+#include "common/util.h"
 
 void load_scene_0(eg_app *app)
 {
     app->scene = DEMO_SCENE_0;
 
-    demo_set_camera(app, EG_CAMERA_ALL);
+    util_set_camera(app, EG_CAMERA_ALL);
     app->cam.x = -320;
     app->cam.y = 40;
 
@@ -62,7 +61,7 @@ void load_scene_0(eg_app *app)
     sign_demo_create(app, 37, 76);
 
     // player
-    app->primary = player_demo_create(app, 150, 0);
+    app->primary = demo_create_player(app, 150, 0);
 
     // scene transition
     transition_demo_create(app);

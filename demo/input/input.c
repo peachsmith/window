@@ -1,16 +1,17 @@
+#include "demo/demo.h"
+#include "demo/assets.h"
 #include "demo/input/input.h"
-#include "demo/entities/player.h"
 #include "demo/entities/entity_types.h"
+#include "demo/entities/player.h"
 #include "demo/entities/jimbo.h"
 #include "demo/entities/billy.h"
 #include "demo/entities/henry.h"
 #include "demo/entities/fireball.h"
-#include "demo/menu/menu.h"
-#include "demo/collision/collision.h"
-#include "demo/audio/audio.h"
-#include "demo/util/util.h"
 
-#include <stdio.h>
+#include "common/util.h"
+#include "common/menu.h"
+#include "common/collision.h"
+#include "common/audio.h"
 
 static eg_callback input_handlers[20];
 
@@ -276,7 +277,7 @@ void root_input_handler(eg_app *app)
                              .h = app->entity_types[app->entities[i].type].height};
                 eg_overlap o;
 
-                if (demo_is_overlapped(&a, &b, &o))
+                if (common_is_overlapped(&a, &b, &o))
                 {
                     interactable = &(app->entities[i]);
                 }

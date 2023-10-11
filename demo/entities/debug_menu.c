@@ -1,12 +1,12 @@
-#include "demo/entities/debug_menu.h"
+#include "demo/demo.h"
+#include "demo/assets.h"
 #include "demo/entities/entity_types.h"
-#include "demo/util/util.h"
+#include "demo/entities/debug_menu.h"
 #include "demo/util/ui.h"
-#include "demo/texture/texture.h"
-#include "demo/font/font.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common/util.h"
+#include "common/texture.h"
+#include "common/font.h"
 
 // debug menu item text
 static const char *item_1_text = "Scenes";
@@ -242,7 +242,7 @@ void debug_menu_demo_register(eg_entity_type *t)
     t->update = update_debug_menu;
 }
 
-eg_entity *debug_menu_demo_create(eg_app* app)
+eg_entity *debug_menu_demo_create(eg_app *app)
 {
     eg_entity *menu = NULL;
 

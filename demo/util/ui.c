@@ -1,5 +1,6 @@
+#include "demo/assets.h"
 #include "demo/util/ui.h"
-#include "demo/texture/texture.h"
+#include "common/texture.h"
 
 void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
 {

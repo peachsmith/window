@@ -1,28 +1,20 @@
-#include "demo/entities/scene_menu.h"
+#include "demo/demo.h"
+#include "demo/assets.h"
 #include "demo/entities/entity_types.h"
-#include "demo/util/util.h"
+#include "demo/entities/scene_menu.h"
 #include "demo/util/ui.h"
-#include "demo/texture/texture.h"
-#include "demo/font/font.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common/util.h"
+#include "common/texture.h"
+#include "common/font.h"
 
 // scenes menu item text
-// static const char *item_1_text = "Scene 0";
-// static const char *item_2_text = "Scene 1";
-// static const char *item_3_text = "Scene 2";
-// static const char *item_4_text = "Scene 3";
-// static const char *item_5_text = "Forest";
-// static const char *item_6_text = "Movement";
-
 static char *items[7] = {
     "Scene 0",
     "Scene 1",
     "Scene 2",
     "Scene 3",
-    "Forest",
-    "Movement"};
+    "Scene 4"};
 
 #define ITEM_HEIGHT 24
 #define SCROLL_LIMIT 4
@@ -78,7 +70,7 @@ static void render_scene_menu(eg_app *app, eg_entity *menu)
         ui_draw_indicator(app, 212, 14 - offset, UI_INDICATOR_SCROLL_UP);
     }
 
-    if (menu->scroll_y < 2)
+    if (menu->scroll_y < 1)
     {
         ui_draw_indicator(app, 212, 88 + offset, UI_INDICATOR_SCROLL_DOWN);
     }

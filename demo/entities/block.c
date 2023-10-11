@@ -1,9 +1,10 @@
-#include "demo/entities/block.h"
+#include "demo/demo.h"
 #include "demo/entities/entity_types.h"
-#include "demo/collision/collision.h"
+#include "demo/entities/block.h"
 #include "demo/util/sprite.h"
 
-#include <stdio.h>
+#include "common/util.h"
+#include "common/collision.h"
 
 // Renders a standard block
 static void render_block(eg_app *app, eg_entity *block)
@@ -520,6 +521,7 @@ void block_demo_register_moving(eg_entity_type *t)
     t->render = render_moving_block;
     t->update = update_moving_block;
     t->collide = collide_block;
+    t->move = 1;
 }
 
 eg_entity *block_demo_create_moving(eg_app *app, int x, int y, int type)
@@ -547,6 +549,7 @@ void block_demo_register_sloped(eg_entity_type *t)
     t->height = 18;
     t->render = render_sloped_block;
     t->collide = collide_block;
+    t->slope = 1;
 }
 
 eg_entity *block_demo_create_sloped(eg_app *app, int x, int y, int dir)

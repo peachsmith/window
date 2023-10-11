@@ -1,11 +1,12 @@
-#include "demo/entities/henry.h"
+#include "demo/demo.h"
 #include "demo/entities/entity_types.h"
-#include "demo/texture/texture.h"
+#include "demo/entities/henry.h"
 #include "demo/util/sprite.h"
-#include "demo/dialog/dialog.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common/util.h"
+#include "common/texture.h"
+#include "common/dialog.h"
+
 
 static int get_henry_x_vel(eg_entity *henry)
 {

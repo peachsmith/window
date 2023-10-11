@@ -1,12 +1,10 @@
+#include "demo/demo.h"
 #include "demo/input/input.h"
-#include "demo/entities/player.h"
 #include "demo/entities/entity_types.h"
+#include "demo/entities/player.h"
 #include "demo/entities/info_dialog.h"
 #include "demo/entities/demo_dialog.h"
-#include "demo/menu/menu.h"
-
-#include <stdlib.h>
-#include <stdio.h>
+#include "common/menu.h"
 
 void pause_menu_input_handler(eg_app *app)
 {

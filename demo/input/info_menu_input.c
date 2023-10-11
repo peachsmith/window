@@ -1,8 +1,7 @@
+#include "demo/demo.h"
 #include "demo/input/input.h"
 #include "demo/entities/entity_types.h"
-#include "demo/menu/menu.h"
-
-#include <stdlib.h>
+#include "common/menu.h"
 
 void info_menu_input_handler(eg_app *app)
 {

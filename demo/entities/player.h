@@ -3,7 +3,8 @@
 
 // This file contains examples of a player avatar. It is an entity that is
 // controlled directly by user input. In this example, the player entity can
-// be moved around the screen with the arrow keys.
+// be moved around the screen with the arrow keys. The player entity may also
+// be referred to as Frank.
 
 #include "example.h"
 
@@ -13,7 +14,7 @@
  * Params:
  *   eg_entity_type* - the player's entity type definition
  */
-void player_demo_register(eg_entity_type *);
+void demo_register_player(eg_entity_type *);
 
 /**
  * Creates a player entity.
@@ -25,6 +26,6 @@ void player_demo_register(eg_entity_type *);
  * Returns:
  *   eg_entity* - a pointer to the new player entity.
  */
-eg_entity *player_demo_create(eg_app *, int, int);
+eg_entity *demo_create_player(eg_app *, int, int);
 
 #endif

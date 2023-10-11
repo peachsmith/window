@@ -1,11 +1,10 @@
-#include "demo/entities/player.h"
+#include "demo/demo.h"
 #include "demo/entities/entity_types.h"
-#include "demo/texture/texture.h"
+#include "demo/entities/player.h"
 #include "demo/util/sprite.h"
-#include "demo/util/util.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common/util.h"
+#include "common/texture.h"
 
 // temporary counter for animation
 static int tmp_counter = 0;
@@ -133,7 +132,7 @@ static void render_player(eg_app *app, eg_entity *player)
     if (!iframes)
     {
         // Render the player sprite.
-        sprite_draw_character(
+        sprite_draw_frank(
             app,
             player->x_pos,
             player->y_pos,
@@ -343,7 +342,7 @@ static void update_player(eg_app *app, eg_entity *player)
     }
 }
 
-void player_demo_register(eg_entity_type *t)
+void demo_register_player(eg_entity_type *t)
 {
     t->width = 24;
     t->height = 24;
@@ -354,7 +353,7 @@ void player_demo_register(eg_entity_type *t)
     t->control = 1;
 }
 
-eg_entity *player_demo_create(eg_app *app, int x, int y)
+eg_entity *demo_create_player(eg_app *app, int x, int y)
 {
     eg_entity *player = NULL;
 

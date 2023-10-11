@@ -1,5 +1,7 @@
 #include "demo/demo.h"
+
 #include "demo/input/input.h"
+
 #include "demo/entities/entity_types.h"
 #include "demo/entities/player.h"
 #include "demo/entities/block.h"
@@ -19,27 +21,19 @@
 #include "demo/entities/jimbo_dialog.h"
 #include "demo/entities/sign_dialog.h"
 #include "demo/entities/fireball.h"
-#include "demo/entities/hud.h"
-#include "demo/entities/forest.h"
-#include "demo/entities/corgi.h"
-#include "demo/entities/note.h"
-#include "demo/entities/critter.h"
-#include "demo/entities/floor.h"
-#include "demo/entities/wall.h"
-#include "demo/entities/main_menu.h"
-#include "demo/entities/controls_menu.h"
-#include "demo/entities/characters_menu.h"
-#include "demo/entities/tns_pause_menu.h"
-#include "demo/collision/collision.h"
+
 #include "demo/scenes/scenes.h"
-#include "demo/menu/menu.h"
-#include "demo/dialog/dialog.h"
-#include "demo/font/font.h"
-#include "demo/texture/texture.h"
-#include "demo/audio/audio.h"
-#include "demo/util/util.h"
+
 #include "demo/util/sprite.h"
 #include "demo/util/overlay.h"
+
+#include "common/util.h"
+#include "common/collision.h"
+#include "common/menu.h"
+#include "common/dialog.h"
+#include "common/texture.h"
+#include "common/font.h"
+#include "common/audio.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,12 +50,6 @@ static eg_entity entities[ENTITY_MAX];
 
 // array of entity types
 static eg_entity_type entity_types[ENTITY_TYPE_MAX];
-
-// 0 notes
-// 1 critters
-// 2 score
-// [3:10] critter slots (8 slots)
-static int counters[DEMO_COUNTER_MAX];
 
 // maximum number of overlays
 #define MAX_OVERLAYS 10
@@ -127,7 +115,7 @@ static void update(eg_app *app)
     // handle collisions
     if (!app->pause)
     {
-        demo_handle_collisions(app);
+        common_handle_collisions(app);
     }
 
     // main update loop
@@ -153,29 +141,7 @@ static void update(eg_app *app)
         }
     }
 
-    // scene behavior
-    // TODO: move scene behavior functions into more appropriate locations.
-    if (!app->pause && app->scene == TNS_SCENE_FOREST)
-    {
-        if (!(app->ticks % 120) && app->counters[DEMO_COUNTER_CRITTERS] < 4)
-        {
-            // Generate random number from 0 to 7. This is the critter slot.
-            // If the slot is unoccupied, then create a critter and mark the
-            // slot as occupied.
-            int slot = rand() % 8;
-            if (!app->counters[slot + DEMO_COUNTER_CRITTER_SLOT_OFFSET])
-            {
-                eg_entity *critter = tns_create_critter(app, 4 + slot * 20 + slot * 10, 25);
-                app->counters[DEMO_COUNTER_CRITTERS]++;
-                app->counters[slot + DEMO_COUNTER_CRITTER_SLOT_OFFSET] = 1;
-                critter->data = slot + DEMO_COUNTER_CRITTER_SLOT_OFFSET;
-                if (slot > 3)
-                {
-                    eg_set_flag(critter, ENTITY_FLAG_MIRROR);
-                }
-            }
-        }
-    }
+    // Here is where scene updates happen.
 }
 
 /**
@@ -262,7 +228,7 @@ static void draw(eg_app *app)
 
     if (app->debug.camera)
     {
-        demo_draw_camera(app);
+        util_draw_camera(app);
     }
 
     if (app->debug.overlay)
@@ -291,6 +257,8 @@ int demo_prepare(eg_app *app)
         entity_types[i].interact = NULL;
         entity_types[i].control = 0;
         entity_types[i].spur = 0;
+        entity_types[i].move = 0;
+        entity_types[i].slope = 0;
     }
 
     // default values of entities
@@ -320,49 +288,81 @@ int demo_prepare(eg_app *app)
         entities[i].cursor_y = 0;
     }
 
-    for (int i = 0; i < DEMO_COUNTER_MAX; i++)
-    {
-        counters[i] = 0;
-    }
-    app->counters = counters;
+    // initialize overlays
+    app->overlays = &(overlays[0]);
+    app->overlay_count = 0;
 
     app->entities = entities;
     app->entity_types = entity_types;
     app->update = update;
     app->draw = draw;
 
-    // delta time (under construction)
-
     // initialize tetxures
-    if (!demo_init_textures(app))
+    if (!common_init_textures(app))
     {
+        return 0;
+    }
+    if (eg_load_texture(app, "assets/images/ui.png") == NULL)
+    {
+        fprintf(stderr, "failed to load ui image\n");
+        return 0;
+    }
+    if (eg_load_texture(app, "assets/images/characters.png") == NULL)
+    {
+        fprintf(stderr, "failed to load characters image\n");
+        return 0;
+    }
+    if (eg_load_texture(app, "assets/images/scenery_3.png") == NULL)
+    {
+        fprintf(stderr, "failed to load scenery image\n");
         return 0;
     }
 
     // initialize fonts
-    if (!demo_init_fonts(app))
+    if (!common_init_fonts(app))
     {
         return 0;
     }
 
     // initialize audio
-    if (!demo_init_audio(app))
+    if (!common_init_audio(app))
     {
+        return 0;
+    }
+    if (eg_load_sound(app, "assets/audio/confirmation_002.ogg", AUDIO_TYPE_SOUND_EFFECT) == NULL)
+    {
+        fprintf(stderr, "failed to load confirmation_002.ogg\n");
+        return 0;
+    }
+    if (eg_load_sound(app, "assets/audio/drop_003.ogg", AUDIO_TYPE_SOUND_EFFECT) == NULL)
+    {
+        fprintf(stderr, "failed to load drop_003.ogg\n");
+        return 0;
+    }
+    if (eg_load_sound(app, "assets/audio/toggle_001.ogg", AUDIO_TYPE_SOUND_EFFECT) == NULL)
+    {
+        fprintf(stderr, "failed to load toggle_001.ogg\n");
+        return 0;
+    }
+    if (eg_load_sound(app, "assets/audio/field_theme_1.wav", AUDIO_TYPE_MUSIC) == NULL)
+    {
+        fprintf(stderr, "failed to load field_theme_1.wav\n");
+        return 0;
+    }
+    if (eg_load_sound(app, "assets/audio/track_4.wav", AUDIO_TYPE_MUSIC) == NULL)
+    {
+        fprintf(stderr, "failed to load track_4.wav\n");
         return 0;
     }
 
     // initialize menus
-    if (!demo_init_menus(app))
+    if (!common_init_menus(app))
     {
         return 0;
     }
 
-    // initialize overlays
-    app->overlays = &(overlays[0]);
-    app->overlay_count = 0;
-
     // Initialize dialogs.
-    demo_init_dialogs(app);
+    common_init_dialogs(app);
 
     // Initialize input.
     demo_init_input(app);
@@ -371,7 +371,7 @@ int demo_prepare(eg_app *app)
     // Demo entity types
 
     // the player avatar
-    player_demo_register(&(app->entity_types[ENTITY_TYPE_PLAYER]));
+    demo_register_player(&(app->entity_types[ENTITY_TYPE_PLAYER]));
 
     // platforms and other blocks
     block_demo_register(&(app->entity_types[ENTITY_TYPE_BLOCK]));
@@ -398,9 +398,6 @@ int demo_prepare(eg_app *app)
     scene_menu_demo_register(&(app->entity_types[ENTITY_TYPE_SCENE_MENU]));
     input_menu_demo_register(&(app->entity_types[ENTITY_TYPE_INPUT_MENU]));
 
-    // scenery
-    forest_demo_register(&(app->entity_types[ENTITY_TYPE_FOREST]));
-
     // dialogs
     demo_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_DEMO_DIALOG]));
     info_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_INFO_DIALOG]));
@@ -410,25 +407,12 @@ int demo_prepare(eg_app *app)
     // projectiles
     fireball_demo_register(&(app->entity_types[ENTITY_TYPE_FIREBALL]));
 
-    //====================================================================
-    // Toot n Sploot entity types
-    tns_register_hud(&(app->entity_types[ENTITY_TYPE_HUD]));
-    tns_register_note(&(app->entity_types[ENTITY_TYPE_NOTE]));
-    tns_register_critter(&(app->entity_types[ENTITY_TYPE_CRITTER]));
-    tns_register_corgi(&(app->entity_types[ENTITY_TYPE_CORGI]));
-    tns_register_floor(&(app->entity_types[ENTITY_TYPE_FLOOR]));
-    tns_register_wall(&(app->entity_types[ENTITY_TYPE_WALL]));
-    tns_register_main_menu(&(app->entity_types[ENTITY_TYPE_MAIN_MENU]));
-    tns_register_controls_menu(&(app->entity_types[ENTITY_TYPE_CONTROLS_MENU]));
-    tns_register_characters_menu(&(app->entity_types[ENTITY_TYPE_CHARACTERS_MENU]));
-    tns_register_pause_menu(&(app->entity_types[ENTITY_TYPE_TNS_PAUSE_MENU]));
-
     // push the default input handler
     eg_push_input_handler(app, default_input_handler);
 
     // Load the initial scene.
-    load_title_screen(app);
-    eg_push_input_handler(app, tns_main_menu_input_handler);
+    load_scene_0(app);
+    eg_push_input_handler(app, root_input_handler);
 
     // Play music
     // eg_play_sound(app, app->sounds[DEMO_SONG_FIELD]);

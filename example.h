@@ -322,6 +322,13 @@ struct eg_entity_type
 
     // indicates that this entity shoudl override the spurious collision check.
     int spur;
+
+    // indicates that an entity is a moving object that can carry another
+    // entity.
+    int move;
+
+    // indicates that an entity is a sloped platform
+    int slope;
 };
 
 //----------------------------------------------------------------------------
