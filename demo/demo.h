@@ -3,6 +3,10 @@
 
 #include "example.h"
 
+// Implementation Detail:
+// Get access to SDL's entry point.
+#include <SDL2/SDL.h>
+
 #define DEMO_COUNTER_BREATH 0
 #define DEMO_COUNTER_CRITTERS 1
 #define DEMO_COUNTER_SCORE 2

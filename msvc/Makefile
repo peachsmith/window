@@ -16,6 +16,9 @@ LIBS="SDL2.lib" "SDL2main.lib" "SDL2_ttf.lib" "SDL2_image.lib" "SDL2_mixer.lib" 
 all:
 	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(SRC) /link $(LIBS) $(LINK_DIR) /SUBSYSTEM:CONSOLE -out:a.exe
 
+release:
+	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(SRC) /link $(LIBS) $(LINK_DIR) /SUBSYSTEM:WINDOWS -out:a.exe
+
 .PHONY: test
 test:
 	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(TESTSRC) /link $(LIBS) $(LINK_DIR) /SUBSYSTEM:CONSOLE -out:test.exe
