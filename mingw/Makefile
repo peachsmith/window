@@ -9,3 +9,6 @@ all:
 
 debug:
 	gcc -g $(SRC) -I.. -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+release:
+	gcc $(SRC) -I.. -mwindows -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer

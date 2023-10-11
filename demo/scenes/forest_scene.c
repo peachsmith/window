@@ -14,8 +14,14 @@ void load_forest_scene(eg_app *app)
 {
     app->scene = TNS_SCENE_FOREST;
 
+    // Reset the counters.
     app->counters[DEMO_COUNTER_BREATH] = 3;
     app->counters[DEMO_COUNTER_CRITTERS] = 0;
+    app->counters[DEMO_COUNTER_SCORE] = 0;
+    for (int i = 0; i < 8; i++)
+    {
+        app->counters[i + DEMO_COUNTER_CRITTER_SLOT_OFFSET] = 0;
+    }
 
     demo_set_camera(app, EG_CAMERA_NONE);
     app->cam.x = 0;
