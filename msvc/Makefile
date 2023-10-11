@@ -9,16 +9,18 @@ LINK_DIR=/LIBPATH:"$(SDL2_HOME)\lib"
 
 CC=cl
 CFLAGS=/W3 /WX
-SRC= ..\*.c ..\impl\*.c ..\demo\main.c ..\demo\demo.c ..\demo\util\*.c ..\demo\menu\*.c ..\demo\dialog\*.c ..\demo\entities\*.c ..\demo\input\*.c ..\demo\collision\*.c ..\demo\scenes\*.c ..\demo\font\*.c ..\demo\texture\*.c ..\demo\audio\*.c
-TESTSRC= ..\*.c ..\impl\*.c ..\demo\test.c ..\demo\entities\*.c ..\demo\input\*.c ..\demo\collision\*.c ..\demo\scenes\*.c
+DEMO_SRC= ..\*.c ..\impl\*.c ..\demo\main.c ..\demo\demo.c ..\common\*.c ..\demo\entities\*.c ..\demo\input\*.c ..\demo\scenes\*.c ..\demo\util\*.c
+TNS_SRC= ..\*.c ..\impl\*.c ..\tootnsploot\main.c ..\tootnsploot\tootnsploot.c ..\common\*.c ..\tootnsploot\entities\*.c ..\tootnsploot\input\*.c ..\tootnsploot\scenes\*.c ..\tootnsploot\util\*.c
 LIBS="SDL2.lib" "SDL2main.lib" "SDL2_ttf.lib" "SDL2_image.lib" "SDL2_mixer.lib" "kernel32.lib" "user32.lib" "shell32.lib"
 
-all:
-	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(SRC) /link $(LIBS) $(LINK_DIR) /SUBSYSTEM:CONSOLE -out:a.exe
+demo-debug:
+	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(DEMO_SRC) /link $(LIBS) $(LINK_DIR) /SUBSYSTEM:CONSOLE -out:demo.exe
 
-release:
-	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(SRC) /link $(LIBS) $(LINK_DIR) /SUBSYSTEM:WINDOWS -out:a.exe
+demo-release:
+	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(DEMO_SRC) /link $(LIBS) $(LINK_DIR) /SUBSYSTEM:WINDOWS -out:demo.exe
 
-.PHONY: test
-test:
-	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(TESTSRC) /link $(LIBS) $(LINK_DIR) /SUBSYSTEM:CONSOLE -out:test.exe
+tootnsploot-debug:
+	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(TNS_SRC) /link $(LIBS) $(LINK_DIR) /SUBSYSTEM:CONSOLE -out:tootnsploot.exe
+
+tootnsploot-release:
+	$(CC) $(CFLAGS) $(INCLUDE_DIR) $(TNS_SRC) /link $(LIBS) $(LINK_DIR) /SUBSYSTEM:WINDOWS -out:tootnsploot.exe
