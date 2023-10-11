@@ -32,12 +32,8 @@ static void do_transition(eg_app *app, eg_callback load_next_scene)
         transition.flags = entity->flags;
     }
 
-    // Close the pause menu and remove its input handler.
+    // Close the pause menu.
     app->menu_count--;
-    eg_pop_input_handler(app);
-
-    // Remove the current scene's input handler.
-    eg_pop_input_handler(app);
 
     // Clear the current scene and load the next scene.
     clear_scene(app);
@@ -146,6 +142,10 @@ void tns_pause_menu_input_handler(eg_app *app)
             eg_pop_input_handler(app);
             break;
         case 1:
+            // Remove the input handlers of the pause menu and the forest
+            // scene, then transition to the main menu.
+            eg_pop_input_handler(app);
+            eg_pop_input_handler(app);
             begin_transition(app, main_menu_transition, tns_main_menu_input_handler);
             break;
         case 2:
