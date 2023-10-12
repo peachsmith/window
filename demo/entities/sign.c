@@ -27,7 +27,7 @@ static void render_sign(eg_app *app, eg_entity *sign)
         hit_box.h = app->entity_types[sign->type].height;
 
         // Render the sign hit box.
-        eg_set_color(app, EG_COLOR_ORANGE);
+        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
         eg_draw_rect(app, &hit_box, 0);
     }
 }

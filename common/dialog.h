@@ -19,7 +19,7 @@ void common_dialog_renderer(
     eg_app *,
     eg_entity *,
     eg_font *,
-    eg_entity_callback,
-    eg_entity_callback);
+    eg_entity_func,
+    eg_entity_func);
 
 #endif

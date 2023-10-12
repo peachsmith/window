@@ -1,7 +1,7 @@
-#ifndef EG_DEMO_FOREST_H
-#define EG_DEMO_FOREST_H
+#ifndef EG_TNS_FOREST_H
+#define EG_TNS_FOREST_H
 
-// A heads-up display (FOREST)
+// The background scenery for the forest scene.
 
 #include "example.h"
 

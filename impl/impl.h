@@ -20,6 +20,8 @@
 #define FONT_MODE_SINGLE 0
 #define FONT_MODE_MULTI 1
 
+typedef struct eg_timing eg_timing;
+
 struct eg_texture
 {
     SDL_Texture *img;

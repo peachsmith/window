@@ -23,7 +23,7 @@ static void render_block(eg_app *app, eg_entity *block)
         hit_box.w = app->entity_types[block->type].width;
         hit_box.h = app->entity_types[block->type].height;
 
-        eg_set_color(app, EG_COLOR_LIGHT_BLUE);
+        eg_set_color(app, EG_COLOR_VINIK_LIGHT_BLUE);
         eg_draw_rect(app, &hit_box, 0);
     }
 }
@@ -37,7 +37,7 @@ static void render_throughblock(eg_app *app, eg_entity *block)
     r.w = app->entity_types[block->type].width;
     r.h = app->entity_types[block->type].height;
 
-    eg_set_color(app, EG_COLOR_FOREST_GREEN);
+    eg_set_color(app, EG_COLOR_VINIK_FOREST_GREEN);
     eg_draw_rect(app, &r, 1);
 
     // hit box
@@ -49,7 +49,7 @@ static void render_throughblock(eg_app *app, eg_entity *block)
         hit_box.w = app->entity_types[block->type].width;
         hit_box.h = app->entity_types[block->type].height;
 
-        eg_set_color(app, EG_COLOR_LIGHT_BLUE);
+        eg_set_color(app, EG_COLOR_VINIK_LIGHT_BLUE);
         eg_draw_rect(app, &hit_box, 0);
     }
 }
@@ -73,7 +73,7 @@ static void render_moving_block(eg_app *app, eg_entity *block)
         hit_box.w = app->entity_types[block->type].width;
         hit_box.h = app->entity_types[block->type].height;
 
-        eg_set_color(app, EG_COLOR_SEA_GREEN);
+        eg_set_color(app, EG_COLOR_VINIK_SEA_GREEN);
         eg_draw_rect(app, &hit_box, 0);
     }
 }
@@ -114,13 +114,13 @@ static void render_sloped_block(eg_app *app, eg_entity *block)
         if (dir < 2)
         {
             // Draw the boundaries of the width and height.
-            eg_set_color(app, EG_COLOR_RED);
+            eg_set_color(app, EG_COLOR_VINIK_RED);
             eg_draw_rect(app, &r, 0);
         }
 
         // Draw the line.
         // Default is from bottom left to top right.
-        eg_set_color(app, EG_COLOR_FOREST_GREEN);
+        eg_set_color(app, EG_COLOR_VINIK_FOREST_GREEN);
         eg_point a = {.x = r.x, .y = r.y + r.h};
         eg_point b = {.x = r.x + r.w, .y = r.y};
 
@@ -250,8 +250,7 @@ static void collide_block(
     eg_app *app,
     eg_entity *block,
     eg_entity *other,
-    eg_collision *t_res,
-    int is_b)
+    eg_collision *t_res)
 {
     // The collision resolution correction factor formula is pulled from
     // the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.

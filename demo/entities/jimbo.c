@@ -91,7 +91,7 @@ static void render_jimbo(eg_app *app, eg_entity *jimbo)
         hit_box.h = app->entity_types[jimbo->type].height;
 
         // Render the jimbo hit box.
-        eg_set_color(app, EG_COLOR_ORANGE);
+        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
         eg_draw_rect(app, &hit_box, 0);
     }
 }

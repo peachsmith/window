@@ -21,11 +21,11 @@ void util_draw_collision(
     target_bounds.y = r->y;
     target_bounds.w = r->w;
     target_bounds.h = r->h;
-    eg_set_color(app, EG_COLOR_RED);
+    eg_set_color(app, EG_COLOR_VINIK_RED);
     eg_draw_rect(app, &target_bounds, 0);
 
     // Draw the contact point CP in cyan.
-    eg_set_color(app, EG_COLOR_CYAN);
+    eg_set_color(app, EG_COLOR_VINIK_CYAN);
     cp_rect.x = res->cp.x - 5;
     cp_rect.y = res->cp.y - 5;
     cp_rect.w = 10;
@@ -33,7 +33,7 @@ void util_draw_collision(
     eg_draw_rect(app, &cp_rect, 1);
 
     // Draw the contact normal CN in a pink.
-    eg_set_color(app, EG_COLOR_PINK);
+    eg_set_color(app, EG_COLOR_VINIK_PINK);
     p0.x = res->cp.x;
     p0.y = res->cp.y;
     p1.x = res->cp.x + res->cn.x * 20;
@@ -41,7 +41,7 @@ void util_draw_collision(
     eg_draw_line(app, &p0, &p1);
 
     // Draw the direction vector D in green.
-    eg_set_color(app, EG_COLOR_SEA_GREEN);
+    eg_set_color(app, EG_COLOR_VINIK_SEA_GREEN);
     p0.x = p->x;
     p0.y = p->y;
     p1.x = p->x + d->x * 10;
@@ -86,25 +86,25 @@ void util_draw_sat(
     rects[6].y = pb[2].y - 2;
 
     // Draw the vertices of entity A.
-    eg_set_color(app, EG_COLOR_LAVENDAR);
+    eg_set_color(app, EG_COLOR_VINIK_LAVENDAR);
     for (int i = 0; i < 4; i++)
     {
         eg_draw_rect(app, &(rects[i]), 1);
     }
 
     // Draw the vertices of entity B.
-    eg_set_color(app, EG_COLOR_YELLOW);
+    eg_set_color(app, EG_COLOR_VINIK_YELLOW);
     for (int i = 4; i < 7; i++)
     {
         eg_draw_rect(app, &(rects[i]), 1);
     }
 
     // Draw the normal axis.
-    eg_set_color(app, EG_COLOR_MILITARY_GREEN);
+    eg_set_color(app, EG_COLOR_VINIK_MILITARY_GREEN);
     eg_draw_line(app, n0, n1);
 
     // Draw the normal origin Q.
-    eg_set_color(app, EG_COLOR_LIGHT_GRAY);
+    eg_set_color(app, EG_COLOR_VINIK_LIGHT_GRAY);
     eg_rect rq = {.x = q->x - 2, .y = q->y - 2, .w = 4, .h = 4};
     eg_draw_rect(app, &rq, 1);
 }
@@ -113,7 +113,7 @@ void util_draw_camera(eg_app *app)
 {
     eg_point l0, l1, r0, r1, t0, t1, b0, b1;
 
-    eg_set_color(app, EG_COLOR_MAUVE);
+    eg_set_color(app, EG_COLOR_VINIK_MAUVE);
 
     // left boundary
     l0.x = app->cam.cl;
@@ -129,7 +129,7 @@ void util_draw_camera(eg_app *app)
     r1.y = app->screen_height;
     eg_draw_line(app, &r0, &r1);
 
-    eg_set_color(app, EG_COLOR_TEAL);
+    eg_set_color(app, EG_COLOR_VINIK_TEAL);
 
     // top boundary
     t0.x = 0;

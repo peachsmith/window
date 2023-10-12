@@ -1,9 +1,5 @@
 #include "example.h"
-#include "colors.h"
 #include "impl/impl.h"
-
-#include <stdio.h>
-#include <stdlib.h>
 
 //----------------------------------------------------------------------------
 // core functions
@@ -195,7 +191,7 @@ int eg_consume_input(eg_app *app, int code)
     return eg_impl_consume_key(app, code);
 }
 
-void eg_push_input_handler(eg_app *app, eg_callback handler)
+void eg_push_input_handler(eg_app *app, eg_func handler)
 {
     if (app == NULL || app->input == NULL || handler == NULL)
     {

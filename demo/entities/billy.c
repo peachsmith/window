@@ -102,7 +102,7 @@ static void render_billy(eg_app *app, eg_entity *billy)
         hit_box.h = app->entity_types[billy->type].height;
 
         // Render the billy hit box.
-        eg_set_color(app, EG_COLOR_ORANGE);
+        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
         eg_draw_rect(app, &hit_box, 0);
     }
 }

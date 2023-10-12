@@ -2,7 +2,7 @@
 #include "tootnsploot/input/input.h"
 #include "tootnsploot/entities/entity_types.h"
 
-static eg_callback input_handlers[20];
+static eg_func input_handlers[20];
 
 void tns_init_input(eg_app *app)
 {

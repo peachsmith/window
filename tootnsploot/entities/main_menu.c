@@ -31,7 +31,7 @@ static void render_main_menu(eg_app *app, eg_entity *menu)
         .y = 0,
         .w = w,
         .h = h};
-    eg_set_color(app, EG_COLOR_BLACK);
+    eg_set_color(app, EG_COLOR_VINIK_BLACK);
     eg_draw_rect(app, &r, 1);
 
     // Render the title.

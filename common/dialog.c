@@ -15,8 +15,8 @@ void common_dialog_renderer(
     eg_app *app,
     eg_entity *dialog,
     eg_font *font,
-    eg_entity_callback draw_panel,
-    eg_entity_callback draw_indicator)
+    eg_entity_func draw_panel,
+    eg_entity_func draw_indicator)
 {
     char buffer[COMMON_DIALOG_BUFSIZE];
     int buf_len;

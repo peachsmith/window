@@ -1,5 +1,5 @@
-#ifndef EG_DEMO_OVERLAY_H
-#define EG_DEMO_OVERLAY_H
+#ifndef EG_TNS_OVERLAY_H
+#define EG_TNS_OVERLAY_H
 
 #include "example.h"
 

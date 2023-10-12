@@ -242,14 +242,14 @@ void common_handle_collisions(eg_app *app)
                     cola = app->entity_types[a->type].collide;
                     if (cola != NULL)
                     {
-                        cola(app, a, b, &col, 0);
+                        cola(app, a, b, &col);
                     }
 
                     // Call the target entity's collision function.
                     colb = app->entity_types[b->type].collide;
                     if (colb != NULL)
                     {
-                        colb(app, b, a, &col, 1);
+                        colb(app, b, a, &col);
                     }
                 }
             }
@@ -278,14 +278,14 @@ void common_handle_collisions(eg_app *app)
                     cola = app->entity_types[a->type].collide;
                     if (cola != NULL)
                     {
-                        cola(app, a, b, &col, 0);
+                        cola(app, a, b, &col);
                     }
 
                     // Call the target entity's collision function.
                     colb = app->entity_types[b->type].collide;
                     if (colb != NULL)
                     {
-                        colb(app, b, a, &col, 1);
+                        colb(app, b, a, &col);
                     }
                 }
             }

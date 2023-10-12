@@ -166,7 +166,7 @@ static void render_corgi(eg_app *app, eg_entity *corgi)
         hit_box.h = app->entity_types[corgi->type].height;
 
         // Render the corgi hit box.
-        eg_set_color(app, EG_COLOR_PURPLE);
+        eg_set_color(app, EG_COLOR_VINIK_PURPLE);
         eg_draw_rect(app, &hit_box, 0);
     }
 }

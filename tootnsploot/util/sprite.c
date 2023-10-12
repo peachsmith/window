@@ -2,8 +2,6 @@
 #include "tootnsploot/util/sprite.h"
 #include "common/texture.h"
 
-#include "colors.h"
-
 void sprite_draw_corgi(eg_app *app, int x, int y, int mirror, int tile)
 {
     // tile dimensions

@@ -161,7 +161,7 @@ static void render_critter(eg_app *app, eg_entity *critter)
         hit_box.h = app->entity_types[critter->type].height;
 
         // Render the critter hit box.
-        eg_set_color(app, EG_COLOR_ORANGE);
+        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
         eg_draw_rect(app, &hit_box, 0);
     }
 }
@@ -261,8 +261,7 @@ static void collide_critter(
     eg_app *app,
     eg_entity *critter,
     eg_entity *other,
-    eg_collision *t_res,
-    int is_b)
+    eg_collision *t_res)
 {
     if (critter->ticks < 120 || critter->result || other->type != ENTITY_TYPE_NOTE)
     {

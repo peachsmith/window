@@ -6,7 +6,7 @@
 // TODO: I definitely need to move the transition functions into some
 // other file.
 
-static void do_transition(eg_app *app, eg_callback load_next_scene)
+static void do_transition(eg_app *app, eg_func load_next_scene)
 {
     eg_entity transition;
     eg_entity *entity = NULL;
@@ -74,7 +74,7 @@ static void main_menu_transition(eg_app *app)
  * the next scene.
  *
  */
-static void begin_transition(eg_app *app, eg_callback transition_loader, eg_callback handler)
+static void begin_transition(eg_app *app, eg_func transition_loader, eg_func handler)
 {
     // Set the transition callback to load scene 0.
     // Set the next input handler to be the root input handler.

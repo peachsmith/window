@@ -25,7 +25,7 @@ static void render_hud(eg_app *app, eg_entity *hud)
         .y = hud->y_pos,
         .w = app->entity_types[hud->type].width,
         .h = app->entity_types[hud->type].height};
-    eg_set_color(app, EG_COLOR_BLACK);
+    eg_set_color(app, EG_COLOR_VINIK_BLACK);
     eg_draw_rect(app, &r, 1);
 
     // render the score

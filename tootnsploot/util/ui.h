@@ -1,5 +1,5 @@
-#ifndef EG_DEMO_UI_H
-#define EG_DEMO_UI_H
+#ifndef EG_TNS_UI_H
+#define EG_TNS_UI_H
 
 #include "example.h"
 

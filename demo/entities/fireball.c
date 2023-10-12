@@ -97,7 +97,7 @@ static void render_fireball(eg_app *app, eg_entity *fireball)
         hit_box.h = app->entity_types[fireball->type].height;
 
         // Render the fireball hit box.
-        eg_set_color(app, EG_COLOR_ORANGE);
+        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
         eg_draw_rect(app, &hit_box, 0);
     }
 }
@@ -140,8 +140,7 @@ static void collide_fireball(
     eg_app *app,
     eg_entity *fireball,
     eg_entity *other,
-    eg_collision *t_res,
-    int is_b)
+    eg_collision *t_res)
 {
     if (other->type == ENTITY_TYPE_BLOCK ||
         other->type == ENTITY_TYPE_HENRY ||

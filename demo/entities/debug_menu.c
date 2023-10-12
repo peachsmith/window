@@ -102,7 +102,7 @@ static void render_debug_menu(eg_app *app, eg_entity *menu)
         break;
     }
 
-    eg_set_color(app, EG_COLOR_RED);
+    eg_set_color(app, EG_COLOR_VINIK_RED);
     eg_rect r = {.x = menu_x + x_origin + selection + 1,
                  .y = menu_y + y_origin + y_margin,
                  .w = 16,

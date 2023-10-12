@@ -10,8 +10,7 @@ static void collide_block(
     eg_app *app,
     eg_entity *block,
     eg_entity *other,
-    eg_collision *t_res,
-    int is_b)
+    eg_collision *t_res)
 {
     // The collision resolution correction factor formula is pulled from
     // the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.
@@ -92,7 +91,7 @@ static void render_floor(eg_app *app, eg_entity *floor)
         hit_box.w = app->entity_types[floor->type].width;
         hit_box.h = app->entity_types[floor->type].height;
 
-        eg_set_color(app, EG_COLOR_SEA_GREEN);
+        eg_set_color(app, EG_COLOR_VINIK_SEA_GREEN);
         eg_draw_rect(app, &hit_box, 0);
     }
 }

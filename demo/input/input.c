@@ -13,7 +13,7 @@
 #include "common/collision.h"
 #include "common/audio.h"
 
-static eg_callback input_handlers[20];
+static eg_func input_handlers[20];
 
 void demo_init_input(eg_app *app)
 {

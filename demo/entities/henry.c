@@ -103,7 +103,7 @@ static void render_henry(eg_app *app, eg_entity *henry)
         hit_box.h = app->entity_types[henry->type].height;
 
         // Render the henry hit box.
-        eg_set_color(app, EG_COLOR_ORANGE);
+        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
         eg_draw_rect(app, &hit_box, 0);
     }
 }
@@ -285,8 +285,7 @@ static void collide_henry(
     eg_app *app,
     eg_entity *henry,
     eg_entity *other,
-    eg_collision *t_res,
-    int is_b)
+    eg_collision *t_res)
 {
     if (other->type == ENTITY_TYPE_PLAYER)
     {
