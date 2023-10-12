@@ -9,55 +9,55 @@
 #include "crumbs.h"
 
 // register and create functions for a small, square block.
-void block_demo_register(eg_entity_type *);
-eg_entity *block_demo_create(eg_app *, int, int);
+void block_demo_register(cr_entity_type *);
+cr_entity *block_demo_create(cr_app *, int, int);
 
 // register and create functions for a large, square block.
-void block_demo_register_big(eg_entity_type *);
-eg_entity *block_demo_create_big(eg_app *, int, int);
+void block_demo_register_big(cr_entity_type *);
+cr_entity *block_demo_create_big(cr_app *, int, int);
 
 // register and create functions for a long, rectangular block.
-void block_demo_register_long(eg_entity_type *);
-eg_entity *block_demo_create_long(eg_app *, int, int);
+void block_demo_register_long(cr_entity_type *);
+cr_entity *block_demo_create_long(cr_app *, int, int);
 
 // register and create functions for a long, rectangular block that can be
 // passed through with certain input.
-void throughblock_demo_register_long(eg_entity_type *);
-eg_entity *throughblock_demo_create_long(eg_app *, int, int);
+void throughblock_demo_register_long(cr_entity_type *);
+cr_entity *throughblock_demo_create_long(cr_app *, int, int);
 
 // register and create functions for a moving block.
-void block_demo_register_moving(eg_entity_type *);
-eg_entity *block_demo_create_moving(eg_app *, int, int, int);
+void block_demo_register_moving(cr_entity_type *);
+cr_entity *block_demo_create_moving(cr_app *, int, int, int);
 
 // register and create functions for a sloped block.
-void block_demo_register_sloped(eg_entity_type *);
-eg_entity *block_demo_create_sloped(eg_app *, int, int, int);
+void block_demo_register_sloped(cr_entity_type *);
+cr_entity *block_demo_create_sloped(cr_app *, int, int, int);
 
 // register and create functions for Toot n Sploot
-void tns_register_floor(eg_entity_type *);
-eg_entity *tns_create_floor(eg_app *, int, int);
+void tns_register_floor(cr_entity_type *);
+cr_entity *tns_create_floor(cr_app *, int, int);
 
 
 /**
  * add a row of blocks to a scene
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *   int - the starting x position of the row
  *   int - the starting y position of the row
  *   int - the number of blocks in the row
  */
-void block_demo_row(eg_app *, int, int, int);
+void block_demo_row(cr_app *, int, int, int);
 
 /**
  * add a column of blocks to a scene
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *   int - the starting x position of the column
  *   int - the starting y position of the column
  *   int - the number of blocks in the column
  */
-void block_demo_col(eg_app *, int, int, int);
+void block_demo_col(cr_app *, int, int, int);
 
 #endif

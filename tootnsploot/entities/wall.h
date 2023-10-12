@@ -9,9 +9,9 @@
  * Populates an entity type struct with information about the wall entity.
  *
  * Params:
- *   eg_entity_type* - the wall's entity type definition
+ *   cr_entity_type* - the wall's entity type definition
  */
-void tns_register_wall(eg_entity_type *);
+void tns_register_wall(cr_entity_type *);
 
 /**
  * Creates a wall entity.
@@ -21,8 +21,8 @@ void tns_register_wall(eg_entity_type *);
  *   int - the wall entity's initial y position
  *
  * Returns:
- *   eg_entity* - a pointer to the new wall entity.
+ *   cr_entity* - a pointer to the new wall entity.
  */
-eg_entity *tns_create_wall(eg_app *, int, int);
+cr_entity *tns_create_wall(cr_app *, int, int);
 
 #endif

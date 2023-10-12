@@ -6,24 +6,24 @@
 #include "demo/entities/demo_dialog.h"
 #include "common/menu.h"
 
-void pause_menu_input_handler(eg_app *app)
+void pause_menu_input_handler(cr_app *app)
 {
-    if (eg_consume_input(app, EG_KEYCODE_X) || eg_consume_input(app, EG_KEYCODE_Q))
+    if (cr_consume_input(app, CR_KEYCODE_X) || cr_consume_input(app, CR_KEYCODE_Q))
     {
         app->menu_count--;
         app->pause = 0;
-        eg_pop_input_handler(app);
+        cr_pop_input_handler(app);
         return;
     }
 
     // Locate the pause menu.
-    eg_entity *menu_entity = app->menus[app->menu_count - 1];
+    cr_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_UP))
+    if (cr_consume_input(app, CR_KEYCODE_UP))
     {
         if (menu_entity->data > 2)
         {
@@ -31,7 +31,7 @@ void pause_menu_input_handler(eg_app *app)
         }
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_DOWN))
+    if (cr_consume_input(app, CR_KEYCODE_DOWN))
     {
         if (menu_entity->data > 0 && menu_entity->data < 3)
         {
@@ -39,7 +39,7 @@ void pause_menu_input_handler(eg_app *app)
         }
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_LEFT))
+    if (cr_consume_input(app, CR_KEYCODE_LEFT))
     {
 
         if (menu_entity->data == 2 || menu_entity->data == 4)
@@ -48,7 +48,7 @@ void pause_menu_input_handler(eg_app *app)
         }
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_RIGHT))
+    if (cr_consume_input(app, CR_KEYCODE_RIGHT))
     {
         if (menu_entity->data == 1 || menu_entity->data == 3)
         {
@@ -57,14 +57,14 @@ void pause_menu_input_handler(eg_app *app)
     }
 
     // menu item selection
-    if (eg_consume_input(app, EG_KEYCODE_Z))
+    if (cr_consume_input(app, CR_KEYCODE_Z))
     {
         switch (menu_entity->data)
         {
         case 1:
         {
             // Locate the info dialog.
-            eg_entity *info_dialog = NULL;
+            cr_entity *info_dialog = NULL;
             for (int i = 0; i < app->entity_cap; i++)
             {
                 if (app->entities[i].type == ENTITY_TYPE_INFO_DIALOG && app->entities[i].present)
@@ -75,14 +75,14 @@ void pause_menu_input_handler(eg_app *app)
 
             info_dialog_demo_open(app, info_dialog);
 
-            eg_push_input_handler(app, common_dialog_input_handler);
+            cr_push_input_handler(app, common_dialog_input_handler);
         }
         break;
 
         case 2:
         {
             // Locate the fish menu.
-            eg_entity *fish_menu = NULL;
+            cr_entity *fish_menu = NULL;
             for (int i = 0; i < app->entity_cap; i++)
             {
                 if (app->entities[i].type == ENTITY_TYPE_FISH_MENU && app->entities[i].present)
@@ -94,7 +94,7 @@ void pause_menu_input_handler(eg_app *app)
             // Set the pause menu as the active menu.
             app->menus[app->menu_count++] = fish_menu;
 
-            eg_push_input_handler(app, fish_menu_input_handler);
+            cr_push_input_handler(app, fish_menu_input_handler);
         }
         break;
 
@@ -105,7 +105,7 @@ void pause_menu_input_handler(eg_app *app)
         case 4:
         {
             // Locate the demo dialog.
-            eg_entity *demo_dialog = NULL;
+            cr_entity *demo_dialog = NULL;
             for (int i = 0; i < app->entity_cap; i++)
             {
                 if (app->entities[i].type == ENTITY_TYPE_DEMO_DIALOG && app->entities[i].present)
@@ -116,7 +116,7 @@ void pause_menu_input_handler(eg_app *app)
 
             demo_dialog_demo_open(app, demo_dialog);
 
-            eg_push_input_handler(app, common_dialog_input_handler);
+            cr_push_input_handler(app, common_dialog_input_handler);
         }
         break;
 

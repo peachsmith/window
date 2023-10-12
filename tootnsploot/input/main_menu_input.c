@@ -6,10 +6,10 @@
 #include "common/util.h"
 #include "common/menu.h"
 
-static void do_transition(eg_app *app, eg_func load_next_scene)
+static void do_transition(cr_app *app, cr_func load_next_scene)
 {
-    eg_entity transition;
-    eg_entity *entity = NULL;
+    cr_entity transition;
+    cr_entity *entity = NULL;
 
     // Save the transition entity state.
     for (int i = 0; i < app->entity_cap; i++)
@@ -24,7 +24,7 @@ static void do_transition(eg_app *app, eg_func load_next_scene)
     {
         // Set the update flag on the transition entity so that the next scene
         // doesn't start in a paused state.
-        eg_set_flag(entity, ENTITY_FLAG_UPDATE);
+        cr_set_flag(entity, ENTITY_FLAG_UPDATE);
 
         transition.ticks = entity->ticks;
         transition.data = entity->data;
@@ -61,7 +61,7 @@ static void do_transition(eg_app *app, eg_func load_next_scene)
     }
 }
 
-static void forest_transition(eg_app *app)
+static void forest_transition(cr_app *app)
 {
     do_transition(app, load_forest_scene);
 }
@@ -75,7 +75,7 @@ static void forest_transition(eg_app *app)
  * the next scene.
  *
  */
-static void begin_transition(eg_app *app, eg_func transition_loader, eg_func handler)
+static void begin_transition(cr_app *app, cr_func transition_loader, cr_func handler)
 {
     // Set the transition callback to load scene 0.
     // Set the next input handler to be the root input handler.
@@ -94,22 +94,22 @@ static void begin_transition(eg_app *app, eg_func transition_loader, eg_func han
     }
 }
 
-void main_menu_input_handler(eg_app *app)
+void main_menu_input_handler(cr_app *app)
 {
     // Locate the main menu.
-    eg_entity *menu_entity = app->menus[app->menu_count - 1];
+    cr_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;
     }
 
     // If the escape key is pressed, terminate the application.
-    if (eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    if (cr_consume_input(app, CR_KEYCODE_ESCAPE))
     {
         app->done = 1;
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_UP))
+    if (cr_consume_input(app, CR_KEYCODE_UP))
     {
         if (menu_entity->cursor_y > 0)
         {
@@ -117,7 +117,7 @@ void main_menu_input_handler(eg_app *app)
         }
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_DOWN))
+    if (cr_consume_input(app, CR_KEYCODE_DOWN))
     {
         if (menu_entity->cursor_y < 2)
         {
@@ -126,20 +126,20 @@ void main_menu_input_handler(eg_app *app)
     }
 
     // menu item selection
-    if (eg_consume_input(app, EG_KEYCODE_Z))
+    if (cr_consume_input(app, CR_KEYCODE_Z))
     {
         switch (menu_entity->cursor_y)
         {
         case 0:
             // Remove the main menu input handler and transition to the forest scene.
-            eg_pop_input_handler(app);
+            cr_pop_input_handler(app);
             begin_transition(app, forest_transition, forest_input_handler);
             break;
 
         case 1:
         {
             // Locate the controls menu.
-            eg_entity *controls_menu = NULL;
+            cr_entity *controls_menu = NULL;
             for (int i = 0; i < app->entity_cap && controls_menu == NULL; i++)
             {
                 if (app->entities[i].type == ENTITY_TYPE_CONTROLS_MENU && app->entities[i].present)
@@ -151,14 +151,14 @@ void main_menu_input_handler(eg_app *app)
             // Set the pause menu as the active menu.
             app->menus[app->menu_count++] = controls_menu;
 
-            eg_push_input_handler(app, controls_menu_input_handler);
+            cr_push_input_handler(app, controls_menu_input_handler);
         }
         break;
 
         case 2:
         {
             // Locate the characters menu.
-            eg_entity *characters_menu = NULL;
+            cr_entity *characters_menu = NULL;
             for (int i = 0; i < app->entity_cap && characters_menu == NULL; i++)
             {
                 if (app->entities[i].type == ENTITY_TYPE_CHARACTERS_MENU && app->entities[i].present)
@@ -170,7 +170,7 @@ void main_menu_input_handler(eg_app *app)
             // Set the pause menu as the active menu.
             app->menus[app->menu_count++] = characters_menu;
 
-            eg_push_input_handler(app, characters_menu_input_handler);
+            cr_push_input_handler(app, characters_menu_input_handler);
         }
         break;
 

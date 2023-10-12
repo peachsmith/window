@@ -19,11 +19,11 @@ static char *items[7] = {
 #define ITEM_HEIGHT 24
 #define SCROLL_LIMIT 4
 
-static void render_scene_menu(eg_app *app, eg_entity *menu)
+static void render_scene_menu(cr_app *app, cr_entity *menu)
 {
     int menu_x = menu->x_pos;
     int menu_y = menu->y_pos;
-    eg_font *font = app->fonts[DEMO_FONT_POKEMON_FIRE_RED];
+    cr_font *font = app->fonts[DEMO_FONT_POKEMON_FIRE_RED];
     int x_origin = 25;
     int y_origin = 5;
 
@@ -34,7 +34,7 @@ static void render_scene_menu(eg_app *app, eg_entity *menu)
     int i;
     for (i = 0 + menu->scroll_y; i < SCROLL_LIMIT + menu->scroll_y; i++)
     {
-        eg_draw_text(
+        cr_draw_text(
             app,
             font,
             items[i],
@@ -76,7 +76,7 @@ static void render_scene_menu(eg_app *app, eg_entity *menu)
     }
 }
 
-static void update_scene_menu(eg_app *app, eg_entity *menu)
+static void update_scene_menu(cr_app *app, cr_entity *menu)
 {
     menu->ticks++;
 
@@ -89,7 +89,7 @@ static void update_scene_menu(eg_app *app, eg_entity *menu)
     }
 }
 
-void scene_menu_demo_register(eg_entity_type *t)
+void scene_menu_demo_register(cr_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
@@ -99,11 +99,11 @@ void scene_menu_demo_register(eg_entity_type *t)
     t->update = update_scene_menu;
 }
 
-eg_entity *scene_menu_demo_create(eg_app *app)
+cr_entity *scene_menu_demo_create(cr_app *app)
 {
-    eg_entity *menu = NULL;
+    cr_entity *menu = NULL;
 
-    menu = eg_create_entity(app);
+    menu = cr_create_entity(app);
     if (menu == NULL)
     {
         return NULL;
@@ -112,8 +112,8 @@ eg_entity *scene_menu_demo_create(eg_app *app)
     menu->x_pos = 140;
     menu->y_pos = 10;
     menu->type = ENTITY_TYPE_SCENE_MENU;
-    eg_set_flag(menu, ENTITY_FLAG_PAUSE);
-    eg_set_flag(menu, ENTITY_FLAG_MENU);
+    cr_set_flag(menu, ENTITY_FLAG_PAUSE);
+    cr_set_flag(menu, ENTITY_FLAG_MENU);
 
     return menu;
 }

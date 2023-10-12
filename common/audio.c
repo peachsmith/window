@@ -6,9 +6,9 @@
 #define MAX_SOUNDS 10
 
 // main sound list for the application
-static eg_sound *sounds[MAX_SOUNDS];
+static cr_sound *sounds[MAX_SOUNDS];
 
-int common_init_audio(eg_app *app)
+int common_init_audio(cr_app *app)
 {
     app->sounds = &(sounds[0]);
     app->sound_count = 0;

@@ -24,11 +24,11 @@
  * Populates am app struct with the data needed for runtime.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-int tns_prepare(eg_app *);
+int tns_prepare(cr_app *);
 
 #endif

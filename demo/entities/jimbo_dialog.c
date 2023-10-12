@@ -14,7 +14,7 @@
 static const char *panel_1_text = "Howdy!\nI'm an NPC.";
 #define PANEL_1_LEN 18
 
-static void update_jimbo_dialog(eg_app *app, eg_entity *dialog)
+static void update_jimbo_dialog(cr_app *app, cr_entity *dialog)
 {
     if (dialog->ticks < dialog->tick_limit)
     {
@@ -22,7 +22,7 @@ static void update_jimbo_dialog(eg_app *app, eg_entity *dialog)
     }
 }
 
-static void advance_jimbo_dialog(eg_app *app, eg_entity *dialog)
+static void advance_jimbo_dialog(cr_app *app, cr_entity *dialog)
 {
     dialog->data++;
 
@@ -30,13 +30,13 @@ static void advance_jimbo_dialog(eg_app *app, eg_entity *dialog)
     {
         // Close the dialog.
         app->dialog_count--;
-        eg_pop_input_handler(app);
+        cr_pop_input_handler(app);
         app->pause = 0;
         return;
     }
 }
 
-static void render_dialog_panel(eg_app *app, eg_entity *dialog)
+static void render_dialog_panel(cr_app *app, cr_entity *dialog)
 {
     ui_draw_panel(
         app,
@@ -46,7 +46,7 @@ static void render_dialog_panel(eg_app *app, eg_entity *dialog)
         COMMON_DIALOG_HEIGHT);
 }
 
-static void render_dialog_indicator(eg_app *app, eg_entity *dialog)
+static void render_dialog_indicator(cr_app *app, cr_entity *dialog)
 {
     ui_draw_indicator(
         app,
@@ -55,7 +55,7 @@ static void render_dialog_indicator(eg_app *app, eg_entity *dialog)
         UI_INDICATOR_ADVANCE);
 }
 
-static void render_dialog(eg_app *app, eg_entity *dialog)
+static void render_dialog(cr_app *app, cr_entity *dialog)
 {
     common_dialog_renderer(
         app,
@@ -65,7 +65,7 @@ static void render_dialog(eg_app *app, eg_entity *dialog)
         render_dialog_indicator);
 }
 
-void jimbo_dialog_demo_register(eg_entity_type *t)
+void jimbo_dialog_demo_register(cr_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
@@ -76,11 +76,11 @@ void jimbo_dialog_demo_register(eg_entity_type *t)
     t->advance = advance_jimbo_dialog;
 }
 
-eg_entity *jimbo_dialog_demo_create(eg_app* app)
+cr_entity *jimbo_dialog_demo_create(cr_app* app)
 {
-    eg_entity *dialog = NULL;
+    cr_entity *dialog = NULL;
 
-    dialog = eg_create_entity(app);
+    dialog = cr_create_entity(app);
     if (dialog == NULL)
     {
         return NULL;
@@ -90,13 +90,13 @@ eg_entity *jimbo_dialog_demo_create(eg_app* app)
     dialog->y_pos = 108;
     dialog->type = ENTITY_TYPE_JIMBO_DIALOG;
 
-    eg_set_flag(dialog, ENTITY_FLAG_PAUSE);
-    eg_set_flag(dialog, ENTITY_FLAG_MENU);
+    cr_set_flag(dialog, ENTITY_FLAG_PAUSE);
+    cr_set_flag(dialog, ENTITY_FLAG_MENU);
 
     return dialog;
 }
 
-void jimbo_dialog_demo_open(eg_app *app, eg_entity *dialog)
+void jimbo_dialog_demo_open(cr_app *app, cr_entity *dialog)
 {
     // Reset the dialog.
     dialog->data = 0;

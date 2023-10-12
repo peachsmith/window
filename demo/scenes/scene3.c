@@ -17,14 +17,14 @@
 
 #include "common/util.h"
 
-void load_scene_3(eg_app *app)
+void load_scene_3(cr_app *app)
 {
     app->scene = DEMO_SCENE_3;
 
     // Starting position for building a sequence of blocks.
     int x_start = 50;
 
-    util_set_camera(app, EG_CAMERA_ALL);
+    util_set_camera(app, CR_CAMERA_ALL);
 
     app->cam.x = 0;
     app->cam.y = 0;

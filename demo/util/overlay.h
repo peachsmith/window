@@ -7,8 +7,8 @@
  * Renders information about the internal state of the application.
  * 
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  */
-void demo_draw_overlay(eg_app *);
+void demo_draw_overlay(cr_app *);
 
 #endif

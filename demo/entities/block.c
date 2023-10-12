@@ -7,7 +7,7 @@
 #include "common/collision.h"
 
 // Renders a standard block
-static void render_block(eg_app *app, eg_entity *block)
+static void render_block(cr_app *app, cr_entity *block)
 {
     sprite_draw_brick(
         app,
@@ -17,45 +17,45 @@ static void render_block(eg_app *app, eg_entity *block)
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = block->x_pos + app->cam.x;
         hit_box.y = block->y_pos + app->cam.y;
         hit_box.w = app->entity_types[block->type].width;
         hit_box.h = app->entity_types[block->type].height;
 
-        eg_set_color(app, EG_COLOR_VINIK_LIGHT_BLUE);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_LIGHT_BLUE);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
 // Renders a throughblock
-static void render_throughblock(eg_app *app, eg_entity *block)
+static void render_throughblock(cr_app *app, cr_entity *block)
 {
-    eg_rect r;
+    cr_rect r;
     r.x = block->x_pos + app->cam.x;
     r.y = block->y_pos + app->cam.y;
     r.w = app->entity_types[block->type].width;
     r.h = app->entity_types[block->type].height;
 
-    eg_set_color(app, EG_COLOR_VINIK_FOREST_GREEN);
-    eg_draw_rect(app, &r, 1);
+    cr_set_color(app, CR_COLOR_VINIK_FOREST_GREEN);
+    cr_draw_rect(app, &r, 1);
 
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = block->x_pos + app->cam.x;
         hit_box.y = block->y_pos + app->cam.y;
         hit_box.w = app->entity_types[block->type].width;
         hit_box.h = app->entity_types[block->type].height;
 
-        eg_set_color(app, EG_COLOR_VINIK_LIGHT_BLUE);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_LIGHT_BLUE);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
 // Renders a moving block
-static void render_moving_block(eg_app *app, eg_entity *block)
+static void render_moving_block(cr_app *app, cr_entity *block)
 {
     sprite_draw_grass_block(
         app,
@@ -67,19 +67,19 @@ static void render_moving_block(eg_app *app, eg_entity *block)
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = block->x_pos + app->cam.x;
         hit_box.y = block->y_pos + app->cam.y;
         hit_box.w = app->entity_types[block->type].width;
         hit_box.h = app->entity_types[block->type].height;
 
-        eg_set_color(app, EG_COLOR_VINIK_SEA_GREEN);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_SEA_GREEN);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
 // Renders a sloped block
-static void render_sloped_block(eg_app *app, eg_entity *block)
+static void render_sloped_block(cr_app *app, cr_entity *block)
 {
     int dir = block->data & 3;
 
@@ -103,7 +103,7 @@ static void render_sloped_block(eg_app *app, eg_entity *block)
 
     if (app->debug.hitboxes)
     {
-        eg_rect r;
+        cr_rect r;
         r.x = block->x_pos + app->cam.x;
         r.y = block->y_pos + app->cam.y;
         r.w = app->entity_types[block->type].width;
@@ -114,15 +114,15 @@ static void render_sloped_block(eg_app *app, eg_entity *block)
         if (dir < 2)
         {
             // Draw the boundaries of the width and height.
-            eg_set_color(app, EG_COLOR_VINIK_RED);
-            eg_draw_rect(app, &r, 0);
+            cr_set_color(app, CR_COLOR_VINIK_RED);
+            cr_draw_rect(app, &r, 0);
         }
 
         // Draw the line.
         // Default is from bottom left to top right.
-        eg_set_color(app, EG_COLOR_VINIK_FOREST_GREEN);
-        eg_point a = {.x = r.x, .y = r.y + r.h};
-        eg_point b = {.x = r.x + r.w, .y = r.y};
+        cr_set_color(app, CR_COLOR_VINIK_FOREST_GREEN);
+        cr_point a = {.x = r.x, .y = r.y + r.h};
+        cr_point b = {.x = r.x + r.w, .y = r.y};
 
         if (dir == 0)
         {
@@ -135,11 +135,11 @@ static void render_sloped_block(eg_app *app, eg_entity *block)
             // horizontal line from top left to top right.
             a.y -= r.h;
         }
-        eg_draw_line(app, &a, &b);
+        cr_draw_line(app, &a, &b);
     }
 }
 
-static void move_vertical(eg_app *app, eg_entity *block)
+static void move_vertical(cr_app *app, cr_entity *block)
 {
     // Move down.
     if (block->ticks < 100)
@@ -163,7 +163,7 @@ static void move_vertical(eg_app *app, eg_entity *block)
     }
 }
 
-static void move_horizontal(eg_app *app, eg_entity *block)
+static void move_horizontal(cr_app *app, cr_entity *block)
 {
     // Move left.
     if (block->ticks < 100)
@@ -187,7 +187,7 @@ static void move_horizontal(eg_app *app, eg_entity *block)
     }
 }
 
-static void move_down_right(eg_app *app, eg_entity *block)
+static void move_down_right(cr_app *app, cr_entity *block)
 {
     // Move down and to the left.
     if (block->ticks < 100)
@@ -213,7 +213,7 @@ static void move_down_right(eg_app *app, eg_entity *block)
     }
 }
 
-static void update_moving_block(eg_app *app, eg_entity *block)
+static void update_moving_block(cr_app *app, cr_entity *block)
 {
     // Update the position of the platform before updating the velocity.
     // This prevents a disconnect between the platform and any entities
@@ -243,14 +243,14 @@ static void update_moving_block(eg_app *app, eg_entity *block)
 
     // Set the update flag so that entities being carried by this platform
     // can update their state accordingly.
-    eg_set_flag(block, ENTITY_FLAG_UPDATE);
+    cr_set_flag(block, ENTITY_FLAG_UPDATE);
 }
 
 static void collide_block(
-    eg_app *app,
-    eg_entity *block,
-    eg_entity *other,
-    eg_collision *t_res)
+    cr_app *app,
+    cr_entity *block,
+    cr_entity *other,
+    cr_collision *t_res)
 {
     // The collision resolution correction factor formula is pulled from
     // the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.
@@ -289,14 +289,14 @@ static void collide_block(
 
         // For now, we are assuming that the source entity collided with
         // the diagonal line from above.
-        eg_clear_flag(other, ENTITY_FLAG_JUMP);
-        eg_set_flag(other, ENTITY_FLAG_GROUND);
+        cr_clear_flag(other, ENTITY_FLAG_JUMP);
+        cr_set_flag(other, ENTITY_FLAG_GROUND);
 
         // The source entity has collided with a diagonal line.
         // We now must determine which direction to resolve the collision
         // based on the source entity's velocity.
         other->y_t += -((int)t_res->ty + 1);
-        eg_set_flag(other, ENTITY_FLAG_SLOPE);
+        cr_set_flag(other, ENTITY_FLAG_SLOPE);
 
         return;
     }
@@ -305,8 +305,8 @@ static void collide_block(
     // Only do this if the entity collided with the block from above.
     if (t_res->cn.y < 0 && !t_res->cn.x)
     {
-        eg_clear_flag(other, ENTITY_FLAG_JUMP);
-        eg_set_flag(other, ENTITY_FLAG_GROUND);
+        cr_clear_flag(other, ENTITY_FLAG_JUMP);
+        cr_set_flag(other, ENTITY_FLAG_GROUND);
     }
 
     // If the block is a throughblock, check if we should resolve the collision.
@@ -314,7 +314,7 @@ static void collide_block(
     {
         // If the down key is pressed and the y component of the contact
         // is negative, don't resolve the collision.
-        if (eg_check_flag(other, ENTITY_FLAG_DOWN))
+        if (cr_check_flag(other, ENTITY_FLAG_DOWN))
         {
             return;
         }
@@ -378,7 +378,7 @@ static void collide_block(
         if (t_res->cn.y < 0)
         {
             int ah = app->entity_types[other->type].height;
-            eg_set_flag(other, ENTITY_FLAG_MOVE);
+            cr_set_flag(other, ENTITY_FLAG_MOVE);
             other->carrier = block;
 
             // Adjust the x velocity if the source entity is not
@@ -408,7 +408,7 @@ static void collide_block(
     }
 }
 
-void block_demo_register(eg_entity_type *t)
+void block_demo_register(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK;
     t->width = 18;
@@ -417,11 +417,11 @@ void block_demo_register(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create(eg_app *app, int x, int y)
+cr_entity *block_demo_create(cr_app *app, int x, int y)
 {
-    eg_entity *block = NULL;
+    cr_entity *block = NULL;
 
-    block = eg_create_entity(app);
+    block = cr_create_entity(app);
     if (block == NULL)
     {
         return NULL;
@@ -434,7 +434,7 @@ eg_entity *block_demo_create(eg_app *app, int x, int y)
     return block;
 }
 
-void block_demo_register_big(eg_entity_type *t)
+void block_demo_register_big(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_BIG;
     t->width = 52;
@@ -443,11 +443,11 @@ void block_demo_register_big(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_big(eg_app *app, int x, int y)
+cr_entity *block_demo_create_big(cr_app *app, int x, int y)
 {
-    eg_entity *block = NULL;
+    cr_entity *block = NULL;
 
-    block = eg_create_entity(app);
+    block = cr_create_entity(app);
     if (block == NULL)
     {
         return NULL;
@@ -460,7 +460,7 @@ eg_entity *block_demo_create_big(eg_app *app, int x, int y)
     return block;
 }
 
-void block_demo_register_long(eg_entity_type *t)
+void block_demo_register_long(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_LONG;
     t->width = 100;
@@ -469,11 +469,11 @@ void block_demo_register_long(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *block_demo_create_long(eg_app *app, int x, int y)
+cr_entity *block_demo_create_long(cr_app *app, int x, int y)
 {
-    eg_entity *block = NULL;
+    cr_entity *block = NULL;
 
-    block = eg_create_entity(app);
+    block = cr_create_entity(app);
     if (block == NULL)
     {
         return NULL;
@@ -486,7 +486,7 @@ eg_entity *block_demo_create_long(eg_app *app, int x, int y)
     return block;
 }
 
-void throughblock_demo_register_long(eg_entity_type *t)
+void throughblock_demo_register_long(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_THROUGHBLOCK_LONG;
     t->width = 100;
@@ -495,11 +495,11 @@ void throughblock_demo_register_long(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *throughblock_demo_create_long(eg_app *app, int x, int y)
+cr_entity *throughblock_demo_create_long(cr_app *app, int x, int y)
 {
-    eg_entity *block = NULL;
+    cr_entity *block = NULL;
 
-    block = eg_create_entity(app);
+    block = cr_create_entity(app);
     if (block == NULL)
     {
         return NULL;
@@ -512,7 +512,7 @@ eg_entity *throughblock_demo_create_long(eg_app *app, int x, int y)
     return block;
 }
 
-void block_demo_register_moving(eg_entity_type *t)
+void block_demo_register_moving(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_MOVING;
     t->width = 54;
@@ -523,11 +523,11 @@ void block_demo_register_moving(eg_entity_type *t)
     t->move = 1;
 }
 
-eg_entity *block_demo_create_moving(eg_app *app, int x, int y, int type)
+cr_entity *block_demo_create_moving(cr_app *app, int x, int y, int type)
 {
-    eg_entity *block = NULL;
+    cr_entity *block = NULL;
 
-    block = eg_create_entity(app);
+    block = cr_create_entity(app);
     if (block == NULL)
     {
         return NULL;
@@ -541,7 +541,7 @@ eg_entity *block_demo_create_moving(eg_app *app, int x, int y, int type)
     return block;
 }
 
-void block_demo_register_sloped(eg_entity_type *t)
+void block_demo_register_sloped(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_SLOPE;
     t->width = 72;
@@ -551,11 +551,11 @@ void block_demo_register_sloped(eg_entity_type *t)
     t->slope = 1;
 }
 
-eg_entity *block_demo_create_sloped(eg_app *app, int x, int y, int dir)
+cr_entity *block_demo_create_sloped(cr_app *app, int x, int y, int dir)
 {
-    eg_entity *block = NULL;
+    cr_entity *block = NULL;
 
-    block = eg_create_entity(app);
+    block = cr_create_entity(app);
     if (block == NULL)
     {
         return NULL;
@@ -573,7 +573,7 @@ eg_entity *block_demo_create_sloped(eg_app *app, int x, int y, int dir)
     return block;
 }
 
-void block_demo_row(eg_app *app, int x, int y, int length)
+void block_demo_row(cr_app *app, int x, int y, int length)
 {
     int block_w = 18;
 
@@ -583,7 +583,7 @@ void block_demo_row(eg_app *app, int x, int y, int length)
     }
 }
 
-void block_demo_col(eg_app *app, int x, int y, int length)
+void block_demo_col(cr_app *app, int x, int y, int length)
 {
     int block_h = 18;
 

@@ -4,17 +4,17 @@
 #include "tootnsploot/scenes/scenes.h"
 #include "common/menu.h"
 
-void characters_menu_input_handler(eg_app *app)
+void characters_menu_input_handler(cr_app *app)
 {
     // Locate the characters menu.
-    eg_entity *menu_entity = app->menus[app->menu_count - 1];
+    cr_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;
     }
 
     // If either the escape key or the x key is pressed, return to the main menu.
-    if (eg_consume_input(app, EG_KEYCODE_ESCAPE) || eg_consume_input(app, EG_KEYCODE_X))
+    if (cr_consume_input(app, CR_KEYCODE_ESCAPE) || cr_consume_input(app, CR_KEYCODE_X))
     {
         if (menu_entity->data)
         {
@@ -23,7 +23,7 @@ void characters_menu_input_handler(eg_app *app)
         }
 
         app->menu_count--;
-        eg_pop_input_handler(app);
+        cr_pop_input_handler(app);
         return;
     }
 
@@ -33,7 +33,7 @@ void characters_menu_input_handler(eg_app *app)
         return;
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_UP))
+    if (cr_consume_input(app, CR_KEYCODE_UP))
     {
         if (menu_entity->cursor_y > 0)
         {
@@ -41,7 +41,7 @@ void characters_menu_input_handler(eg_app *app)
         }
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_DOWN))
+    if (cr_consume_input(app, CR_KEYCODE_DOWN))
     {
         if (menu_entity->cursor_y < 5)
         {
@@ -56,7 +56,7 @@ void characters_menu_input_handler(eg_app *app)
     // Thomas H. Foolery
     // Byarf Squirrelson
     // Throbgar the Sumptuous
-    if (eg_consume_input(app, EG_KEYCODE_Z))
+    if (cr_consume_input(app, CR_KEYCODE_Z))
     {
         switch (menu_entity->cursor_y)
         {

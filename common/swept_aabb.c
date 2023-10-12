@@ -68,16 +68,16 @@
  * gravity.
  *
  * Params:
- *   eg_point* - the origin point of the ray
- *   eg_point* - the direction vector of the ray
- *   eg_rect* - the target rectangle
- *   eg_t_res* - results of intersection detection
+ *   cr_point* - the origin point of the ray
+ *   cr_point* - the direction vector of the ray
+ *   cr_rect* - the target rectangle
+ *   cr_collision* - results of intersection detection
  */
 static int ray_v_rect(
-    eg_point *p,
-    eg_point *d,
-    eg_rect *r,
-    eg_collision *res)
+    cr_point *p,
+    cr_point *d,
+    cr_rect *r,
+    cr_collision *res)
 {
     if (p == NULL || d == NULL || r == NULL)
     {
@@ -392,14 +392,14 @@ static int ray_v_rect(
 }
 
 int common_swept_aabb(
-    eg_app *app,
-    eg_entity *a,
-    eg_entity *b,
-    eg_collision *res)
+    cr_app *app,
+    cr_entity *a,
+    cr_entity *b,
+    cr_collision *res)
 {
-    eg_point p; // origin point P
-    eg_point d; // direction vector D
-    eg_rect r;  // target rectangle R
+    cr_point p; // origin point P
+    cr_point d; // direction vector D
+    cr_rect r;  // target rectangle R
 
     if (app == NULL || a == NULL || b == NULL || res == NULL)
     {
@@ -494,19 +494,19 @@ int common_swept_aabb(
         // If both entities are moving, then their collision may be
         // missed by the normal swept AABB method. So we check for
         // overlap between the two entities.
-        eg_rect arect = {
+        cr_rect arect = {
             .x = a->x_pos,
             .y = a->y_pos,
             .w = app->entity_types[a->type].width,
             .h = app->entity_types[a->type].height,
         };
-        eg_rect brect = {
+        cr_rect brect = {
             .x = b->x_pos,
             .y = b->y_pos,
             .w = app->entity_types[b->type].width,
             .h = app->entity_types[b->type].height,
         };
-        eg_overlap o;
+        cr_overlap o;
         if (common_is_overlapped(&arect, &brect, &o))
         {
             return 1;

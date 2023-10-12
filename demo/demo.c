@@ -46,23 +46,23 @@
 
 // array of entities that will replace the linked list.
 // TODO: determine a better time and place to allocate this.
-static eg_entity entities[ENTITY_MAX];
+static cr_entity entities[ENTITY_MAX];
 
 // array of entity types
-static eg_entity_type entity_types[ENTITY_TYPE_MAX];
+static cr_entity_type entity_types[ENTITY_TYPE_MAX];
 
 // maximum number of overlays
 #define MAX_OVERLAYS 10
 
 // list of active overlays entities
-static eg_entity *overlays[MAX_OVERLAYS];
+static cr_entity *overlays[MAX_OVERLAYS];
 
-static int default_get_x_vel(eg_entity *e)
+static int default_get_x_vel(cr_entity *e)
 {
     return e->x_vel;
 }
 
-static int default_get_y_vel(eg_entity *e)
+static int default_get_y_vel(cr_entity *e)
 {
     return e->y_vel;
 }
@@ -71,9 +71,9 @@ static int default_get_y_vel(eg_entity *e)
  * Implmentation of the update function.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  */
-static void update(eg_app *app)
+static void update(cr_app *app)
 {
     if (app->time == TIMING_DELTA)
     {
@@ -94,21 +94,21 @@ static void update(eg_app *app)
     // update dialogs
     if (app->dialog_count > 0)
     {
-        eg_entity *d = app->dialogs[app->dialog_count - 1];
+        cr_entity *d = app->dialogs[app->dialog_count - 1];
         app->entity_types[d->type].update(app, d);
     }
 
     // update menus
     if (app->menu_count > 0)
     {
-        eg_entity *m = app->menus[app->menu_count - 1];
+        cr_entity *m = app->menus[app->menu_count - 1];
         app->entity_types[m->type].update(app, m);
     }
 
     // update overlays
     if (app->overlay_count > 0)
     {
-        eg_entity *o = app->overlays[app->overlay_count - 1];
+        cr_entity *o = app->overlays[app->overlay_count - 1];
         app->entity_types[o->type].update(app, o);
     }
 
@@ -121,10 +121,10 @@ static void update(eg_app *app)
     // main update loop
     for (int i = 0; i < app->entity_cap; i++)
     {
-        eg_entity *ent = &(app->entities[i]);
-        eg_entity_type t = app->entity_types[ent->type];
-        int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
-        int menu_flag = eg_check_flag(ent, ENTITY_FLAG_MENU);
+        cr_entity *ent = &(app->entities[i]);
+        cr_entity_type t = app->entity_types[ent->type];
+        int pause_flag = cr_check_flag(ent, ENTITY_FLAG_PAUSE);
+        int menu_flag = cr_check_flag(ent, ENTITY_FLAG_MENU);
         if (ent->present && t.update != NULL)
         {
             if (app->pause)
@@ -153,9 +153,9 @@ static void update(eg_app *app)
  * 4. debug
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  */
-static void draw(eg_app *app)
+static void draw(cr_app *app)
 {
     if (app->time == TIMING_DELTA)
     {
@@ -173,10 +173,10 @@ static void draw(eg_app *app)
     // foreground layer
     for (int i = 0; i < app->entity_cap; i++)
     {
-        eg_entity *ent = &(app->entities[i]);
-        eg_entity_type t = app->entity_types[ent->type];
-        int pause_flag = eg_check_flag(ent, ENTITY_FLAG_PAUSE);
-        int menu_flag = eg_check_flag(ent, ENTITY_FLAG_MENU);
+        cr_entity *ent = &(app->entities[i]);
+        cr_entity_type t = app->entity_types[ent->type];
+        int pause_flag = cr_check_flag(ent, ENTITY_FLAG_PAUSE);
+        int menu_flag = cr_check_flag(ent, ENTITY_FLAG_MENU);
         if (ent->present && t.render != NULL)
         {
             // We render all entities without the pause flag, regardless of
@@ -204,21 +204,21 @@ static void draw(eg_app *app)
         // render all open menus
         for (int i = 0; i < app->menu_count; i++)
         {
-            eg_entity *m = app->menus[i];
+            cr_entity *m = app->menus[i];
             app->entity_types[m->type].render(app, m);
         }
 
         // only render the dialog on the top of the stack
         if (app->dialog_count > 0)
         {
-            eg_entity *d = app->dialogs[app->dialog_count - 1];
+            cr_entity *d = app->dialogs[app->dialog_count - 1];
             app->entity_types[d->type].render(app, d);
         }
 
         // render screen overlay effects
         for (int i = 0; i < app->overlay_count; i++)
         {
-            eg_entity *o = app->overlays[i];
+            cr_entity *o = app->overlays[i];
             app->entity_types[o->type].render(app, o);
         }
     }
@@ -237,9 +237,9 @@ static void draw(eg_app *app)
     }
 }
 
-int demo_prepare(eg_app *app)
+int demo_prepare(cr_app *app)
 {
-    eg_set_title(app, "Toot n Sploot");
+    cr_set_title(app, "Toot n Sploot");
 
     // default values for entity types
     for (int i = 0; i < ENTITY_TYPE_MAX; i++)
@@ -302,17 +302,17 @@ int demo_prepare(eg_app *app)
     {
         return 0;
     }
-    if (eg_load_texture(app, "assets/images/ui.png") == NULL)
+    if (cr_load_texture(app, "assets/images/ui.png") == NULL)
     {
         fprintf(stderr, "failed to load ui image\n");
         return 0;
     }
-    if (eg_load_texture(app, "assets/images/characters.png") == NULL)
+    if (cr_load_texture(app, "assets/images/characters.png") == NULL)
     {
         fprintf(stderr, "failed to load characters image\n");
         return 0;
     }
-    if (eg_load_texture(app, "assets/images/scenery_3.png") == NULL)
+    if (cr_load_texture(app, "assets/images/scenery_3.png") == NULL)
     {
         fprintf(stderr, "failed to load scenery image\n");
         return 0;
@@ -329,27 +329,27 @@ int demo_prepare(eg_app *app)
     {
         return 0;
     }
-    if (eg_load_sound(app, "assets/audio/confirmation_002.ogg", AUDIO_TYPE_SOUND_EFFECT) == NULL)
+    if (cr_load_sound(app, "assets/audio/confirmation_002.ogg", AUDIO_TYPE_SOUND_EFFECT) == NULL)
     {
         fprintf(stderr, "failed to load confirmation_002.ogg\n");
         return 0;
     }
-    if (eg_load_sound(app, "assets/audio/drop_003.ogg", AUDIO_TYPE_SOUND_EFFECT) == NULL)
+    if (cr_load_sound(app, "assets/audio/drop_003.ogg", AUDIO_TYPE_SOUND_EFFECT) == NULL)
     {
         fprintf(stderr, "failed to load drop_003.ogg\n");
         return 0;
     }
-    if (eg_load_sound(app, "assets/audio/toggle_001.ogg", AUDIO_TYPE_SOUND_EFFECT) == NULL)
+    if (cr_load_sound(app, "assets/audio/toggle_001.ogg", AUDIO_TYPE_SOUND_EFFECT) == NULL)
     {
         fprintf(stderr, "failed to load toggle_001.ogg\n");
         return 0;
     }
-    if (eg_load_sound(app, "assets/audio/field_theme_1.wav", AUDIO_TYPE_MUSIC) == NULL)
+    if (cr_load_sound(app, "assets/audio/field_theme_1.wav", AUDIO_TYPE_MUSIC) == NULL)
     {
         fprintf(stderr, "failed to load field_theme_1.wav\n");
         return 0;
     }
-    if (eg_load_sound(app, "assets/audio/track_4.wav", AUDIO_TYPE_MUSIC) == NULL)
+    if (cr_load_sound(app, "assets/audio/track_4.wav", AUDIO_TYPE_MUSIC) == NULL)
     {
         fprintf(stderr, "failed to load track_4.wav\n");
         return 0;
@@ -408,14 +408,14 @@ int demo_prepare(eg_app *app)
     fireball_demo_register(&(app->entity_types[ENTITY_TYPE_FIREBALL]));
 
     // push the default input handler
-    eg_push_input_handler(app, default_input_handler);
+    cr_push_input_handler(app, default_input_handler);
 
     // Load the initial scene.
     load_scene_0(app);
-    eg_push_input_handler(app, root_input_handler);
+    cr_push_input_handler(app, root_input_handler);
 
     // Play music
-    // eg_play_sound(app, app->sounds[DEMO_SONG_FIELD]);
+    // cr_play_sound(app, app->sounds[DEMO_SONG_FIELD]);
 
     // Seed random number generation.
     time_t t;

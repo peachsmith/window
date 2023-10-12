@@ -10,18 +10,18 @@
  * entity.
  *
  * Params:
- *   eg_entity_type* - the fish menu entity type definition
+ *   cr_entity_type* - the fish menu entity type definition
  */
-void demo_dialog_demo_register(eg_entity_type *);
+void demo_dialog_demo_register(cr_entity_type *);
 
 /**
  * Creates a fish menu entity.
  *
  * Returns:
- *   eg_entity* - a pointer to the new fish menu entity.
+ *   cr_entity* - a pointer to the new fish menu entity.
  */
-eg_entity *demo_dialog_demo_create(eg_app *);
+cr_entity *demo_dialog_demo_create(cr_app *);
 
-void demo_dialog_demo_open(eg_app *, eg_entity *);
+void demo_dialog_demo_open(cr_app *, cr_entity *);
 
 #endif

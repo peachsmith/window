@@ -6,10 +6,10 @@
 #include <stdio.h>
 
 static int intersect(
-    eg_point *p0,
-    eg_point *p1,
-    eg_point *q0,
-    eg_point *q1,
+    cr_point *p0,
+    cr_point *p1,
+    cr_point *q0,
+    cr_point *q1,
     float *tx,
     float *ty)
 {
@@ -46,13 +46,13 @@ static int intersect(
  * Source: https://github.com/OneLoneCoder/olcPixelGameEngine/blob/master/Videos/OneLoneCoder_PGE_PolygonCollisions1.cpp
  */
 int common_line(
-    eg_app *app,
-    eg_entity *a,
-    eg_entity *b,
-    eg_collision *res)
+    cr_app *app,
+    cr_entity *a,
+    cr_entity *b,
+    cr_collision *res)
 {
-    eg_point pa[4]; // vertices of entity A
-    eg_point pb[4]; // vertices of entity B
+    cr_point pa[4]; // vertices of entity A
+    cr_point pb[4]; // vertices of entity B
 
     // Get the velocity of the source entitity A.
     int avx = app->entity_types[a->type].get_x_vel(a);
@@ -122,17 +122,17 @@ int common_line(
     pb[3].y = by + bh;
 
     // Find the Centroid of the triangle.
-    // eg_point c = {.x = pb[2].x + ((2 * bw) / 3), .y = pb[2].y - bh / 3};
+    // cr_point c = {.x = pb[2].x + ((2 * bw) / 3), .y = pb[2].y - bh / 3};
 
     // The starting point of the source line.
-    eg_point aa = {.x = pa[0].x, .y = pa[0].y + ah / 2};
-    eg_point ab = pa[2];
+    cr_point aa = {.x = pa[0].x, .y = pa[0].y + ah / 2};
+    cr_point ab = pa[2];
 
     // Check the data of the platform to see which direction the diagonal
     // line is sloped.
     int dir = b->data & 3;
-    eg_point ba = pb[3];
-    eg_point bb = pb[1];
+    cr_point ba = pb[3];
+    cr_point bb = pb[1];
 
     if (dir == 0)
     {
@@ -161,10 +161,10 @@ int common_line(
     {
         if (app->debug.collisions)
         {
-            eg_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
-            eg_set_color(app, EG_COLOR_VINIK_INDIGO);
-            eg_draw_rect(app, &cr, 1);
-            eg_draw_line(app, &aa, &ab);
+            cr_rect cr = {.x = aa.x - 2, .y = aa.y - 2, .w = 4, .h = 4};
+            cr_set_color(app, CR_COLOR_VINIK_INDIGO);
+            cr_draw_rect(app, &cr, 1);
+            cr_draw_line(app, &aa, &ab);
         }
 
         return 1;

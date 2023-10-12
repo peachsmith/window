@@ -7,17 +7,17 @@
 
 #define MAX_INPUT_HANDLERS 20
 
-void demo_init_input(eg_app *);
+void demo_init_input(cr_app *);
 
-void default_input_handler(eg_app *);
+void default_input_handler(cr_app *);
 
-void root_input_handler(eg_app *);
-void fish_menu_input_handler(eg_app *);
-void info_menu_input_handler(eg_app *);
-void pause_menu_input_handler(eg_app *);
-void common_dialog_input_handler(eg_app *);
-void debug_menu_input_handler(eg_app *);
-void scene_menu_input_handler(eg_app *);
-void input_menu_input_handler(eg_app *);
+void root_input_handler(cr_app *);
+void fish_menu_input_handler(cr_app *);
+void info_menu_input_handler(cr_app *);
+void pause_menu_input_handler(cr_app *);
+void common_dialog_input_handler(cr_app *);
+void debug_menu_input_handler(cr_app *);
+void scene_menu_input_handler(cr_app *);
+void input_menu_input_handler(cr_app *);
 
 #endif

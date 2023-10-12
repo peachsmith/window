@@ -3,7 +3,7 @@
 
 #include "common/texture.h"
 
-void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
+void ui_draw_panel(cr_app *app, int x, int y, int w, int h)
 {
     // dimensions of each tile from the sprite sheet
     int tile_w = 16;
@@ -39,14 +39,14 @@ void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
 
     // source rectangle for menu tiles
     // There is a 2 pixel margin between each tile in the sprite sheet.
-    eg_rect src = {
+    cr_rect src = {
         .x = sheet_x * (tile_w + padding),
         .y = sheet_y * (tile_h + padding),
         .w = tile_w,
         .h = tile_h};
 
     // destination rectangle for menu tiles
-    eg_rect dest = {
+    cr_rect dest = {
         .x = x,
         .y = y,
         .w = tile_w,
@@ -146,16 +146,16 @@ void ui_draw_panel(eg_app *app, int x, int y, int w, int h)
             dest.x = col;
             dest.y = row;
 
-            eg_draw_texture(app, app->textures[TNS_TEXTURE_UI], &src, &dest, 0);
+            cr_draw_texture(app, app->textures[TNS_TEXTURE_UI], &src, &dest, 0);
         }
     }
 }
 
-void ui_draw_text(eg_app *app)
+void ui_draw_text(cr_app *app)
 {
 }
 
-void ui_draw_cursor(eg_app *app, int x, int y)
+void ui_draw_cursor(cr_app *app, int x, int y)
 {
     int tile_w = 16;
     int tile_h = 16;
@@ -165,19 +165,19 @@ void ui_draw_cursor(eg_app *app, int x, int y)
     int cursor_sheet_x = 5;
     int cursor_sheet_y = 26;
 
-    eg_rect cusor_src = {
+    cr_rect cusor_src = {
         .x = cursor_sheet_x * (tile_w + padding),
         .y = cursor_sheet_y * (tile_h + padding),
         .w = tile_w,
         .h = tile_h};
 
-    eg_rect cusor_dest = {
+    cr_rect cusor_dest = {
         .x = x,
         .y = y,
         .w = tile_w,
         .h = tile_h};
 
-    eg_draw_texture(app,
+    cr_draw_texture(app,
                     app->textures[TNS_TEXTURE_UI],
                     &cusor_src,
                     &cusor_dest,
@@ -191,7 +191,7 @@ void ui_draw_cursor(eg_app *app, int x, int y)
 // scroll left: 20, 25
 // scroll right: 21, 26
 
-void ui_draw_indicator(eg_app *app, int x, int y, int type)
+void ui_draw_indicator(cr_app *app, int x, int y, int type)
 {
     int tile_w = 16;
     int tile_h = 16;
@@ -232,19 +232,19 @@ void ui_draw_indicator(eg_app *app, int x, int y, int type)
         break;
     }
 
-    eg_rect ind_src = {
+    cr_rect ind_src = {
         .x = sheet_x * (tile_w + padding),
         .y = sheet_y * (tile_h + padding),
         .w = tile_w,
         .h = tile_h};
 
-    eg_rect ind_dest = {
+    cr_rect ind_dest = {
         .x = x,
         .y = y,
         .w = tile_w,
         .h = tile_h};
 
-    eg_draw_texture(
+    cr_draw_texture(
         app,
         app->textures[TNS_TEXTURE_UI],
         &ind_src,

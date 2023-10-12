@@ -9,9 +9,9 @@
  * Populates an entity type struct with information about the jimbo entity.
  *
  * Params:
- *   eg_entity_type* - the jimbo's entity type definition
+ *   cr_entity_type* - the jimbo's entity type definition
  */
-void jimbo_demo_register(eg_entity_type *);
+void jimbo_demo_register(cr_entity_type *);
 
 /**
  * Creates a jimbo entity.
@@ -21,8 +21,8 @@ void jimbo_demo_register(eg_entity_type *);
  *   int - Jimbo's initial y position
  *
  * Returns:
- *   eg_entity* - a pointer to the Jimbo.
+ *   cr_entity* - a pointer to the Jimbo.
  */
-eg_entity *jimbo_demo_create(eg_app *, int, int);
+cr_entity *jimbo_demo_create(cr_app *, int, int);
 
 #endif

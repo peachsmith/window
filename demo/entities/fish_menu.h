@@ -10,16 +10,16 @@
  * entity.
  *
  * Params:
- *   eg_entity_type* - the fish menu entity type definition
+ *   cr_entity_type* - the fish menu entity type definition
  */
-void fish_menu_demo_register(eg_entity_type *);
+void fish_menu_demo_register(cr_entity_type *);
 
 /**
  * Creates a fish menu entity.
  *
  * Returns:
- *   eg_entity* - a pointer to the new fish menu entity.
+ *   cr_entity* - a pointer to the new fish menu entity.
  */
-eg_entity *fish_menu_demo_create(eg_app *);
+cr_entity *fish_menu_demo_create(cr_app *);
 
 #endif

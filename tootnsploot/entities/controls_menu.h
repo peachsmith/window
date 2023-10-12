@@ -11,16 +11,16 @@
  * entity.
  *
  * Params:
- *   eg_entity_type* - the controls menu entity type definition
+ *   cr_entity_type* - the controls menu entity type definition
  */
-void tns_register_controls_menu(eg_entity_type *);
+void tns_register_controls_menu(cr_entity_type *);
 
 /**
  * Creates a controls menu entity.
  *
  * Returns:
- *   eg_entity* - a pointer to the new controls menu entity.
+ *   cr_entity* - a pointer to the new controls menu entity.
  */
-eg_entity *tns_create_controls_menu(eg_app *);
+cr_entity *tns_create_controls_menu(cr_app *);
 
 #endif

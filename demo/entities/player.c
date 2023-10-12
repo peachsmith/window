@@ -13,7 +13,7 @@ static int tmp_counter = 0;
 #define PLAYER_Y_ACC_LIMIT 24
 #define PLAYER_IFRAME_LIMIT 20
 
-static int get_player_x_vel(eg_entity *player)
+static int get_player_x_vel(cr_entity *player)
 {
     // acceleration to velocity conversion table
     int a_to_v[PLAYER_X_ACC_LIMIT] = {
@@ -53,7 +53,7 @@ static int get_player_x_vel(eg_entity *player)
     return x_vel;
 }
 
-static int get_player_y_vel(eg_entity *player)
+static int get_player_y_vel(cr_entity *player)
 {
     // acceleration to velocity conversion table
     // int a_to_v[PLAYER_Y_ACC_LIMIT] = {
@@ -98,12 +98,12 @@ static int get_player_y_vel(eg_entity *player)
     return y_vel;
 }
 
-static void render_player(eg_app *app, eg_entity *player)
+static void render_player(cr_app *app, cr_entity *player)
 {
     int tile = 0;
-    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
-    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
-    int grounded = eg_check_flag(player, ENTITY_FLAG_GROUND);
+    int left_pressed = cr_peek_input(app, CR_KEYCODE_LEFT);
+    int right_pressed = cr_peek_input(app, CR_KEYCODE_RIGHT);
+    int grounded = cr_check_flag(player, ENTITY_FLAG_GROUND);
     int iframes = 0; // whether or not the player currently has invincibility frames.
 
     // Animation logic for walking to the right
@@ -124,7 +124,7 @@ static void render_player(eg_app *app, eg_entity *player)
         tile = 1;
     }
 
-    if (eg_check_flag(player, ENTITY_FLAG_INVINCIBLE) && player->iframes % 2)
+    if (cr_check_flag(player, ENTITY_FLAG_INVINCIBLE) && player->iframes % 2)
     {
         iframes = 1;
     }
@@ -136,25 +136,25 @@ static void render_player(eg_app *app, eg_entity *player)
             app,
             player->x_pos,
             player->y_pos,
-            eg_check_flag(player, ENTITY_FLAG_MIRROR), tile);
+            cr_check_flag(player, ENTITY_FLAG_MIRROR), tile);
     }
 
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = player->x_pos;
         hit_box.y = player->y_pos;
         hit_box.w = app->entity_types[player->type].width;
         hit_box.h = app->entity_types[player->type].height;
 
         // Render the player hit box.
-        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_ORANGE);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
-static void update_player(eg_app *app, eg_entity *player)
+static void update_player(cr_app *app, cr_entity *player)
 {
     // Get the width and height of the player.
     int w = app->entity_types[player->type].width;
@@ -162,10 +162,10 @@ static void update_player(eg_app *app, eg_entity *player)
 
     // Check the MOVE flag to see if the player is being carried by a
     // a moving platform.
-    int carried = eg_check_flag(player, ENTITY_FLAG_MOVE);
-    int grounded = eg_check_flag(player, ENTITY_FLAG_GROUND);
-    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT);
-    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT);
+    int carried = cr_check_flag(player, ENTITY_FLAG_MOVE);
+    int grounded = cr_check_flag(player, ENTITY_FLAG_GROUND);
+    int left_pressed = cr_peek_input(app, CR_KEYCODE_LEFT);
+    int right_pressed = cr_peek_input(app, CR_KEYCODE_RIGHT);
 
     int avx = get_player_x_vel(player);
     int avy = get_player_y_vel(player);
@@ -187,14 +187,14 @@ static void update_player(eg_app *app, eg_entity *player)
     }
 
     // Update horizontal position.
-    if (app->cam.config == EG_CAMERA_ALL && player->x_pos + w >= app->cam.cr && avx > 0)
+    if (app->cam.config == CR_CAMERA_ALL && player->x_pos + w >= app->cam.cr && avx > 0)
     {
         int dcam = (player->x_pos + w) - app->cam.cr;
         player->x_pos = app->cam.cr - w;
         app->cam.x -= avx;
         app->cam.x -= dcam;
     }
-    else if (app->cam.config == EG_CAMERA_ALL && player->x_pos <= app->cam.cl + 1 && avx < 0)
+    else if (app->cam.config == CR_CAMERA_ALL && player->x_pos <= app->cam.cl + 1 && avx < 0)
     {
         int dcam = player->x_pos - (app->cam.cl + 1);
         player->x_pos = app->cam.cl + 1;
@@ -230,7 +230,7 @@ static void update_player(eg_app *app, eg_entity *player)
         // If the platform was already updated, recalculate the correction
         // factor that was done in the collision resolution.
         // Otherwise, we just add the platform's y velocity to the player's.
-        if (eg_check_flag(player->carrier, ENTITY_FLAG_UPDATE))
+        if (cr_check_flag(player->carrier, ENTITY_FLAG_UPDATE))
         {
             cf = player->carrier->y_pos + app->cam.y - (player->y_pos + h);
         }
@@ -256,17 +256,17 @@ static void update_player(eg_app *app, eg_entity *player)
     }
 
     // Clear the carry flag.
-    eg_clear_flag(player, ENTITY_FLAG_MOVE);
+    cr_clear_flag(player, ENTITY_FLAG_MOVE);
 
     // Update vertical position.
-    if (app->cam.config == EG_CAMERA_ALL && player->y_pos + h >= app->cam.cb && avy > 0)
+    if (app->cam.config == CR_CAMERA_ALL && player->y_pos + h >= app->cam.cb && avy > 0)
     {
         int dcam = (player->y_pos + h) - app->cam.cb;
         player->y_pos = app->cam.cb - h;
         app->cam.y -= avy;
         app->cam.y -= dcam;
     }
-    else if (app->cam.config == EG_CAMERA_ALL && player->y_pos <= app->cam.ct + 1 && avy < 0)
+    else if (app->cam.config == CR_CAMERA_ALL && player->y_pos <= app->cam.ct + 1 && avy < 0)
     {
         int dcam = player->y_pos - (app->cam.ct + 1);
         player->y_pos = app->cam.ct + 1;
@@ -281,9 +281,9 @@ static void update_player(eg_app *app, eg_entity *player)
     // If the player is on a sloped platform, set the y velocity to some
     // value that causes the player to collide with the platform before
     // moving into open space.
-    if (eg_check_flag(player, ENTITY_FLAG_SLOPE))
+    if (cr_check_flag(player, ENTITY_FLAG_SLOPE))
     {
-        eg_clear_flag(player, ENTITY_FLAG_SLOPE);
+        cr_clear_flag(player, ENTITY_FLAG_SLOPE);
         player->y_acc = PLAYER_Y_ACC_LIMIT - 1;
     }
 
@@ -291,7 +291,7 @@ static void update_player(eg_app *app, eg_entity *player)
     if (player->y_acc < PLAYER_Y_ACC_LIMIT - 1)
     {
         // jump height control
-        int act = app->actuation_counters[EG_KEYCODE_SPACE];
+        int act = app->actuation_counters[CR_KEYCODE_SPACE];
         int delay_acceleration = 0;
 
         if (act && act <= 15)
@@ -316,19 +316,19 @@ static void update_player(eg_app *app, eg_entity *player)
     // Animation Logic
 
     // Invincibility frames.
-    if (eg_check_flag(player, ENTITY_FLAG_INVINCIBLE))
+    if (cr_check_flag(player, ENTITY_FLAG_INVINCIBLE))
     {
         player->iframes++;
 
         if (player->iframes >= PLAYER_IFRAME_LIMIT)
         {
-            eg_clear_flag(player, ENTITY_FLAG_INVINCIBLE);
+            cr_clear_flag(player, ENTITY_FLAG_INVINCIBLE);
             player->iframes = 0;
         }
     }
 
     // Advance the counter for walking to the right
-    if ((eg_peek_input(app, EG_KEYCODE_LEFT) || eg_peek_input(app, EG_KEYCODE_RIGHT)) && grounded)
+    if ((cr_peek_input(app, CR_KEYCODE_LEFT) || cr_peek_input(app, CR_KEYCODE_RIGHT)) && grounded)
     {
         tmp_counter++;
         if (tmp_counter >= 20)
@@ -342,7 +342,7 @@ static void update_player(eg_app *app, eg_entity *player)
     }
 }
 
-void demo_register_player(eg_entity_type *t)
+void demo_register_player(cr_entity_type *t)
 {
     t->width = 24;
     t->height = 24;
@@ -353,11 +353,11 @@ void demo_register_player(eg_entity_type *t)
     t->control = 1;
 }
 
-eg_entity *demo_create_player(eg_app *app, int x, int y)
+cr_entity *demo_create_player(cr_app *app, int x, int y)
 {
-    eg_entity *player = NULL;
+    cr_entity *player = NULL;
 
-    player = eg_create_entity(app);
+    player = cr_create_entity(app);
     if (player == NULL)
     {
         return NULL;

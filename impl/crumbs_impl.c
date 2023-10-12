@@ -1,7 +1,7 @@
 #include "crumbs.h"
 #include "impl.h"
 
-int eg_impl_init()
+int cr_impl_init()
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
     {
@@ -56,12 +56,12 @@ int eg_impl_init()
         return 0;
     }
 
-    eg_impl_init_keyboard();
+    cr_impl_init_keyboard();
 
     return 1;
 }
 
-void eg_impl_term()
+void cr_impl_term()
 {
     Mix_Quit();       // closes handles to dependencies
     Mix_CloseAudio(); // terminates the actual SDL_Mixer library
@@ -70,15 +70,15 @@ void eg_impl_term()
     SDL_Quit();
 }
 
-eg_impl *eg_impl_create(int screen_width, int screen_height, int scale)
+cr_impl *cr_impl_create(int screen_width, int screen_height, int scale)
 {
-    eg_impl *impl;
+    cr_impl *impl;
     SDL_Window *window;
     SDL_Renderer *renderer;
     const Uint8 *keystates;
 
     // Create the wrapper struct.
-    impl = (eg_impl *)malloc(sizeof(struct eg_impl));
+    impl = (cr_impl *)malloc(sizeof(struct cr_impl));
     if (impl == NULL)
     {
         return NULL;
@@ -182,7 +182,7 @@ eg_impl *eg_impl_create(int screen_width, int screen_height, int scale)
     return impl;
 }
 
-void eg_impl_destroy(eg_impl *impl)
+void cr_impl_destroy(cr_impl *impl)
 {
     if (impl == NULL)
     {
@@ -194,26 +194,26 @@ void eg_impl_destroy(eg_impl *impl)
     free(impl);
 }
 
-void eg_impl_set_title(eg_app *app, const char *title)
+void cr_impl_set_title(cr_app *app, const char *title)
 {
     if (app == NULL || app->impl == NULL)
     {
         return;
     }
 
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
 
     SDL_SetWindowTitle(impl->window, title);
 }
 
-void eg_impl_process_events(eg_app *app)
+void cr_impl_process_events(cr_app *app)
 {
     if (app == NULL || app->impl == NULL)
     {
         return;
     }
 
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
 
     // First, we get the current tick count for regulating framerate.
     impl->ticks = SDL_GetTicks64();
@@ -235,18 +235,18 @@ void eg_impl_process_events(eg_app *app)
             app->done = 1;
         }
 
-        // If a key was released, convert the SDL_Scancode into an eg_keycode
+        // If a key was released, convert the SDL_Scancode into an cr_keycode
         // and set the corresponding key capture flag to 0.
         if (impl->event.type == SDL_KEYUP)
         {
             SDL_Scancode sc = impl->event.key.keysym.scancode;
-            eg_keycode k = eg_impl_get_eg_keycode(sc);
+            cr_keycode k = cr_impl_get_cr_keycode(sc);
             app->key_captures[k] = 0;
         }
     }
 }
 
-void eg_impl_delay(eg_app *app)
+void cr_impl_delay(cr_app *app)
 {
     if (app == NULL || app->impl == NULL)
     {
@@ -264,7 +264,7 @@ void eg_impl_delay(eg_app *app)
         return;
     }
 
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
 
     // Get the approximate number of milliseconds since the beginning of the
     // current iteration of the main loop.
@@ -282,7 +282,7 @@ void eg_impl_delay(eg_app *app)
     }
 }
 
-void eg_impl_clear_screen(eg_app *app)
+void cr_impl_clear_screen(cr_app *app)
 {
     if (app == NULL || app->impl == NULL)
     {
@@ -297,14 +297,14 @@ void eg_impl_clear_screen(eg_app *app)
         }
     }
 
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
 
     // SDL_SetRenderDrawColor(impl->renderer, 0X04, 0X35, 0X8D, 255);
     SDL_SetRenderDrawColor(impl->renderer, 0, 0, 0, 255);
     SDL_RenderClear(impl->renderer);
 }
 
-void eg_impl_render_screen(eg_app *app)
+void cr_impl_render_screen(cr_app *app)
 {
     if (app == NULL || app->impl == NULL)
     {
@@ -319,11 +319,11 @@ void eg_impl_render_screen(eg_app *app)
         }
     }
 
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
     SDL_RenderPresent(impl->renderer);
 }
 
-void eg_impl_set_color(eg_app *app, uint32_t color)
+void cr_impl_set_color(cr_app *app, uint32_t color)
 {
     if (app == NULL || app->impl == NULL)
     {
@@ -340,18 +340,18 @@ void eg_impl_set_color(eg_app *app, uint32_t color)
     r = (Uint8)((color >> 16) & 0xFF);
     a = (Uint8)((color >> 24) & 0xFF);
 
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
     SDL_SetRenderDrawColor(impl->renderer, r, g, b, a);
 }
 
-void eg_impl_draw_line(eg_app *app, eg_point *a, eg_point *b)
+void cr_impl_draw_line(cr_app *app, cr_point *a, cr_point *b)
 {
     if (app == NULL || app->impl == NULL)
     {
         return;
     }
 
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
     SDL_RenderDrawLine(
         impl->renderer,
         a->x,
@@ -360,14 +360,14 @@ void eg_impl_draw_line(eg_app *app, eg_point *a, eg_point *b)
         b->y);
 }
 
-void eg_impl_draw_rect(eg_app *app, eg_rect *r, int filled)
+void cr_impl_draw_rect(cr_app *app, cr_rect *r, int filled)
 {
     if (app == NULL || app->impl == NULL)
     {
         return;
     }
 
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
 
     SDL_Rect sr = {
         .x = r->x,
@@ -384,16 +384,16 @@ void eg_impl_draw_rect(eg_app *app, eg_rect *r, int filled)
     SDL_RenderDrawRect(impl->renderer, &sr);
 }
 
-int eg_impl_peek_key(eg_app *app, int v)
+int cr_impl_peek_key(cr_app *app, int v)
 {
     if (app == NULL || app->impl == NULL)
     {
         return 0;
     }
 
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
 
-    SDL_Scancode sc = eg_impl_get_sdl_scancode(v);
+    SDL_Scancode sc = cr_impl_get_sdl_scancode(v);
 
     if (sc >= SDL_NUM_SCANCODES || sc <= SDL_SCANCODE_UNKNOWN)
     {
@@ -408,16 +408,16 @@ int eg_impl_peek_key(eg_app *app, int v)
     return 0;
 }
 
-int eg_impl_consume_key(eg_app *app, int v)
+int cr_impl_consume_key(cr_app *app, int v)
 {
     if (app == NULL || app->impl == NULL)
     {
         return 0;
     }
 
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
 
-    SDL_Scancode sc = eg_impl_get_sdl_scancode(v);
+    SDL_Scancode sc = cr_impl_get_sdl_scancode(v);
 
     if (sc >= SDL_NUM_SCANCODES || sc <= SDL_SCANCODE_UNKNOWN)
     {

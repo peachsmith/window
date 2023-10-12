@@ -9,9 +9,9 @@
  * Populates an entity type struct with information about the note entity.
  *
  * Params:
- *   eg_entity_type* - the note's entity type definition
+ *   cr_entity_type* - the note's entity type definition
  */
-void tns_register_note(eg_entity_type *);
+void tns_register_note(cr_entity_type *);
 
 /**
  * Creates a note entity.
@@ -21,8 +21,8 @@ void tns_register_note(eg_entity_type *);
  *   int - the note entity's initial y position
  *
  * Returns:
- *   eg_entity* - a pointer to the new note entity.
+ *   cr_entity* - a pointer to the new note entity.
  */
-eg_entity *tns_create_note(eg_app *, int, int);
+cr_entity *tns_create_note(cr_app *, int, int);
 
 #endif

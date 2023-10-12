@@ -6,10 +6,10 @@
 // TODO: I definitely need to move the transition functions into some
 // other file.
 
-static void do_transition(eg_app *app, eg_func load_next_scene)
+static void do_transition(cr_app *app, cr_func load_next_scene)
 {
-    eg_entity transition;
-    eg_entity *entity = NULL;
+    cr_entity transition;
+    cr_entity *entity = NULL;
 
     // Save the transition entity state.
     for (int i = 0; i < app->entity_cap; i++)
@@ -60,7 +60,7 @@ static void do_transition(eg_app *app, eg_func load_next_scene)
     }
 }
 
-static void main_menu_transition(eg_app *app)
+static void main_menu_transition(cr_app *app)
 {
     do_transition(app, load_title_screen);
 }
@@ -74,7 +74,7 @@ static void main_menu_transition(eg_app *app)
  * the next scene.
  *
  */
-static void begin_transition(eg_app *app, eg_func transition_loader, eg_func handler)
+static void begin_transition(cr_app *app, cr_func transition_loader, cr_func handler)
 {
     // Set the transition callback to load scene 0.
     // Set the next input handler to be the root input handler.
@@ -93,25 +93,25 @@ static void begin_transition(eg_app *app, eg_func transition_loader, eg_func han
     }
 }
 
-void pause_menu_input_handler(eg_app *app)
+void pause_menu_input_handler(cr_app *app)
 {
     // Locate the pause menu.
-    eg_entity *menu_entity = app->menus[app->menu_count - 1];
+    cr_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;
     }
 
     // Close the pause menu if the escape key or x key is pressed.
-    if (eg_consume_input(app, EG_KEYCODE_X) || eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    if (cr_consume_input(app, CR_KEYCODE_X) || cr_consume_input(app, CR_KEYCODE_ESCAPE))
     {
         app->menu_count--;
         app->pause = 0;
-        eg_pop_input_handler(app);
+        cr_pop_input_handler(app);
         return;
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_UP))
+    if (cr_consume_input(app, CR_KEYCODE_UP))
     {
         if (menu_entity->cursor_y > 0)
         {
@@ -119,7 +119,7 @@ void pause_menu_input_handler(eg_app *app)
         }
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_DOWN))
+    if (cr_consume_input(app, CR_KEYCODE_DOWN))
     {
         if (menu_entity->cursor_y < 2)
         {
@@ -130,20 +130,20 @@ void pause_menu_input_handler(eg_app *app)
     // Resume
     // Main Menu
     // Quit
-    if (eg_consume_input(app, EG_KEYCODE_Z))
+    if (cr_consume_input(app, CR_KEYCODE_Z))
     {
         switch (menu_entity->cursor_y)
         {
         case 0:
             app->menu_count--;
             app->pause = 0;
-            eg_pop_input_handler(app);
+            cr_pop_input_handler(app);
             break;
         case 1:
             // Remove the input handlers of the pause menu and the forest
             // scene, then transition to the main menu.
-            eg_pop_input_handler(app);
-            eg_pop_input_handler(app);
+            cr_pop_input_handler(app);
+            cr_pop_input_handler(app);
             begin_transition(app, main_menu_transition, main_menu_input_handler);
             break;
         case 2:

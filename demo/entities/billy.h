@@ -9,9 +9,9 @@
  * Populates an entity type struct with information about the billy entity.
  *
  * Params:
- *   eg_entity_type* - the billy's entity type definition
+ *   cr_entity_type* - the billy's entity type definition
  */
-void billy_demo_register(eg_entity_type *);
+void billy_demo_register(cr_entity_type *);
 
 /**
  * Creates a billy entity.
@@ -21,8 +21,8 @@ void billy_demo_register(eg_entity_type *);
  *   int - the billy entity's initial y position
  *
  * Returns:
- *   eg_entity* - a pointer to the new billy entity.
+ *   cr_entity* - a pointer to the new billy entity.
  */
-eg_entity *billy_demo_create(eg_app *, int, int);
+cr_entity *billy_demo_create(cr_app *, int, int);
 
 #endif

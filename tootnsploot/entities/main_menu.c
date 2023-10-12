@@ -15,9 +15,9 @@ static char *items[3] = {
 
 #define ITEM_HEIGHT 20
 
-static void render_main_menu(eg_app *app, eg_entity *menu)
+static void render_main_menu(cr_app *app, cr_entity *menu)
 {
-    eg_font *font = app->fonts[TNS_FONT_PRESS_START];
+    cr_font *font = app->fonts[TNS_FONT_PRESS_START];
     int x_origin = 60;
     int y_origin = 90;
 
@@ -26,26 +26,26 @@ static void render_main_menu(eg_app *app, eg_entity *menu)
 
     // Render the menu panel.
     // For the main menu, this takes up the entire screen.
-    eg_rect r = {
+    cr_rect r = {
         .x = 0,
         .y = 0,
         .w = w,
         .h = h};
-    eg_set_color(app, EG_COLOR_VINIK_BLACK);
-    eg_draw_rect(app, &r, 1);
+    cr_set_color(app, CR_COLOR_VINIK_BLACK);
+    cr_draw_rect(app, &r, 1);
 
     // Render the title.
-    eg_rect src = {
+    cr_rect src = {
         .x = 0,
         .y = 0,
         .w = 140,
         .h = 70};
-    eg_rect dest = {
+    cr_rect dest = {
         .x = 45,
         .y = 5,
         .w = 140,
         .h = 70};
-    eg_draw_texture(
+    cr_draw_texture(
         app,
         app->textures[TNS_TEXTURE_TITLE],
         &src,
@@ -56,7 +56,7 @@ static void render_main_menu(eg_app *app, eg_entity *menu)
     int i;
     for (i = 0; i < 3; i++)
     {
-        eg_draw_text(
+        cr_draw_text(
             app,
             font,
             items[i],
@@ -71,7 +71,7 @@ static void render_main_menu(eg_app *app, eg_entity *menu)
         y_origin - 3 + menu->cursor_y * ITEM_HEIGHT);
 }
 
-static void update_main_menu(eg_app *app, eg_entity *menu)
+static void update_main_menu(cr_app *app, cr_entity *menu)
 {
     menu->ticks++;
 
@@ -85,7 +85,7 @@ static void update_main_menu(eg_app *app, eg_entity *menu)
     }
 }
 
-void tns_register_main_menu(eg_entity_type *t)
+void tns_register_main_menu(cr_entity_type *t)
 {
     t->width = 240;
     t->height = 160;
@@ -94,19 +94,19 @@ void tns_register_main_menu(eg_entity_type *t)
     t->update = update_main_menu;
 }
 
-eg_entity *tns_create_main_menu(eg_app *app)
+cr_entity *tns_create_main_menu(cr_app *app)
 {
-    eg_entity *menu = NULL;
+    cr_entity *menu = NULL;
 
-    menu = eg_create_entity(app);
+    menu = cr_create_entity(app);
     if (menu == NULL)
     {
         return NULL;
     }
 
     menu->type = ENTITY_TYPE_MAIN_MENU;
-    eg_set_flag(menu, ENTITY_FLAG_PAUSE);
-    eg_set_flag(menu, ENTITY_FLAG_MENU);
+    cr_set_flag(menu, ENTITY_FLAG_PAUSE);
+    cr_set_flag(menu, ENTITY_FLAG_MENU);
 
     return menu;
 }

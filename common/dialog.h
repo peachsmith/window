@@ -1,5 +1,5 @@
-#ifndef CRUMBS_COMMON_DIALOG_H
-#define CRUMBS_COMMON_DIALOG_H
+#ifndef COMMON_DIALOG_H
+#define COMMON_DIALOG_H
 
 #include "crumbs.h"
 
@@ -13,13 +13,13 @@
 #define COMMON_DIALOG_WIDTH 224
 #define COMMON_DIALOG_HEIGHT 48
 
-void common_init_dialogs(eg_app *);
+void common_init_dialogs(cr_app *);
 
 void common_dialog_renderer(
-    eg_app *,
-    eg_entity *,
-    eg_font *,
-    eg_entity_func,
-    eg_entity_func);
+    cr_app *,
+    cr_entity *,
+    cr_font *,
+    cr_entity_func,
+    cr_entity_func);
 
 #endif

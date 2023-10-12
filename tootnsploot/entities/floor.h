@@ -9,9 +9,9 @@
  * Populates an entity type struct with information about the floor entity.
  *
  * Params:
- *   eg_entity_type* - the floor's entity type definition
+ *   cr_entity_type* - the floor's entity type definition
  */
-void tns_register_floor(eg_entity_type *);
+void tns_register_floor(cr_entity_type *);
 
 /**
  * Creates a floor entity.
@@ -21,8 +21,8 @@ void tns_register_floor(eg_entity_type *);
  *   int - the floor entity's initial y position
  *
  * Returns:
- *   eg_entity* - a pointer to the new floor entity.
+ *   cr_entity* - a pointer to the new floor entity.
  */
-eg_entity *tns_create_floor(eg_app *, int, int);
+cr_entity *tns_create_floor(cr_app *, int, int);
 
 #endif

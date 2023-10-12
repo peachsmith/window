@@ -2,7 +2,7 @@
 #include "demo/util/sprite.h"
 #include "common/texture.h"
 
-void sprite_draw_frank(eg_app *app, int x, int y, int mirror, int tile)
+void sprite_draw_frank(cr_app *app, int x, int y, int mirror, int tile)
 {
     // tile dimensions
     int tile_w = 24;
@@ -12,19 +12,19 @@ void sprite_draw_frank(eg_app *app, int x, int y, int mirror, int tile)
     int tile_x = tile;
     int tile_y = 0;
 
-    eg_rect src = {
+    cr_rect src = {
         .x = tile_x * tile_w,
         .y = tile_y * tile_h,
         .w = tile_w,
         .h = tile_h};
 
-    eg_rect dest = {
+    cr_rect dest = {
         .x = x,
         .y = y,
         .w = tile_w,
         .h = tile_h};
 
-    eg_draw_texture(
+    cr_draw_texture(
         app,
         app->textures[DEMO_TEXTURE_CHARACTERS],
         &src,
@@ -32,7 +32,7 @@ void sprite_draw_frank(eg_app *app, int x, int y, int mirror, int tile)
         mirror);
 }
 
-void sprite_draw_jimbo(eg_app *app, int x, int y, int mirror, int tile)
+void sprite_draw_jimbo(cr_app *app, int x, int y, int mirror, int tile)
 {
     // tile dimensions
     int tile_w = 24;
@@ -42,19 +42,19 @@ void sprite_draw_jimbo(eg_app *app, int x, int y, int mirror, int tile)
     int tile_x = tile + 6;
     int tile_y = 0;
 
-    eg_rect src = {
+    cr_rect src = {
         .x = tile_x * tile_w,
         .y = tile_y * tile_h,
         .w = tile_w,
         .h = tile_h};
 
-    eg_rect dest = {
+    cr_rect dest = {
         .x = x,
         .y = y,
         .w = tile_w,
         .h = tile_h};
 
-    eg_draw_texture(
+    cr_draw_texture(
         app,
         app->textures[DEMO_TEXTURE_CHARACTERS],
         &src,
@@ -62,7 +62,7 @@ void sprite_draw_jimbo(eg_app *app, int x, int y, int mirror, int tile)
         mirror);
 }
 
-void sprite_draw_billy(eg_app *app, int x, int y, int mirror, int tile)
+void sprite_draw_billy(cr_app *app, int x, int y, int mirror, int tile)
 {
     // tile dimensions
     int tile_w = 24;
@@ -72,19 +72,19 @@ void sprite_draw_billy(eg_app *app, int x, int y, int mirror, int tile)
     int tile_x = tile + 4;
     int tile_y = 0;
 
-    eg_rect src = {
+    cr_rect src = {
         .x = tile_x * tile_w,
         .y = tile_y * tile_h,
         .w = tile_w,
         .h = tile_h};
 
-    eg_rect dest = {
+    cr_rect dest = {
         .x = x,
         .y = y,
         .w = tile_w,
         .h = tile_h};
 
-    eg_draw_texture(
+    cr_draw_texture(
         app,
         app->textures[DEMO_TEXTURE_CHARACTERS],
         &src,
@@ -92,7 +92,7 @@ void sprite_draw_billy(eg_app *app, int x, int y, int mirror, int tile)
         mirror);
 }
 
-void sprite_draw_henry(eg_app *app, int x, int y, int mirror, int tile)
+void sprite_draw_henry(cr_app *app, int x, int y, int mirror, int tile)
 {
     // tile dimensions
     int tile_w = 24;
@@ -102,19 +102,19 @@ void sprite_draw_henry(eg_app *app, int x, int y, int mirror, int tile)
     int tile_x = tile + 6;
     int tile_y = 1;
 
-    eg_rect src = {
+    cr_rect src = {
         .x = tile_x * tile_w,
         .y = tile_y * tile_h,
         .w = tile_w,
         .h = tile_h};
 
-    eg_rect dest = {
+    cr_rect dest = {
         .x = x,
         .y = y,
         .w = tile_w,
         .h = tile_h};
 
-    eg_draw_texture(
+    cr_draw_texture(
         app,
         app->textures[DEMO_TEXTURE_CHARACTERS],
         &src,
@@ -122,7 +122,7 @@ void sprite_draw_henry(eg_app *app, int x, int y, int mirror, int tile)
         mirror);
 }
 
-void sprite_draw_sign(eg_app *app, int x, int y)
+void sprite_draw_sign(cr_app *app, int x, int y)
 {
     // tile dimensions
     int tile_w = 18;
@@ -132,19 +132,19 @@ void sprite_draw_sign(eg_app *app, int x, int y)
     int tile_x = 6;
     int tile_y = 4;
 
-    eg_rect src = {
+    cr_rect src = {
         .x = tile_x * tile_w,
         .y = tile_y * tile_h,
         .w = tile_w,
         .h = tile_h};
 
-    eg_rect dest = {
+    cr_rect dest = {
         .x = x,
         .y = y,
         .w = tile_w,
         .h = tile_h};
 
-    eg_draw_texture(
+    cr_draw_texture(
         app,
         app->textures[DEMO_TEXTURE_SCENERY],
         &src,
@@ -152,7 +152,7 @@ void sprite_draw_sign(eg_app *app, int x, int y)
         0);
 }
 
-void sprite_draw_brick(eg_app *app, int x, int y)
+void sprite_draw_brick(cr_app *app, int x, int y)
 {
     // tile dimensions
     int tile_w = 18;
@@ -162,19 +162,19 @@ void sprite_draw_brick(eg_app *app, int x, int y)
     int tile_x = 7;
     int tile_y = 2;
 
-    eg_rect src = {
+    cr_rect src = {
         .x = tile_x * tile_w,
         .y = tile_y * tile_h,
         .w = tile_w,
         .h = tile_h};
 
-    eg_rect dest = {
+    cr_rect dest = {
         .x = x,
         .y = y,
         .w = tile_w,
         .h = tile_h};
 
-    eg_draw_texture(
+    cr_draw_texture(
         app,
         app->textures[DEMO_TEXTURE_SCENERY],
         &src,
@@ -182,7 +182,7 @@ void sprite_draw_brick(eg_app *app, int x, int y)
         0);
 }
 
-void sprite_draw_slope(eg_app *app, int x, int y, int length, int mirror)
+void sprite_draw_slope(cr_app *app, int x, int y, int length, int mirror)
 {
     // Only slopes from 1 - 4 tiles in length are supported.
     if (length < 1 || length > 4)
@@ -203,13 +203,13 @@ void sprite_draw_slope(eg_app *app, int x, int y, int length, int mirror)
         tile_x = 3;
     }
 
-    eg_rect src = {
+    cr_rect src = {
         .x = tile_x * tile_w,
         .y = tile_y * tile_h,
         .w = tile_w,
         .h = tile_h};
 
-    eg_rect dest = {
+    cr_rect dest = {
         .x = x,
         .y = y,
         .w = tile_w,
@@ -217,7 +217,7 @@ void sprite_draw_slope(eg_app *app, int x, int y, int length, int mirror)
 
     for (int i = 0; i < length; i++)
     {
-        eg_draw_texture(
+        cr_draw_texture(
             app,
             app->textures[DEMO_TEXTURE_SCENERY],
             &src,
@@ -237,7 +237,7 @@ void sprite_draw_slope(eg_app *app, int x, int y, int length, int mirror)
     }
 }
 
-void sprite_draw_flat_slope(eg_app *app, int x, int y, int length)
+void sprite_draw_flat_slope(cr_app *app, int x, int y, int length)
 {
     // Only slopes from 1 - 4 tiles in length are supported.
     if (length < 1 || length > 4)
@@ -253,13 +253,13 @@ void sprite_draw_flat_slope(eg_app *app, int x, int y, int length)
     int tile_x = 2;
     int tile_y = 1;
 
-    eg_rect src = {
+    cr_rect src = {
         .x = tile_x * tile_w,
         .y = tile_y * tile_h,
         .w = tile_w,
         .h = tile_h};
 
-    eg_rect dest = {
+    cr_rect dest = {
         .x = x,
         .y = y,
         .w = tile_w,
@@ -267,7 +267,7 @@ void sprite_draw_flat_slope(eg_app *app, int x, int y, int length)
 
     for (int i = 0; i < length; i++)
     {
-        eg_draw_texture(
+        cr_draw_texture(
             app,
             app->textures[DEMO_TEXTURE_SCENERY],
             &src,
@@ -278,7 +278,7 @@ void sprite_draw_flat_slope(eg_app *app, int x, int y, int length)
     }
 }
 
-void sprite_draw_grass_block(eg_app *app, int x, int y, int w, int h)
+void sprite_draw_grass_block(cr_app *app, int x, int y, int w, int h)
 {
     // tile dimensions
     int tile_w = 18;
@@ -328,14 +328,14 @@ void sprite_draw_grass_block(eg_app *app, int x, int y, int w, int h)
 
     // source rectangle for menu tiles
     // There is a 2 pixel margin between each tile in the sprite sheet.
-    eg_rect src = {
+    cr_rect src = {
         .x = sheet_x * tile_w,
         .y = sheet_y * tile_h,
         .w = tile_w,
         .h = tile_h};
 
     // destination rectangle for menu tiles
-    eg_rect dest = {
+    cr_rect dest = {
         .x = x,
         .y = y,
         .w = tile_w,
@@ -435,7 +435,7 @@ void sprite_draw_grass_block(eg_app *app, int x, int y, int w, int h)
             dest.x = col;
             dest.y = row;
 
-            eg_draw_texture(
+            cr_draw_texture(
                 app,
                 app->textures[DEMO_TEXTURE_SCENERY],
                 &src,
@@ -445,19 +445,19 @@ void sprite_draw_grass_block(eg_app *app, int x, int y, int w, int h)
     }
 }
 
-void sprite_draw_background(eg_app *app, int type)
+void sprite_draw_background(cr_app *app, int type)
 {
-    eg_rect dest = {
+    cr_rect dest = {
         .x = 0,
         .y = 0,
         .w = app->screen_width,
         .h = app->screen_height};
 
-    eg_set_color(app, 0xFF2090D0);
-    eg_draw_rect(app, &dest, 1);
+    cr_set_color(app, 0xFF2090D0);
+    cr_draw_rect(app, &dest, 1);
 }
 
-void sprite_draw_fireball(eg_app *app, int x, int y, int mirror, int tile)
+void sprite_draw_fireball(cr_app *app, int x, int y, int mirror, int tile)
 {
     // tile dimensions
     int tile_w = 18;
@@ -467,19 +467,19 @@ void sprite_draw_fireball(eg_app *app, int x, int y, int mirror, int tile)
     int tile_x = tile;
     int tile_y = 9;
 
-    eg_rect src = {
+    cr_rect src = {
         .x = tile_x * tile_w,
         .y = tile_y * tile_h,
         .w = tile_w,
         .h = tile_h};
 
-    eg_rect dest = {
+    cr_rect dest = {
         .x = x,
         .y = y,
         .w = tile_w,
         .h = tile_h};
 
-    eg_draw_texture(
+    cr_draw_texture(
         app,
         app->textures[DEMO_TEXTURE_SCENERY],
         &src,

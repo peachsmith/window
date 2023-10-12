@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-void clear_scene(eg_app *app)
+void clear_scene(cr_app *app)
 {
     for (int i = 0; i < app->entity_cap; i++)
     {

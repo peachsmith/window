@@ -7,10 +7,10 @@
 #include "common/collision.h"
 
 static void collide_block(
-    eg_app *app,
-    eg_entity *block,
-    eg_entity *other,
-    eg_collision *t_res)
+    cr_app *app,
+    cr_entity *block,
+    cr_entity *other,
+    cr_collision *t_res)
 {
     // The collision resolution correction factor formula is pulled from
     // the video at https://www.youtube.com/watch?v=8JJ-4JgR7Dg.
@@ -25,8 +25,8 @@ static void collide_block(
     // Only do this if the entity collided with the block from above.
     if (t_res->cn.y < 0 && !t_res->cn.x)
     {
-        eg_clear_flag(other, ENTITY_FLAG_JUMP);
-        eg_set_flag(other, ENTITY_FLAG_GROUND);
+        cr_clear_flag(other, ENTITY_FLAG_JUMP);
+        cr_set_flag(other, ENTITY_FLAG_GROUND);
     }
 
     // Correction factor.
@@ -73,7 +73,7 @@ static void collide_block(
 }
 
 // Renders a standard block
-static void render_floor(eg_app *app, eg_entity *floor)
+static void render_floor(cr_app *app, cr_entity *floor)
 {
     int w = app->entity_types[floor->type].width;
 
@@ -85,18 +85,18 @@ static void render_floor(eg_app *app, eg_entity *floor)
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = floor->x_pos + app->cam.x;
         hit_box.y = floor->y_pos + app->cam.y;
         hit_box.w = app->entity_types[floor->type].width;
         hit_box.h = app->entity_types[floor->type].height;
 
-        eg_set_color(app, EG_COLOR_VINIK_SEA_GREEN);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_SEA_GREEN);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
-void tns_register_floor(eg_entity_type *t)
+void tns_register_floor(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_FLOOR;
     t->width = 240;
@@ -105,11 +105,11 @@ void tns_register_floor(eg_entity_type *t)
     t->collide = collide_block;
 }
 
-eg_entity *tns_create_floor(eg_app *app, int x, int y)
+cr_entity *tns_create_floor(cr_app *app, int x, int y)
 {
-    eg_entity *floor = NULL;
+    cr_entity *floor = NULL;
 
-    floor = eg_create_entity(app);
+    floor = cr_create_entity(app);
     if (floor == NULL)
     {
         return NULL;

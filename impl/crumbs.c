@@ -4,32 +4,32 @@
 //----------------------------------------------------------------------------
 // core functions
 
-int eg_initialize()
+int cr_initialize()
 {
-    return eg_impl_init();
+    return cr_impl_init();
 }
 
-void eg_terminate()
+void cr_terminate()
 {
-    eg_impl_term();
+    cr_impl_term();
 }
 
 // default update function
-static void default_update(eg_app *app)
+static void default_update(cr_app *app)
 {
 }
 
 // default draw function
-static void default_draw(eg_app *app)
+static void default_draw(cr_app *app)
 {
 }
 
-eg_app *eg_create_app()
+cr_app *cr_create_app()
 {
-    eg_app *app = NULL;
+    cr_app *app = NULL;
 
     // Create the app struct.
-    app = (eg_app *)malloc(sizeof(eg_app));
+    app = (cr_app *)malloc(sizeof(cr_app));
     if (app == NULL)
     {
         return NULL;
@@ -80,8 +80,8 @@ eg_app *eg_create_app()
     app->dialogs = NULL;
     app->dialog_count = 0;
 
-    app->screen_width = EG_DEFAULT_SCREEN_WIDTH;
-    app->screen_height = EG_DEFAULT_SCREEN_HEIGHT;
+    app->screen_width = CR_DEFAULT_SCREEN_WIDTH;
+    app->screen_height = CR_DEFAULT_SCREEN_HEIGHT;
 
     app->cam.x = 0;
     app->cam.y = 0;
@@ -91,9 +91,9 @@ eg_app *eg_create_app()
     app->cam.cb = 140;
 
     // Create the implementation struct.
-    app->impl = eg_impl_create(
-        EG_DEFAULT_SCREEN_WIDTH,
-        EG_DEFAULT_SCREEN_HEIGHT,
+    app->impl = cr_impl_create(
+        CR_DEFAULT_SCREEN_WIDTH,
+        CR_DEFAULT_SCREEN_HEIGHT,
         app->scale);
     if (app->impl == NULL)
     {
@@ -102,7 +102,7 @@ eg_app *eg_create_app()
     }
 
     // Initialize the key press flags and actuation counters to 0.
-    for (int i = 0; i < EG_MAX_KEYCODE; i++)
+    for (int i = 0; i < CR_MAX_KEYCODE; i++)
     {
         app->key_captures[i] = 0;
         app->actuation_counters[i] = 0;
@@ -116,82 +116,82 @@ eg_app *eg_create_app()
     return app;
 }
 
-void eg_destroy_app(eg_app *app)
+void cr_destroy_app(cr_app *app)
 {
     // Destroy the fonts.
     for (int i = 0; i < app->font_count; i++)
     {
-        eg_impl_destroy_font(app->fonts[i]);
+        cr_impl_destroy_font(app->fonts[i]);
     }
 
     // Destroy the textures.
     for (int i = 0; i < app->texture_count; i++)
     {
-        eg_impl_destroy_texture(app->textures[i]);
+        cr_impl_destroy_texture(app->textures[i]);
     }
 
     // Destroy the sounds.
     for (int i = 0; i < app->sound_count; i++)
     {
-        eg_impl_destroy_sound(app->sounds[i]);
+        cr_impl_destroy_sound(app->sounds[i]);
     }
 
     // Destroy the implementation.
-    eg_impl_destroy(app->impl);
+    cr_impl_destroy(app->impl);
 
     // Free the memory allocated for the application struct.
     free(app);
 }
 
-void eg_set_title(eg_app *app, const char *title)
+void cr_set_title(cr_app *app, const char *title)
 {
-    eg_impl_set_title(app, title);
+    cr_impl_set_title(app, title);
 }
 
-void eg_begin_frame(eg_app *app)
+void cr_begin_frame(cr_app *app)
 {
-    eg_impl_process_events(app);
-    eg_impl_clear_screen(app);
+    cr_impl_process_events(app);
+    cr_impl_clear_screen(app);
 }
 
-void eg_end_frame(eg_app *app)
+void cr_end_frame(cr_app *app)
 {
-    eg_impl_render_screen(app);
-    eg_impl_delay(app);
+    cr_impl_render_screen(app);
+    cr_impl_delay(app);
 }
 
 //----------------------------------------------------------------------------
 // drawing functions
 
-void eg_set_color(eg_app *app, eg_color color)
+void cr_set_color(cr_app *app, cr_color color)
 {
-    eg_impl_set_color(app, color);
+    cr_impl_set_color(app, color);
 }
 
-void eg_draw_line(eg_app *app, eg_point *a, eg_point *b)
+void cr_draw_line(cr_app *app, cr_point *a, cr_point *b)
 {
-    eg_impl_draw_line(app, a, b);
+    cr_impl_draw_line(app, a, b);
 }
 
-void eg_draw_rect(eg_app *app, eg_rect *r, int filled)
+void cr_draw_rect(cr_app *app, cr_rect *r, int filled)
 {
-    eg_impl_draw_rect(app, r, filled);
+    cr_impl_draw_rect(app, r, filled);
 }
 
 //----------------------------------------------------------------------------
 // input handling functions
 
-int eg_peek_input(eg_app *app, int code)
+int cr_peek_input(cr_app *app, int code)
 {
-    return eg_impl_peek_key(app, code);
+    return cr_impl_peek_key(app, code);
 }
 
-int eg_consume_input(eg_app *app, int code)
+int cr_consume_input(cr_app *app, int code)
 {
-    return eg_impl_consume_key(app, code);
+    return cr_impl_consume_key(app, code);
 }
 
-void eg_push_input_handler(eg_app *app, eg_func handler)
+void cr_push_input_handler(cr_app *app, cr_func handler)
 {
     if (app == NULL || app->input == NULL || handler == NULL)
     {
@@ -201,7 +201,7 @@ void eg_push_input_handler(eg_app *app, eg_func handler)
     app->input[app->input_count++] = handler;
 }
 
-void eg_pop_input_handler(eg_app *app)
+void cr_pop_input_handler(cr_app *app)
 {
     // If the stack is empty, then return without doing anything.
     if (app == NULL || app->input == NULL)
@@ -221,9 +221,9 @@ void eg_pop_input_handler(eg_app *app)
 //----------------------------------------------------------------------------
 // entity functions
 
-eg_entity *eg_create_entity(eg_app *app)
+cr_entity *cr_create_entity(cr_app *app)
 {
-    eg_entity *entity = NULL;
+    cr_entity *entity = NULL;
 
     // Look for the available entity slot.
     for (int i = 0; i < app->entity_cap && entity == NULL; i++)
@@ -268,12 +268,12 @@ eg_entity *eg_create_entity(eg_app *app)
     return entity;
 }
 
-void eg_remove_entity(eg_app *app, eg_entity *entity)
+void cr_remove_entity(cr_app *app, cr_entity *entity)
 {
     entity->present = 0;
 }
 
-int eg_check_flag(eg_entity *e, int f)
+int cr_check_flag(cr_entity *e, int f)
 {
     // The flag index must be in the range [0, 15] since we're only dealing
     // with 16 bits.
@@ -294,7 +294,7 @@ int eg_check_flag(eg_entity *e, int f)
     return 0;
 }
 
-void eg_set_flag(eg_entity *e, int f)
+void cr_set_flag(cr_entity *e, int f)
 {
     // The flag index must be in the range [0, 15] since we're only dealing
     // with 16 bits.
@@ -310,7 +310,7 @@ void eg_set_flag(eg_entity *e, int f)
     e->flags |= bit;
 }
 
-void eg_clear_flag(eg_entity *e, int f)
+void cr_clear_flag(cr_entity *e, int f)
 {
     // The flag index must be in the range [0, 15] since we're only dealing
     // with 16 bits.
@@ -326,7 +326,7 @@ void eg_clear_flag(eg_entity *e, int f)
     e->flags &= ~bit;
 }
 
-void eg_toggle_flag(eg_entity *e, int f)
+void cr_toggle_flag(cr_entity *e, int f)
 {
     // The flag index must be in the range [0, 15] since we're only dealing
     // with 16 bits.
@@ -352,43 +352,43 @@ void eg_toggle_flag(eg_entity *e, int f)
 //----------------------------------------------------------------------------
 // font functions
 
-eg_font *eg_load_font(eg_app *app, const char *path, int p)
+cr_font *cr_load_font(cr_app *app, const char *path, int p)
 {
-    return eg_impl_load_font(app, path, p);
+    return cr_impl_load_font(app, path, p);
 }
 
-void eg_draw_text(eg_app *app, eg_font *font, const char *msg, int x, int y)
+void cr_draw_text(cr_app *app, cr_font *font, const char *msg, int x, int y)
 {
-    eg_impl_draw_text(app, font, msg, x, y);
+    cr_impl_draw_text(app, font, msg, x, y);
 }
 
-void eg_draw_text_bounded(eg_app *app, eg_font *font, const char *msg, eg_rect *bounds, int *result)
+void cr_draw_text_bounded(cr_app *app, cr_font *font, const char *msg, cr_rect *bounds, int *result)
 {
-    eg_impl_draw_text_bounded(app, font, msg, bounds, result);
+    cr_impl_draw_text_bounded(app, font, msg, bounds, result);
 }
 
 //----------------------------------------------------------------------------
 // texture functions
 
-eg_texture *eg_load_texture(eg_app *app, const char *path)
+cr_texture *cr_load_texture(cr_app *app, const char *path)
 {
-    return eg_impl_load_texture(app, path);
+    return cr_impl_load_texture(app, path);
 }
 
-void eg_draw_texture(eg_app *app, eg_texture *texture, eg_rect *src, eg_rect *dest, int mirror)
+void cr_draw_texture(cr_app *app, cr_texture *texture, cr_rect *src, cr_rect *dest, int mirror)
 {
-    eg_impl_draw_texture(app, texture, src, dest, mirror);
+    cr_impl_draw_texture(app, texture, src, dest, mirror);
 }
 
 //----------------------------------------------------------------------------
 // audio functions
 
-eg_sound *eg_load_sound(eg_app *app, const char *path, int type)
+cr_sound *cr_load_sound(cr_app *app, const char *path, int type)
 {
-    return eg_impl_load_sound(app, path, type);
+    return cr_impl_load_sound(app, path, type);
 }
 
-void eg_play_sound(eg_app *app, eg_sound *sound)
+void cr_play_sound(cr_app *app, cr_sound *sound)
 {
-    eg_impl_play_sound(app, sound);
+    cr_impl_play_sound(app, sound);
 }

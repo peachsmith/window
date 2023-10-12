@@ -6,14 +6,14 @@
 #include "common/texture.h"
 #include "common/dialog.h"
 
-static void render_transition(eg_app *app, eg_entity *transition)
+static void render_transition(cr_app *app, cr_entity *transition)
 {
     if (!transition->data)
     {
         return;
     }
 
-    eg_rect transition_rect;
+    cr_rect transition_rect;
     transition_rect.x = 0;
     transition_rect.y = 0;
     transition_rect.w = app->screen_width;
@@ -43,11 +43,11 @@ static void render_transition(eg_app *app, eg_entity *transition)
         }
     }
 
-    eg_set_color(app, c | (a << 24));
-    eg_draw_rect(app, &transition_rect, 1);
+    cr_set_color(app, c | (a << 24));
+    cr_draw_rect(app, &transition_rect, 1);
 }
 
-static void update_transition(eg_app *app, eg_entity *transition)
+static void update_transition(cr_app *app, cr_entity *transition)
 {
     if (!transition->data)
     {
@@ -83,17 +83,17 @@ static void update_transition(eg_app *app, eg_entity *transition)
     // Once the next scene has been fully loaded and the transition is
     // complete, we push the input handler of the next scene to give control
     // back to the user.
-    eg_push_input_handler(app, app->transition_input_handler);
+    cr_push_input_handler(app, app->transition_input_handler);
 
     // If the update flag is set, unpause the application so the next scene
     // doesn't start in a paused state.
-    if (eg_check_flag(transition, ENTITY_FLAG_UPDATE))
+    if (cr_check_flag(transition, ENTITY_FLAG_UPDATE))
     {
         app->pause = 0;
     }
 }
 
-void transition_demo_register(eg_entity_type *t)
+void transition_demo_register(cr_entity_type *t)
 {
     t->width = 50;
     t->height = 50;
@@ -101,19 +101,19 @@ void transition_demo_register(eg_entity_type *t)
     t->update = update_transition;
 }
 
-eg_entity *transition_demo_create(eg_app *app)
+cr_entity *transition_demo_create(cr_app *app)
 {
-    eg_entity *transition = NULL;
+    cr_entity *transition = NULL;
 
-    transition = eg_create_entity(app);
+    transition = cr_create_entity(app);
     if (transition == NULL)
     {
         return NULL;
     }
 
     transition->type = ENTITY_TYPE_TRANSITION;
-    eg_set_flag(transition, ENTITY_FLAG_PAUSE);
-    eg_set_flag(transition, ENTITY_FLAG_MENU);
+    cr_set_flag(transition, ENTITY_FLAG_PAUSE);
+    cr_set_flag(transition, ENTITY_FLAG_MENU);
 
     return transition;
 }

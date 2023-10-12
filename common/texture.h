@@ -1,8 +1,8 @@
-#ifndef CRUMBS_COMMON_TEXTURE_H
-#define CRUMBS_COMMON_TEXTURE_H
+#ifndef COMMON_TEXTURE_H
+#define COMMON_TEXTURE_H
 
 #include "crumbs.h"
 
-int common_init_textures(eg_app *);
+int common_init_textures(cr_app *);
 
 #endif

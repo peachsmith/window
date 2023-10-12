@@ -11,7 +11,7 @@
 
 #include "common/util.h"
 
-void load_forest_scene(eg_app *app)
+void load_forest_scene(cr_app *app)
 {
     app->scene = TNS_SCENE_FOREST;
 
@@ -24,7 +24,7 @@ void load_forest_scene(eg_app *app)
         app->counters[i + TNS_COUNTER_CRITTER_SLOT_OFFSET] = 0;
     }
 
-    util_set_camera(app, EG_CAMERA_NONE);
+    util_set_camera(app, CR_CAMERA_NONE);
     app->cam.x = 0;
     app->cam.y = 0;
 

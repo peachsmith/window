@@ -14,7 +14,7 @@ static const char *item_2_text = "Quit";
 static const char *item_3_text = "Submenu";
 static const char *item_4_text = "Dialog";
 
-static void render_pause_menu(eg_app *app, eg_entity *menu)
+static void render_pause_menu(cr_app *app, cr_entity *menu)
 {
     // Render the menu panel.
     ui_draw_panel(
@@ -25,28 +25,28 @@ static void render_pause_menu(eg_app *app, eg_entity *menu)
         77);
 
     // Render the menu items.
-    eg_draw_text(
+    cr_draw_text(
         app,
         app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
         item_1_text,
         menu->x_pos + 30,
         menu->y_pos + 17);
 
-    eg_draw_text(
+    cr_draw_text(
         app,
         app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
         item_2_text,
         menu->x_pos + 30,
         menu->y_pos + 41);
 
-    eg_draw_text(
+    cr_draw_text(
         app,
         app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
         item_3_text,
         menu->x_pos + 110,
         menu->y_pos + 17);
 
-    eg_draw_text(
+    cr_draw_text(
         app,
         app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
         item_4_text,
@@ -92,11 +92,11 @@ static void render_pause_menu(eg_app *app, eg_entity *menu)
         22 + cursor_y * 24);
 }
 
-static void update_pause_menu(eg_app *app, eg_entity *menu)
+static void update_pause_menu(cr_app *app, cr_entity *menu)
 {
 }
 
-void pause_menu_demo_register(eg_entity_type *t)
+void pause_menu_demo_register(cr_entity_type *t)
 {
     t->width = 172;
     t->height = 77;
@@ -104,11 +104,11 @@ void pause_menu_demo_register(eg_entity_type *t)
     t->update = update_pause_menu;
 }
 
-eg_entity *pause_menu_demo_create(eg_app* app)
+cr_entity *pause_menu_demo_create(cr_app* app)
 {
-    eg_entity *menu = NULL;
+    cr_entity *menu = NULL;
 
-    menu = eg_create_entity(app);
+    menu = cr_create_entity(app);
     if (menu == NULL)
     {
         return NULL;
@@ -118,8 +118,8 @@ eg_entity *pause_menu_demo_create(eg_app* app)
     menu->y_pos = 5;
     menu->type = ENTITY_TYPE_PAUSE_MENU;
     menu->data = 1;
-    eg_set_flag(menu, ENTITY_FLAG_PAUSE);
-    eg_set_flag(menu, ENTITY_FLAG_MENU);
+    cr_set_flag(menu, ENTITY_FLAG_PAUSE);
+    cr_set_flag(menu, ENTITY_FLAG_MENU);
 
     return menu;
 }

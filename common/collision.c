@@ -15,13 +15,13 @@
 
 typedef struct col_res
 {
-    eg_collision col;
-    eg_entity *target;
+    cr_collision col;
+    cr_entity *target;
 } col_res;
 
 static void detect_collisions(
-    eg_app *app,
-    eg_entity *source,
+    cr_app *app,
+    cr_entity *source,
     int source_i,
     col_res *cols,
     int *count,
@@ -41,13 +41,13 @@ static void detect_collisions(
         return;
     }
 
-    eg_entity *target = NULL;
+    cr_entity *target = NULL;
 
     for (int i = target_i; direction ? i < app->entity_cap : i >= 0; direction ? i++ : i--)
     {
         target = &(app->entities[i]);
 
-        eg_collision res;
+        cr_collision res;
         res.t = 0.0f;
         res.tx = 0.0f;
         res.ty = 0.0f;
@@ -97,8 +97,8 @@ static int greater(col_res *a, col_res *b)
     float ty0;
     float tx1;
     float ty1;
-    eg_point cn0; // contact normal of entity a
-    eg_point cn1; // contact normal of entity b
+    cr_point cn0; // contact normal of entity a
+    cr_point cn1; // contact normal of entity b
     int corner;   // corner collision flag
 
     tx0 = a->col.tx;
@@ -141,7 +141,7 @@ static int greater(col_res *a, col_res *b)
     return 0;
 }
 
-void common_handle_collisions(eg_app *app)
+void common_handle_collisions(cr_app *app)
 {
     // The collision detection has three stages:
     // Stage 1: Collision Detection
@@ -153,10 +153,10 @@ void common_handle_collisions(eg_app *app)
     for (int i = 0; i < app->entity_cap; i++)
     {
         int count = 0;
-        eg_entity *source = &(app->entities[i]);
+        cr_entity *source = &(app->entities[i]);
 
         // Clear the ground flag of the source entity.
-        eg_clear_flag(source, ENTITY_FLAG_GROUND);
+        cr_clear_flag(source, ENTITY_FLAG_GROUND);
 
         //--------------------------------------------------------
         // Stage 1: Collision Detection
@@ -225,11 +225,11 @@ void common_handle_collisions(eg_app *app)
         // Stage 3: Collision Resolution
         for (int i = 0; i < count; i++)
         {
-            eg_entity *a;     // source entity A
-            eg_entity *b;     // target entity B
-            eg_collision col; // swept AABB result
-            eg_collider cola; // source collision callback
-            eg_collider colb; // target collision callback
+            cr_entity *a;     // source entity A
+            cr_entity *b;     // target entity B
+            cr_collision col; // swept AABB result
+            cr_collider cola; // source collision callback
+            cr_collider colb; // target collision callback
 
             a = source;
             b = cols[i].target;
@@ -292,7 +292,7 @@ void common_handle_collisions(eg_app *app)
         }
 
         // Clear the update flag of the current source entity.
-        eg_clear_flag(source, ENTITY_FLAG_UPDATE);
+        cr_clear_flag(source, ENTITY_FLAG_UPDATE);
 
     } // END main collision detection loop
 }

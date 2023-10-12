@@ -9,9 +9,9 @@
  * Populates an entity type struct with information about the forest entity.
  *
  * Params:
- *   eg_entity_type* - the forest's entity type definition
+ *   cr_entity_type* - the forest's entity type definition
  */
-void tns_register_forest(eg_entity_type *);
+void tns_register_forest(cr_entity_type *);
 
 /**
  * Creates a forest entity.
@@ -21,8 +21,8 @@ void tns_register_forest(eg_entity_type *);
  *   int - the forest entity's initial y position
  *
  * Returns:
- *   eg_entity* - a pointer to the new forest entity.
+ *   cr_entity* - a pointer to the new forest entity.
  */
-eg_entity *tns_create_forest(eg_app *, int, int);
+cr_entity *tns_create_forest(cr_app *, int, int);
 
 #endif

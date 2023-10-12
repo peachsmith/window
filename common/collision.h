@@ -1,13 +1,13 @@
-#ifndef CRUMBS_COMMON_COLLISION_H
-#define CRUMBS_COMMON_COLLISION_H
+#ifndef COMMON_COLLISION_H
+#define COMMON_COLLISION_H
 
 #include "crumbs.h"
 
-// defintion of eg_collision struct
-struct eg_collision
+// defintion of cr_collision struct
+struct cr_collision
 {
-    eg_point cp; // contact point
-    eg_point cn; // contact normal
+    cr_point cp; // contact point
+    cr_point cn; // contact normal
     float t;     // t such that P(t) = CP
     float tx;    // horizontal correction factor for diagonal lines
     float ty;    // veritcal correction factor for diagonal lines
@@ -16,7 +16,7 @@ struct eg_collision
 /**
  * Result of rectangle overlap calculation.
  */
-typedef struct eg_overlap
+typedef struct cr_overlap
 {
     // The fields dx0, dx1, dy0, and dy1 are referred to as the deltas.
     // They represent the differences between the positions of the sides
@@ -30,7 +30,7 @@ typedef struct eg_overlap
     int dx1;
     int dy0;
     int dy1;
-} eg_overlap;
+} cr_overlap;
 
 /**
  * Determines if a collision will occur between a moving source entity A and
@@ -41,54 +41,54 @@ typedef struct eg_overlap
  * the target and B as if it were the source.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_entity* - the source entity
- *   eg_entity* - the target entity
- *   eg_t-res* - a pointer to the collision result struct
+ *   cr_app* - a pointer to an app struct
+ *   cr_entity* - the source entity
+ *   cr_entity* - the target entity
+ *   cr_collision* - a pointer to the collision result struct
  */
 int common_swept_aabb(
-    eg_app *app,
-    eg_entity *a,
-    eg_entity *b,
-    eg_collision *res);
+    cr_app *app,
+    cr_entity *a,
+    cr_entity *b,
+    cr_collision *res);
 
 /**
  * Used for slopes.
  * UNDER CONSTRUCTION
  *
  * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_entity* - the source entity
- *   eg_entity* - the target entity
- *   eg_t-res* - a pointer to the collision result struct
+ *   cr_app* - a pointer to an app struct
+ *   cr_entity* - the source entity
+ *   cr_entity* - the target entity
+ *   cr_collision* - a pointer to the collision result struct
  */
 int common_line(
-    eg_app *app,
-    eg_entity *a,
-    eg_entity *b,
-    eg_collision *res);
+    cr_app *app,
+    cr_entity *a,
+    cr_entity *b,
+    cr_collision *res);
 
 /**
  * Determines if two rectangles overlap.
- * The third argument is a pointer to an eg_overlap struct.
+ * The third argument is a pointer to an cr_overlap struct.
  * This will receive the results of the overlap calculations.
  *
  * Params:
- *   eg_rect* - a reference to a rect
- *   eg_rect* - a reference to another rect
- *   eg_overlap* - a reference to the overlap calculation result struct
+ *   cr_rect* - a reference to a rect
+ *   cr_rect* - a reference to another rect
+ *   cr_overlap* - a reference to the overlap calculation result struct
  */
 int common_is_overlapped(
-    eg_rect *a,
-    eg_rect *b,
-    eg_overlap *res);
+    cr_rect *a,
+    cr_rect *b,
+    cr_overlap *res);
 
 /**
  * Detects and handles collisions between all entities in an application.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  */
-void common_handle_collisions(eg_app *app);
+void common_handle_collisions(cr_app *app);
 
 #endif

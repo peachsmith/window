@@ -27,8 +27,8 @@ extern "C"
 //----------------------------------------------------------------------------
 
 // default screen dimensions based on the Game Boy Advance.
-#define EG_DEFAULT_SCREEN_WIDTH 240
-#define EG_DEFAULT_SCREEN_HEIGHT 160
+#define CR_DEFAULT_SCREEN_WIDTH 240
+#define CR_DEFAULT_SCREEN_HEIGHT 160
 
 // types of audio resources
 #define AUDIO_TYPE_SOUND_EFFECT 1
@@ -44,261 +44,261 @@ extern "C"
  * The app struct represents the state of an application.
  * Only one of these should be created in a given program.
  */
-typedef struct eg_app eg_app;
+typedef struct cr_app cr_app;
 
 /**
  * The impl struct underlying implementation of the framework.
  * This handles things like windows and input handling.
  */
-typedef struct eg_impl eg_impl;
+typedef struct cr_impl cr_impl;
 
 /**
  * The debug struct is used for viewing and modifying the internal state of
  * the application. This is intended primarily for development and debugging.
  */
-typedef struct eg_debug eg_debug;
+typedef struct cr_debug cr_debug;
 
 /**
  * An entity is a thing that can interact with other things.
  */
-typedef struct eg_entity eg_entity;
+typedef struct cr_entity cr_entity;
 
 /**
  * An entity_type represents common information for all entities of a given
  * type.
  */
-typedef struct eg_entity_type eg_entity_type;
+typedef struct cr_entity_type cr_entity_type;
 
 /**
  * A texture represents some graphical data that may be rendered to the
  * screen.
  */
-typedef struct eg_texture eg_texture;
+typedef struct cr_texture cr_texture;
 
 /**
  * A font represents a specific style of typeface for text that may be
  * rendered to the screen.
  */
-typedef struct eg_font eg_font;
+typedef struct cr_font cr_font;
 
 /**
  * A sound represents audio data.
  */
-typedef struct eg_sound eg_sound;
+typedef struct cr_sound cr_sound;
 
 /**
  * A point represents x and y coordinates in 2D space.
  */
-typedef struct eg_point eg_point;
+typedef struct cr_point cr_point;
 
 /**
  * A rectangle represents a 2D area bound by four right angles.
  */
-typedef struct eg_rect eg_rect;
+typedef struct cr_rect cr_rect;
 
 /**
  * The camera represents a modification to the field of view.
  */
-typedef struct eg_camera eg_camera;
+typedef struct cr_camera cr_camera;
 
 /**
  * The collision struct represents the result of collision detection.
  * This structure is defined by the consuming application.
  */
-typedef struct eg_collision eg_collision;
+typedef struct cr_collision cr_collision;
 
 /**
  * A color represents a 32-bit value of the format 0xAARRGGBB.
  * For example, the color cornflower blue can be represented as 0xFF6495ED.
  */
-typedef uint32_t eg_color;
+typedef uint32_t cr_color;
 
 /**
  * A keycode identifies a key on the keyboard.
  */
-typedef enum eg_keycode eg_keycode;
+typedef enum cr_keycode cr_keycode;
 
 /**
  * A func is a function that can get all its required input from an app
  * struct.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  */
-typedef void (*eg_func)(eg_app *);
+typedef void (*cr_func)(cr_app *);
 
 /**
  * An entity_func is a function that performs a task using a specific
  * entity.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_entity* - an entity that may be affected by the task.
+ *   cr_app* - a pointer to an app struct
+ *   cr_entity* - an entity that may be affected by the task.
  */
-typedef void (*eg_entity_func)(eg_app *, eg_entity *);
+typedef void (*cr_entity_func)(cr_app *, cr_entity *);
 
 /**
  * A collider is a function that provides the behavior of one entity when it
  * collides with another.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_entity* - the entity whose state may be updated
- *   eg_entity* - the entity that affects the state of the first entity
- *   eg_collision* - a
+ *   cr_app* - a pointer to an app struct
+ *   cr_entity* - the entity whose state may be updated
+ *   cr_entity* - the entity that affects the state of the first entity
+ *   cr_collision* - a
  */
-typedef void (*eg_collider)(
-    eg_app *,
-    eg_entity *,
-    eg_entity *,
-    eg_collision *);
+typedef void (*cr_collider)(
+    cr_app *,
+    cr_entity *,
+    cr_entity *,
+    cr_collision *);
 
 //----------------------------------------------------------------------------
 // Keycodes
 
-enum eg_keycode
+enum cr_keycode
 {
     // dummy keycode
-    EG_KEYCODE_UNKNOWN,
+    CR_KEYCODE_UNKNOWN,
 
     // alphabetic keys
-    EG_KEYCODE_A,
-    EG_KEYCODE_B,
-    EG_KEYCODE_C,
-    EG_KEYCODE_D,
-    EG_KEYCODE_E,
-    EG_KEYCODE_F,
-    EG_KEYCODE_G,
-    EG_KEYCODE_H,
-    EG_KEYCODE_I,
-    EG_KEYCODE_J,
-    EG_KEYCODE_K,
-    EG_KEYCODE_L,
-    EG_KEYCODE_M,
-    EG_KEYCODE_N,
-    EG_KEYCODE_O,
-    EG_KEYCODE_P,
-    EG_KEYCODE_Q,
-    EG_KEYCODE_R,
-    EG_KEYCODE_S,
-    EG_KEYCODE_T,
-    EG_KEYCODE_U,
-    EG_KEYCODE_V,
-    EG_KEYCODE_W,
-    EG_KEYCODE_X,
-    EG_KEYCODE_Y,
-    EG_KEYCODE_Z,
+    CR_KEYCODE_A,
+    CR_KEYCODE_B,
+    CR_KEYCODE_C,
+    CR_KEYCODE_D,
+    CR_KEYCODE_E,
+    CR_KEYCODE_F,
+    CR_KEYCODE_G,
+    CR_KEYCODE_H,
+    CR_KEYCODE_I,
+    CR_KEYCODE_J,
+    CR_KEYCODE_K,
+    CR_KEYCODE_L,
+    CR_KEYCODE_M,
+    CR_KEYCODE_N,
+    CR_KEYCODE_O,
+    CR_KEYCODE_P,
+    CR_KEYCODE_Q,
+    CR_KEYCODE_R,
+    CR_KEYCODE_S,
+    CR_KEYCODE_T,
+    CR_KEYCODE_U,
+    CR_KEYCODE_V,
+    CR_KEYCODE_W,
+    CR_KEYCODE_X,
+    CR_KEYCODE_Y,
+    CR_KEYCODE_Z,
 
     // numbers
-    EG_KEYCODE_1,
-    EG_KEYCODE_2,
-    EG_KEYCODE_3,
-    EG_KEYCODE_4,
-    EG_KEYCODE_5,
-    EG_KEYCODE_6,
-    EG_KEYCODE_7,
-    EG_KEYCODE_8,
-    EG_KEYCODE_9,
-    EG_KEYCODE_0,
+    CR_KEYCODE_1,
+    CR_KEYCODE_2,
+    CR_KEYCODE_3,
+    CR_KEYCODE_4,
+    CR_KEYCODE_5,
+    CR_KEYCODE_6,
+    CR_KEYCODE_7,
+    CR_KEYCODE_8,
+    CR_KEYCODE_9,
+    CR_KEYCODE_0,
 
-    EG_KEYCODE_RETURN,
-    EG_KEYCODE_ESCAPE,
-    EG_KEYCODE_BACKSPACE,
-    EG_KEYCODE_TAB,
-    EG_KEYCODE_SPACE,
+    CR_KEYCODE_RETURN,
+    CR_KEYCODE_ESCAPE,
+    CR_KEYCODE_BACKSPACE,
+    CR_KEYCODE_TAB,
+    CR_KEYCODE_SPACE,
 
     // punctuation
-    EG_KEYCODE_MINUS,
-    EG_KEYCODE_EQUALS,
-    EG_KEYCODE_LEFTBRACKET,
-    EG_KEYCODE_RIGHTBRACKET,
-    EG_KEYCODE_BACKSLASH,
-    EG_KEYCODE_NONUSHASH, // unused, don't rely on it
-    EG_KEYCODE_SEMICOLON,
-    EG_KEYCODE_APOSTROPHE,
-    EG_KEYCODE_GRAVE, // back tick or tilde key in top left
-    EG_KEYCODE_COMMA,
-    EG_KEYCODE_PERIOD,
-    EG_KEYCODE_SLASH,
-    EG_KEYCODE_CAPSLOCK,
+    CR_KEYCODE_MINUS,
+    CR_KEYCODE_EQUALS,
+    CR_KEYCODE_LEFTBRACKET,
+    CR_KEYCODE_RIGHTBRACKET,
+    CR_KEYCODE_BACKSLASH,
+    CR_KEYCODE_NONUSHASH, // unused, don't rely on it
+    CR_KEYCODE_SEMICOLON,
+    CR_KEYCODE_APOSTROPHE,
+    CR_KEYCODE_GRAVE, // back tick or tilde key in top left
+    CR_KEYCODE_COMMA,
+    CR_KEYCODE_PERIOD,
+    CR_KEYCODE_SLASH,
+    CR_KEYCODE_CAPSLOCK,
 
     // function keys
-    EG_KEYCODE_F1,
-    EG_KEYCODE_F2,
-    EG_KEYCODE_F3,
-    EG_KEYCODE_F4,
-    EG_KEYCODE_F5,
-    EG_KEYCODE_F6,
-    EG_KEYCODE_F7,
-    EG_KEYCODE_F8,
-    EG_KEYCODE_F9,
-    EG_KEYCODE_F10,
-    EG_KEYCODE_F11,
-    EG_KEYCODE_F12,
+    CR_KEYCODE_F1,
+    CR_KEYCODE_F2,
+    CR_KEYCODE_F3,
+    CR_KEYCODE_F4,
+    CR_KEYCODE_F5,
+    CR_KEYCODE_F6,
+    CR_KEYCODE_F7,
+    CR_KEYCODE_F8,
+    CR_KEYCODE_F9,
+    CR_KEYCODE_F10,
+    CR_KEYCODE_F11,
+    CR_KEYCODE_F12,
 
-    EG_KEYCODE_PRINTSCREEN,
-    EG_KEYCODE_SCROLLLOCK,
-    EG_KEYCODE_PAUSE,
-    EG_KEYCODE_INSERT,
-    EG_KEYCODE_HOME,
-    EG_KEYCODE_PAGEUP,
-    EG_KEYCODE_DELETE,
-    EG_KEYCODE_END,
-    EG_KEYCODE_PAGEDOWN,
-    EG_KEYCODE_RIGHT,
-    EG_KEYCODE_LEFT,
-    EG_KEYCODE_DOWN,
-    EG_KEYCODE_UP,
+    CR_KEYCODE_PRINTSCREEN,
+    CR_KEYCODE_SCROLLLOCK,
+    CR_KEYCODE_PAUSE,
+    CR_KEYCODE_INSERT,
+    CR_KEYCODE_HOME,
+    CR_KEYCODE_PAGEUP,
+    CR_KEYCODE_DELETE,
+    CR_KEYCODE_END,
+    CR_KEYCODE_PAGEDOWN,
+    CR_KEYCODE_RIGHT,
+    CR_KEYCODE_LEFT,
+    CR_KEYCODE_DOWN,
+    CR_KEYCODE_UP,
 
-    EG_KEYCODE_NUMLOCKCLEAR,
+    CR_KEYCODE_NUMLOCKCLEAR,
 
     // key pad (a.k.a. 10 key) keys
-    EG_KEYCODE_KP_DIVIDE,
-    EG_KEYCODE_KP_MULTIPLY,
-    EG_KEYCODE_KP_MINUS,
-    EG_KEYCODE_KP_PLUS,
-    EG_KEYCODE_KP_ENTER,
-    EG_KEYCODE_KP_1,
-    EG_KEYCODE_KP_2,
-    EG_KEYCODE_KP_3,
-    EG_KEYCODE_KP_4,
-    EG_KEYCODE_KP_5,
-    EG_KEYCODE_KP_6,
-    EG_KEYCODE_KP_7,
-    EG_KEYCODE_KP_8,
-    EG_KEYCODE_KP_9,
-    EG_KEYCODE_KP_0,
-    EG_KEYCODE_KP_PERIOD,
+    CR_KEYCODE_KP_DIVIDE,
+    CR_KEYCODE_KP_MULTIPLY,
+    CR_KEYCODE_KP_MINUS,
+    CR_KEYCODE_KP_PLUS,
+    CR_KEYCODE_KP_ENTER,
+    CR_KEYCODE_KP_1,
+    CR_KEYCODE_KP_2,
+    CR_KEYCODE_KP_3,
+    CR_KEYCODE_KP_4,
+    CR_KEYCODE_KP_5,
+    CR_KEYCODE_KP_6,
+    CR_KEYCODE_KP_7,
+    CR_KEYCODE_KP_8,
+    CR_KEYCODE_KP_9,
+    CR_KEYCODE_KP_0,
+    CR_KEYCODE_KP_PERIOD,
 
     // Control, Shift, Alt, and super
-    EG_KEYCODE_LCTRL,
-    EG_KEYCODE_LSHIFT,
-    EG_KEYCODE_LALT, // left alt or option
-    EG_KEYCODE_LGUI, // super key (windows key, command, etc.)
-    EG_KEYCODE_RCTRL,
-    EG_KEYCODE_RSHIFT,
-    EG_KEYCODE_RALT, // right alt or option
-    EG_KEYCODE_RGUI, // right super key (windows key, command, etc.)
+    CR_KEYCODE_LCTRL,
+    CR_KEYCODE_LSHIFT,
+    CR_KEYCODE_LALT, // left alt or option
+    CR_KEYCODE_LGUI, // super key (windows key, command, etc.)
+    CR_KEYCODE_RCTRL,
+    CR_KEYCODE_RSHIFT,
+    CR_KEYCODE_RALT, // right alt or option
+    CR_KEYCODE_RGUI, // right super key (windows key, command, etc.)
 
     // unknown keycodes
-    EG_KEYCODE_NONUSBACKSLASH,
-    EG_KEYCODE_APPLICATION,
+    CR_KEYCODE_NONUSBACKSLASH,
+    CR_KEYCODE_APPLICATION,
 
     // Any values greater than or equal to this are considered to be invalid
     // keycodes.
-    EG_MAX_KEYCODE
+    CR_MAX_KEYCODE
 };
 
 //----------------------------------------------------------------------------
 // Structure Definitions
 
-struct eg_point
+struct cr_point
 {
     int x;
     int y;
 };
 
-struct eg_rect
+struct cr_rect
 {
     int x;
     int y;
@@ -306,7 +306,7 @@ struct eg_rect
     int h;
 };
 
-struct eg_camera
+struct cr_camera
 {
     // position
     int x;
@@ -322,7 +322,7 @@ struct eg_camera
     int config;
 };
 
-struct eg_debug
+struct cr_debug
 {
     int overlay;
     int hitboxes;
@@ -333,17 +333,17 @@ struct eg_debug
     float fps;
 };
 
-// definition of the eg_app struct
-struct eg_app
+// definition of the cr_app struct
+struct cr_app
 {
-    eg_impl *impl;
+    cr_impl *impl;
 
     // This is an array of flags to indicate that a key press has already been
     // detected.
-    unsigned char key_captures[EG_MAX_KEYCODE];
+    unsigned char key_captures[CR_MAX_KEYCODE];
 
     // Counters to indicate how long an input has been actuated.
-    unsigned char actuation_counters[EG_MAX_KEYCODE];
+    unsigned char actuation_counters[CR_MAX_KEYCODE];
 
     // For different sized windows.
     int scale;
@@ -371,59 +371,59 @@ struct eg_app
     int screen_width;
     int screen_height;
 
-    eg_camera cam;
+    cr_camera cam;
 
-    eg_func update;
-    eg_func draw;
+    cr_func update;
+    cr_func draw;
 
     // assets
-    eg_texture **textures;
+    cr_texture **textures;
     int texture_count;
 
-    eg_font **fonts;
+    cr_font **fonts;
     int font_count;
 
-    eg_sound **sounds;
+    cr_sound **sounds;
     int sound_count;
 
     // entities
-    eg_entity *entities;
+    cr_entity *entities;
     int entity_count;
     int entity_cap;
 
     // entity type registry
-    eg_entity_type *entity_types;
+    cr_entity_type *entity_types;
 
     // menus
-    eg_entity **menus;
+    cr_entity **menus;
     int menu_count;
 
     // dialogs
-    eg_entity **dialogs;
+    cr_entity **dialogs;
     int dialog_count;
 
-    eg_entity **overlays;
+    cr_entity **overlays;
     int overlay_count;
 
     // input handlers
-    eg_func *input;
+    cr_func *input;
     int input_count;
 
     // scene transition
-    eg_func transition_loader;
-    eg_func transition_input_handler;
+    cr_func transition_loader;
+    cr_func transition_input_handler;
 
-    eg_debug debug;
+    cr_debug debug;
 
     float frame_check;
 
     // Generic values that can be used in any way.
-    eg_entity *primary; // an entity of significance
+    cr_entity *primary; // an entity of significance
     int *counters;      // generic counters
 };
 
-// definition of the eg_entity struct
-struct eg_entity
+// definition of the cr_entity struct
+struct cr_entity
 {
     int present;
 
@@ -462,7 +462,7 @@ struct eg_entity
 
     // The carrier is an entity that is modifying another entity's position
     // and velocity.
-    eg_entity *carrier;
+    cr_entity *carrier;
 
     // A single string of text. (used for UI elements)
     const char *text;
@@ -482,22 +482,22 @@ struct eg_entity
     int scroll_y;
 };
 
-struct eg_entity_type
+struct cr_entity_type
 {
     int id;
     int width;
     int height;
-    eg_entity_func render;
-    eg_entity_func update;
-    eg_entity_func advance;
-    eg_collider collide;
+    cr_entity_func render;
+    cr_entity_func update;
+    cr_entity_func advance;
+    cr_collider collide;
 
-    int (*get_x_vel)(eg_entity *); // calculates current x velocity.
-    int (*get_y_vel)(eg_entity *); // calculates current y velocity.
+    int (*get_x_vel)(cr_entity *); // calculates current x velocity.
+    int (*get_y_vel)(cr_entity *); // calculates current y velocity.
 
     // entity interaction
     int interactable;
-    int (*interact)(eg_app *, eg_entity *, eg_entity *);
+    int (*interact)(cr_app *, cr_entity *, cr_entity *);
 
     // indicates whether this entity represents the user
     int control;
@@ -524,14 +524,14 @@ struct eg_entity_type
  * Returns:
  *   int - 1 on success, or 0 on failure
  */
-CRUMBS_API int CRUMBS_CALL eg_initialize();
+CRUMBS_API int CRUMBS_CALL cr_initialize();
 
 /**
  * Terminates the framework.
  * This should be called after freeing all other resources that were allocated
  * during execution.
  */
-CRUMBS_API void CRUMBS_CALL eg_terminate();
+CRUMBS_API void CRUMBS_CALL cr_terminate();
 
 /**
  * Creates a new instance of the app struct.
@@ -539,7 +539,7 @@ CRUMBS_API void CRUMBS_CALL eg_terminate();
  * Returns:
  *   app* - a pointer to an app struct
  */
-CRUMBS_API eg_app *CRUMBS_CALL eg_create_app();
+CRUMBS_API cr_app *CRUMBS_CALL cr_create_app();
 
 /**
  * Frees the memory allocated for an app struct.
@@ -547,31 +547,31 @@ CRUMBS_API eg_app *CRUMBS_CALL eg_create_app();
  * Params:
  *   app* - a pointer to an app struct
  */
-CRUMBS_API void CRUMBS_CALL eg_destroy_app(eg_app *);
+CRUMBS_API void CRUMBS_CALL cr_destroy_app(cr_app *);
 
 /**
  * Sets the title of the application. This string will be used by the
  * underlying platform to label the window.
  */
-CRUMBS_API void CRUMBS_CALL eg_set_title(eg_app *, const char *);
+CRUMBS_API void CRUMBS_CALL cr_set_title(cr_app *, const char *);
 
 /**
  * Initiates the current frame.
  * This should be called at the beginning of each iteration of the main loop.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  */
-CRUMBS_API void CRUMBS_CALL eg_begin_frame(eg_app *);
+CRUMBS_API void CRUMBS_CALL cr_begin_frame(cr_app *);
 
 /**
  * Concludes the current frame.
  * This should be called at the end of each iteration of the main loop.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  */
-CRUMBS_API void CRUMBS_CALL eg_end_frame(eg_app *);
+CRUMBS_API void CRUMBS_CALL cr_end_frame(cr_app *);
 
 //----------------------------------------------------------------------------
 // Drawing Functions
@@ -584,20 +584,20 @@ CRUMBS_API void CRUMBS_CALL eg_end_frame(eg_app *);
  * color specified until this function is called again with a different color.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_color - a color
+ *   cr_app* - a pointer to an app struct
+ *   cr_color - a color
  */
-CRUMBS_API void CRUMBS_CALL eg_set_color(eg_app *, eg_color);
+CRUMBS_API void CRUMBS_CALL cr_set_color(cr_app *, cr_color);
 
 /**
  * Draws a line connecting two points.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_point* - a pointer to the starting point of the line
- *   eg_point* - a pointer to the ending point of the line
+ *   cr_app* - a pointer to an app struct
+ *   cr_point* - a pointer to the starting point of the line
+ *   cr_point* - a pointer to the ending point of the line
  */
-CRUMBS_API void CRUMBS_CALL eg_draw_line(eg_app *, eg_point *, eg_point *);
+CRUMBS_API void CRUMBS_CALL cr_draw_line(cr_app *, cr_point *, cr_point *);
 
 /**
  * Draws a rectangle.
@@ -606,11 +606,11 @@ CRUMBS_API void CRUMBS_CALL eg_draw_line(eg_app *, eg_point *, eg_point *);
  * the rectangle is not filled.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_rect* - a pointer to a rectangle
+ *   cr_app* - a pointer to an app struct
+ *   cr_rect* - a pointer to a rectangle
  *   int - fill flag. 1 if the rectangle should be filled, otherwise 0
  */
-CRUMBS_API void CRUMBS_CALL eg_draw_rect(eg_app *, eg_rect *, int);
+CRUMBS_API void CRUMBS_CALL cr_draw_rect(cr_app *, cr_rect *, int);
 
 //----------------------------------------------------------------------------
 // Input Handling Functions
@@ -622,10 +622,10 @@ CRUMBS_API void CRUMBS_CALL eg_draw_rect(eg_app *, eg_rect *, int);
  * the input is actuated.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *   int - the scancode of the key to check
  */
-CRUMBS_API int CRUMBS_CALL eg_peek_input(eg_app *, int);
+CRUMBS_API int CRUMBS_CALL cr_peek_input(cr_app *, int);
 
 /**
  * Checks to see if an input is actuated.
@@ -635,10 +635,10 @@ CRUMBS_API int CRUMBS_CALL eg_peek_input(eg_app *, int);
  * where a task must be performed a single time for a single input actuation.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *   int - the scancode of the key to check
  */
-CRUMBS_API int CRUMBS_CALL eg_consume_input(eg_app *, int);
+CRUMBS_API int CRUMBS_CALL cr_consume_input(cr_app *, int);
 
 /**
  * Pushes an input handler onto the top of the input handler stack.
@@ -646,10 +646,10 @@ CRUMBS_API int CRUMBS_CALL eg_consume_input(eg_app *, int);
  * remains at the top.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_func - an input handliner function
+ *   cr_app* - a pointer to an app struct
+ *   cr_func - an input handliner function
  */
-CRUMBS_API void CRUMBS_CALL eg_push_input_handler(eg_app *, eg_func);
+CRUMBS_API void CRUMBS_CALL cr_push_input_handler(cr_app *, cr_func);
 
 /**
  * Pops an input handler off the top of the input handler stack.
@@ -658,9 +658,9 @@ CRUMBS_API void CRUMBS_CALL eg_push_input_handler(eg_app *, eg_func);
  * caller to dispose of any input handlers popped from the stack.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  */
-CRUMBS_API void CRUMBS_CALL eg_pop_input_handler(eg_app *);
+CRUMBS_API void CRUMBS_CALL cr_pop_input_handler(cr_app *);
 
 //----------------------------------------------------------------------------
 // Entity Functions
@@ -669,57 +669,57 @@ CRUMBS_API void CRUMBS_CALL eg_pop_input_handler(eg_app *);
  * Creates a new entity.
  *
  * Returns:
- *   eg_entity* - a pointer to a new entity
+ *   cr_entity* - a pointer to a new entity
  */
-CRUMBS_API eg_entity *CRUMBS_CALL eg_create_entity(eg_app *);
+CRUMBS_API cr_entity *CRUMBS_CALL cr_create_entity(cr_app *);
 
 /**
  * Removes an entity from the entity list.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_entity* - the entity to remove
+ *   cr_app* - a pointer to an app struct
+ *   cr_entity* - the entity to remove
  */
-CRUMBS_API void CRUMBS_CALL eg_remove_entity(eg_app *, eg_entity *);
+CRUMBS_API void CRUMBS_CALL cr_remove_entity(cr_app *, cr_entity *);
 
 /**
  * Checks the value of an entity's flag.
  *
  * Params:
- *   eg_entity* - a reference to an entity whose flags will be checked
+ *   cr_entity* - a reference to an entity whose flags will be checked
  *   int - the index of the flag to check, ranging from 0 to 7.
  *
  * Returns:
  *   int - 1 if the flag is set or 0 if the flag is not set.
  */
-CRUMBS_API int CRUMBS_CALL eg_check_flag(eg_entity *, int);
+CRUMBS_API int CRUMBS_CALL cr_check_flag(cr_entity *, int);
 
 /**
  * Sets a flag on an entity.
  *
  * Params:
- *   eg_entity* - a reference to an entity whose flag will be set
+ *   cr_entity* - a reference to an entity whose flag will be set
  *   int - the index of the flag to set, ranging from 0 to 7.
  */
-CRUMBS_API void CRUMBS_CALL eg_set_flag(eg_entity *, int);
+CRUMBS_API void CRUMBS_CALL cr_set_flag(cr_entity *, int);
 
 /**
  * Clears a flag on an entity.
  *
  * Params:
- *   eg_entity* - a reference to an entity whose flag will be cleared
+ *   cr_entity* - a reference to an entity whose flag will be cleared
  *   int - the index of the flag to clear, ranging from 0 to 7.
  */
-CRUMBS_API void CRUMBS_CALL eg_clear_flag(eg_entity *, int);
+CRUMBS_API void CRUMBS_CALL cr_clear_flag(cr_entity *, int);
 
 /**
  * Toggles a flag on an entity.
  *
  * Params:
- *   eg_entity* - a reference to an entity whose flag will be toggled
+ *   cr_entity* - a reference to an entity whose flag will be toggled
  *   int - the index of the flag to toggle, ranging from 0 to 7.
  */
-CRUMBS_API void CRUMBS_CALL eg_toggle_flag(eg_entity *, int);
+CRUMBS_API void CRUMBS_CALL cr_toggle_flag(cr_entity *, int);
 
 //----------------------------------------------------------------------------
 // Font Functions
@@ -728,29 +728,29 @@ CRUMBS_API void CRUMBS_CALL eg_toggle_flag(eg_entity *, int);
  * Loads a font from a TrueType file.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *   const char* - file path of the TrueType file
  *   int - point size
  *
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-CRUMBS_API eg_font *CRUMBS_CALL eg_load_font(eg_app *, const char *, int);
+CRUMBS_API cr_font *CRUMBS_CALL cr_load_font(cr_app *, const char *, int);
 
 /**
  * Renders a string of text to the screen.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *   const char* - the text to render
  *   int - the x position of the text on the screen
  *   int - the y position of the text on the screen
  */
-CRUMBS_API void CRUMBS_CALL eg_draw_text(eg_app *, eg_font *, const char *, int, int);
+CRUMBS_API void CRUMBS_CALL cr_draw_text(cr_app *, cr_font *, const char *, int, int);
 
 /**
  * Renders a string of text to the screen within a specified area.
- * The fourth argument is an eg_rect structure describing the area that will
+ * The fourth argument is an cr_rect structure describing the area that will
  * contain the text.
  * The x and y fields of the rect represent the starting position.
  * The w field of the rect represents the line width. This is the point at
@@ -760,12 +760,12 @@ CRUMBS_API void CRUMBS_CALL eg_draw_text(eg_app *, eg_font *, const char *, int,
  * default heigh of the character 'A' in the font will be used.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *   const char* - the text to render
  *   int - the x position of the text on the screen
  *   int - the y position of the text on the screen
  */
-CRUMBS_API void CRUMBS_CALL eg_draw_text_bounded(eg_app *, eg_font *, const char *, eg_rect *, int *);
+CRUMBS_API void CRUMBS_CALL cr_draw_text_bounded(cr_app *, cr_font *, const char *, cr_rect *, int *);
 
 //----------------------------------------------------------------------------
 // Texture Functions
@@ -774,26 +774,26 @@ CRUMBS_API void CRUMBS_CALL eg_draw_text_bounded(eg_app *, eg_font *, const char
  * Loads a texture from a PNG file.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *   const char* - file path of the PNG file
  *
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-CRUMBS_API eg_texture *CRUMBS_CALL eg_load_texture(eg_app *, const char *);
+CRUMBS_API cr_texture *CRUMBS_CALL cr_load_texture(cr_app *, const char *);
 
 /**
  * Renders a texure to the screen.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_texture* - the texure to render
- *   eg_rect* - a rectangular region of the texture that will be rendered
- *   eg_rect* - a rectangular region of the screen to which the texture
+ *   cr_app* - a pointer to an app struct
+ *   cr_texture* - the texure to render
+ *   cr_rect* - a rectangular region of the texture that will be rendered
+ *   cr_rect* - a rectangular region of the screen to which the texture
  *              will be rendered
  *   int - 1 for horizontal flip, 0 for no flip
  */
-CRUMBS_API void CRUMBS_CALL eg_draw_texture(eg_app *, eg_texture *, eg_rect *, eg_rect *, int);
+CRUMBS_API void CRUMBS_CALL cr_draw_texture(cr_app *, cr_texture *, cr_rect *, cr_rect *, int);
 
 //----------------------------------------------------------------------------
 // Audio functions
@@ -802,49 +802,49 @@ CRUMBS_API void CRUMBS_CALL eg_draw_texture(eg_app *, eg_texture *, eg_rect *, e
  * Loads a sound from a file.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *   const char* - file path of the sound file
  */
-CRUMBS_API eg_sound *CRUMBS_CALL eg_load_sound(eg_app *app, const char *, int);
+CRUMBS_API cr_sound *CRUMBS_CALL cr_load_sound(cr_app *app, const char *, int);
 
 /**
  * Plays the contents of a sound file.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
- *   eg_sound* - a pointer to the sound to play
+ *   cr_app* - a pointer to an app struct
+ *   cr_sound* - a pointer to the sound to play
  */
-CRUMBS_API void CRUMBS_CALL eg_play_sound(eg_app *, eg_sound *);
+CRUMBS_API void CRUMBS_CALL cr_play_sound(cr_app *, cr_sound *);
 
 //----------------------------------------------------------------------------
 // Reference Colors
 
 // Palette Name: Vinik24
 // Source: https://lospec.com/palette-list/vinik24
-#define EG_COLOR_VINIK_BLACK 0xFF000000
-#define EG_COLOR_VINIK_GRAY 0xFF6F6776
-#define EG_COLOR_VINIK_LIGHT_GRAY 0xFF9A9A97
-#define EG_COLOR_VINIK_GREEN_GRAY 0xFFC5CCB8
-#define EG_COLOR_VINIK_MAUVE 0xFF8B5580
-#define EG_COLOR_VINIK_PINK 0xFFC38890
-#define EG_COLOR_VINIK_LAVENDAR 0xFFA593A5
-#define EG_COLOR_VINIK_INDIGO 0xFF666092
-#define EG_COLOR_VINIK_RED 0xFF9A4F50
-#define EG_COLOR_VINIK_ORANGE 0xFFC28D75
-#define EG_COLOR_VINIK_LIGHT_BLUE 0xFF7CA1C0
-#define EG_COLOR_VINIK_BLUE 0xFF416AA3
-#define EG_COLOR_VINIK_MAROON 0xFF8D6268
-#define EG_COLOR_VINIK_YELLOW 0xFFBE955C
-#define EG_COLOR_VINIK_CYAN 0xFF68ACA9
-#define EG_COLOR_VINIK_TEAL 0xFF387080
-#define EG_COLOR_VINIK_BROWN 0xFF6E6962
-#define EG_COLOR_VINIK_CHARTEUSE 0xFF93A167
-#define EG_COLOR_VINIK_SEA_GREEN 0xFF6EAA78
-#define EG_COLOR_VINIK_FOREST_GREEN 0xFF557064
-#define EG_COLOR_VINIK_MILITARY_GREEN 0xFF9D9F7F
-#define EG_COLOR_VINIK_GREEMP 0xFF7E9E99
-#define EG_COLOR_VINIK_GROOMP 0xFF5D6872
-#define EG_COLOR_VINIK_PURPLE 0xFF433455
+#define CR_COLOR_VINIK_BLACK 0xFF000000
+#define CR_COLOR_VINIK_GRAY 0xFF6F6776
+#define CR_COLOR_VINIK_LIGHT_GRAY 0xFF9A9A97
+#define CR_COLOR_VINIK_GREEN_GRAY 0xFFC5CCB8
+#define CR_COLOR_VINIK_MAUVE 0xFF8B5580
+#define CR_COLOR_VINIK_PINK 0xFFC38890
+#define CR_COLOR_VINIK_LAVENDAR 0xFFA593A5
+#define CR_COLOR_VINIK_INDIGO 0xFF666092
+#define CR_COLOR_VINIK_RED 0xFF9A4F50
+#define CR_COLOR_VINIK_ORANGE 0xFFC28D75
+#define CR_COLOR_VINIK_LIGHT_BLUE 0xFF7CA1C0
+#define CR_COLOR_VINIK_BLUE 0xFF416AA3
+#define CR_COLOR_VINIK_MAROON 0xFF8D6268
+#define CR_COLOR_VINIK_YELLOW 0xFFBE955C
+#define CR_COLOR_VINIK_CYAN 0xFF68ACA9
+#define CR_COLOR_VINIK_TEAL 0xFF387080
+#define CR_COLOR_VINIK_BROWN 0xFF6E6962
+#define CR_COLOR_VINIK_CHARTEUSE 0xFF93A167
+#define CR_COLOR_VINIK_SEA_GREEN 0xFF6EAA78
+#define CR_COLOR_VINIK_FOREST_GREEN 0xFF557064
+#define CR_COLOR_VINIK_MILITARY_GREEN 0xFF9D9F7F
+#define CR_COLOR_VINIK_GREEMP 0xFF7E9E99
+#define CR_COLOR_VINIK_GROOMP 0xFF5D6872
+#define CR_COLOR_VINIK_PURPLE 0xFF433455
 
 #ifdef __cplusplus
 }

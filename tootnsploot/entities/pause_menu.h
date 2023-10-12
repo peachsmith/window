@@ -11,16 +11,16 @@
  * entity.
  *
  * Params:
- *   eg_entity_type* - the pause menu entity type definition
+ *   cr_entity_type* - the pause menu entity type definition
  */
-void tns_register_pause_menu(eg_entity_type *);
+void tns_register_pause_menu(cr_entity_type *);
 
 /**
  * Creates a pause menu entity.
  *
  * Returns:
- *   eg_entity* - a pointer to the new pause menu entity.
+ *   cr_entity* - a pointer to the new pause menu entity.
  */
-eg_entity *tns_create_pause_menu(eg_app *);
+cr_entity *tns_create_pause_menu(cr_app *);
 
 #endif

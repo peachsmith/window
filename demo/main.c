@@ -7,31 +7,31 @@
 int main(int argc, char **argv)
 {
     // Initialize the underlying implementation.
-    if (!eg_initialize())
+    if (!cr_initialize())
     {
         return 1;
     }
 
     // Create the application context.
-    eg_app *app = eg_create_app();
+    cr_app *app = cr_create_app();
     if (app == NULL)
     {
-        eg_terminate();
+        cr_terminate();
         return 1;
     }
 
     // Implement application behavior.
     if (!demo_prepare(app))
     {
-        eg_destroy_app(app);
-        eg_terminate();
+        cr_destroy_app(app);
+        cr_terminate();
         return 1;
     }
 
     // Begin the main loop.
     while (!app->done)
     {
-        eg_begin_frame(app);
+        cr_begin_frame(app);
 
         // Update the state of the application.
         app->update(app);
@@ -39,14 +39,14 @@ int main(int argc, char **argv)
         // Draw the contents of the current frame.
         app->draw(app);
 
-        eg_end_frame(app);
+        cr_end_frame(app);
     }
 
     // Destroy the application context.
-    eg_destroy_app(app);
+    cr_destroy_app(app);
 
     // Terminate the underlying implementation.
-    eg_terminate();
+    cr_terminate();
 
     return 0;
 }

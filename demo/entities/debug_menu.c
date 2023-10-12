@@ -15,21 +15,21 @@ static const char *item_3_text = "Hit Boxes";
 static const char *item_4_text = "Draw Collisions";
 static const char *item_5_text = "Input Actuation";
 
-static void render_debug_menu(eg_app *app, eg_entity *menu)
+static void render_debug_menu(cr_app *app, cr_entity *menu)
 {
     int menu_x = menu->x_pos;
     int menu_y = menu->y_pos;
     int x_origin = 25;
     int y_origin = 5;
     int y_margin = 24;
-    eg_font *font = app->fonts[DEMO_FONT_POKEMON_FIRE_RED];
+    cr_font *font = app->fonts[DEMO_FONT_POKEMON_FIRE_RED];
 
     // Render the menu panel.
     ui_draw_panel(app, menu_x, menu_y, 230, 150);
 
     //-----------------------------------------------------
     // BEGIN Scenes
-    eg_draw_text(app, font,
+    cr_draw_text(app, font,
                  item_1_text,
                  menu_x + x_origin,
                  menu_y + y_origin);
@@ -38,14 +38,14 @@ static void render_debug_menu(eg_app *app, eg_entity *menu)
 
     //-----------------------------------------------------
     // BEGIN Frame Length
-    eg_draw_text(app, font,
+    cr_draw_text(app, font,
                  item_2_text,
                  menu_x + x_origin,
                  menu_y + y_origin + y_margin);
-    eg_draw_text(app, font, "1", menu_x + x_origin + 107, menu_y + y_origin + y_margin);
-    eg_draw_text(app, font, "2", menu_x + x_origin + 126, menu_y + y_origin + y_margin);
-    eg_draw_text(app, font, "4", menu_x + x_origin + 146, menu_y + y_origin + y_margin);
-    eg_draw_text(app, font, "8", menu_x + x_origin + 166, menu_y + y_origin + y_margin);
+    cr_draw_text(app, font, "1", menu_x + x_origin + 107, menu_y + y_origin + y_margin);
+    cr_draw_text(app, font, "2", menu_x + x_origin + 126, menu_y + y_origin + y_margin);
+    cr_draw_text(app, font, "4", menu_x + x_origin + 146, menu_y + y_origin + y_margin);
+    cr_draw_text(app, font, "8", menu_x + x_origin + 166, menu_y + y_origin + y_margin);
 
     if (menu->cursor_y == 1)
     {
@@ -102,18 +102,18 @@ static void render_debug_menu(eg_app *app, eg_entity *menu)
         break;
     }
 
-    eg_set_color(app, EG_COLOR_VINIK_RED);
-    eg_rect r = {.x = menu_x + x_origin + selection + 1,
+    cr_set_color(app, CR_COLOR_VINIK_RED);
+    cr_rect r = {.x = menu_x + x_origin + selection + 1,
                  .y = menu_y + y_origin + y_margin,
                  .w = 16,
                  .h = 16};
-    eg_draw_rect(app, &r, 0);
+    cr_draw_rect(app, &r, 0);
     // END Frame Length
     //-----------------------------------------------------
 
     //-----------------------------------------------------
     // BEGIN Hitbox Rendering
-    eg_draw_text(app, font,
+    cr_draw_text(app, font,
                  item_3_text,
                  menu_x + x_origin,
                  menu_y + y_origin + 2 * y_margin);
@@ -148,7 +148,7 @@ static void render_debug_menu(eg_app *app, eg_entity *menu)
                           UI_INDICATOR_SCROLL_RIGHT);
     }
 
-    eg_draw_text(
+    cr_draw_text(
         app,
         font,
         app->debug.hitboxes ? "ON" : "OFF",
@@ -159,7 +159,7 @@ static void render_debug_menu(eg_app *app, eg_entity *menu)
 
     //-----------------------------------------------------
     // BEGIN Collision Rendering
-    eg_draw_text(app, font,
+    cr_draw_text(app, font,
                  item_4_text,
                  menu_x + x_origin,
                  menu_y + y_origin + 3 * y_margin);
@@ -194,7 +194,7 @@ static void render_debug_menu(eg_app *app, eg_entity *menu)
                           UI_INDICATOR_SCROLL_RIGHT);
     }
 
-    eg_draw_text(
+    cr_draw_text(
         app,
         font,
         app->debug.collisions ? "ON" : "OFF",
@@ -205,7 +205,7 @@ static void render_debug_menu(eg_app *app, eg_entity *menu)
 
     //-----------------------------------------------------
     // BEGIN Input Actuation
-    eg_draw_text(app, font,
+    cr_draw_text(app, font,
                  item_5_text,
                  menu_x + x_origin,
                  menu_y + y_origin + 4 * y_margin);
@@ -219,7 +219,7 @@ static void render_debug_menu(eg_app *app, eg_entity *menu)
         (menu_y + 5) + menu->cursor_y * 24);
 }
 
-static void update_debug_menu(eg_app *app, eg_entity *menu)
+static void update_debug_menu(cr_app *app, cr_entity *menu)
 {
     menu->ticks++;
 
@@ -232,7 +232,7 @@ static void update_debug_menu(eg_app *app, eg_entity *menu)
     }
 }
 
-void debug_menu_demo_register(eg_entity_type *t)
+void debug_menu_demo_register(cr_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
@@ -242,11 +242,11 @@ void debug_menu_demo_register(eg_entity_type *t)
     t->update = update_debug_menu;
 }
 
-eg_entity *debug_menu_demo_create(eg_app *app)
+cr_entity *debug_menu_demo_create(cr_app *app)
 {
-    eg_entity *menu = NULL;
+    cr_entity *menu = NULL;
 
-    menu = eg_create_entity(app);
+    menu = cr_create_entity(app);
     if (menu == NULL)
     {
         return NULL;
@@ -257,8 +257,8 @@ eg_entity *debug_menu_demo_create(eg_app *app)
     menu->cursor_x = 0;
     menu->cursor_y = 0;
     menu->type = ENTITY_TYPE_DEBUG_MENU;
-    eg_set_flag(menu, ENTITY_FLAG_PAUSE);
-    eg_set_flag(menu, ENTITY_FLAG_MENU);
+    cr_set_flag(menu, ENTITY_FLAG_PAUSE);
+    cr_set_flag(menu, ENTITY_FLAG_MENU);
 
     return menu;
 }

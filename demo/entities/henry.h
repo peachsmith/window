@@ -9,9 +9,9 @@
  * Populates an entity type struct with information about the henry entity.
  *
  * Params:
- *   eg_entity_type* - the henry's entity type definition
+ *   cr_entity_type* - the henry's entity type definition
  */
-void henry_demo_register(eg_entity_type *);
+void henry_demo_register(cr_entity_type *);
 
 /**
  * Creates a henry entity.
@@ -21,8 +21,8 @@ void henry_demo_register(eg_entity_type *);
  *   int - the henry entity's initial y position
  *
  * Returns:
- *   eg_entity* - a pointer to the new henry entity.
+ *   cr_entity* - a pointer to the new henry entity.
  */
-eg_entity *henry_demo_create(eg_app *, int, int);
+cr_entity *henry_demo_create(cr_app *, int, int);
 
 #endif

@@ -11,16 +11,16 @@
  * entity.
  *
  * Params:
- *   eg_entity_type* - the main menu entity type definition
+ *   cr_entity_type* - the main menu entity type definition
  */
-void tns_register_main_menu(eg_entity_type *);
+void tns_register_main_menu(cr_entity_type *);
 
 /**
  * Creates a main menu entity.
  *
  * Returns:
- *   eg_entity* - a pointer to the new main menu entity.
+ *   cr_entity* - a pointer to the new main menu entity.
  */
-eg_entity *tns_create_main_menu(eg_app *);
+cr_entity *tns_create_main_menu(cr_app *);
 
 #endif

@@ -10,7 +10,7 @@
 #define CORGI_Y_ACC_LIMIT 24
 #define CORGI_IFRAME_LIMIT 20
 
-static int get_corgi_x_vel(eg_entity *corgi)
+static int get_corgi_x_vel(cr_entity *corgi)
 {
     // acceleration to velocity conversion table
     int a_to_v[CORGI_X_ACC_LIMIT] = {
@@ -61,7 +61,7 @@ static int get_corgi_x_vel(eg_entity *corgi)
     return x_vel;
 }
 
-static int get_corgi_y_vel(eg_entity *corgi)
+static int get_corgi_y_vel(cr_entity *corgi)
 {
     // acceleration to velocity conversion table
     int a_to_v[CORGI_Y_ACC_LIMIT] = {
@@ -101,19 +101,19 @@ static int get_corgi_y_vel(eg_entity *corgi)
     return y_vel;
 }
 
-static void render_corgi(eg_app *app, eg_entity *corgi)
+static void render_corgi(cr_app *app, cr_entity *corgi)
 {
     int tile = 0;
-    int mirror = eg_check_flag(corgi, ENTITY_FLAG_MIRROR);
-    int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
-    int splooting = app->actuation_counters[EG_KEYCODE_SPACE] >= 20;
+    int mirror = cr_check_flag(corgi, ENTITY_FLAG_MIRROR);
+    int grounded = cr_check_flag(corgi, ENTITY_FLAG_GROUND);
+    int splooting = app->actuation_counters[CR_KEYCODE_SPACE] >= 20;
 
     // input checks
     // When the user has control over the corgi, we expect there to be two
     // input handlers.
-    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT) && app->input_count == 2;
-    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT) && app->input_count == 2;
-    int tooting = eg_peek_input(app, EG_KEYCODE_X) && app->input_count == 2;
+    int left_pressed = cr_peek_input(app, CR_KEYCODE_LEFT) && app->input_count == 2;
+    int right_pressed = cr_peek_input(app, CR_KEYCODE_RIGHT) && app->input_count == 2;
+    int tooting = cr_peek_input(app, CR_KEYCODE_X) && app->input_count == 2;
 
     // Animation logic for walking to the right
     if ((left_pressed || right_pressed) && grounded)
@@ -159,19 +159,19 @@ static void render_corgi(eg_app *app, eg_entity *corgi)
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = corgi->x_pos;
         hit_box.y = corgi->y_pos;
         hit_box.w = app->entity_types[corgi->type].width;
         hit_box.h = app->entity_types[corgi->type].height;
 
         // Render the corgi hit box.
-        eg_set_color(app, EG_COLOR_VINIK_PURPLE);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_PURPLE);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
-static void update_corgi(eg_app *app, eg_entity *corgi)
+static void update_corgi(cr_app *app, cr_entity *corgi)
 {
     // Get the width and height of the corgi.
     int w = app->entity_types[corgi->type].width;
@@ -179,15 +179,15 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
 
     // Check the MOVE flag to see if the corgi is being carried by a
     // a moving platform.
-    int carried = eg_check_flag(corgi, ENTITY_FLAG_MOVE);
-    int grounded = eg_check_flag(corgi, ENTITY_FLAG_GROUND);
-    int splooting = app->actuation_counters[EG_KEYCODE_SPACE] >= 20;
+    int carried = cr_check_flag(corgi, ENTITY_FLAG_MOVE);
+    int grounded = cr_check_flag(corgi, ENTITY_FLAG_GROUND);
+    int splooting = app->actuation_counters[CR_KEYCODE_SPACE] >= 20;
 
     // input checks
     // When the user has control over the corgi, we expect there to be two
     // input handlers.
-    int left_pressed = eg_peek_input(app, EG_KEYCODE_LEFT) && app->input_count == 2;
-    int right_pressed = eg_peek_input(app, EG_KEYCODE_RIGHT) && app->input_count == 2;
+    int left_pressed = cr_peek_input(app, CR_KEYCODE_LEFT) && app->input_count == 2;
+    int right_pressed = cr_peek_input(app, CR_KEYCODE_RIGHT) && app->input_count == 2;
 
     int avx = get_corgi_x_vel(corgi);
     int avy = get_corgi_y_vel(corgi);
@@ -209,14 +209,14 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     }
 
     // Update horizontal position.
-    if (app->cam.config == EG_CAMERA_ALL && corgi->x_pos + w >= app->cam.cr && avx > 0)
+    if (app->cam.config == CR_CAMERA_ALL && corgi->x_pos + w >= app->cam.cr && avx > 0)
     {
         int dcam = (corgi->x_pos + w) - app->cam.cr;
         corgi->x_pos = app->cam.cr - w;
         app->cam.x -= avx;
         app->cam.x -= dcam;
     }
-    else if (app->cam.config == EG_CAMERA_ALL && corgi->x_pos <= app->cam.cl + 1 && avx < 0)
+    else if (app->cam.config == CR_CAMERA_ALL && corgi->x_pos <= app->cam.cl + 1 && avx < 0)
     {
         int dcam = corgi->x_pos - (app->cam.cl + 1);
         corgi->x_pos = app->cam.cl + 1;
@@ -252,7 +252,7 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
         // If the platform was already updated, recalculate the correction
         // factor that was done in the collision resolution.
         // Otherwise, we just add the platform's y velocity to the corgi's.
-        if (eg_check_flag(corgi->carrier, ENTITY_FLAG_UPDATE))
+        if (cr_check_flag(corgi->carrier, ENTITY_FLAG_UPDATE))
         {
             cf = corgi->carrier->y_pos + app->cam.y - (corgi->y_pos + h);
         }
@@ -278,14 +278,14 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     }
 
     // Clear the carry flag.
-    eg_clear_flag(corgi, ENTITY_FLAG_MOVE);
+    cr_clear_flag(corgi, ENTITY_FLAG_MOVE);
 
     // Update vertical position.
     // We effectively halve the velocity by reducing the tick count modulo 2.
     // Since the modulo happens outside of the get_y_vel function, this is
     // mainly visual. Collision detection will still happen as if the velocity
     // is unchanged.
-    if (app->cam.config == EG_CAMERA_ALL &&
+    if (app->cam.config == CR_CAMERA_ALL &&
         corgi->y_pos + h >= app->cam.cb &&
         avy > 0 &&
         app->ticks % 2)
@@ -295,7 +295,7 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
         app->cam.y -= avy;
         app->cam.y -= dcam;
     }
-    else if (app->cam.config == EG_CAMERA_ALL &&
+    else if (app->cam.config == CR_CAMERA_ALL &&
              corgi->y_pos <= app->cam.ct + 1 &&
              avy < 0 &&
              app->ticks % 2)
@@ -313,9 +313,9 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     // If the corgi is on a sloped platform, set the y velocity to some
     // value that causes the corgi to collide with the platform before
     // moving into open space.
-    if (eg_check_flag(corgi, ENTITY_FLAG_SLOPE))
+    if (cr_check_flag(corgi, ENTITY_FLAG_SLOPE))
     {
-        eg_clear_flag(corgi, ENTITY_FLAG_SLOPE);
+        cr_clear_flag(corgi, ENTITY_FLAG_SLOPE);
         corgi->y_acc = CORGI_Y_ACC_LIMIT - 1;
     }
 
@@ -367,7 +367,7 @@ static void update_corgi(eg_app *app, eg_entity *corgi)
     }
 }
 
-void tns_register_corgi(eg_entity_type *t)
+void tns_register_corgi(cr_entity_type *t)
 {
     t->width = 24;
     t->height = 24;
@@ -378,11 +378,11 @@ void tns_register_corgi(eg_entity_type *t)
     t->control = 1;
 }
 
-eg_entity *tns_create_corgi(eg_app *app, int x, int y)
+cr_entity *tns_create_corgi(cr_app *app, int x, int y)
 {
-    eg_entity *corgi = NULL;
+    cr_entity *corgi = NULL;
 
-    corgi = eg_create_entity(app);
+    corgi = cr_create_entity(app);
     if (corgi == NULL)
     {
         return NULL;

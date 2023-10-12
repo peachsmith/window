@@ -7,7 +7,7 @@
 #include "common/texture.h"
 #include "common/dialog.h"
 
-static int get_billy_x_vel(eg_entity *billy)
+static int get_billy_x_vel(cr_entity *billy)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -34,7 +34,7 @@ static int get_billy_x_vel(eg_entity *billy)
     return x_vel;
 }
 
-static int get_billy_y_vel(eg_entity *billy)
+static int get_billy_y_vel(cr_entity *billy)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -61,10 +61,10 @@ static int get_billy_y_vel(eg_entity *billy)
     return y_vel;
 }
 
-static void render_billy(eg_app *app, eg_entity *billy)
+static void render_billy(cr_app *app, cr_entity *billy)
 {
     int tile = 0;
-    int grounded = eg_check_flag(billy, ENTITY_FLAG_GROUND);
+    int grounded = cr_check_flag(billy, ENTITY_FLAG_GROUND);
 
     // Animation logic for walking to the right
     if ((billy->x_acc) && grounded)
@@ -89,25 +89,25 @@ static void render_billy(eg_app *app, eg_entity *billy)
         app,
         billy->x_pos + app->cam.x,
         billy->y_pos + app->cam.y,
-        eg_check_flag(billy, ENTITY_FLAG_MIRROR),
+        cr_check_flag(billy, ENTITY_FLAG_MIRROR),
         tile);
 
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = billy->x_pos + app->cam.x;
         hit_box.y = billy->y_pos + app->cam.y;
         hit_box.w = app->entity_types[billy->type].width;
         hit_box.h = app->entity_types[billy->type].height;
 
         // Render the billy hit box.
-        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_ORANGE);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
-static void update_billy(eg_app *app, eg_entity *billy)
+static void update_billy(cr_app *app, cr_entity *billy)
 {
     // Movement constraints for billy.
     int max_walk = 6;
@@ -124,7 +124,7 @@ static void update_billy(eg_app *app, eg_entity *billy)
 
     // Check the MOVE flag to see if the billy is being carried by a
     // a moving platform.
-    int carried = eg_check_flag(billy, ENTITY_FLAG_MOVE);
+    int carried = cr_check_flag(billy, ENTITY_FLAG_MOVE);
 
     int avx = get_billy_x_vel(billy);
     int avy = get_billy_y_vel(billy);
@@ -172,7 +172,7 @@ static void update_billy(eg_app *app, eg_entity *billy)
         // If the platform was already updated, recalculate the correction
         // factor that was done in the collision resolution.
         // Otherwise, we just add the platform's y velocity to the billy's.
-        if (eg_check_flag(billy->carrier, ENTITY_FLAG_UPDATE))
+        if (cr_check_flag(billy->carrier, ENTITY_FLAG_UPDATE))
         {
             cf = billy->carrier->y_pos - (billy->y_pos + h);
         }
@@ -198,7 +198,7 @@ static void update_billy(eg_app *app, eg_entity *billy)
     }
 
     // Clear the carry flag.
-    eg_clear_flag(billy, ENTITY_FLAG_MOVE);
+    cr_clear_flag(billy, ENTITY_FLAG_MOVE);
 
     // Update vertical position.
     billy->y_pos += avy;
@@ -206,9 +206,9 @@ static void update_billy(eg_app *app, eg_entity *billy)
     // If the billy is on a sloped platform, set the y velocity to some
     // value that causes the billy to collide with the platform before
     // moving into open space.
-    if (eg_check_flag(billy, ENTITY_FLAG_SLOPE))
+    if (cr_check_flag(billy, ENTITY_FLAG_SLOPE))
     {
-        eg_clear_flag(billy, ENTITY_FLAG_SLOPE);
+        cr_clear_flag(billy, ENTITY_FLAG_SLOPE);
         billy->y_acc = 23;
     }
 
@@ -263,19 +263,19 @@ static void update_billy(eg_app *app, eg_entity *billy)
         // Turn to face right.
         if (billy->ticks > 180 && billy->ticks < 210)
         {
-            eg_set_flag(billy, ENTITY_FLAG_MIRROR);
+            cr_set_flag(billy, ENTITY_FLAG_MIRROR);
         }
 
         // Turn to face left.
         if (billy->ticks >= 210 && billy->ticks < 250)
         {
-            eg_clear_flag(billy, ENTITY_FLAG_MIRROR);
+            cr_clear_flag(billy, ENTITY_FLAG_MIRROR);
         }
 
         // Turn to face right.
         if (billy->ticks >= 250)
         {
-            eg_set_flag(billy, ENTITY_FLAG_MIRROR);
+            cr_set_flag(billy, ENTITY_FLAG_MIRROR);
         }
     }
 
@@ -301,7 +301,7 @@ static void update_billy(eg_app *app, eg_entity *billy)
     }
 }
 
-void billy_demo_register(eg_entity_type *t)
+void billy_demo_register(cr_entity_type *t)
 {
     t->width = 24;
     t->height = 24;
@@ -311,11 +311,11 @@ void billy_demo_register(eg_entity_type *t)
     t->get_y_vel = get_billy_y_vel;
 }
 
-eg_entity *billy_demo_create(eg_app *app, int x, int y)
+cr_entity *billy_demo_create(cr_app *app, int x, int y)
 {
-    eg_entity *billy = NULL;
+    cr_entity *billy = NULL;
 
-    billy = eg_create_entity(app);
+    billy = cr_create_entity(app);
     if (billy == NULL)
     {
         return NULL;

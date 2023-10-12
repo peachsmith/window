@@ -11,9 +11,9 @@
  * Populates an entity type struct with information about the corgi entity.
  *
  * Params:
- *   eg_entity_type* - the corgi's entity type definition
+ *   cr_entity_type* - the corgi's entity type definition
  */
-void tns_register_corgi(eg_entity_type *);
+void tns_register_corgi(cr_entity_type *);
 
 /**
  * Creates a corgi entity.
@@ -23,8 +23,8 @@ void tns_register_corgi(eg_entity_type *);
  *   int - the corgi entity's initial y position
  *
  * Returns:
- *   eg_entity* - a pointer to the new corgi entity.
+ *   cr_entity* - a pointer to the new corgi entity.
  */
-eg_entity *tns_create_corgi(eg_app *, int, int);
+cr_entity *tns_create_corgi(cr_app *, int, int);
 
 #endif

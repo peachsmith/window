@@ -8,7 +8,7 @@
 #include "common/dialog.h"
 
 
-static int get_henry_x_vel(eg_entity *henry)
+static int get_henry_x_vel(cr_entity *henry)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -35,7 +35,7 @@ static int get_henry_x_vel(eg_entity *henry)
     return x_vel;
 }
 
-static int get_henry_y_vel(eg_entity *henry)
+static int get_henry_y_vel(cr_entity *henry)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -62,10 +62,10 @@ static int get_henry_y_vel(eg_entity *henry)
     return y_vel;
 }
 
-static void render_henry(eg_app *app, eg_entity *henry)
+static void render_henry(cr_app *app, cr_entity *henry)
 {
     int tile = 0;
-    int grounded = eg_check_flag(henry, ENTITY_FLAG_GROUND);
+    int grounded = cr_check_flag(henry, ENTITY_FLAG_GROUND);
 
     // Animation logic for walking to the right
     if ((henry->x_acc) && grounded)
@@ -90,25 +90,25 @@ static void render_henry(eg_app *app, eg_entity *henry)
         app,
         henry->x_pos + app->cam.x - 3,
         henry->y_pos + app->cam.y - 6,
-        eg_check_flag(henry, ENTITY_FLAG_MIRROR),
+        cr_check_flag(henry, ENTITY_FLAG_MIRROR),
         tile);
 
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = henry->x_pos + app->cam.x;
         hit_box.y = henry->y_pos + app->cam.y;
         hit_box.w = app->entity_types[henry->type].width;
         hit_box.h = app->entity_types[henry->type].height;
 
         // Render the henry hit box.
-        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_ORANGE);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
-static void update_henry(eg_app *app, eg_entity *henry)
+static void update_henry(cr_app *app, cr_entity *henry)
 {
     // Movement constraints for henry.
     int max_walk = 6;
@@ -125,7 +125,7 @@ static void update_henry(eg_app *app, eg_entity *henry)
 
     // Check the MOVE flag to see if the henry is being carried by a
     // a moving platform.
-    int carried = eg_check_flag(henry, ENTITY_FLAG_MOVE);
+    int carried = cr_check_flag(henry, ENTITY_FLAG_MOVE);
 
     int avx = get_henry_x_vel(henry);
     int avy = get_henry_y_vel(henry);
@@ -173,7 +173,7 @@ static void update_henry(eg_app *app, eg_entity *henry)
         // If the platform was already updated, recalculate the correction
         // factor that was done in the collision resolution.
         // Otherwise, we just add the platform's y velocity to the henry's.
-        if (eg_check_flag(henry->carrier, ENTITY_FLAG_UPDATE))
+        if (cr_check_flag(henry->carrier, ENTITY_FLAG_UPDATE))
         {
             cf = henry->carrier->y_pos - (henry->y_pos + h);
         }
@@ -199,7 +199,7 @@ static void update_henry(eg_app *app, eg_entity *henry)
     }
 
     // Clear the carry flag.
-    eg_clear_flag(henry, ENTITY_FLAG_MOVE);
+    cr_clear_flag(henry, ENTITY_FLAG_MOVE);
 
     // Update vertical position.
     henry->y_pos += avy;
@@ -207,9 +207,9 @@ static void update_henry(eg_app *app, eg_entity *henry)
     // If the henry is on a sloped platform, set the y velocity to some
     // value that causes the henry to collide with the platform before
     // moving into open space.
-    if (eg_check_flag(henry, ENTITY_FLAG_SLOPE))
+    if (cr_check_flag(henry, ENTITY_FLAG_SLOPE))
     {
-        eg_clear_flag(henry, ENTITY_FLAG_SLOPE);
+        cr_clear_flag(henry, ENTITY_FLAG_SLOPE);
         henry->y_acc = 23;
     }
 
@@ -249,7 +249,7 @@ static void update_henry(eg_app *app, eg_entity *henry)
 
     if (henry->ticks == 61)
     {
-        eg_set_flag(henry, ENTITY_FLAG_MIRROR);
+        cr_set_flag(henry, ENTITY_FLAG_MIRROR);
     }
 
     // Walk to the right for 60 frames.
@@ -276,25 +276,25 @@ static void update_henry(eg_app *app, eg_entity *henry)
     // Reset Henry's walking.
     if (henry->ticks >= 121)
     {
-        eg_clear_flag(henry, ENTITY_FLAG_MIRROR);
+        cr_clear_flag(henry, ENTITY_FLAG_MIRROR);
         henry->ticks = 0;
     }
 }
 
 static void collide_henry(
-    eg_app *app,
-    eg_entity *henry,
-    eg_entity *other,
-    eg_collision *t_res)
+    cr_app *app,
+    cr_entity *henry,
+    cr_entity *other,
+    cr_collision *t_res)
 {
     if (other->type == ENTITY_TYPE_PLAYER)
     {
-        if (eg_check_flag(other, ENTITY_FLAG_INVINCIBLE))
+        if (cr_check_flag(other, ENTITY_FLAG_INVINCIBLE))
         {
             return;
         }
 
-        eg_set_flag(other, ENTITY_FLAG_INVINCIBLE);
+        cr_set_flag(other, ENTITY_FLAG_INVINCIBLE);
 
         int avx = app->entity_types[other->type].get_x_vel(other);
         if (avx >= 0)
@@ -310,7 +310,7 @@ static void collide_henry(
     }
 }
 
-void henry_demo_register(eg_entity_type *t)
+void henry_demo_register(cr_entity_type *t)
 {
     t->width = 18;
     t->height = 18;
@@ -321,11 +321,11 @@ void henry_demo_register(eg_entity_type *t)
     t->collide = collide_henry;
 }
 
-eg_entity *henry_demo_create(eg_app *app, int x, int y)
+cr_entity *henry_demo_create(cr_app *app, int x, int y)
 {
-    eg_entity *henry = NULL;
+    cr_entity *henry = NULL;
 
-    henry = eg_create_entity(app);
+    henry = cr_create_entity(app);
     if (henry == NULL)
     {
         return NULL;

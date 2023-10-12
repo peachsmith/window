@@ -9,7 +9,7 @@
 #include "common/dialog.h"
 #include "common/audio.h"
 
-static int get_critter_x_vel(eg_entity *critter)
+static int get_critter_x_vel(cr_entity *critter)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -41,7 +41,7 @@ static int get_critter_x_vel(eg_entity *critter)
     return x_vel; // adjusted;
 }
 
-static int get_critter_y_vel(eg_entity *critter)
+static int get_critter_y_vel(cr_entity *critter)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -73,10 +73,10 @@ static int get_critter_y_vel(eg_entity *critter)
     return y_vel;
 }
 
-static void render_critter(eg_app *app, eg_entity *critter)
+static void render_critter(cr_app *app, cr_entity *critter)
 {
     int tile = 0;
-    int grounded = eg_check_flag(critter, ENTITY_FLAG_GROUND);
+    int grounded = cr_check_flag(critter, ENTITY_FLAG_GROUND);
 
     // If the critter has fallen from the tree, is still in the air, and has
     // not yet been healed with the power of music, render it upside down.
@@ -105,7 +105,7 @@ static void render_critter(eg_app *app, eg_entity *critter)
                 app,
                 critter->x_pos,
                 critter->y_pos,
-                eg_check_flag(critter, ENTITY_FLAG_MIRROR),
+                cr_check_flag(critter, ENTITY_FLAG_MIRROR),
                 tile);
         }
     }
@@ -154,24 +154,24 @@ static void render_critter(eg_app *app, eg_entity *critter)
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = critter->x_pos + app->cam.x;
         hit_box.y = critter->y_pos + app->cam.y;
         hit_box.w = app->entity_types[critter->type].width;
         hit_box.h = app->entity_types[critter->type].height;
 
         // Render the critter hit box.
-        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_ORANGE);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
-static void update_critter(eg_app *app, eg_entity *critter)
+static void update_critter(cr_app *app, cr_entity *critter)
 {
     int avx = get_critter_x_vel(critter);
     int avy = get_critter_y_vel(critter);
-    int grounded = eg_check_flag(critter, ENTITY_FLAG_GROUND);
-    int mirror = eg_check_flag(critter, ENTITY_FLAG_MIRROR);
+    int grounded = cr_check_flag(critter, ENTITY_FLAG_GROUND);
+    int mirror = cr_check_flag(critter, ENTITY_FLAG_MIRROR);
 
     //--------------------------------------------------------------------
     // Horizontal Movement
@@ -258,10 +258,10 @@ static void update_critter(eg_app *app, eg_entity *critter)
 }
 
 static void collide_critter(
-    eg_app *app,
-    eg_entity *critter,
-    eg_entity *other,
-    eg_collision *t_res)
+    cr_app *app,
+    cr_entity *critter,
+    cr_entity *other,
+    cr_collision *t_res)
 {
     if (critter->ticks < 120 || critter->result || other->type != ENTITY_TYPE_NOTE)
     {
@@ -290,7 +290,7 @@ static void collide_critter(
         critter->cursor_x = 1;
 
         // play a whimsical sound effect
-        eg_play_sound(app, app->sounds[TNS_SOUND_EFFECT_CONFIRMATION]);
+        cr_play_sound(app, app->sounds[TNS_SOUND_EFFECT_CONFIRMATION]);
     }
 
     // If a certain score is reached, the game ends.
@@ -304,7 +304,7 @@ static void collide_critter(
     }
 }
 
-void tns_register_critter(eg_entity_type *t)
+void tns_register_critter(cr_entity_type *t)
 {
     t->width = 20;
     t->height = 12;
@@ -316,11 +316,11 @@ void tns_register_critter(eg_entity_type *t)
     t->spur = 1;
 }
 
-eg_entity *tns_create_critter(eg_app *app, int x, int y)
+cr_entity *tns_create_critter(cr_app *app, int x, int y)
 {
-    eg_entity *critter = NULL;
+    cr_entity *critter = NULL;
 
-    critter = eg_create_entity(app);
+    critter = cr_create_entity(app);
     if (critter == NULL)
     {
         return NULL;

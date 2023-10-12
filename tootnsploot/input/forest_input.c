@@ -9,13 +9,13 @@
 #include "common/audio.h"
 #include "common/menu.h"
 
-void forest_input_handler(eg_app *app)
+void forest_input_handler(cr_app *app)
 {
     // Pause the application.
-    if (eg_consume_input(app, EG_KEYCODE_ESCAPE) || eg_consume_input(app, EG_KEYCODE_Q))
+    if (cr_consume_input(app, CR_KEYCODE_ESCAPE) || cr_consume_input(app, CR_KEYCODE_Q))
     {
         // Locate the pause menu.
-        eg_entity *pause_menu = NULL;
+        cr_entity *pause_menu = NULL;
         for (int i = 0; i < app->entity_cap; i++)
         {
             if (app->entities[i].type == ENTITY_TYPE_PAUSE_MENU && app->entities[i].present)
@@ -27,34 +27,34 @@ void forest_input_handler(eg_app *app)
         // Set the pause menu as the active menu.
         app->menus[app->menu_count++] = pause_menu;
 
-        eg_push_input_handler(app, pause_menu_input_handler);
+        cr_push_input_handler(app, pause_menu_input_handler);
 
         app->pause = 1;
         return;
     }
 
     // Locate the player entity.
-    eg_entity *target = app->primary;
+    cr_entity *target = app->primary;
     if (target == NULL)
     {
         return;
     }
 
-    int splooting = app->actuation_counters[EG_KEYCODE_SPACE] >= 20;
+    int splooting = app->actuation_counters[CR_KEYCODE_SPACE] >= 20;
 
     int max_walk = 6;
     int min_walk = 1;
     int walk_acc = 1;
 
     // left movement
-    if (eg_peek_input(app, EG_KEYCODE_LEFT) && !splooting)
+    if (cr_peek_input(app, CR_KEYCODE_LEFT) && !splooting)
     {
-        if (app->actuation_counters[EG_KEYCODE_LEFT] < 10)
+        if (app->actuation_counters[CR_KEYCODE_LEFT] < 10)
         {
-            app->actuation_counters[EG_KEYCODE_LEFT]++;
+            app->actuation_counters[CR_KEYCODE_LEFT]++;
         }
 
-        eg_clear_flag(target, ENTITY_FLAG_MIRROR);
+        cr_clear_flag(target, ENTITY_FLAG_MIRROR);
 
         if (target->x_acc > -min_walk)
         {
@@ -75,18 +75,18 @@ void forest_input_handler(eg_app *app)
     }
     else
     {
-        app->actuation_counters[EG_KEYCODE_LEFT] = 0;
+        app->actuation_counters[CR_KEYCODE_LEFT] = 0;
     }
 
     // right movement
-    if (eg_peek_input(app, EG_KEYCODE_RIGHT) && !splooting)
+    if (cr_peek_input(app, CR_KEYCODE_RIGHT) && !splooting)
     {
-        if (app->actuation_counters[EG_KEYCODE_RIGHT] < 10)
+        if (app->actuation_counters[CR_KEYCODE_RIGHT] < 10)
         {
-            app->actuation_counters[EG_KEYCODE_RIGHT]++;
+            app->actuation_counters[CR_KEYCODE_RIGHT]++;
         }
 
-        eg_set_flag(target, ENTITY_FLAG_MIRROR);
+        cr_set_flag(target, ENTITY_FLAG_MIRROR);
 
         if (target->x_acc < min_walk)
         {
@@ -107,32 +107,32 @@ void forest_input_handler(eg_app *app)
     }
     else
     {
-        app->actuation_counters[EG_KEYCODE_RIGHT] = 0;
+        app->actuation_counters[CR_KEYCODE_RIGHT] = 0;
     }
 
     // down arrow key
-    if (eg_peek_input(app, EG_KEYCODE_DOWN))
+    if (cr_peek_input(app, CR_KEYCODE_DOWN))
     {
-        if (!eg_check_flag(target, ENTITY_FLAG_DOWN))
+        if (!cr_check_flag(target, ENTITY_FLAG_DOWN))
         {
-            eg_set_flag(target, ENTITY_FLAG_DOWN);
+            cr_set_flag(target, ENTITY_FLAG_DOWN);
         }
     }
-    else if (eg_check_flag(target, ENTITY_FLAG_DOWN))
+    else if (cr_check_flag(target, ENTITY_FLAG_DOWN))
     {
-        eg_clear_flag(target, ENTITY_FLAG_DOWN);
+        cr_clear_flag(target, ENTITY_FLAG_DOWN);
     }
 
     // jumping
-    if (eg_peek_input(app, EG_KEYCODE_SPACE))
+    if (cr_peek_input(app, CR_KEYCODE_SPACE))
     {
-        if (eg_check_flag(target, ENTITY_FLAG_GROUND) &&
-            !eg_check_flag(target, ENTITY_FLAG_JUMP) &&
-            app->actuation_counters[EG_KEYCODE_SPACE] == 0)
+        if (cr_check_flag(target, ENTITY_FLAG_GROUND) &&
+            !cr_check_flag(target, ENTITY_FLAG_JUMP) &&
+            app->actuation_counters[CR_KEYCODE_SPACE] == 0)
         {
-            eg_clear_flag(target, ENTITY_FLAG_GROUND);
-            eg_set_flag(target, ENTITY_FLAG_JUMP);
-            eg_clear_flag(target, ENTITY_FLAG_MOVE);
+            cr_clear_flag(target, ENTITY_FLAG_GROUND);
+            cr_set_flag(target, ENTITY_FLAG_JUMP);
+            cr_clear_flag(target, ENTITY_FLAG_MOVE);
 
             // Clear the carrier and the correction factor.
             target->carrier = NULL;
@@ -142,34 +142,34 @@ void forest_input_handler(eg_app *app)
             // value to launch the entity upward.
             target->y_acc = -13;
 
-            app->actuation_counters[EG_KEYCODE_SPACE]++;
+            app->actuation_counters[CR_KEYCODE_SPACE]++;
         }
 
         // Increase the actuation counter to allow jump height control in the
         // target entity's update function.
-        else if (app->actuation_counters[EG_KEYCODE_SPACE] < 20)
+        else if (app->actuation_counters[CR_KEYCODE_SPACE] < 20)
         {
-            app->actuation_counters[EG_KEYCODE_SPACE]++;
+            app->actuation_counters[CR_KEYCODE_SPACE]++;
         }
     }
     else
     {
-        app->actuation_counters[EG_KEYCODE_SPACE] = 0;
+        app->actuation_counters[CR_KEYCODE_SPACE] = 0;
     }
 
     // play a musical note
-    if (eg_consume_input(app, EG_KEYCODE_X) && !splooting)
+    if (cr_consume_input(app, CR_KEYCODE_X) && !splooting)
     {
         // Limit the number of notes to 3 at any given time.
         if (app->counters[TNS_COUNTER_BREATH] > 0)
         {
-            eg_entity *f = tns_create_note(
+            cr_entity *f = tns_create_note(
                 app,
                 target->x_pos - app->cam.x,
                 target->y_pos - app->cam.y + 4);
             if (f != NULL)
             {
-                if (eg_check_flag(target, ENTITY_FLAG_MIRROR))
+                if (cr_check_flag(target, ENTITY_FLAG_MIRROR))
                 {
                     f->x_pos += app->entity_types[target->type].width / 2;
                     f->x_acc = 16;
@@ -177,7 +177,7 @@ void forest_input_handler(eg_app *app)
                 else
                 {
                     f->x_acc = -16;
-                    eg_set_flag(f, ENTITY_FLAG_MIRROR);
+                    cr_set_flag(f, ENTITY_FLAG_MIRROR);
                 }
             }
 

@@ -12,9 +12,9 @@
  * Populates an entity type struct with information about the player entity.
  *
  * Params:
- *   eg_entity_type* - the player's entity type definition
+ *   cr_entity_type* - the player's entity type definition
  */
-void demo_register_player(eg_entity_type *);
+void demo_register_player(cr_entity_type *);
 
 /**
  * Creates a player entity.
@@ -24,8 +24,8 @@ void demo_register_player(eg_entity_type *);
  *   int - the player entity's initial y position
  *
  * Returns:
- *   eg_entity* - a pointer to the new player entity.
+ *   cr_entity* - a pointer to the new player entity.
  */
-eg_entity *demo_create_player(eg_app *, int, int);
+cr_entity *demo_create_player(cr_app *, int, int);
 
 #endif

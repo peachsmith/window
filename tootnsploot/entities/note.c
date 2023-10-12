@@ -7,7 +7,7 @@
 #include "common/texture.h"
 #include "common/dialog.h"
 
-static int get_note_x_vel(eg_entity *note)
+static int get_note_x_vel(cr_entity *note)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -37,7 +37,7 @@ static int get_note_x_vel(eg_entity *note)
     return x_vel;
 }
 
-static int get_note_y_vel(eg_entity *note)
+static int get_note_y_vel(cr_entity *note)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -64,7 +64,7 @@ static int get_note_y_vel(eg_entity *note)
     return y_vel;
 }
 
-static void render_note(eg_app *app, eg_entity *note)
+static void render_note(cr_app *app, cr_entity *note)
 {
     sprite_draw_note(
         app,
@@ -74,23 +74,23 @@ static void render_note(eg_app *app, eg_entity *note)
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = note->x_pos + app->cam.x;
         hit_box.y = note->y_pos + app->cam.y;
         hit_box.w = app->entity_types[note->type].width;
         hit_box.h = app->entity_types[note->type].height;
 
         // Render the note hit box.
-        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_ORANGE);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
-static void update_note(eg_app *app, eg_entity *note)
+static void update_note(cr_app *app, cr_entity *note)
 {
     int avx = get_note_x_vel(note);
     int avy = get_note_y_vel(note);
-    int mirror = eg_check_flag(note, ENTITY_FLAG_MIRROR);
+    int mirror = cr_check_flag(note, ENTITY_FLAG_MIRROR);
 
     //--------------------------------------------------------------------
     // Horizontal Movement
@@ -172,14 +172,14 @@ static void update_note(eg_app *app, eg_entity *note)
 }
 
 static void collide_note(
-    eg_app *app,
-    eg_entity *note,
-    eg_entity *other,
-    eg_collision *t_res)
+    cr_app *app,
+    cr_entity *note,
+    cr_entity *other,
+    cr_collision *t_res)
 {
 }
 
-void tns_register_note(eg_entity_type *t)
+void tns_register_note(cr_entity_type *t)
 {
     t->width = 11;
     t->height = 11;
@@ -191,11 +191,11 @@ void tns_register_note(eg_entity_type *t)
     t->spur = 1;
 }
 
-eg_entity *tns_create_note(eg_app *app, int x, int y)
+cr_entity *tns_create_note(cr_app *app, int x, int y)
 {
-    eg_entity *note = NULL;
+    cr_entity *note = NULL;
 
-    note = eg_create_entity(app);
+    note = cr_create_entity(app);
     if (note == NULL)
     {
         return NULL;

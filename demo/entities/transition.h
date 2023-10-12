@@ -12,16 +12,16 @@
  * transition entity.
  *
  * Params:
- *   eg_entity_type* - the screen transition entity type definition
+ *   cr_entity_type* - the screen transition entity type definition
  */
-void transition_demo_register(eg_entity_type *);
+void transition_demo_register(cr_entity_type *);
 
 /**
  * Creates a screen transition entity.
  *
  * Returns:
- *   eg_entity* - a pointer to the new screen transition entity.
+ *   cr_entity* - a pointer to the new screen transition entity.
  */
-eg_entity *transition_demo_create(eg_app *);
+cr_entity *transition_demo_create(cr_app *);
 
 #endif

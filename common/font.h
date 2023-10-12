@@ -1,8 +1,8 @@
-#ifndef CRUMBS_COMMON_FONT_H
-#define CRUMBS_COMMON_FONT_H
+#ifndef COMMON_FONT_H
+#define COMMON_FONT_H
 
 #include "crumbs.h"
 
-int common_init_fonts(eg_app *);
+int common_init_fonts(cr_app *);
 
 #endif

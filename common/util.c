@@ -3,16 +3,16 @@
 #include "common/texture.h"
 
 void util_draw_collision(
-    eg_app *app,
-    eg_rect *r,
-    eg_collision *res,
-    eg_point *p,
-    eg_point *d)
+    cr_app *app,
+    cr_rect *r,
+    cr_collision *res,
+    cr_point *p,
+    cr_point *d)
 {
-    eg_rect target_bounds;
-    eg_rect cp_rect;
-    eg_point p0;
-    eg_point p1;
+    cr_rect target_bounds;
+    cr_rect cp_rect;
+    cr_point p0;
+    cr_point p1;
 
     // Draw the target rectangle in red.
     // The dimensions should be the width and height of the target entity
@@ -21,44 +21,44 @@ void util_draw_collision(
     target_bounds.y = r->y;
     target_bounds.w = r->w;
     target_bounds.h = r->h;
-    eg_set_color(app, EG_COLOR_VINIK_RED);
-    eg_draw_rect(app, &target_bounds, 0);
+    cr_set_color(app, CR_COLOR_VINIK_RED);
+    cr_draw_rect(app, &target_bounds, 0);
 
     // Draw the contact point CP in cyan.
-    eg_set_color(app, EG_COLOR_VINIK_CYAN);
+    cr_set_color(app, CR_COLOR_VINIK_CYAN);
     cp_rect.x = res->cp.x - 5;
     cp_rect.y = res->cp.y - 5;
     cp_rect.w = 10;
     cp_rect.h = 10;
-    eg_draw_rect(app, &cp_rect, 1);
+    cr_draw_rect(app, &cp_rect, 1);
 
     // Draw the contact normal CN in a pink.
-    eg_set_color(app, EG_COLOR_VINIK_PINK);
+    cr_set_color(app, CR_COLOR_VINIK_PINK);
     p0.x = res->cp.x;
     p0.y = res->cp.y;
     p1.x = res->cp.x + res->cn.x * 20;
     p1.y = res->cp.y + res->cn.y * 20;
-    eg_draw_line(app, &p0, &p1);
+    cr_draw_line(app, &p0, &p1);
 
     // Draw the direction vector D in green.
-    eg_set_color(app, EG_COLOR_VINIK_SEA_GREEN);
+    cr_set_color(app, CR_COLOR_VINIK_SEA_GREEN);
     p0.x = p->x;
     p0.y = p->y;
     p1.x = p->x + d->x * 10;
     p1.y = p->y + d->y * 10;
-    eg_draw_line(app, &p0, &p1);
+    cr_draw_line(app, &p0, &p1);
 }
 
 void util_draw_sat(
-    eg_app *app,
-    eg_point *pa,
-    eg_point *pb,
-    eg_point *n0,
-    eg_point *n1,
-    eg_point *q)
+    cr_app *app,
+    cr_point *pa,
+    cr_point *pb,
+    cr_point *n0,
+    cr_point *n1,
+    cr_point *q)
 {
 
-    eg_rect rects[7];
+    cr_rect rects[7];
 
     // All of the vertex rectangles will have a width of 4.
     for (int i = 0; i < 7; i++)
@@ -86,71 +86,71 @@ void util_draw_sat(
     rects[6].y = pb[2].y - 2;
 
     // Draw the vertices of entity A.
-    eg_set_color(app, EG_COLOR_VINIK_LAVENDAR);
+    cr_set_color(app, CR_COLOR_VINIK_LAVENDAR);
     for (int i = 0; i < 4; i++)
     {
-        eg_draw_rect(app, &(rects[i]), 1);
+        cr_draw_rect(app, &(rects[i]), 1);
     }
 
     // Draw the vertices of entity B.
-    eg_set_color(app, EG_COLOR_VINIK_YELLOW);
+    cr_set_color(app, CR_COLOR_VINIK_YELLOW);
     for (int i = 4; i < 7; i++)
     {
-        eg_draw_rect(app, &(rects[i]), 1);
+        cr_draw_rect(app, &(rects[i]), 1);
     }
 
     // Draw the normal axis.
-    eg_set_color(app, EG_COLOR_VINIK_MILITARY_GREEN);
-    eg_draw_line(app, n0, n1);
+    cr_set_color(app, CR_COLOR_VINIK_MILITARY_GREEN);
+    cr_draw_line(app, n0, n1);
 
     // Draw the normal origin Q.
-    eg_set_color(app, EG_COLOR_VINIK_LIGHT_GRAY);
-    eg_rect rq = {.x = q->x - 2, .y = q->y - 2, .w = 4, .h = 4};
-    eg_draw_rect(app, &rq, 1);
+    cr_set_color(app, CR_COLOR_VINIK_LIGHT_GRAY);
+    cr_rect rq = {.x = q->x - 2, .y = q->y - 2, .w = 4, .h = 4};
+    cr_draw_rect(app, &rq, 1);
 }
 
-void util_draw_camera(eg_app *app)
+void util_draw_camera(cr_app *app)
 {
-    eg_point l0, l1, r0, r1, t0, t1, b0, b1;
+    cr_point l0, l1, r0, r1, t0, t1, b0, b1;
 
-    eg_set_color(app, EG_COLOR_VINIK_MAUVE);
+    cr_set_color(app, CR_COLOR_VINIK_MAUVE);
 
     // left boundary
     l0.x = app->cam.cl;
     l0.y = 0;
     l1.x = app->cam.cl;
     l1.y = app->screen_height;
-    eg_draw_line(app, &l0, &l1);
+    cr_draw_line(app, &l0, &l1);
 
     // right boundary
     r0.x = app->cam.cr;
     r0.y = 0;
     r1.x = app->cam.cr;
     r1.y = app->screen_height;
-    eg_draw_line(app, &r0, &r1);
+    cr_draw_line(app, &r0, &r1);
 
-    eg_set_color(app, EG_COLOR_VINIK_TEAL);
+    cr_set_color(app, CR_COLOR_VINIK_TEAL);
 
     // top boundary
     t0.x = 0;
     t0.y = app->cam.ct;
     t1.x = app->screen_width;
     t1.y = app->cam.ct;
-    eg_draw_line(app, &t0, &t1);
+    cr_draw_line(app, &t0, &t1);
 
     // bottom boundary
     b0.x = 0;
     b0.y = app->cam.cb;
     b1.x = app->screen_width;
     b1.y = app->cam.cb;
-    eg_draw_line(app, &b0, &b1);
+    cr_draw_line(app, &b0, &b1);
 }
 
-void util_set_camera(eg_app *app, int config)
+void util_set_camera(cr_app *app, int config)
 {
     app->cam.config = config;
 
-    if (config == EG_CAMERA_ALL)
+    if (config == CR_CAMERA_ALL)
     {
         app->cam.cl = 50;
         app->cam.cr = 180;
@@ -159,7 +159,7 @@ void util_set_camera(eg_app *app, int config)
         return;
     }
 
-    if (config == EG_CAMERA_ALL)
+    if (config == CR_CAMERA_ALL)
     {
         app->cam.cl = 0;
         app->cam.cr = 0;

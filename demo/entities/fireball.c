@@ -7,7 +7,7 @@
 #include "common/texture.h"
 #include "common/dialog.h"
 
-static int get_fireball_x_vel(eg_entity *fireball)
+static int get_fireball_x_vel(cr_entity *fireball)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -34,7 +34,7 @@ static int get_fireball_x_vel(eg_entity *fireball)
     return x_vel;
 }
 
-static int get_fireball_y_vel(eg_entity *fireball)
+static int get_fireball_y_vel(cr_entity *fireball)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -61,7 +61,7 @@ static int get_fireball_y_vel(eg_entity *fireball)
     return y_vel;
 }
 
-static void render_fireball(eg_app *app, eg_entity *fireball)
+static void render_fireball(cr_app *app, cr_entity *fireball)
 {
     int tile = 0;
 
@@ -84,25 +84,25 @@ static void render_fireball(eg_app *app, eg_entity *fireball)
         app,
         fireball->x_pos + app->cam.x - 3,
         fireball->y_pos + app->cam.y - 4,
-        eg_check_flag(fireball, ENTITY_FLAG_MIRROR),
+        cr_check_flag(fireball, ENTITY_FLAG_MIRROR),
         tile);
 
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = fireball->x_pos + app->cam.x;
         hit_box.y = fireball->y_pos + app->cam.y;
         hit_box.w = app->entity_types[fireball->type].width;
         hit_box.h = app->entity_types[fireball->type].height;
 
         // Render the fireball hit box.
-        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_ORANGE);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
-static void update_fireball(eg_app *app, eg_entity *fireball)
+static void update_fireball(cr_app *app, cr_entity *fireball)
 {
     int avx = get_fireball_x_vel(fireball);
     int avy = get_fireball_y_vel(fireball);
@@ -137,10 +137,10 @@ static void update_fireball(eg_app *app, eg_entity *fireball)
 }
 
 static void collide_fireball(
-    eg_app *app,
-    eg_entity *fireball,
-    eg_entity *other,
-    eg_collision *t_res)
+    cr_app *app,
+    cr_entity *fireball,
+    cr_entity *other,
+    cr_collision *t_res)
 {
     if (other->type == ENTITY_TYPE_BLOCK ||
         other->type == ENTITY_TYPE_HENRY ||
@@ -156,7 +156,7 @@ static void collide_fireball(
     }
 }
 
-void fireball_demo_register(eg_entity_type *t)
+void fireball_demo_register(cr_entity_type *t)
 {
     t->width = 11;
     t->height = 11;
@@ -167,11 +167,11 @@ void fireball_demo_register(eg_entity_type *t)
     t->collide = collide_fireball;
 }
 
-eg_entity *fireball_demo_create(eg_app *app, int x, int y)
+cr_entity *fireball_demo_create(cr_app *app, int x, int y)
 {
-    eg_entity *fireball = NULL;
+    cr_entity *fireball = NULL;
 
-    fireball = eg_create_entity(app);
+    fireball = cr_create_entity(app);
     if (fireball == NULL)
     {
         return NULL;

@@ -16,9 +16,9 @@ static char *items[4] = {
 
 #define ITEM_HEIGHT 30
 
-static void render_controls_menu(eg_app *app, eg_entity *menu)
+static void render_controls_menu(cr_app *app, cr_entity *menu)
 {
-    eg_font *font = app->fonts[TNS_FONT_PRESS_START];
+    cr_font *font = app->fonts[TNS_FONT_PRESS_START];
     int x_origin = 20;
     int y_origin = 45;
 
@@ -27,16 +27,16 @@ static void render_controls_menu(eg_app *app, eg_entity *menu)
 
     // Render the menu panel.
     // For the main menu, this takes up the entire screen.
-    eg_rect r = {
+    cr_rect r = {
         .x = 0,
         .y = 0,
         .w = w,
         .h = h};
-    eg_set_color(app, EG_COLOR_VINIK_BLACK);
-    eg_draw_rect(app, &r, 1);
+    cr_set_color(app, CR_COLOR_VINIK_BLACK);
+    cr_draw_rect(app, &r, 1);
 
     // Render the menu title.
-    eg_draw_text(
+    cr_draw_text(
         app,
         font,
         "CONTROLS",
@@ -49,12 +49,12 @@ static void render_controls_menu(eg_app *app, eg_entity *menu)
     for (i = 0; i < 4; i++)
     {
         int dy = 0;
-        eg_rect bounds = {
+        cr_rect bounds = {
             .x = x_origin,
             .y = y_origin + y_offset,
             .w = 210,
             .h = 0};
-        eg_draw_text_bounded(
+        cr_draw_text_bounded(
             app,
             font,
             items[i],
@@ -64,16 +64,16 @@ static void render_controls_menu(eg_app *app, eg_entity *menu)
 
         // For debugging text boundaries
         // bounds.h = dy;
-        // eg_set_color(app, EG_COLOR_VINIK_SEA_GREEN);
-        // eg_draw_rect(app, &bounds, 0);
+        // cr_set_color(app, CR_COLOR_VINIK_SEA_GREEN);
+        // cr_draw_rect(app, &bounds, 0);
     }
 }
 
-static void update_controls_menu(eg_app *app, eg_entity *menu)
+static void update_controls_menu(cr_app *app, cr_entity *menu)
 {
 }
 
-void tns_register_controls_menu(eg_entity_type *t)
+void tns_register_controls_menu(cr_entity_type *t)
 {
     t->width = 240;
     t->height = 160;
@@ -82,19 +82,19 @@ void tns_register_controls_menu(eg_entity_type *t)
     t->update = update_controls_menu;
 }
 
-eg_entity *tns_create_controls_menu(eg_app *app)
+cr_entity *tns_create_controls_menu(cr_app *app)
 {
-    eg_entity *menu = NULL;
+    cr_entity *menu = NULL;
 
-    menu = eg_create_entity(app);
+    menu = cr_create_entity(app);
     if (menu == NULL)
     {
         return NULL;
     }
 
     menu->type = ENTITY_TYPE_CONTROLS_MENU;
-    eg_set_flag(menu, ENTITY_FLAG_PAUSE);
-    eg_set_flag(menu, ENTITY_FLAG_MENU);
+    cr_set_flag(menu, ENTITY_FLAG_PAUSE);
+    cr_set_flag(menu, ENTITY_FLAG_MENU);
 
     return menu;
 }

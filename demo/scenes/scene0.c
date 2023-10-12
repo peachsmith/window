@@ -19,11 +19,11 @@
 
 #include "common/util.h"
 
-void load_scene_0(eg_app *app)
+void load_scene_0(cr_app *app)
 {
     app->scene = DEMO_SCENE_0;
 
-    util_set_camera(app, EG_CAMERA_ALL);
+    util_set_camera(app, CR_CAMERA_ALL);
     app->cam.x = -320;
     app->cam.y = 40;
 

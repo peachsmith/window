@@ -8,76 +8,76 @@
 // the name of this file is "input_menu_input", which sounds confusing and
 // warrants this explanation.
 
-void input_menu_input_handler(eg_app *app)
+void input_menu_input_handler(cr_app *app)
 {
-    if (eg_consume_input(app, EG_KEYCODE_X) ||
-        eg_consume_input(app, EG_KEYCODE_Q) ||
-        eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    if (cr_consume_input(app, CR_KEYCODE_X) ||
+        cr_consume_input(app, CR_KEYCODE_Q) ||
+        cr_consume_input(app, CR_KEYCODE_ESCAPE))
     {
         app->menu_count--;
-        eg_pop_input_handler(app);
+        cr_pop_input_handler(app);
         return;
     }
 
     int max_count = 255;
 
-    if (eg_peek_input(app, EG_KEYCODE_W))
+    if (cr_peek_input(app, CR_KEYCODE_W))
     {
-        if (app->actuation_counters[EG_KEYCODE_W] < max_count)
+        if (app->actuation_counters[CR_KEYCODE_W] < max_count)
         {
-            app->actuation_counters[EG_KEYCODE_W]++;
+            app->actuation_counters[CR_KEYCODE_W]++;
         }
     }
     else
     {
-        app->actuation_counters[EG_KEYCODE_W] = 0;
+        app->actuation_counters[CR_KEYCODE_W] = 0;
     }
 
-    if (eg_peek_input(app, EG_KEYCODE_A))
+    if (cr_peek_input(app, CR_KEYCODE_A))
     {
-        if (app->actuation_counters[EG_KEYCODE_A] < max_count)
+        if (app->actuation_counters[CR_KEYCODE_A] < max_count)
         {
-            app->actuation_counters[EG_KEYCODE_A]++;
+            app->actuation_counters[CR_KEYCODE_A]++;
         }
     }
     else
     {
-        app->actuation_counters[EG_KEYCODE_A] = 0;
+        app->actuation_counters[CR_KEYCODE_A] = 0;
     }
 
-    if (eg_peek_input(app, EG_KEYCODE_S))
+    if (cr_peek_input(app, CR_KEYCODE_S))
     {
-        if (app->actuation_counters[EG_KEYCODE_S] < max_count)
+        if (app->actuation_counters[CR_KEYCODE_S] < max_count)
         {
-            app->actuation_counters[EG_KEYCODE_S]++;
+            app->actuation_counters[CR_KEYCODE_S]++;
         }
     }
     else
     {
-        app->actuation_counters[EG_KEYCODE_S] = 0;
+        app->actuation_counters[CR_KEYCODE_S] = 0;
     }
 
-    if (eg_peek_input(app, EG_KEYCODE_D))
+    if (cr_peek_input(app, CR_KEYCODE_D))
     {
-        if (app->actuation_counters[EG_KEYCODE_D] < max_count)
+        if (app->actuation_counters[CR_KEYCODE_D] < max_count)
         {
-            app->actuation_counters[EG_KEYCODE_D]++;
+            app->actuation_counters[CR_KEYCODE_D]++;
         }
     }
     else
     {
-        app->actuation_counters[EG_KEYCODE_D] = 0;
+        app->actuation_counters[CR_KEYCODE_D] = 0;
     }
 
-    if (eg_peek_input(app, EG_KEYCODE_SPACE))
+    if (cr_peek_input(app, CR_KEYCODE_SPACE))
     {
-        if (app->actuation_counters[EG_KEYCODE_SPACE] < max_count)
+        if (app->actuation_counters[CR_KEYCODE_SPACE] < max_count)
         {
-            app->actuation_counters[EG_KEYCODE_SPACE]++;
+            app->actuation_counters[CR_KEYCODE_SPACE]++;
         }
     }
     else
     {
-        app->actuation_counters[EG_KEYCODE_SPACE] = 0;
+        app->actuation_counters[CR_KEYCODE_SPACE] = 0;
     }
 }

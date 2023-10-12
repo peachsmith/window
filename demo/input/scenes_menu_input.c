@@ -6,10 +6,10 @@
 #include "common/util.h"
 #include "common/menu.h"
 
-static void do_transition(eg_app *app, eg_func load_next_scene)
+static void do_transition(cr_app *app, cr_func load_next_scene)
 {
-    eg_entity transition;
-    eg_entity *entity = NULL;
+    cr_entity transition;
+    cr_entity *entity = NULL;
 
     // Save the transition entity state.
     for (int i = 0; i < app->entity_cap; i++)
@@ -26,7 +26,7 @@ static void do_transition(eg_app *app, eg_func load_next_scene)
         // doesn't start in a paused state. If we were transitioning to a scene
         // that should start in a paused state, we wouldn't do this, but the
         // scenese menu only contains scenes that don't start paused.
-        eg_set_flag(entity, ENTITY_FLAG_UPDATE);
+        cr_set_flag(entity, ENTITY_FLAG_UPDATE);
 
         transition.ticks = entity->ticks;
         transition.data = entity->data;
@@ -60,27 +60,27 @@ static void do_transition(eg_app *app, eg_func load_next_scene)
     }
 }
 
-static void scene0_transition(eg_app *app)
+static void scene0_transition(cr_app *app)
 {
     do_transition(app, load_scene_0);
 }
 
-static void scene1_transition(eg_app *app)
+static void scene1_transition(cr_app *app)
 {
     do_transition(app, load_scene_1);
 }
 
-static void scene2_transition(eg_app *app)
+static void scene2_transition(cr_app *app)
 {
     do_transition(app, load_scene_2);
 }
 
-static void scene3_transition(eg_app *app)
+static void scene3_transition(cr_app *app)
 {
     do_transition(app, load_scene_3);
 }
 
-static void scene4_transition(eg_app *app)
+static void scene4_transition(cr_app *app)
 {
     do_transition(app, load_scene_4);
 }
@@ -94,15 +94,15 @@ static void scene4_transition(eg_app *app)
  * the next scene.
  *
  */
-static void begin_transition(eg_app *app, eg_func transition_loader, eg_func handler)
+static void begin_transition(cr_app *app, cr_func transition_loader, cr_func handler)
 {
     // Close the scenes menu.
     app->menu_count--;
-    eg_pop_input_handler(app);
+    cr_pop_input_handler(app);
 
     // Close the debug menu.
     app->menu_count--;
-    eg_pop_input_handler(app);
+    cr_pop_input_handler(app);
 
     // Set the transition callback to load scene 0.
     // Set the next input handler to be the root input handler.
@@ -110,7 +110,7 @@ static void begin_transition(eg_app *app, eg_func transition_loader, eg_func han
     app->transition_input_handler = handler;
 
     // Remove the input handler of the current scene.
-    eg_pop_input_handler(app);
+    cr_pop_input_handler(app);
 
     // Start the screen transition by marking the data field as 1 for any
     // entity that has an entity type of ENTITY_TYPE_TRANSITION.
@@ -124,25 +124,25 @@ static void begin_transition(eg_app *app, eg_func transition_loader, eg_func han
     }
 }
 
-void scene_menu_input_handler(eg_app *app)
+void scene_menu_input_handler(cr_app *app)
 {
-    if (eg_consume_input(app, EG_KEYCODE_X) ||
-        eg_consume_input(app, EG_KEYCODE_Q) ||
-        eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    if (cr_consume_input(app, CR_KEYCODE_X) ||
+        cr_consume_input(app, CR_KEYCODE_Q) ||
+        cr_consume_input(app, CR_KEYCODE_ESCAPE))
     {
         app->menu_count--;
-        eg_pop_input_handler(app);
+        cr_pop_input_handler(app);
         return;
     }
 
     // Locate the scene menu.
-    eg_entity *menu_entity = app->menus[app->menu_count - 1];
+    cr_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_UP))
+    if (cr_consume_input(app, CR_KEYCODE_UP))
     {
         if (menu_entity->cursor_y > 0)
         {
@@ -154,7 +154,7 @@ void scene_menu_input_handler(eg_app *app)
         }
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_DOWN))
+    if (cr_consume_input(app, CR_KEYCODE_DOWN))
     {
         if (menu_entity->cursor_y < 3)
         {
@@ -167,7 +167,7 @@ void scene_menu_input_handler(eg_app *app)
     }
 
     // menu item selection
-    if (eg_consume_input(app, EG_KEYCODE_Z))
+    if (cr_consume_input(app, CR_KEYCODE_Z))
     {
         switch (menu_entity->cursor_y + menu_entity->scroll_y)
         {

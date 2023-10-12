@@ -12,7 +12,7 @@
 static const char *item_1_text = "Purpose";
 static const char *item_2_text = "Implementation";
 
-static void render_info_menu(eg_app *app, eg_entity *menu)
+static void render_info_menu(cr_app *app, cr_entity *menu)
 {
     // Render the menu panel.
     ui_draw_panel(
@@ -23,14 +23,14 @@ static void render_info_menu(eg_app *app, eg_entity *menu)
         64);
 
     // Render the menu items.
-    eg_draw_text(
+    cr_draw_text(
         app,
         app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
         item_1_text,
         menu->x_pos + 25,
         menu->y_pos + 9);
 
-    eg_draw_text(
+    cr_draw_text(
         app,
         app->fonts[DEMO_FONT_POKEMON_FIRE_RED],
         item_2_text,
@@ -66,11 +66,11 @@ static void render_info_menu(eg_app *app, eg_entity *menu)
         52 + cursor_y * 24);
 }
 
-static void update_info_menu(eg_app *app, eg_entity *menu)
+static void update_info_menu(cr_app *app, cr_entity *menu)
 {
 }
 
-void info_menu_demo_register(eg_entity_type *t)
+void info_menu_demo_register(cr_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
@@ -80,11 +80,11 @@ void info_menu_demo_register(eg_entity_type *t)
     t->update = update_info_menu;
 }
 
-eg_entity *info_menu_demo_create(eg_app* app)
+cr_entity *info_menu_demo_create(cr_app* app)
 {
-    eg_entity *menu = NULL;
+    cr_entity *menu = NULL;
 
-    menu = eg_create_entity(app);
+    menu = cr_create_entity(app);
     if (menu == NULL)
     {
         return NULL;
@@ -94,8 +94,8 @@ eg_entity *info_menu_demo_create(eg_app* app)
     menu->y_pos = 42;
     menu->type = ENTITY_TYPE_INFO_MENU;
     menu->data = 1;
-    eg_set_flag(menu, ENTITY_FLAG_PAUSE);
-    eg_set_flag(menu, ENTITY_FLAG_MENU);
+    cr_set_flag(menu, ENTITY_FLAG_PAUSE);
+    cr_set_flag(menu, ENTITY_FLAG_MENU);
 
     return menu;
 }

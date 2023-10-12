@@ -9,7 +9,7 @@
 
 #define DEBUG_BUFSIZE 256
 
-void demo_draw_overlay(eg_app *app)
+void demo_draw_overlay(cr_app *app)
 {
     char buffer[DEBUG_BUFSIZE];
     int n = DEBUG_BUFSIZE - 1;
@@ -19,7 +19,7 @@ void demo_draw_overlay(eg_app *app)
     // Documentation for snprintf:
     // https://cplusplus.com/reference/cstdio/snprintf
 
-    eg_entity *player = app->primary;
+    cr_entity *player = app->primary;
 
     // The nul terminator is appended by the snprintf function.
     int res = snprintf(
@@ -36,7 +36,7 @@ void demo_draw_overlay(eg_app *app)
         return;
     }
 
-    eg_draw_text(app,
+    cr_draw_text(app,
                  app->fonts[DEMO_FONT_KENNY_PIXEL],
                  buffer,
                  5,
@@ -68,7 +68,7 @@ void demo_draw_overlay(eg_app *app)
         return;
     }
 
-    eg_draw_text(app,
+    cr_draw_text(app,
                  app->fonts[DEMO_FONT_KENNY_PIXEL],
                  buffer,
                  5,
@@ -77,7 +77,7 @@ void demo_draw_overlay(eg_app *app)
     // Render entity array
     int ex = 160;
     int ey = 3;
-    eg_rect er = {.w = 5, .h = 5};
+    cr_rect er = {.w = 5, .h = 5};
     for (int i = 0; i < app->entity_cap; i++)
     {
         er.x = ex + (i / 20) * (er.w + 1);
@@ -88,58 +88,58 @@ void demo_draw_overlay(eg_app *app)
             switch (app->entities[i].type)
             {
             case ENTITY_TYPE_BILLY:
-                eg_set_color(app, 0xfffa8ee3);
+                cr_set_color(app, 0xfffa8ee3);
                 break;
 
             case ENTITY_TYPE_JIMBO:
-                eg_set_color(app, 0xffffed47);
+                cr_set_color(app, 0xffffed47);
                 break;
 
             case ENTITY_TYPE_PLAYER:
-                eg_set_color(app, 0xff78eb5b);
+                cr_set_color(app, 0xff78eb5b);
                 break;
 
             case ENTITY_TYPE_BLOCK:
-                eg_set_color(app, 0xffc49f0c);
+                cr_set_color(app, 0xffc49f0c);
                 break;
 
             case ENTITY_TYPE_BLOCK_SLOPE:
-                eg_set_color(app, 0xffbd80d9);
+                cr_set_color(app, 0xffbd80d9);
                 break;
 
             case ENTITY_TYPE_BLOCK_MOVING:
-                eg_set_color(app, 0xff739c3b);
+                cr_set_color(app, 0xff739c3b);
                 break;
 
             case ENTITY_TYPE_HENRY:
-                eg_set_color(app, 0xfff24202);
+                cr_set_color(app, 0xfff24202);
                 break;
 
             case ENTITY_TYPE_FIREBALL:
-                eg_set_color(app, 0xfff28918);
+                cr_set_color(app, 0xfff28918);
                 break;
 
             default:
-                eg_set_color(app, 0xffa8a8a8);
+                cr_set_color(app, 0xffa8a8a8);
                 break;
             }
 
-            if (eg_check_flag(&(app->entities[i]), ENTITY_FLAG_MENU))
+            if (cr_check_flag(&(app->entities[i]), ENTITY_FLAG_MENU))
             {
-                eg_set_color(app, 0xff84f0ec);
+                cr_set_color(app, 0xff84f0ec);
             }
 
-            eg_draw_rect(app, &er, 1);
+            cr_draw_rect(app, &er, 1);
         }
         else
         {
-            eg_set_color(app, 0xffedece8);
-            eg_draw_rect(app, &er, 0);
+            cr_set_color(app, 0xffedece8);
+            cr_draw_rect(app, &er, 0);
         }
     }
 
     // Render jump height control
-    int act = app->actuation_counters[EG_KEYCODE_SPACE];
+    int act = app->actuation_counters[CR_KEYCODE_SPACE];
     res = snprintf(
         buffer,
         n,
@@ -153,7 +153,7 @@ void demo_draw_overlay(eg_app *app)
         return;
     }
 
-    eg_draw_text(app,
+    cr_draw_text(app,
                  app->fonts[DEMO_FONT_KENNY_PIXEL],
                  buffer,
                  5,
@@ -163,15 +163,15 @@ void demo_draw_overlay(eg_app *app)
     er.y = 83;
     er.w = 32;
     er.h = 7;
-    eg_set_color(app, 0xffedece8);
-    eg_draw_rect(app, &er, 0);
+    cr_set_color(app, 0xffedece8);
+    cr_draw_rect(app, &er, 0);
 
     er.x = 56;
     er.y = 84;
     er.w = act * 2;
     er.h = 5;
-    eg_set_color(app, 0xffe85900);
-    eg_draw_rect(app, &er, 1);
+    cr_set_color(app, 0xffe85900);
+    cr_draw_rect(app, &er, 1);
 
     // // Render frame rate information
     // res = snprintf(
@@ -187,7 +187,7 @@ void demo_draw_overlay(eg_app *app)
     //     return;
     // }
 
-    // eg_draw_text(app,
+    // cr_draw_text(app,
     //              app->fonts[DEMO_FONT_KENNY_PIXEL],
     //              buffer,
     //              5,

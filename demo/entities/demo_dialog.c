@@ -15,7 +15,7 @@ static const char *demo_dialog_panel_1 = "This is a dialog. This is a test of th
 static const char *demo_dialog_panel_2 = "This is the second panel of text in the demo\ndialog.";
 #define PANEL_2_LEN 52
 
-static void update_demo_dialog(eg_app *app, eg_entity *dialog)
+static void update_demo_dialog(cr_app *app, cr_entity *dialog)
 {
     if (dialog->ticks < dialog->tick_limit)
     {
@@ -23,7 +23,7 @@ static void update_demo_dialog(eg_app *app, eg_entity *dialog)
     }
 }
 
-static void advance_demo_dialog(eg_app *app, eg_entity *dialog)
+static void advance_demo_dialog(cr_app *app, cr_entity *dialog)
 {
     // We currently use the data field to represent which panel of content
     // should be rendered in the dialog.
@@ -32,7 +32,7 @@ static void advance_demo_dialog(eg_app *app, eg_entity *dialog)
     {
         // Close the dialog.
         app->dialog_count--;
-        eg_pop_input_handler(app);
+        cr_pop_input_handler(app);
         return;
     }
 
@@ -45,7 +45,7 @@ static void advance_demo_dialog(eg_app *app, eg_entity *dialog)
     dialog->data++;
 }
 
-static void render_dialog_panel(eg_app *app, eg_entity *dialog)
+static void render_dialog_panel(cr_app *app, cr_entity *dialog)
 {
     ui_draw_panel(
         app,
@@ -55,7 +55,7 @@ static void render_dialog_panel(eg_app *app, eg_entity *dialog)
         COMMON_DIALOG_HEIGHT);
 }
 
-static void render_dialog_indicator(eg_app *app, eg_entity *dialog)
+static void render_dialog_indicator(cr_app *app, cr_entity *dialog)
 {
     ui_draw_indicator(
         app,
@@ -64,7 +64,7 @@ static void render_dialog_indicator(eg_app *app, eg_entity *dialog)
         UI_INDICATOR_ADVANCE);
 }
 
-static void render_dialog(eg_app *app, eg_entity *dialog)
+static void render_dialog(cr_app *app, cr_entity *dialog)
 {
     common_dialog_renderer(
         app,
@@ -74,7 +74,7 @@ static void render_dialog(eg_app *app, eg_entity *dialog)
         render_dialog_indicator);
 }
 
-void demo_dialog_demo_register(eg_entity_type *t)
+void demo_dialog_demo_register(cr_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
@@ -85,11 +85,11 @@ void demo_dialog_demo_register(eg_entity_type *t)
     t->advance = advance_demo_dialog;
 }
 
-eg_entity *demo_dialog_demo_create(eg_app *app)
+cr_entity *demo_dialog_demo_create(cr_app *app)
 {
-    eg_entity *dialog = NULL;
+    cr_entity *dialog = NULL;
 
-    dialog = eg_create_entity(app);
+    dialog = cr_create_entity(app);
     if (dialog == NULL)
     {
         return NULL;
@@ -99,13 +99,13 @@ eg_entity *demo_dialog_demo_create(eg_app *app)
     dialog->y_pos = 108;
     dialog->type = ENTITY_TYPE_DEMO_DIALOG;
 
-    eg_set_flag(dialog, ENTITY_FLAG_PAUSE);
-    eg_set_flag(dialog, ENTITY_FLAG_MENU);
+    cr_set_flag(dialog, ENTITY_FLAG_PAUSE);
+    cr_set_flag(dialog, ENTITY_FLAG_MENU);
 
     return dialog;
 }
 
-void demo_dialog_demo_open(eg_app *app, eg_entity *dialog)
+void demo_dialog_demo_open(cr_app *app, cr_entity *dialog)
 {
     // Reset the dialog.
     dialog->data = 0;

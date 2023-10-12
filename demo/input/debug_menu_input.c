@@ -3,26 +3,26 @@
 #include "demo/entities/entity_types.h"
 #include "common/menu.h"
 
-void debug_menu_input_handler(eg_app *app)
+void debug_menu_input_handler(cr_app *app)
 {
-    if (eg_consume_input(app, EG_KEYCODE_X) ||
-        eg_consume_input(app, EG_KEYCODE_Q) ||
-        eg_consume_input(app, EG_KEYCODE_ESCAPE))
+    if (cr_consume_input(app, CR_KEYCODE_X) ||
+        cr_consume_input(app, CR_KEYCODE_Q) ||
+        cr_consume_input(app, CR_KEYCODE_ESCAPE))
     {
         app->menu_count--;
         app->pause = 0;
-        eg_pop_input_handler(app);
+        cr_pop_input_handler(app);
         return;
     }
 
     // Locate the debug menu.
-    eg_entity *menu_entity = app->menus[app->menu_count - 1];
+    cr_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_UP))
+    if (cr_consume_input(app, CR_KEYCODE_UP))
     {
         if (menu_entity->cursor_y > 0)
         {
@@ -30,7 +30,7 @@ void debug_menu_input_handler(eg_app *app)
         }
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_DOWN))
+    if (cr_consume_input(app, CR_KEYCODE_DOWN))
     {
         if (menu_entity->cursor_y < 4)
         {
@@ -39,13 +39,13 @@ void debug_menu_input_handler(eg_app *app)
     }
 
     // menu item selection
-    if (eg_consume_input(app, EG_KEYCODE_Z))
+    if (cr_consume_input(app, CR_KEYCODE_Z))
     {
         switch (menu_entity->cursor_y)
         {
         case 0:
         {
-            eg_entity *scene_menu = NULL;
+            cr_entity *scene_menu = NULL;
             for (int i = 0; i < app->entity_cap; i++)
             {
                 if (app->entities[i].type == ENTITY_TYPE_SCENE_MENU && app->entities[i].present)
@@ -54,7 +54,7 @@ void debug_menu_input_handler(eg_app *app)
                 }
             }
 
-            eg_push_input_handler(app, scene_menu_input_handler);
+            cr_push_input_handler(app, scene_menu_input_handler);
 
             scene_menu->cursor_x = 0;
             scene_menu->cursor_y = 0;
@@ -65,7 +65,7 @@ void debug_menu_input_handler(eg_app *app)
 
         case 4:
         {
-            eg_entity *input_menu = NULL;
+            cr_entity *input_menu = NULL;
             for (int i = 0; i < app->entity_cap; i++)
             {
                 if (app->entities[i].type == ENTITY_TYPE_INPUT_MENU && app->entities[i].present)
@@ -74,7 +74,7 @@ void debug_menu_input_handler(eg_app *app)
                 }
             }
 
-            eg_push_input_handler(app, input_menu_input_handler);
+            cr_push_input_handler(app, input_menu_input_handler);
 
             input_menu->cursor_x = 0;
             input_menu->cursor_y = 0;
@@ -88,7 +88,7 @@ void debug_menu_input_handler(eg_app *app)
         }
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_LEFT))
+    if (cr_consume_input(app, CR_KEYCODE_LEFT))
     {
         if (menu_entity->cursor_y == 1 && app->debug.frame_len > 1)
         {
@@ -107,7 +107,7 @@ void debug_menu_input_handler(eg_app *app)
         }
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_RIGHT))
+    if (cr_consume_input(app, CR_KEYCODE_RIGHT))
     {
         if (menu_entity->cursor_y == 1 && app->debug.frame_len < 8)
         {

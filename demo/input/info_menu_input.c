@@ -3,16 +3,16 @@
 #include "demo/entities/entity_types.h"
 #include "common/menu.h"
 
-void info_menu_input_handler(eg_app *app)
+void info_menu_input_handler(cr_app *app)
 {
-    if (eg_consume_input(app, EG_KEYCODE_X))
+    if (cr_consume_input(app, CR_KEYCODE_X))
     {
         app->menu_count--;
-        eg_pop_input_handler(app);
+        cr_pop_input_handler(app);
 
         if (app->dialog_count > 0)
         {
-            eg_entity *d = app->dialogs[app->dialog_count - 1];
+            cr_entity *d = app->dialogs[app->dialog_count - 1];
             d->result = 0;
             app->entity_types[d->type].advance(app, d);
         }
@@ -20,13 +20,13 @@ void info_menu_input_handler(eg_app *app)
         return;
     }
 
-    eg_entity *menu_entity = app->menus[app->menu_count - 1];
+    cr_entity *menu_entity = app->menus[app->menu_count - 1];
     if (menu_entity == NULL)
     {
         return;
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_UP))
+    if (cr_consume_input(app, CR_KEYCODE_UP))
     {
         if (menu_entity->data > 1)
         {
@@ -34,7 +34,7 @@ void info_menu_input_handler(eg_app *app)
         }
     }
 
-    if (eg_consume_input(app, EG_KEYCODE_DOWN))
+    if (cr_consume_input(app, CR_KEYCODE_DOWN))
     {
         if (menu_entity->data < 2)
         {
@@ -43,17 +43,17 @@ void info_menu_input_handler(eg_app *app)
     }
 
     // menu item selection
-    if (eg_consume_input(app, EG_KEYCODE_Z))
+    if (cr_consume_input(app, CR_KEYCODE_Z))
     {
         switch (menu_entity->data)
         {
         case 1:
             app->menu_count--;
-            eg_pop_input_handler(app);
+            cr_pop_input_handler(app);
 
             if (app->dialog_count > 0)
             {
-                eg_entity *d = app->dialogs[app->dialog_count - 1];
+                cr_entity *d = app->dialogs[app->dialog_count - 1];
                 d->result = 1;
                 app->entity_types[d->type].advance(app, d);
             }
@@ -61,11 +61,11 @@ void info_menu_input_handler(eg_app *app)
 
         case 2:
             app->menu_count--;
-            eg_pop_input_handler(app);
+            cr_pop_input_handler(app);
 
             if (app->dialog_count > 0)
             {
-                eg_entity *d = app->dialogs[app->dialog_count - 1];
+                cr_entity *d = app->dialogs[app->dialog_count - 1];
                 d->result = 2;
                 app->entity_types[d->type].advance(app, d);
             }

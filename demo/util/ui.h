@@ -13,26 +13,26 @@
  * Draws a panel.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  */
-void ui_draw_panel(eg_app *, int, int, int, int);
+void ui_draw_panel(cr_app *, int, int, int, int);
 
 /**
  * Draws text.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  */
-void ui_draw_text(eg_app *);
+void ui_draw_text(cr_app *);
 
 /**
  * Draws a cursor. This indicates the position of control, such as which
  * menu item will be selected.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  */
-void ui_draw_cursor(eg_app *, int, int);
+void ui_draw_cursor(cr_app *, int, int);
 
 /**
  * Draws an indicator. An indicator signifies that more content will be
@@ -41,11 +41,11 @@ void ui_draw_cursor(eg_app *, int, int);
  * more items.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *   int - the x coordinate on the screen
  *   int - the y coordinate on the screen
  *   int - the type of indicator to render
  */
-void ui_draw_indicator(eg_app *, int, int, int);
+void ui_draw_indicator(cr_app *, int, int, int);
 
 #endif

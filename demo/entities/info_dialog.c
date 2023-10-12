@@ -20,7 +20,7 @@ static const char *purpose_panel = "This software is an exercise in API design."
 static const char *implementation_panel = "This software was implemented using SDL2.";
 #define IMPLEMENTATION_PANEL_LEN 41
 
-static void update_info_dialog(eg_app *app, eg_entity *dialog)
+static void update_info_dialog(cr_app *app, cr_entity *dialog)
 {
     if (dialog->ticks < dialog->tick_limit)
     {
@@ -32,7 +32,7 @@ static void update_info_dialog(eg_app *app, eg_entity *dialog)
     {
         dialog->ticks++;
         // Locate the info menu.
-        eg_entity *info_menu = NULL;
+        cr_entity *info_menu = NULL;
         for (int i = 0; i < app->entity_cap; i++)
         {
             if (app->entities[i].type == ENTITY_TYPE_INFO_MENU && app->entities[i].present)
@@ -44,11 +44,11 @@ static void update_info_dialog(eg_app *app, eg_entity *dialog)
         // Set the pause menu as the active menu.
         app->menus[app->menu_count++] = info_menu;
 
-        eg_push_input_handler(app, info_menu_input_handler);
+        cr_push_input_handler(app, info_menu_input_handler);
     }
 }
 
-static void advance_info_dialog(eg_app *app, eg_entity *dialog)
+static void advance_info_dialog(cr_app *app, cr_entity *dialog)
 {
     dialog->data++;
 
@@ -56,7 +56,7 @@ static void advance_info_dialog(eg_app *app, eg_entity *dialog)
     {
         // Close the dialog.
         app->dialog_count--;
-        eg_pop_input_handler(app);
+        cr_pop_input_handler(app);
         return;
     }
 
@@ -67,7 +67,7 @@ static void advance_info_dialog(eg_app *app, eg_entity *dialog)
         {
             // Close the dialog.
             app->dialog_count--;
-            eg_pop_input_handler(app);
+            cr_pop_input_handler(app);
             return;
         }
 
@@ -93,7 +93,7 @@ static void advance_info_dialog(eg_app *app, eg_entity *dialog)
     }
 }
 
-static void render_dialog_panel(eg_app *app, eg_entity *dialog)
+static void render_dialog_panel(cr_app *app, cr_entity *dialog)
 {
     ui_draw_panel(
         app,
@@ -103,7 +103,7 @@ static void render_dialog_panel(eg_app *app, eg_entity *dialog)
         COMMON_DIALOG_HEIGHT);
 }
 
-static void render_dialog_indicator(eg_app *app, eg_entity *dialog)
+static void render_dialog_indicator(cr_app *app, cr_entity *dialog)
 {
     ui_draw_indicator(
         app,
@@ -112,7 +112,7 @@ static void render_dialog_indicator(eg_app *app, eg_entity *dialog)
         UI_INDICATOR_ADVANCE);
 }
 
-static void render_dialog(eg_app *app, eg_entity *dialog)
+static void render_dialog(cr_app *app, cr_entity *dialog)
 {
     common_dialog_renderer(
         app,
@@ -122,7 +122,7 @@ static void render_dialog(eg_app *app, eg_entity *dialog)
         render_dialog_indicator);
 }
 
-void info_dialog_demo_register(eg_entity_type *t)
+void info_dialog_demo_register(cr_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
@@ -133,11 +133,11 @@ void info_dialog_demo_register(eg_entity_type *t)
     t->advance = advance_info_dialog;
 }
 
-eg_entity *info_dialog_demo_create(eg_app* app)
+cr_entity *info_dialog_demo_create(cr_app* app)
 {
-    eg_entity *dialog = NULL;
+    cr_entity *dialog = NULL;
 
-    dialog = eg_create_entity(app);
+    dialog = cr_create_entity(app);
     if (dialog == NULL)
     {
         return NULL;
@@ -147,13 +147,13 @@ eg_entity *info_dialog_demo_create(eg_app* app)
     dialog->y_pos = 108;
     dialog->type = ENTITY_TYPE_INFO_DIALOG;
 
-    eg_set_flag(dialog, ENTITY_FLAG_PAUSE);
-    eg_set_flag(dialog, ENTITY_FLAG_MENU);
+    cr_set_flag(dialog, ENTITY_FLAG_PAUSE);
+    cr_set_flag(dialog, ENTITY_FLAG_MENU);
 
     return dialog;
 }
 
-void info_dialog_demo_open(eg_app *app, eg_entity *dialog)
+void info_dialog_demo_open(cr_app *app, cr_entity *dialog)
 {
     // Reset the dialog.
     dialog->data = 0;

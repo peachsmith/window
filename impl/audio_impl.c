@@ -1,9 +1,9 @@
 #include "crumbs.h"
 #include "impl.h"
 
-eg_sound *eg_impl_load_sound(eg_app *app, const char *path, int type)
+cr_sound *cr_impl_load_sound(cr_app *app, const char *path, int type)
 {
-    eg_sound *sound = NULL;
+    cr_sound *sound = NULL;
 
     if (type == AUDIO_TYPE_SOUND_EFFECT)
     {
@@ -16,7 +16,7 @@ eg_sound *eg_impl_load_sound(eg_app *app, const char *path, int type)
             return NULL;
         }
 
-        sound = (eg_sound *)malloc(sizeof(eg_sound));
+        sound = (cr_sound *)malloc(sizeof(cr_sound));
         if (sound == NULL)
         {
             fprintf(stderr, "failed to create sound\n");
@@ -38,7 +38,7 @@ eg_sound *eg_impl_load_sound(eg_app *app, const char *path, int type)
             return NULL;
         }
 
-        sound = (eg_sound *)malloc(sizeof(eg_sound));
+        sound = (cr_sound *)malloc(sizeof(cr_sound));
         if (sound == NULL)
         {
             fprintf(stderr, "failed to create sound\n");
@@ -56,7 +56,7 @@ eg_sound *eg_impl_load_sound(eg_app *app, const char *path, int type)
     return sound;
 }
 
-void eg_impl_destroy_sound(eg_sound *sound)
+void cr_impl_destroy_sound(cr_sound *sound)
 {
     if (sound->type == AUDIO_TYPE_SOUND_EFFECT)
     {
@@ -69,7 +69,7 @@ void eg_impl_destroy_sound(eg_sound *sound)
     }
 }
 
-void eg_impl_play_sound(eg_app *app, eg_sound *sound)
+void cr_impl_play_sound(cr_app *app, cr_sound *sound)
 {
     if (sound->type == AUDIO_TYPE_SOUND_EFFECT)
     {

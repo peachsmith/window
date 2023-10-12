@@ -11,9 +11,9 @@
  * Populates an entity type struct with information about the sign entity.
  *
  * Params:
- *   eg_entity_type* - the sign's entity type definition
+ *   cr_entity_type* - the sign's entity type definition
  */
-void sign_demo_register(eg_entity_type *);
+void sign_demo_register(cr_entity_type *);
 
 /**
  * Creates a sign entity.
@@ -23,8 +23,8 @@ void sign_demo_register(eg_entity_type *);
  *   int - the sign entity's initial y position
  *
  * Returns:
- *   eg_entity* - a pointer to the new sign entity.
+ *   cr_entity* - a pointer to the new sign entity.
  */
-eg_entity *sign_demo_create(eg_app *, int, int);
+cr_entity *sign_demo_create(cr_app *, int, int);
 
 #endif

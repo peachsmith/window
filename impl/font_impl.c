@@ -6,7 +6,7 @@
 // 95 printable ASCII characters [32:126]
 //  !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 
-static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
+static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, cr_font *font)
 {
     SDL_RendererInfo ri;
     SDL_Color white = {.a = 255, .r = 255, .g = 255, .b = 255};
@@ -181,10 +181,10 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, eg_font *font)
     return 1;
 }
 
-eg_font *eg_impl_load_font(eg_app *app, const char *path, int p)
+cr_font *cr_impl_load_font(cr_app *app, const char *path, int p)
 {
-    eg_font *font = NULL;
-    eg_impl *impl = app->impl;
+    cr_font *font = NULL;
+    cr_impl *impl = app->impl;
 
     // Load the font data from the TrueType file.
     TTF_Font *ttf = TTF_OpenFont(path, p);
@@ -197,7 +197,7 @@ eg_font *eg_impl_load_font(eg_app *app, const char *path, int p)
     }
 
     // Create the font object.
-    font = (eg_font *)malloc(sizeof(eg_font));
+    font = (cr_font *)malloc(sizeof(cr_font));
     if (font == NULL)
     {
         TTF_CloseFont(ttf);
@@ -228,7 +228,7 @@ eg_font *eg_impl_load_font(eg_app *app, const char *path, int p)
     return font;
 }
 
-void eg_impl_destroy_font(eg_font *font)
+void cr_impl_destroy_font(cr_font *font)
 {
     for (int i = 0; i < FONT_ATLAS_MAX; i++)
     {
@@ -249,8 +249,8 @@ void eg_impl_destroy_font(eg_font *font)
  * of multiple textures.
  */
 static void impl_draw_text_multi(
-    eg_app *app,
-    eg_font *font,
+    cr_app *app,
+    cr_font *font,
     const char *msg,
     int x,
     int y,
@@ -258,7 +258,7 @@ static void impl_draw_text_multi(
     int line_height,
     int *result)
 {
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
 
     int w;
     int h;
@@ -280,8 +280,8 @@ static void impl_draw_text_multi(
  * of one single texture.
  */
 static void impl_draw_text_single(
-    eg_app *app,
-    eg_font *font,
+    cr_app *app,
+    cr_font *font,
     const char *msg,
     int x,
     int y,
@@ -289,7 +289,7 @@ static void impl_draw_text_single(
     int line_height,
     int *result)
 {
-    eg_impl *impl = app->impl;
+    cr_impl *impl = app->impl;
 
     int x0 = x;
     int y0 = y;
@@ -345,9 +345,9 @@ static void impl_draw_text_single(
     }
 }
 
-void eg_impl_draw_text(
-    eg_app *app,
-    eg_font *font,
+void cr_impl_draw_text(
+    cr_app *app,
+    cr_font *font,
     const char *msg,
     int x,
     int y)
@@ -363,11 +363,11 @@ void eg_impl_draw_text(
     }
 }
 
-void eg_impl_draw_text_bounded(
-    eg_app *app,
-    eg_font *font,
+void cr_impl_draw_text_bounded(
+    cr_app *app,
+    cr_font *font,
     const char *msg,
-    eg_rect *bounds,
+    cr_rect *bounds,
     int *result)
 {
     if (font->mode == FONT_MODE_MULTI)

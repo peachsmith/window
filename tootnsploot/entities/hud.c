@@ -8,25 +8,25 @@
 
 #define HUD_BUFSIZE 256
 
-static void render_hud(eg_app *app, eg_entity *hud)
+static void render_hud(cr_app *app, cr_entity *hud)
 {
     char buffer[HUD_BUFSIZE];
     int n = HUD_BUFSIZE - 1;
 
-    eg_entity *corgi = app->primary;
+    cr_entity *corgi = app->primary;
     if (corgi == NULL)
     {
         return;
     }
 
     // render the HUD panel
-    eg_rect r = {
+    cr_rect r = {
         .x = hud->x_pos,
         .y = hud->y_pos,
         .w = app->entity_types[hud->type].width,
         .h = app->entity_types[hud->type].height};
-    eg_set_color(app, EG_COLOR_VINIK_BLACK);
-    eg_draw_rect(app, &r, 1);
+    cr_set_color(app, CR_COLOR_VINIK_BLACK);
+    cr_draw_rect(app, &r, 1);
 
     // render the score
     int res = snprintf(
@@ -38,17 +38,17 @@ static void render_hud(eg_app *app, eg_entity *hud)
     {
         return;
     }
-    eg_draw_text(app, app->fonts[TNS_FONT_PRESS_START], buffer, 2, 2);
+    cr_draw_text(app, app->fonts[TNS_FONT_PRESS_START], buffer, 2, 2);
 
     // render the available music notes
-    eg_draw_text(app, app->fonts[TNS_FONT_PRESS_START], "BREATH", 2, 12);
+    cr_draw_text(app, app->fonts[TNS_FONT_PRESS_START], "BREATH", 2, 12);
     for (int i = 0; i < app->counters[TNS_COUNTER_BREATH]; i++)
     {
         sprite_draw_note(app, 55 + i * 13, 10);
     }
 }
 
-void tns_register_hud(eg_entity_type *t)
+void tns_register_hud(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_HUD;
     t->width = 240;
@@ -57,11 +57,11 @@ void tns_register_hud(eg_entity_type *t)
     t->collide = NULL;
 }
 
-eg_entity *tns_create_hud(eg_app *app, int x, int y)
+cr_entity *tns_create_hud(cr_app *app, int x, int y)
 {
-    eg_entity *hud = NULL;
+    cr_entity *hud = NULL;
 
-    hud = eg_create_entity(app);
+    hud = cr_create_entity(app);
     if (hud == NULL)
     {
         return NULL;

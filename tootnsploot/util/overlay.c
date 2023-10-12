@@ -9,12 +9,12 @@
 
 #define DEBUG_BUFSIZE 256
 
-void tns_draw_overlay(eg_app *app)
+void tns_draw_overlay(cr_app *app)
 {
     char buffer[DEBUG_BUFSIZE];
     int n = DEBUG_BUFSIZE - 1;
 
-    eg_entity *player = app->primary;
+    cr_entity *player = app->primary;
 
     int res = snprintf(
         buffer,
@@ -27,7 +27,7 @@ void tns_draw_overlay(eg_app *app)
         return;
     }
 
-    eg_draw_text(app,
+    cr_draw_text(app,
                  app->fonts[TNS_FONT_KENNY_PIXEL],
                  buffer,
                  5,
@@ -54,7 +54,7 @@ void tns_draw_overlay(eg_app *app)
         return;
     }
 
-    eg_draw_text(app,
+    cr_draw_text(app,
                  app->fonts[TNS_FONT_KENNY_PIXEL],
                  buffer,
                  5,
@@ -63,7 +63,7 @@ void tns_draw_overlay(eg_app *app)
     // Render entity array
     int ex = 160;
     int ey = 3;
-    eg_rect er = {.w = 5, .h = 5};
+    cr_rect er = {.w = 5, .h = 5};
     for (int i = 0; i < app->entity_cap; i++)
     {
         er.x = ex + (i / 20) * (er.w + 1);
@@ -74,38 +74,38 @@ void tns_draw_overlay(eg_app *app)
             switch (app->entities[i].type)
             {
             case ENTITY_TYPE_CRITTER:
-                eg_set_color(app, 0xffa16800);
+                cr_set_color(app, 0xffa16800);
                 break;
 
             case ENTITY_TYPE_CORGI:
-                eg_set_color(app, 0xffffd342);
+                cr_set_color(app, 0xffffd342);
                 break;
 
             case ENTITY_TYPE_NOTE:
-                eg_set_color(app, 0xff8d04cc);
+                cr_set_color(app, 0xff8d04cc);
                 break;
 
             default:
-                eg_set_color(app, 0xffa8a8a8);
+                cr_set_color(app, 0xffa8a8a8);
                 break;
             }
 
-            if (eg_check_flag(&(app->entities[i]), ENTITY_FLAG_MENU))
+            if (cr_check_flag(&(app->entities[i]), ENTITY_FLAG_MENU))
             {
-                eg_set_color(app, 0xff84f0ec);
+                cr_set_color(app, 0xff84f0ec);
             }
 
-            eg_draw_rect(app, &er, 1);
+            cr_draw_rect(app, &er, 1);
         }
         else
         {
-            eg_set_color(app, 0xffedece8);
-            eg_draw_rect(app, &er, 0);
+            cr_set_color(app, 0xffedece8);
+            cr_draw_rect(app, &er, 0);
         }
     }
 
     // Render jump height control
-    int act = app->actuation_counters[EG_KEYCODE_SPACE];
+    int act = app->actuation_counters[CR_KEYCODE_SPACE];
     res = snprintf(
         buffer,
         n,
@@ -116,7 +116,7 @@ void tns_draw_overlay(eg_app *app)
         return;
     }
 
-    eg_draw_text(app,
+    cr_draw_text(app,
                  app->fonts[TNS_FONT_KENNY_PIXEL],
                  buffer,
                  5,
@@ -126,13 +126,13 @@ void tns_draw_overlay(eg_app *app)
     er.y = 83;
     er.w = 32;
     er.h = 7;
-    eg_set_color(app, 0xffedece8);
-    eg_draw_rect(app, &er, 0);
+    cr_set_color(app, 0xffedece8);
+    cr_draw_rect(app, &er, 0);
 
     er.x = 56;
     er.y = 84;
     er.w = act * 2;
     er.h = 5;
-    eg_set_color(app, 0xffe85900);
-    eg_draw_rect(app, &er, 1);
+    cr_set_color(app, 0xffe85900);
+    cr_draw_rect(app, &er, 1);
 }

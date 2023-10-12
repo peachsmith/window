@@ -1,9 +1,9 @@
 #include "common/collision.h"
 
 int common_is_overlapped(
-    eg_rect *a,
-    eg_rect *b,
-    eg_overlap *res)
+    cr_rect *a,
+    cr_rect *b,
+    cr_overlap *res)
 {
     // Get the width and height of both entities.
     int aw = a->w;

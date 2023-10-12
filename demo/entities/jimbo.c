@@ -9,7 +9,7 @@
 #include "common/texture.h"
 #include "common/dialog.h"
 
-static int get_jimbo_x_vel(eg_entity *jimbo)
+static int get_jimbo_x_vel(cr_entity *jimbo)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -36,7 +36,7 @@ static int get_jimbo_x_vel(eg_entity *jimbo)
     return x_vel;
 }
 
-static int get_jimbo_y_vel(eg_entity *jimbo)
+static int get_jimbo_y_vel(cr_entity *jimbo)
 {
     // acceleration to velocity conversion table
     int a_to_v[24] = {
@@ -63,10 +63,10 @@ static int get_jimbo_y_vel(eg_entity *jimbo)
     return y_vel;
 }
 
-static void render_jimbo(eg_app *app, eg_entity *jimbo)
+static void render_jimbo(cr_app *app, cr_entity *jimbo)
 {
     int tile = 0;
-    int grounded = eg_check_flag(jimbo, ENTITY_FLAG_GROUND);
+    int grounded = cr_check_flag(jimbo, ENTITY_FLAG_GROUND);
 
     if (!grounded)
     {
@@ -78,25 +78,25 @@ static void render_jimbo(eg_app *app, eg_entity *jimbo)
         app,
         jimbo->x_pos + app->cam.x,
         jimbo->y_pos + app->cam.y,
-        eg_check_flag(jimbo, ENTITY_FLAG_MIRROR),
+        cr_check_flag(jimbo, ENTITY_FLAG_MIRROR),
         tile);
 
     // hit box
     if (app->debug.hitboxes)
     {
-        eg_rect hit_box;
+        cr_rect hit_box;
         hit_box.x = jimbo->x_pos + app->cam.x;
         hit_box.y = jimbo->y_pos + app->cam.y;
         hit_box.w = app->entity_types[jimbo->type].width;
         hit_box.h = app->entity_types[jimbo->type].height;
 
         // Render the jimbo hit box.
-        eg_set_color(app, EG_COLOR_VINIK_ORANGE);
-        eg_draw_rect(app, &hit_box, 0);
+        cr_set_color(app, CR_COLOR_VINIK_ORANGE);
+        cr_draw_rect(app, &hit_box, 0);
     }
 }
 
-static void update_jimbo(eg_app *app, eg_entity *jimbo)
+static void update_jimbo(cr_app *app, cr_entity *jimbo)
 {
     // Get the width and height of the jimbo.
     // int w = app->entity_types[jimbo->type].width;
@@ -104,7 +104,7 @@ static void update_jimbo(eg_app *app, eg_entity *jimbo)
 
     // Check the MOVE flag to see if the jimbo is being carried by a
     // a moving platform.
-    int carried = eg_check_flag(jimbo, ENTITY_FLAG_MOVE);
+    int carried = cr_check_flag(jimbo, ENTITY_FLAG_MOVE);
 
     int avx = get_jimbo_x_vel(jimbo);
     int avy = get_jimbo_y_vel(jimbo);
@@ -152,7 +152,7 @@ static void update_jimbo(eg_app *app, eg_entity *jimbo)
         // If the platform was already updated, recalculate the correction
         // factor that was done in the collision resolution.
         // Otherwise, we just add the platform's y velocity to the jimbo's.
-        if (eg_check_flag(jimbo->carrier, ENTITY_FLAG_UPDATE))
+        if (cr_check_flag(jimbo->carrier, ENTITY_FLAG_UPDATE))
         {
             cf = jimbo->carrier->y_pos - (jimbo->y_pos + h);
         }
@@ -178,7 +178,7 @@ static void update_jimbo(eg_app *app, eg_entity *jimbo)
     }
 
     // Clear the carry flag.
-    eg_clear_flag(jimbo, ENTITY_FLAG_MOVE);
+    cr_clear_flag(jimbo, ENTITY_FLAG_MOVE);
 
     // Update vertical position.
     jimbo->y_pos += avy;
@@ -186,9 +186,9 @@ static void update_jimbo(eg_app *app, eg_entity *jimbo)
     // If the jimbo is on a sloped platform, set the y velocity to some
     // value that causes the jimbo to collide with the platform before
     // moving into open space.
-    if (eg_check_flag(jimbo, ENTITY_FLAG_SLOPE))
+    if (cr_check_flag(jimbo, ENTITY_FLAG_SLOPE))
     {
-        eg_clear_flag(jimbo, ENTITY_FLAG_SLOPE);
+        cr_clear_flag(jimbo, ENTITY_FLAG_SLOPE);
         jimbo->y_acc = 23;
     }
 
@@ -199,12 +199,12 @@ static void update_jimbo(eg_app *app, eg_entity *jimbo)
     }
 }
 
-static int interact_with_jimbo(eg_app *app, eg_entity *jimbo, eg_entity *actor)
+static int interact_with_jimbo(cr_app *app, cr_entity *jimbo, cr_entity *actor)
 {
     app->pause = 1;
 
     // Locate jimbo's dialog.
-    eg_entity *jimbo_dialog = NULL;
+    cr_entity *jimbo_dialog = NULL;
     for (int i = 0; i < app->entity_cap; i++)
     {
         if (app->entities[i].type == ENTITY_TYPE_JIMBO_DIALOG && app->entities[i].present)
@@ -215,12 +215,12 @@ static int interact_with_jimbo(eg_app *app, eg_entity *jimbo, eg_entity *actor)
 
     jimbo_dialog_demo_open(app, jimbo_dialog);
 
-    eg_push_input_handler(app, common_dialog_input_handler);
+    cr_push_input_handler(app, common_dialog_input_handler);
 
     return 0;
 }
 
-void jimbo_demo_register(eg_entity_type *t)
+void jimbo_demo_register(cr_entity_type *t)
 {
     t->width = 24;
     t->height = 24;
@@ -232,11 +232,11 @@ void jimbo_demo_register(eg_entity_type *t)
     t->interact = interact_with_jimbo;
 }
 
-eg_entity *jimbo_demo_create(eg_app *app, int x, int y)
+cr_entity *jimbo_demo_create(cr_app *app, int x, int y)
 {
-    eg_entity *jimbo = NULL;
+    cr_entity *jimbo = NULL;
 
-    jimbo = eg_create_entity(app);
+    jimbo = cr_create_entity(app);
     if (jimbo == NULL)
     {
         return NULL;

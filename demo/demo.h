@@ -1,5 +1,5 @@
-#ifndef CRUMBS_DEMO_H
-#define CRUMBS_DEMO_H
+#ifndef DEMO_H
+#define DEMO_H
 
 #include "crumbs.h"
 
@@ -16,11 +16,11 @@
  * Populates am app struct with the data needed for runtime.
  *
  * Params:
- *   eg_app* - a pointer to an app struct
+ *   cr_app* - a pointer to an app struct
  *
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-int demo_prepare(eg_app *);
+int demo_prepare(cr_app *);
 
 #endif

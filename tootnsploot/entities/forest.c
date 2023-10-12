@@ -3,12 +3,12 @@
 #include "tootnsploot/entities/forest.h"
 #include "tootnsploot/util/sprite.h"
 
-static void render_forest(eg_app *app, eg_entity *forest)
+static void render_forest(cr_app *app, cr_entity *forest)
 {
     sprite_draw_forest(app, forest->x_pos, forest->y_pos);
 }
 
-void tns_register_forest(eg_entity_type *t)
+void tns_register_forest(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_FOREST;
     t->width = 240;
@@ -17,11 +17,11 @@ void tns_register_forest(eg_entity_type *t)
     t->collide = NULL;
 }
 
-eg_entity *tns_create_forest(eg_app *app, int x, int y)
+cr_entity *tns_create_forest(cr_app *app, int x, int y)
 {
-    eg_entity *forest = NULL;
+    cr_entity *forest = NULL;
 
-    forest = eg_create_entity(app);
+    forest = cr_create_entity(app);
     if (forest == NULL)
     {
         return NULL;

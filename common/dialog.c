@@ -3,20 +3,20 @@
 #include "common/texture.h"
 #include "common/font.h"
 
-static eg_entity *dialogs[COMMON_MAX_DIALOGS];
+static cr_entity *dialogs[COMMON_MAX_DIALOGS];
 
-void common_init_dialogs(eg_app *app)
+void common_init_dialogs(cr_app *app)
 {
     app->dialogs = &(dialogs[0]);
     app->dialog_count = 0;
 }
 
 void common_dialog_renderer(
-    eg_app *app,
-    eg_entity *dialog,
-    eg_font *font,
-    eg_entity_func draw_panel,
-    eg_entity_func draw_indicator)
+    cr_app *app,
+    cr_entity *dialog,
+    cr_font *font,
+    cr_entity_func draw_panel,
+    cr_entity_func draw_indicator)
 {
     char buffer[COMMON_DIALOG_BUFSIZE];
     int buf_len;
@@ -42,12 +42,12 @@ void common_dialog_renderer(
     buffer[i] = '\0';
 
     // Render the dialog text.
-    eg_rect bounds = {
+    cr_rect bounds = {
         .x = dialog->x_pos + 5,
         .y = dialog->y_pos + 5,
         .w = 210,
         .h = 0};
-    eg_draw_text_bounded(
+    cr_draw_text_bounded(
         app,
         font, // app->fonts[COMMON_FONT_POKEMON_FIRE_RED],
         buffer,
