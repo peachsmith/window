@@ -1,9 +1,9 @@
-#ifndef EG_DEMO_FISH_MENU_H
-#define EG_DEMO_FISH_MENU_H
+#ifndef DEMO_FISH_MENU_H
+#define DEMO_FISH_MENU_H
 
 // This file contains an entity that represents the fish menu.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the fish menu

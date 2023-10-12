@@ -1,10 +1,8 @@
-// This is a demonstrationg of using the Example interface.
+// This is a demonstrationg of using the Crumbs interface.
 // The prepare function is defined and implemented in
 
-#include "example.h"
+#include "crumbs.h"
 #include "demo/demo.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 int main(int argc, char **argv)
 {

@@ -1,9 +1,9 @@
-#ifndef EG_DEMO_HENRY_H
-#define EG_DEMO_HENRY_H
+#ifndef DEMO_HENRY_H
+#define DEMO_HENRY_H
 
 // Henry is a hostile entity. We call him "Hostile Henry".
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the henry entity.

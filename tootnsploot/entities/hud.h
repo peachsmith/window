@@ -1,9 +1,9 @@
-#ifndef EG_TNS_HUD_H
-#define EG_TNS_HUD_H
+#ifndef TNS_HUD_H
+#define TNS_HUD_H
 
 // A heads-up display (HUD)
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the hud entity.

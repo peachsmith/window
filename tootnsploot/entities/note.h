@@ -1,9 +1,9 @@
-#ifndef EG_TNS_NOTE_H
-#define EG_TNS_NOTE_H
+#ifndef TNS_NOTE_H
+#define TNS_NOTE_H
 
 // A note represents the sound produced by a musical instrument.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the note entity.

@@ -1,5 +1,5 @@
-#ifndef EG_IMPLEMENTATION_H
-#define EG_IMPLEMENTATION_H
+#ifndef CRUMBS_IMPLEMENTATION_H
+#define CRUMBS_IMPLEMENTATION_H
 
 // Simple DirectMedia Layer (SDL) is a library for thigns like creating
 // windows and capturing user input.

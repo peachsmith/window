@@ -1,10 +1,10 @@
-#ifndef EG_TNS_CHARACTERS_MENU_H
-#define EG_TNS_CHARACTERS_MENU_H
+#ifndef TNS_CHARACTERS_MENU_H
+#define TNS_CHARACTERS_MENU_H
 
 // The characters menu for Toot n Sploot.
 // This menu contains short biographies for the characters.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the characters menu

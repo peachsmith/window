@@ -1,9 +1,9 @@
-#ifndef EG_DEMO_JIMBO_H
-#define EG_DEMO_JIMBO_H
+#ifndef DEMO_JIMBO_H
+#define DEMO_JIMBO_H
 
 // Jimbo is an NPC that has a small amount of dialog.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the jimbo entity.

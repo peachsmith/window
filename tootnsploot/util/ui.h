@@ -1,7 +1,7 @@
-#ifndef EG_TNS_UI_H
-#define EG_TNS_UI_H
+#ifndef TNS_UI_H
+#define TNS_UI_H
 
-#include "example.h"
+#include "crumbs.h"
 
 #define UI_INDICATOR_ADVANCE 1
 #define UI_INDICATOR_SCROLL_UP 2

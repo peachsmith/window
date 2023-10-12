@@ -1,9 +1,9 @@
-#ifndef EG_DEMO_INFO_MENU_H
-#define EG_DEMO_INFO_MENU_H
+#ifndef DEMO_INFO_MENU_H
+#define DEMO_INFO_MENU_H
 
 // This file contains an entity that represents the info menu.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the info menu

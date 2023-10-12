@@ -1,7 +1,7 @@
-#ifndef EG_TNS_H
-#define EG_TNS_H
+#ifndef TNS_H
+#define TNS_H
 
-#include "example.h"
+#include "crumbs.h"
 
 #include <stdio.h>
 #include <stdlib.h>

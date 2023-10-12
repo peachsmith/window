@@ -1,7 +1,7 @@
-#ifndef EG_DEMO_SPRITE_H
-#define EG_DEMO_SPRITE_H
+#ifndef DEMO_SPRITE_H
+#define DEMO_SPRITE_H
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Renders the player character to the screen.

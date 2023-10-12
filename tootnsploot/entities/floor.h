@@ -1,9 +1,9 @@
-#ifndef EG_TNS_FLOOR_H
-#define EG_TNS_FLOOR_H
+#ifndef TNS_FLOOR_H
+#define TNS_FLOOR_H
 
 // The floor is the ground on which everything stands.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the floor entity.

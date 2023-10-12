@@ -1,7 +1,7 @@
-#ifndef EG_TNS_SCENES_H
-#define EG_TNS_SCENES_H
+#ifndef TNS_SCENES_H
+#define TNS_SCENES_H
 
-#include "example.h"
+#include "crumbs.h"
 
 // scenes
 #define TNS_SCENE_TITLE_SCREEN 0

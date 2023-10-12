@@ -1,7 +1,7 @@
-#ifndef EG_COMMON_AUDIO_H
-#define EG_COMMON_AUDIO_H
+#ifndef CRUMBS_COMMON_AUDIO_H
+#define CRUMBS_COMMON_AUDIO_H
 
-#include "example.h"
+#include "crumbs.h"
 
 int common_init_audio(eg_app *);
 

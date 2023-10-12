@@ -1,11 +1,11 @@
-#ifndef EG_TNS_TRANSITION_H
-#define EG_TNS_TRANSITION_H
+#ifndef TNS_TRANSITION_H
+#define TNS_TRANSITION_H
 
 // This file contains examples of a screen transition.
 // This will be rendered over all contents of a given scene to make the
 // process of switching the contents of the screen less jaring.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the screen

@@ -1,11 +1,11 @@
-#ifndef EG_DEMO_SIGN_H
-#define EG_DEMO_SIGN_H
+#ifndef DEMO_SIGN_H
+#define DEMO_SIGN_H
 
 // This file contains examples of a sign avatar. It is an entity that is
 // controlled directly by user input. In this example, the sign entity can
 // be moved around the screen with the arrow keys.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the sign entity.

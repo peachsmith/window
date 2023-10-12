@@ -1,15 +1,21 @@
-#ifndef EG_PUBLIC_API_H
-#define EG_PUBLIC_API_H
+#ifndef CRUMBS_PUBLIC_API_H
+#define CRUMBS_PUBLIC_API_H
 
 //----------------------------------------------------------------------------
-// This is the Example interface.
-// Since this is an example, all functions an data types will be prefixed
-// with eg (for exempli gratia).
-// "Example" is a working title. A slightly more original name should be
-// used at some point in the future.
+// Crumbs
+// An exercise in API design.
 
+#if  defined(_WIN32) || defined(__MINGW32__) || defined(__MINGW64__)
+#ifdef CRUMBS_EXPORTS
+#define CRUMBS_API __declspec(dllexport)
+#else
+#define CRUMBS_API __declspec(dllimport)
+#endif
+#define CRUMBS_CALL __cdecl
+#else
 #define CRUMBS_API
 #define CRUMBS_CALL
+#endif // _WIN32
 
 #ifdef __cplusplus
 extern "C"

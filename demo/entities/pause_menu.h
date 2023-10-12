@@ -1,9 +1,9 @@
-#ifndef EG_DEMO_PAUSE_MENU_H
-#define EG_DEMO_PAUSE_MENU_H
+#ifndef DEMO_PAUSE_MENU_H
+#define DEMO_PAUSE_MENU_H
 
 // This file contains an entity that represents the pause menu.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the pause menu

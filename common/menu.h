@@ -1,7 +1,7 @@
-#ifndef EG_COMMON_MENU_H
-#define EG_COMMON_MENU_H
+#ifndef CRUMBS_COMMON_MENU_H
+#define CRUMBS_COMMON_MENU_H
 
-#include "example.h"
+#include "crumbs.h"
 
 int common_init_menus(eg_app *);
 

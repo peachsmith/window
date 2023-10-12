@@ -1,7 +1,7 @@
-#ifndef EG_DEMO_SCENES_H
-#define EG_DEMO_SCENES_H
+#ifndef DEMO_SCENES_H
+#define DEMO_SCENES_H
 
-#include "example.h"
+#include "crumbs.h"
 
 #define DEMO_SCENE_0 0
 #define DEMO_SCENE_1 1

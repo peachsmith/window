@@ -1,9 +1,9 @@
-#ifndef EG_DEMO_INPUT_H
-#define EG_DEMO_INPUT_H
+#ifndef DEMO_INPUT_H
+#define DEMO_INPUT_H
 
 // This file contains input handler callback functions.
 
-#include "example.h"
+#include "crumbs.h"
 
 #define MAX_INPUT_HANDLERS 20
 

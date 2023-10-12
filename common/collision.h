@@ -1,7 +1,7 @@
-#ifndef EG_COMMON_COLLISION_H
-#define EG_COMMON_COLLISION_H
+#ifndef CRUMBS_COMMON_COLLISION_H
+#define CRUMBS_COMMON_COLLISION_H
 
-#include "example.h"
+#include "crumbs.h"
 
 // defintion of eg_collision struct
 struct eg_collision

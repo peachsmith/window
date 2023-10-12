@@ -1,10 +1,10 @@
-#ifndef EG_TNS_PAUSE_MENU_H
-#define EG_TNS_PAUSE_MENU_H
+#ifndef TNS_PAUSE_MENU_H
+#define TNS_PAUSE_MENU_H
 
 // The pause menu halts normal gameplay and allows the user to exit the
 // application or return to the main menu.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the pause menu

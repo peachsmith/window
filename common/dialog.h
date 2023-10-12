@@ -1,7 +1,7 @@
-#ifndef EG_COMMON_DIALOG_H
-#define EG_COMMON_DIALOG_H
+#ifndef CRUMBS_COMMON_DIALOG_H
+#define CRUMBS_COMMON_DIALOG_H
 
-#include "example.h"
+#include "crumbs.h"
 
 #define COMMON_MAX_DIALOGS 10
 #define COMMON_DIALOG_BUFSIZE 256

@@ -1,7 +1,7 @@
-#ifndef EG_DEMO_H
-#define EG_DEMO_H
+#ifndef CRUMBS_DEMO_H
+#define CRUMBS_DEMO_H
 
-#include "example.h"
+#include "crumbs.h"
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,10 +1,10 @@
-#ifndef EG_TNS_CONTROLS_MENU_H
-#define EG_TNS_CONTROLS_MENU_H
+#ifndef TNS_CONTROLS_MENU_H
+#define TNS_CONTROLS_MENU_H
 
 // The controls menu for Toot n Sploot.
 // This menu explains how to play the game.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the controls menu

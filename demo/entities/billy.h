@@ -1,9 +1,9 @@
-#ifndef EG_DEMO_BILLY_H
-#define EG_DEMO_BILLY_H
+#ifndef DEMO_BILLY_H
+#define DEMO_BILLY_H
 
 // Billy is an NPC that walks around a little, then does nothing.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the billy entity.

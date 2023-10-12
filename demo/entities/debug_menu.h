@@ -1,9 +1,9 @@
-#ifndef EG_DEMO_DEBUG_MENU_H
-#define EG_DEMO_DEBUG_MENU_H
+#ifndef DEMO_DEBUG_MENU_H
+#define DEMO_DEBUG_MENU_H
 
 // This file contains an entity that represents the debug menu.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with debugrmation about the debug menu

@@ -1,7 +1,7 @@
-#ifndef EG_COMMON_UTIL_H
-#define EG_COMMON_UTIL_H
+#ifndef CRUMBS_COMMON_UTIL_H
+#define CRUMBS_COMMON_UTIL_H
 
-#include "example.h"
+#include "crumbs.h"
 
 // flags
 #define ENTITY_FLAG_GROUND 0

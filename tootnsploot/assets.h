@@ -1,5 +1,5 @@
-#ifndef EG_TNS_ASSETS_H
-#define EG_TNS_ASSETS_H
+#ifndef TNS_ASSETS_H
+#define TNS_ASSETS_H
 
 // image assets
 #define TNS_TEXTURE_UI 0

@@ -1,9 +1,9 @@
-#ifndef EG_DEMO_INPUT_MENU_H
-#define EG_DEMO_INPUT_MENU_H
+#ifndef DEMO_INPUT_MENU_H
+#define DEMO_INPUT_MENU_H
 
 // This file contains an entity that represents the input menu.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with inputrmation about the input menu

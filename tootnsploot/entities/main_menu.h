@@ -1,10 +1,10 @@
-#ifndef EG_TNS_MAIN_MENU_H
-#define EG_TNS_MAIN_MENU_H
+#ifndef TNS_MAIN_MENU_H
+#define TNS_MAIN_MENU_H
 
 // The main menu for Toot n Sploot.
 // This represents the content of the title screen.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the main menu

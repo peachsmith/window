@@ -1,9 +1,9 @@
-#ifndef EG_TNS_WALL_H
-#define EG_TNS_WALL_H
+#ifndef TNS_WALL_H
+#define TNS_WALL_H
 
 // A wall functions as a barrier restricting certain entities movement.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the wall entity.

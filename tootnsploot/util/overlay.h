@@ -1,7 +1,7 @@
-#ifndef EG_TNS_OVERLAY_H
-#define EG_TNS_OVERLAY_H
+#ifndef TNS_OVERLAY_H
+#define TNS_OVERLAY_H
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Renders information about the internal state of the application.

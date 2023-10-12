@@ -1,9 +1,9 @@
-#ifndef EG_TNS_FOREST_H
-#define EG_TNS_FOREST_H
+#ifndef TNS_FOREST_H
+#define TNS_FOREST_H
 
 // The background scenery for the forest scene.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the forest entity.

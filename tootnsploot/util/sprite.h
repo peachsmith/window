@@ -1,7 +1,7 @@
-#ifndef EG_TNS_SPRITE_H
-#define EG_TNS_SPRITE_H
+#ifndef TNS_SPRITE_H
+#define TNS_SPRITE_H
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Renders the corgi character.

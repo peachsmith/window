@@ -1,12 +1,12 @@
-#ifndef EG_DEMO_PLAYER_H
-#define EG_DEMO_PLAYER_H
+#ifndef DEMO_PLAYER_H
+#define DEMO_PLAYER_H
 
 // This file contains examples of a player avatar. It is an entity that is
 // controlled directly by user input. In this example, the player entity can
 // be moved around the screen with the arrow keys. The player entity may also
 // be referred to as Frank.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the player entity.

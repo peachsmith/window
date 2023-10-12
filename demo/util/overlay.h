@@ -1,7 +1,7 @@
-#ifndef EG_DEMO_OVERLAY_H
-#define EG_DEMO_OVERLAY_H
+#ifndef DEMO_OVERLAY_H
+#define DEMO_OVERLAY_H
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Renders information about the internal state of the application.

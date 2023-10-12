@@ -1,12 +1,12 @@
-#ifndef EG_DEMO_BLOCK_H
-#define EG_DEMO_BLOCK_H
+#ifndef DEMO_BLOCK_H
+#define DEMO_BLOCK_H
 
 // A block is an example of a solid object.
 // It is typically a static rectangle. A block's only interaction with other
 // entities is to prevent them from passing through itself.
 // Each type of block has a create function and a register function.
 
-#include "example.h"
+#include "crumbs.h"
 
 // register and create functions for a small, square block.
 void block_demo_register(eg_entity_type *);

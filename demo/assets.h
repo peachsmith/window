@@ -1,5 +1,5 @@
-#ifndef EG_DEMO_ASSETS_H
-#define EG_DEMO_ASSETS_H
+#ifndef DEMO_ASSETS_H
+#define DEMO_ASSETS_H
 
 // image assets
 #define DEMO_TEXTURE_UI 0

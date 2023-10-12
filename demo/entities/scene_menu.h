@@ -1,9 +1,9 @@
-#ifndef EG_DEMO_SCENE_MENU_H
-#define EG_DEMO_SCENE_MENU_H
+#ifndef DEMO_SCENE_MENU_H
+#define DEMO_SCENE_MENU_H
 
 // This file contains an entity that represents the scene menu.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with scenermation about the scene menu

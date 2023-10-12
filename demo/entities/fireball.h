@@ -1,9 +1,9 @@
-#ifndef EG_DEMO_FIREBALL_H
-#define EG_DEMO_FIREBALL_H
+#ifndef DEMO_FIREBALL_H
+#define DEMO_FIREBALL_H
 
 // fireball is a hostile entity. We call him "Hostile fireball".
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the fireball entity.

@@ -1,11 +1,11 @@
-#ifndef EG_TNS_CORGI_H
-#define EG_TNS_CORGI_H
+#ifndef TNS_CORGI_H
+#define TNS_CORGI_H
 
 // The corgi represents the player avatar. His name is Skippy.
 // His job is to restore the woodland critters' will to live with the power
 // of music.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the corgi entity.

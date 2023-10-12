@@ -1,9 +1,9 @@
-#ifndef EG_TNS_INPUT_H
-#define EG_TNS_INPUT_H
+#ifndef TNS_INPUT_H
+#define TNS_INPUT_H
 
 // This file contains input handler callback functions.
 
-#include "example.h"
+#include "crumbs.h"
 
 #define MAX_INPUT_HANDLERS 20
 

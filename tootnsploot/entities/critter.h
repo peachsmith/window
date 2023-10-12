@@ -1,10 +1,10 @@
-#ifndef EG_TNS_CRITTER_H
-#define EG_TNS_CRITTER_H
+#ifndef TNS_CRITTER_H
+#define TNS_CRITTER_H
 
 // A critter, in this context, is an animal that may fall from the trees
 // due to various forms of emotional distress.
 
-#include "example.h"
+#include "crumbs.h"
 
 /**
  * Populates an entity type struct with information about the critter entity.
