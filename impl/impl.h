@@ -1,6 +1,8 @@
 #ifndef CRUMBS_IMPLEMENTATION_H
 #define CRUMBS_IMPLEMENTATION_H
 
+#include "crumbs.h"
+
 // Simple DirectMedia Layer (SDL) is a library for thigns like creating
 // windows and capturing user input.
 // https://www.libsdl.org/

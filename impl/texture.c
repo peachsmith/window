@@ -1,4 +1,3 @@
-#include "crumbs.h"
 #include "impl.h"
 
 cr_texture *cr_impl_load_texture(cr_app *app, const char *path)
