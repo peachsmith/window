@@ -1,7 +1,7 @@
 # Makefile for MacOS and Linux.
 #
-# By default, the CC and LIB_OUTPUT variables are set to MacOS values, but
-# they can be swapped out for Linux values.
+# By default, the CC, LIB_OUTPUT, and MAIN_DEF variables are set to MacOS
+# values, but they can be swapped out for Linux values.
 #
 # This file expects the following environment variables to be defined:
 #
@@ -24,10 +24,12 @@
 # MacOS
 CC=clang
 LIB_OUTPUT=libcrumbs.dylib
+MAIN_DEF=-D_main=_SDL_main
 
 # Linux
 #CC=gcc
 #LIB_OUTPUT=libcrumbs.so
+#MAIN_DEF=-Dmain=SDL_main
 
 # The include and lib directories must exist in the SDL2_HOME directory.
 INCLUDE_DIR=-I$(SDL2_HOME)/include -I..
@@ -56,10 +58,10 @@ D=../demo
 DEMO_SRC=$(D)/*.c ../common/*.c $(D)/entities/*.c $(D)/input/*.c $(D)/scenes/*.c $(D)/util/*.c
 
 demo-debug:
-	$(CC) -g -D_main=_SDL_main $(DEMO_SRC) -o demo.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) -g $(MAIN_DEF) $(DEMO_SRC) -o demo.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
 
 demo-release:
-	$(CC) -D_main=_SDL_main $(DEMO_SRC) -o demo.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) $(MAIN_DEF) $(DEMO_SRC) -o demo.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
 
 
 #=============================================================================
@@ -69,7 +71,7 @@ T=../tootnsploot
 TNS_SRC=$(T)/*.c ../common/*.c $(T)/entities/*.c $(T)/input/*.c $(T)/scenes/*.c $(T)/util/*.c
 
 tootnsploot-debug:
-	$(CC) -g -D_main=_SDL_main $(TNS_SRC) -o tootnsploot.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) -g $(MAIN_DEF) $(TNS_SRC) -o tootnsploot.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
 
 tootnsploot-release:
-	$(CC) -D_main=_SDL_main $(TNS_SRC) -o tootnsploot.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) $(MAIN_DEF) $(TNS_SRC) -o tootnsploot.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
