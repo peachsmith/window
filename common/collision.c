@@ -1,6 +1,8 @@
 #include "common/collision.h"
 #include "common/util.h"
 
+#include <stdlib.h>
+
 // Directions.
 // These determine which way we traverse a linked list using previous and
 // next pointers.

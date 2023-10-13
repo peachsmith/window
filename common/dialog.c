@@ -3,6 +3,8 @@
 #include "common/texture.h"
 #include "common/font.h"
 
+#include <stdlib.h>
+
 static cr_entity *dialogs[COMMON_MAX_DIALOGS];
 
 void common_init_dialogs(cr_app *app)

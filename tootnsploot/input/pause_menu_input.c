@@ -3,6 +3,8 @@
 #include "tootnsploot/scenes/scenes.h"
 #include "common/menu.h"
 
+#include <stdlib.h>
+
 // TODO: I definitely need to move the transition functions into some
 // other file.
 

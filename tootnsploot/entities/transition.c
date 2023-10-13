@@ -5,6 +5,8 @@
 #include "common/texture.h"
 #include "common/dialog.h"
 
+#include <stdlib.h>
+
 static void render_transition(cr_app *app, cr_entity *transition)
 {
     if (!transition->data)
