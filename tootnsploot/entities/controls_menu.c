@@ -5,8 +5,6 @@
 #include "tootnsploot/util/ui.h"
 
 #include "common/util.h"
-#include "common/texture.h"
-#include "common/font.h"
 
 static char *items[4] = {
     "Press the left and right\narrow keys to move Skippy.",

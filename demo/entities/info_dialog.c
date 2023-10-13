@@ -7,8 +7,6 @@
 
 #include "common/util.h"
 #include "common/dialog.h"
-#include "common/texture.h"
-#include "common/font.h"
 #include "common/menu.h"
 
 static const char *info_dialog_panel_1 = "What kind of information would you like?";
@@ -17,8 +15,8 @@ static const char *info_dialog_panel_1 = "What kind of information would you lik
 static const char *purpose_panel = "This software is an exercise in API design.";
 #define PURPOSE_PANEL_LEN 43
 
-static const char *implementation_panel = "This software was implemented using SDL2.";
-#define IMPLEMENTATION_PANEL_LEN 41
+static const char *implementation_panel = "This software was implemented using\nsomething.";
+#define IMPLEMENTATION_PANEL_LEN 46
 
 static void update_info_dialog(cr_app *app, cr_entity *dialog)
 {

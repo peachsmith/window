@@ -1,9 +1,8 @@
 #include "demo/demo.h"
-#include "demo/entities/transition.h"
 #include "demo/entities/entity_types.h"
+#include "demo/entities/transition.h"
 
 #include "common/util.h"
-#include "common/texture.h"
 #include "common/dialog.h"
 
 static void render_transition(cr_app *app, cr_entity *transition)

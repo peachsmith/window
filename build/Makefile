@@ -17,6 +17,9 @@
 #
 # SDL_MIXER_HOME:
 #   directory where SDL2_mixer is installed
+#
+# The preprocessor -Dmain=SDL_main is needed to give the code access to
+# SDL's SDL_main function.
 
 # MacOS
 CC=clang
@@ -53,10 +56,10 @@ D=../demo
 DEMO_SRC=$(D)/*.c ../common/*.c $(D)/entities/*.c $(D)/input/*.c $(D)/scenes/*.c $(D)/util/*.c
 
 demo-debug:
-	$(CC) -g $(DEMO_SRC) -o demo.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) -g -Dmain=SDL_main $(DEMO_SRC) -o demo.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
 
 demo-release:
-	$(CC) $(DEMO_SRC) -o demo.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) -Dmain=SDL_main $(DEMO_SRC) -o demo.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
 
 
 #=============================================================================
@@ -66,7 +69,7 @@ T=../tootnsploot
 TNS_SRC=$(T)/*.c ../common/*.c $(T)/entities/*.c $(T)/input/*.c $(T)/scenes/*.c $(T)/util/*.c
 
 tootnsploot-debug:
-	$(CC) -g $(TNS_SRC) -o tootnsploot.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) -g -Dmain=SDL_main $(TNS_SRC) -o tootnsploot.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
 
 tootnsploot-release:
-	$(CC) $(TNS_SRC) -o tootnsploot.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) -Dmain=SDL_main $(TNS_SRC) -o tootnsploot.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs

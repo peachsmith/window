@@ -4,7 +4,6 @@
 #include "demo/entities/entity_types.h"
 
 #include "common/util.h"
-#include "common/font.h"
 #include "common/collision.h"
 
 #define DEBUG_BUFSIZE 256

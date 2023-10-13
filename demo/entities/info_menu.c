@@ -5,8 +5,6 @@
 #include "demo/util/ui.h"
 
 #include "common/util.h"
-#include "common/texture.h"
-#include "common/font.h"
 
 // info menu item text
 static const char *item_1_text = "Purpose";

@@ -5,9 +5,7 @@
 #include "tootnsploot/util/sprite.h"
 
 #include "common/util.h"
-#include "common/texture.h"
 #include "common/dialog.h"
-#include "common/audio.h"
 
 static int get_critter_x_vel(cr_entity *critter)
 {

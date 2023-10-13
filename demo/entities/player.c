@@ -4,7 +4,6 @@
 #include "demo/util/sprite.h"
 
 #include "common/util.h"
-#include "common/texture.h"
 
 // temporary counter for animation
 static int tmp_counter = 0;

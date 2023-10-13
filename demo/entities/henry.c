@@ -4,7 +4,6 @@
 #include "demo/util/sprite.h"
 
 #include "common/util.h"
-#include "common/texture.h"
 #include "common/dialog.h"
 
 

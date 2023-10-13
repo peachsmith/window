@@ -8,10 +8,6 @@
 #include <time.h>
 #include <limits.h>
 
-// Implementation Detail:
-// Get access to SDL's entry point.
-#include <SDL2/SDL.h>
-
 // counters
 // counters [3:10] represent available critter slots
 #define TNS_COUNTER_BREATH 0

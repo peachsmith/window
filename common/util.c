@@ -1,6 +1,34 @@
 #include "common/util.h"
 #include "common/collision.h"
-#include "common/texture.h"
+
+#define MAX_TEXTURES 10
+#define MAX_FONTS 10
+#define MAX_SOUNDS 10
+
+static cr_texture *textures[MAX_TEXTURES];
+static cr_font *fonts[MAX_FONTS];
+static cr_sound *sounds[MAX_SOUNDS];
+
+int common_init_textures(cr_app *app)
+{
+    app->textures = &(textures[0]);
+    app->texture_count = 0;
+    return 1;
+}
+
+int common_init_fonts(cr_app *app)
+{
+    app->fonts = &(fonts[0]);
+    app->font_count = 0;
+    return 1;
+}
+
+int common_init_audio(cr_app *app)
+{
+    app->sounds = &(sounds[0]);
+    app->sound_count = 0;
+    return 1;
+}
 
 void util_draw_collision(
     cr_app *app,

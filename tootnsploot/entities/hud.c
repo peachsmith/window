@@ -4,8 +4,6 @@
 #include "tootnsploot/entities/hud.h"
 #include "tootnsploot/util/sprite.h"
 
-#include "common/font.h"
-
 #define HUD_BUFSIZE 256
 
 static void render_hud(cr_app *app, cr_entity *hud)

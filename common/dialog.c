@@ -1,7 +1,5 @@
 #include "common/util.h"
 #include "common/dialog.h"
-#include "common/texture.h"
-#include "common/font.h"
 
 #include <stdlib.h>
 

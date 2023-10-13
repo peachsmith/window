@@ -1,8 +1,6 @@
 #include "tootnsploot/assets.h"
 #include "tootnsploot/util/ui.h"
 
-#include "common/texture.h"
-
 void ui_draw_panel(cr_app *app, int x, int y, int w, int h)
 {
     // dimensions of each tile from the sprite sheet

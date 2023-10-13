@@ -7,8 +7,6 @@
 
 #include "common/util.h"
 #include "common/dialog.h"
-#include "common/texture.h"
-#include "common/font.h"
 #include "common/menu.h"
 
 static const char *panel_1_text = "This is a very informative sign.\nTrust me.";

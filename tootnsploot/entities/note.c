@@ -4,7 +4,6 @@
 #include "tootnsploot/util/sprite.h"
 
 #include "common/util.h"
-#include "common/texture.h"
 #include "common/dialog.h"
 
 static int get_note_x_vel(cr_entity *note)

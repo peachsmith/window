@@ -64,36 +64,6 @@ struct cr_impl
 };
 
 //----------------------------------------------------------------------------
-// core
-
-int cr_impl_init();
-
-void cr_impl_term();
-
-cr_impl *cr_impl_create(int, int, int);
-
-void cr_impl_destroy(cr_impl *);
-
-void cr_impl_set_title(cr_app *, const char *);
-
-void cr_impl_process_events(cr_app *);
-
-void cr_impl_delay(cr_app *);
-
-//----------------------------------------------------------------------------
-// graphics
-
-void cr_impl_clear_screen(cr_app *);
-
-void cr_impl_render_screen(cr_app *);
-
-void cr_impl_set_color(cr_app *app, uint32_t color);
-
-void cr_impl_draw_line(cr_app *app, cr_point *a, cr_point *b);
-
-void cr_impl_draw_rect(cr_app *app, cr_rect *r, int filled);
-
-//----------------------------------------------------------------------------
 // keyboard
 
 /**
@@ -122,31 +92,6 @@ SDL_Scancode cr_impl_get_sdl_scancode(cr_keycode k);
  *   cr_keycode - a keycode from the public API
  */
 cr_keycode cr_impl_get_cr_keycode(SDL_Scancode sc);
-
-/**
- * Checks to see if an input is actuated.
- * As long as the input is actuated, this function will return 1. This is used
- * for handling input events where some task must be performed for as long as
- * the input is actuated.
- *
- * Params:
- *   cr_app* - a pointer to an app struct
- *   int - the scancode of the key to check
- */
-int cr_impl_peek_key(cr_app *, int);
-
-/**
- * Checks to see if an input is actuated.
- * The first time the input is actuated, this function will return 1.
- * All subsequent calls to this function will return 0 until the state of
- * the input in question is reset. This is used for handling input events
- * where a task must be performed a single time for a single input actuation.
- *
- * Params:
- *   cr_app* - a pointer to an app struct
- *   int - the scancode of the key to check
- */
-int cr_impl_consume_key(cr_app *, int);
 
 //----------------------------------------------------------------------------
 // textures

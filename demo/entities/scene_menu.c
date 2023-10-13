@@ -5,8 +5,6 @@
 #include "demo/util/ui.h"
 
 #include "common/util.h"
-#include "common/texture.h"
-#include "common/font.h"
 
 // scenes menu item text
 static char *items[7] = {

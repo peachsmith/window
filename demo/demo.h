@@ -8,10 +8,6 @@
 #include <time.h>
 #include <limits.h>
 
-// Implementation Detail:
-// Get access to SDL's entry point.
-#include <SDL2/SDL.h>
-
 /**
  * Populates am app struct with the data needed for runtime.
  *

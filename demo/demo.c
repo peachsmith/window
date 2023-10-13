@@ -31,9 +31,6 @@
 #include "common/collision.h"
 #include "common/menu.h"
 #include "common/dialog.h"
-#include "common/texture.h"
-#include "common/font.h"
-#include "common/audio.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -321,6 +318,21 @@ int demo_prepare(cr_app *app)
     // initialize fonts
     if (!common_init_fonts(app))
     {
+        return 0;
+    }
+    if (cr_load_font(app, "assets/fonts/Kenney Pixel.ttf", 16) == NULL)
+    {
+        fprintf(stderr, "failed to load Kenney Pixel font\n");
+        return 0;
+    }
+    if (cr_load_font(app, "assets/fonts/pokemon_fire_red.ttf", 16) == NULL)
+    {
+        fprintf(stderr, "failed to load pokemon_fire_red font\n");
+        return 0;
+    }
+    if (cr_load_font(app, "assets/fonts/press-start.regular.ttf", 8) == NULL)
+    {
+        fprintf(stderr, "failed to load press-start.regular font\n");
         return 0;
     }
 

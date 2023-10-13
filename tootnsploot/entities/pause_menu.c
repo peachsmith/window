@@ -6,8 +6,6 @@
 #include "tootnsploot/util/sprite.h"
 
 #include "common/util.h"
-#include "common/texture.h"
-#include "common/font.h"
 
 #define ITEM_COUNT 3
 #define ITEM_HEIGHT 20

@@ -1,6 +1,5 @@
 #include "demo/assets.h"
 #include "demo/util/sprite.h"
-#include "common/texture.h"
 
 void sprite_draw_frank(cr_app *app, int x, int y, int mirror, int tile)
 {

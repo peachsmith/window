@@ -2,7 +2,6 @@
 #include "tootnsploot/entities/entity_types.h"
 
 #include "common/util.h"
-#include "common/texture.h"
 #include "common/dialog.h"
 
 #include <stdlib.h>

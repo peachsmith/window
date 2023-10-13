@@ -6,8 +6,6 @@
 
 #include "common/util.h"
 #include "common/dialog.h"
-#include "common/texture.h"
-#include "common/font.h"
 
 static const char *demo_dialog_panel_1 = "This is a dialog. This is a test of the line\nbreak functionality. How long can we go?";
 #define PANEL_1_LEN 85

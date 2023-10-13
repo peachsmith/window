@@ -11,7 +11,6 @@
 #include "common/util.h"
 #include "common/menu.h"
 #include "common/collision.h"
-#include "common/audio.h"
 
 static cr_func input_handlers[20];
 

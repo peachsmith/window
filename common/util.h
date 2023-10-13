@@ -31,6 +31,11 @@
 #define CR_CAMERA_NONE 0
 #define CR_CAMERA_ALL 1
 
+// asset management
+int common_init_textures(cr_app *);
+int common_init_fonts(cr_app *);
+int common_init_audio(cr_app *);
+
 /**
  * Draws various elements of a collision event on the screen.
  * This function is intended for debugging purposes.

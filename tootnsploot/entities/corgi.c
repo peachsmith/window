@@ -4,7 +4,6 @@
 #include "tootnsploot/util/sprite.h"
 
 #include "common/util.h"
-#include "common/texture.h"
 
 #define CORGI_X_ACC_LIMIT 24
 #define CORGI_Y_ACC_LIMIT 24

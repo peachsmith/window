@@ -1,17 +1,80 @@
 #include "crumbs.h"
-#include "impl/impl.h"
+#include "impl.h"
+
+#include <stdio.h>
+
+static cr_impl *create_impl(int screen_width, int screen_height, int scale);
 
 //----------------------------------------------------------------------------
 // core functions
 
 int cr_initialize()
 {
-    return cr_impl_init();
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
+    {
+        fprintf(
+            stderr,
+            "failed to initialize SDL. error: %s\n",
+            SDL_GetError());
+        return 0;
+    }
+
+    if (TTF_Init() == -1)
+    {
+        fprintf(stderr,
+                "failed to initialize SDL_ttf, error: %s\n",
+                TTF_GetError());
+        SDL_Quit();
+        return 0;
+    }
+
+    if (!IMG_Init(IMG_INIT_PNG))
+    {
+        fprintf(stderr,
+                "failed to initialize SDL_image, error: %s\n",
+                IMG_GetError());
+        TTF_Quit();
+        SDL_Quit();
+        return 0;
+    }
+
+    // Open the SDL_Mixer audio device.
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    {
+        fprintf(stderr,
+                "failed to open audio device, error: %s\n",
+                Mix_GetError());
+        IMG_Quit();
+        TTF_Quit();
+        SDL_Quit();
+        return 0;
+    }
+
+    // Initialize SDL_Mixer to allow playback of OGG files.
+    if (Mix_Init(MIX_INIT_OGG) != MIX_INIT_OGG)
+    {
+        fprintf(stderr,
+                "failed to initialize SDL_mixer, error: %s\n",
+                Mix_GetError());
+        Mix_CloseAudio();
+        IMG_Quit();
+        TTF_Quit();
+        SDL_Quit();
+        return 0;
+    }
+
+    cr_impl_init_keyboard();
+
+    return 1;
 }
 
 void cr_terminate()
 {
-    cr_impl_term();
+    Mix_Quit();       // closes handles to dependencies
+    Mix_CloseAudio(); // terminates the actual SDL_Mixer library
+    IMG_Quit();
+    TTF_Quit();
+    SDL_Quit();
 }
 
 // default update function
@@ -91,7 +154,7 @@ cr_app *cr_create_app()
     app->cam.cb = 140;
 
     // Create the implementation struct.
-    app->impl = cr_impl_create(
+    app->impl = create_impl(
         CR_DEFAULT_SCREEN_WIDTH,
         CR_DEFAULT_SCREEN_HEIGHT,
         app->scale);
@@ -137,7 +200,12 @@ void cr_destroy_app(cr_app *app)
     }
 
     // Destroy the implementation.
-    cr_impl_destroy(app->impl);
+    if (app->impl != NULL)
+    {
+        SDL_DestroyRenderer(app->impl->renderer);
+        SDL_DestroyWindow(app->impl->window);
+        free(app->impl);
+    }
 
     // Free the memory allocated for the application struct.
     free(app);
@@ -145,19 +213,122 @@ void cr_destroy_app(cr_app *app)
 
 void cr_set_title(cr_app *app, const char *title)
 {
-    cr_impl_set_title(app, title);
+    if (app == NULL || app->impl == NULL)
+    {
+        return;
+    }
+
+    cr_impl *impl = app->impl;
+
+    SDL_SetWindowTitle(impl->window, title);
 }
 
 void cr_begin_frame(cr_app *app)
 {
-    cr_impl_process_events(app);
-    cr_impl_clear_screen(app);
+    // cr_impl_process_events(app);
+    if (app == NULL || app->impl == NULL)
+    {
+        return;
+    }
+
+    cr_impl *impl = app->impl;
+
+    //------------------------------------------------------------------------
+    // process events
+
+    // First, we get the current tick count for regulating framerate.
+    impl->ticks = SDL_GetTicks64();
+
+    // delta time
+    Uint64 count = SDL_GetPerformanceCounter();
+    impl->timing.delta = (float)(count - impl->timing.count) / impl->timing.frequency;
+    impl->timing.count = count;
+
+    // According to the wiki, it is common practice to process all events in
+    // the event queue at the beginning of each iteration of the main loop.
+    // The SDL_PollEvent function also calls SDL_PumpEvents, which updates the
+    // keyboard state array.
+    while (SDL_PollEvent(&(impl->event)))
+    {
+        // If the window was closed, exit the application.
+        if (impl->event.type == SDL_QUIT)
+        {
+            app->done = 1;
+        }
+
+        // If a key was released, convert the SDL_Scancode into an cr_keycode
+        // and set the corresponding key capture flag to 0.
+        if (impl->event.type == SDL_KEYUP)
+        {
+            SDL_Scancode sc = impl->event.key.keysym.scancode;
+            cr_keycode k = cr_impl_get_cr_keycode(sc);
+            app->key_captures[k] = 0;
+        }
+    }
+
+    //------------------------------------------------------------------------
+    // clear screen
+
+    if (app->time == TIMING_DELTA)
+    {
+        if (app->frame_check < 1)
+        {
+            return;
+        }
+    }
+
+    // SDL_SetRenderDrawColor(impl->renderer, 0X04, 0X35, 0X8D, 255);
+    SDL_SetRenderDrawColor(impl->renderer, 0, 0, 0, 255);
+    SDL_RenderClear(impl->renderer);
 }
 
 void cr_end_frame(cr_app *app)
 {
-    cr_impl_render_screen(app);
-    cr_impl_delay(app);
+    if (app == NULL || app->impl == NULL)
+    {
+        return;
+    }
+
+    cr_impl *impl = app->impl;
+
+    //------------------------------------------------------------------------
+    // render screen
+
+    if ((app->time == TIMING_DELTA && app->frame_check >= 1) ||
+        app->time == TIMING_WAIT)
+    {
+        SDL_RenderPresent(impl->renderer);
+    }
+
+    //------------------------------------------------------------------------
+    // regulate framerate
+
+    // cr_impl_delay(app);
+    if (app->time == TIMING_DELTA)
+    {
+        if (app->frame_check >= 1)
+        {
+            app->frame_check = 0;
+        }
+
+        app->frame_check += app->impl->timing.delta * 60;
+        return;
+    }
+
+    // Get the approximate number of milliseconds since the beginning of the
+    // current iteration of the main loop.
+    Uint64 elapsed = SDL_GetTicks64() - impl->ticks;
+
+    // If the frame length is greater than the elapsed milliseconds since the
+    // beginning of the frame, wait for the duration of the difference.
+    if (impl->frame_len > elapsed)
+    {
+        // The SDL_Delay function expects a Uint32 as its argument.
+        // Converting from Uint64 to Uint32 will truncate the value, but the
+        // difference between the frame length and the elapsed milliseconds
+        // should never be greater than UINT32_MAX.
+        SDL_Delay((Uint32)(impl->frame_len * app->debug.frame_len - elapsed));
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -165,17 +336,63 @@ void cr_end_frame(cr_app *app)
 
 void cr_set_color(cr_app *app, cr_color color)
 {
-    cr_impl_set_color(app, color);
+    if (app == NULL || app->impl == NULL)
+    {
+        return;
+    }
+
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
+    Uint8 a;
+
+    b = (Uint8)(color & 0xFF);
+    g = (Uint8)((color >> 8) & 0xFF);
+    r = (Uint8)((color >> 16) & 0xFF);
+    a = (Uint8)((color >> 24) & 0xFF);
+
+    cr_impl *impl = app->impl;
+    SDL_SetRenderDrawColor(impl->renderer, r, g, b, a);
 }
 
 void cr_draw_line(cr_app *app, cr_point *a, cr_point *b)
 {
-    cr_impl_draw_line(app, a, b);
+    if (app == NULL || app->impl == NULL)
+    {
+        return;
+    }
+
+    cr_impl *impl = app->impl;
+    SDL_RenderDrawLine(
+        impl->renderer,
+        a->x,
+        a->y,
+        b->x,
+        b->y);
 }
 
 void cr_draw_rect(cr_app *app, cr_rect *r, int filled)
 {
-    cr_impl_draw_rect(app, r, filled);
+    if (app == NULL || app->impl == NULL)
+    {
+        return;
+    }
+
+    cr_impl *impl = app->impl;
+
+    SDL_Rect sr = {
+        .x = r->x,
+        .y = r->y,
+        .w = r->w,
+        .h = r->h};
+
+    if (filled)
+    {
+        SDL_RenderFillRect(impl->renderer, &sr);
+        return;
+    }
+
+    SDL_RenderDrawRect(impl->renderer, &sr);
 }
 
 //----------------------------------------------------------------------------
@@ -183,12 +400,56 @@ void cr_draw_rect(cr_app *app, cr_rect *r, int filled)
 
 int cr_peek_input(cr_app *app, int code)
 {
-    return cr_impl_peek_key(app, code);
+    if (app == NULL || app->impl == NULL)
+    {
+        return 0;
+    }
+
+    cr_impl *impl = app->impl;
+
+    SDL_Scancode sc = cr_impl_get_sdl_scancode(code);
+
+    if (sc >= SDL_NUM_SCANCODES || sc <= SDL_SCANCODE_UNKNOWN)
+    {
+        return 0;
+    }
+
+    if (impl->keystates[sc])
+    {
+        return 1;
+    }
+
+    return 0;
 }
 
 int cr_consume_input(cr_app *app, int code)
 {
-    return cr_impl_consume_key(app, code);
+    if (app == NULL || app->impl == NULL)
+    {
+        return 0;
+    }
+
+    cr_impl *impl = app->impl;
+
+    SDL_Scancode sc = cr_impl_get_sdl_scancode(code);
+
+    if (sc >= SDL_NUM_SCANCODES || sc <= SDL_SCANCODE_UNKNOWN)
+    {
+        return 0;
+    }
+
+    if (app->key_captures[code])
+    {
+        return 0;
+    }
+
+    if (impl->keystates[sc])
+    {
+        app->key_captures[code] = 1;
+        return 1;
+    }
+
+    return 0;
 }
 
 void cr_push_input_handler(cr_app *app, cr_func handler)
@@ -391,4 +652,116 @@ cr_sound *cr_load_sound(cr_app *app, const char *path, int type)
 void cr_play_sound(cr_app *app, cr_sound *sound)
 {
     cr_impl_play_sound(app, sound);
+}
+
+static cr_impl *create_impl(int screen_width, int screen_height, int scale)
+{
+    cr_impl *impl;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    const Uint8 *keystates;
+
+    // Create the wrapper struct.
+    impl = (cr_impl *)malloc(sizeof(struct cr_impl));
+    if (impl == NULL)
+    {
+        return NULL;
+    }
+
+    // Create the window.
+    // NOTE: we use SDL_WINDOW_ALLOW_HIGHDPI on macOS.
+    window = SDL_CreateWindow(
+        "Example",
+        SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED,
+        screen_width * scale,
+        screen_height * scale,
+        SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
+    if (window == NULL)
+    {
+        free(impl);
+        return NULL;
+    }
+
+    // Create the renderer.
+    // We used SDL_RENDERER_PRESENTVSYNC to prevent screen tearing on things
+    // like MacBook.
+    renderer = SDL_CreateRenderer(
+        window,
+        -1,
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (renderer == NULL)
+    {
+        SDL_DestroyWindow(window);
+        free(impl);
+        return NULL;
+    }
+
+    // NOTE: to enable transparency when setting the draw color,
+    // we set the blend mode to SDL_BLENDMODE_BLEND.
+    // This is mainly used for debugging.
+    // SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+    // TEMP: get window and screen info for scaling on mac.
+    int ww, wh;
+    int rw, rh;
+    SDL_GetWindowSize(window, &ww, &wh);
+    SDL_GetRendererOutputSize(renderer, &rw, &rh);
+    printf("[DEBUG] window: (%d x %d), renderer: (%d, %d)\n", ww, wh, rw, rh);
+    if (rw > ww)
+    {
+        int scale_correction_x = rw / ww;
+        int scale_correction_y = rh / wh;
+        printf("[DEBUG] scale correction factor: (%d, %d)\n",
+               scale_correction_x,
+               scale_correction_y);
+        SDL_RenderSetScale(renderer, (float)scale_correction_x * scale, (float)scale_correction_y * scale);
+    }
+    else if (scale > 0)
+    {
+        SDL_RenderSetScale(renderer, (float)scale, (float)scale);
+    }
+
+    // Get the keyboard state.
+    keystates = SDL_GetKeyboardState(NULL);
+    if (keystates == NULL)
+    {
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        free(impl);
+        return NULL;
+    }
+
+    // Populate the fields of the wrapper struct.
+    impl->window = window;
+    impl->renderer = renderer;
+    impl->keystates = keystates;
+    impl->frame_len = 16;
+    impl->ticks = 0;
+    impl->timing.frequency = SDL_GetPerformanceFrequency();
+    impl->timing.count = SDL_GetPerformanceCounter();
+    impl->timing.delta = 0;
+
+    // Notes on frame_len field:
+    // Since the desired framerate is 60 frames per second, we set the
+    // approximate milliseconds per frame to 16. This is the truncated result
+    // of 1000 / 60.
+
+    // Output renderer info in case anyone is interested.
+    SDL_RendererInfo ri;
+    if (!SDL_GetRendererInfo(impl->renderer, &ri))
+    {
+        printf("[DEBUG] Renderer Info\n-------------\n");
+        printf("[DEBUG] Name: %s\n", ri.name);
+        printf("[DEBUG] Number of texture formats: %d\n", ri.num_texture_formats);
+        printf("[DEBUG] Max Width: %d\n", ri.max_texture_width);
+        printf("[DEBUG] Max Height: %d\n", ri.max_texture_height);
+        printf("[DEBUG] SDL_RENDERER_SOFTWARE: %s\n", (ri.flags & SDL_RENDERER_SOFTWARE) ? "yes" : "no");
+        printf("[DEBUG] SDL_RENDERER_ACCELERATED: %s\n", (ri.flags & SDL_RENDERER_ACCELERATED) ? "yes" : "no");
+        printf("[DEBUG] SDL_RENDERER_PRESENTVSYNC: %s\n", (ri.flags & SDL_RENDERER_PRESENTVSYNC) ? "yes" : "no");
+        printf("[DEBUG] SDL_RENDERER_TARGETTEXTURE: %s\n", (ri.flags & SDL_RENDERER_TARGETTEXTURE) ? "yes" : "no");
+    }
+
+    return impl;
 }

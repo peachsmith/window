@@ -1,6 +1,5 @@
 #include "tootnsploot/assets.h"
 #include "tootnsploot/util/sprite.h"
-#include "common/texture.h"
 
 void sprite_draw_corgi(cr_app *app, int x, int y, int mirror, int tile)
 {
