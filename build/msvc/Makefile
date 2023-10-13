@@ -4,7 +4,7 @@
 # executable in order for it to run.
 
 # The include and lib directories must exist in the SDL2_HOME directory.
-INCLUDE_DIR=/I$(SDL2_HOME)\include /I..
+INCLUDE_DIR=/I$(SDL2_HOME)\include /I..\..
 LINK_DIR=/LIBPATH:"$(SDL2_HOME)\lib" /LIBPATH:"."
 
 CC=cl

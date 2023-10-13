@@ -53,10 +53,10 @@ D=../demo
 DEMO_SRC=$(D)/*.c ../common/*.c $(D)/entities/*.c $(D)/input/*.c $(D)/scenes/*.c $(D)/util/*.c
 
 demo-debug:
-	$(CC) -g $(DEMO_SRC) -o demo $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) -g $(DEMO_SRC) -o demo.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
 
 demo-release:
-	$(CC) $(DEMO_SRC) -o demo $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) $(DEMO_SRC) -o demo.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
 
 
 #=============================================================================
@@ -66,7 +66,7 @@ T=../tootnsploot
 TNS_SRC=$(T)/*.c ../common/*.c $(T)/entities/*.c $(T)/input/*.c $(T)/scenes/*.c $(T)/util/*.c
 
 tootnsploot-debug:
-	$(CC) -g $(TNS_SRC) -o tootnsploot $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) -g $(TNS_SRC) -o tootnsploot.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
 
 tootnsploot-release:
-	$(CC) $(TNS_SRC) -o tootnsploot $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs
+	$(CC) $(TNS_SRC) -o tootnsploot.out $(INCLUDE_DIR) $(LINK_DIR) $(LIBS) -lcrumbs

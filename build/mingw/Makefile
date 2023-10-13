@@ -14,10 +14,10 @@ all: crumbs-release demo-release tootnsploot-release
 CRUMBS_SRC=../../impl/*.c
 
 crumbs-debug:
-	$(CC) -g -fPIC -shared $(CRUMBS_SRC) -DCRUMBS_EXPORTS -o libcrumbs.dll -I.. $(LIBS)
+	$(CC) -g -fPIC -shared $(CRUMBS_SRC) -DCRUMBS_EXPORTS -o libcrumbs.dll -I../.. $(LIBS)
 
 crumbs-release:
-	$(CC) -fPIC -shared $(CRUMBS_SRC) -DCRUMBS_EXPORTS -o libcrumbs.dll -I.. -mwindows $(LIBS)
+	$(CC) -fPIC -shared $(CRUMBS_SRC) -DCRUMBS_EXPORTS -o libcrumbs.dll -I../.. -mwindows $(LIBS)
 
 #=============================================================================
 # Demo
@@ -26,10 +26,10 @@ D=../../demo
 DEMO_SRC=$(D)/*.c ../../common/*.c $(D)/entities/*.c $(D)/input/*.c $(D)/scenes/*.c $(D)/util/*.c
 
 demo-debug:
-	$(CC) -g $(DEMO_SRC) -o demo -I.. -L. $(LIBS) -lcrumbs
+	$(CC) -g $(DEMO_SRC) -o demo -I../.. -L. $(LIBS) -lcrumbs
 
 demo-release:
-	$(CC) $(DEMO_SRC) -o demo -I.. -L. -mwindows $(LIBS) -lcrumbs
+	$(CC) $(DEMO_SRC) -o demo -I../.. -L. -mwindows $(LIBS) -lcrumbs
 
 
 #=============================================================================
@@ -39,7 +39,7 @@ T=../../tootnsploot
 TNS_SRC=$(T)/*.c ../../common/*.c $(T)/entities/*.c $(T)/input/*.c $(T)/scenes/*.c $(T)/util/*.c
 
 tootnsploot-debug:
-	$(CC) -g $(TNS_SRC) -o tootnsploot -I.. -L. $(LIBS) -lcrumbs
+	$(CC) -g $(TNS_SRC) -o tootnsploot -I../.. -L. $(LIBS) -lcrumbs
 
 tootnsploot-release:
-	$(CC) $(TNS_SRC) -o tootnsploot -I.. -L. -mwindows $(LIBS) -lcrumbs
+	$(CC) $(TNS_SRC) -o tootnsploot -I../.. -L. -mwindows $(LIBS) -lcrumbs
