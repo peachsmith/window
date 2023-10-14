@@ -1,4 +1,5 @@
 # A Makefile for MinGW-w64.
+#
 # Used by running mingw32-make.exe
 # This assumes all the dependencies are installed in an MSYS2 environment.
 #

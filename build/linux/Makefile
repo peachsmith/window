@@ -1,38 +1,14 @@
-# Makefile for MacOS and Linux.
+# Makefile for Linux.
 #
-# By default, the CC, LIB_OUTPUT, and MAIN_DEF variables are set to MacOS
-# values, but they can be swapped out for Linux values.
-#
-# This file expects the following environment variables to be defined:
-#
-# SDL2_HOME:
-#   directory where SDL2 is installed. This also contains the include
-#   directory where all of the SDL2 headers should be.
-#
-# SDL_IMAGE_HOME:
-#   directory where SDL2_image is installed
-#
-# SDL_TTF_HOME:
-#   directory where SDL2_ttf is installed
-#
-# SDL_MIXER_HOME:
-#   directory where SDL2_mixer is installed
-#
-# The preprocessor -Dmain=SDL_main is needed to give the code access to
-# SDL's SDL_main function.
+# The preprocessor definition -D_start=_SDL_main is needed to give the code
+# access to SDL's SDL_main function.
 
-# MacOS
-CC=clang
-LIB_OUTPUT=libcrumbs.dylib
-MAIN_DEF=-D_main=_SDL_main
-
-# Linux
-#CC=gcc
-#LIB_OUTPUT=libcrumbs.so
-#MAIN_DEF=-Dmain=SDL_main
+CC=gcc
+LIB_OUTPUT=libcrumbs.so
+MAIN_DEF=-D_start=_SDL_main
 
 # The include and lib directories must exist in the SDL2_HOME directory.
-INCLUDE_DIR=-I$(SDL2_HOME)/include -I..
+INCLUDE_DIR=-I$(SDL2_HOME)/include -I../..
 LINK_DIR=-L$(SDL2_HOME)/lib -L$(SDL_IMAGE_HOME)/lib -L$(SDL_TTF_HOME)/lib -L$(SDL_MIXER_HOME)/lib -L.
 
 CFLAGS=-Wall -Werror

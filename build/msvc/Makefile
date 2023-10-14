@@ -1,7 +1,4 @@
-# This is a Makefile for use by NMAKE from the MSVC build tools.
-# It produces a file called a.exe.
-# The necessary SDL dll files must be present in the same directory as the
-# executable in order for it to run.
+# Makefile for use by NMAKE from the MSVC build tools.
 #
 # The preprocessor /D"main=SDL_main" is needed to give the code access to
 # SDL's SDL_main function.
