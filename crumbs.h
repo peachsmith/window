@@ -145,7 +145,7 @@ typedef void (*cr_entity_func)(cr_app *, cr_entity *);
  *   cr_app* - a pointer to an app struct
  *   cr_entity* - the entity whose state may be updated
  *   cr_entity* - the entity that affects the state of the first entity
- *   cr_collision* - a
+ *   cr_collision* - a collision detection result
  */
 typedef void (*cr_collider)(
     cr_app *,
@@ -159,8 +159,8 @@ typedef void (*cr_collider)(
  * 
  * Params:
  *   cr_app* - a pointer to an app struct
- *   cr_entity* - the entity whose state may be updated
- *   cr_entity* - the entity that affects the state of the first entity
+ *   cr_entity* - the entity responding to the interaction
+ *   cr_entity* - the entity initiating the interaction
  */
 typedef int (*cr_interaction)(
     cr_app *,
