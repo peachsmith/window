@@ -18,6 +18,8 @@
 
 void load_scene_2(cr_app *app)
 {
+    cr_entity **handles = app->extension->entity_handles;
+
     app->scene = DEMO_SCENE_2;
 
     // Starting position for building a sequence of blocks.
@@ -46,7 +48,7 @@ void load_scene_2(cr_app *app)
     block_demo_create_moving(app, x_start + 253, 94, 1); // horizontal
 
     // scene transition
-    transition_demo_create(app);
+    handles[DEMO_HANDLE_TRANSITION] = transition_demo_create(app);
 
     block_demo_create(app, x_start - 27 + 18, 94);
     block_demo_create(app, x_start - 27 + 36, 94);
@@ -61,7 +63,7 @@ void load_scene_2(cr_app *app)
     block_demo_create(app, x_start - 27 + 54, 40);
 
     // player
-    app->primary = demo_create_player(app, 100, 55);
+    handles[DEMO_HANDLE_PLAYER] = demo_create_player(app, 100, 55);
 
     // Add the rest of the horizontal row.
     block_demo_create(app, x_start - 27 + 108, 94);

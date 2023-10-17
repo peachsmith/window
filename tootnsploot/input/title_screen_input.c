@@ -24,62 +24,64 @@ static void begin_transition(cr_app *app, cr_func loader, cr_func input)
     {
         if (app->entities[i].type == ENTITY_TYPE_TRANSITION && app->entities[i].present)
         {
-            app->entities[i].data = 1;
+            app->entities[i].data = 1 | TX_RESUME;
             app->overlays[app->overlay_count++] = &(app->entities[i]);
         }
     }
 }
 
-void pause_menu_input(cr_app *app)
+void title_screen_input(cr_app *app)
 {
-    // Locate the pause menu.
-    cr_entity *menu_entity = app->menus[app->menu_count - 1];
-    if (menu_entity == NULL)
+    cr_entity *menu = app->menus[app->menu_count - 1];
+    cr_entity **handles = app->extension->entity_handles;
+
+    if (menu == NULL)
     {
         return;
     }
 
-    // Close the pause menu if the escape key or x key is pressed.
-    if (cr_consume_input(app, CR_KEYCODE_X) || cr_consume_input(app, CR_KEYCODE_ESCAPE))
+    if (cr_consume_input(app, CR_KEYCODE_ESCAPE))
     {
-        app->menu_count--;
-        app->pause = 0;
-        cr_pop_input_handler(app);
-        return;
+        app->done = 1;
     }
 
-    if (cr_consume_input(app, CR_KEYCODE_UP) && menu_entity->cursor_y > 0)
+    if (cr_consume_input(app, CR_KEYCODE_UP) && menu->cursor_y > 0)
     {
-        menu_entity->cursor_y--;
+        menu->cursor_y--;
     }
 
-    if (cr_consume_input(app, CR_KEYCODE_DOWN) && menu_entity->cursor_y < 2)
+    if (cr_consume_input(app, CR_KEYCODE_DOWN) && menu->cursor_y < 2)
     {
-        menu_entity->cursor_y++;
+        menu->cursor_y++;
     }
 
-    // Resume
-    // Main Menu
-    // Quit
+    // menu item selection
     if (cr_consume_input(app, CR_KEYCODE_Z))
     {
-        switch (menu_entity->cursor_y)
+        switch (menu->cursor_y)
         {
         case 0:
-            app->menu_count--;
-            app->pause = 0;
+            // Leave the title screen and load the forest scene.
             cr_pop_input_handler(app);
+            begin_transition(app, load_forest_scene, forest_input);
             break;
+
         case 1:
-            // Remove the input handlers of the pause menu and the forest
-            // scene, then transition to the main menu.
-            cr_pop_input_handler(app);
-            cr_pop_input_handler(app);
-            begin_transition(app, load_title_screen, title_screen_input);
-            break;
+        {
+            // Switch to the controls menu.
+            app->menus[app->menu_count++] = handles[TNS_HANDLE_CONTROLS];
+            cr_push_input_handler(app, controls_menu_input);
+        }
+        break;
+
         case 2:
-            app->done = 1;
-            break;
+        {
+            // Switch to the characters menu.
+            app->menus[app->menu_count++] = handles[TNS_HANDLE_CHARACTERS];
+            cr_push_input_handler(app, characters_menu_input);
+        }
+        break;
+
         default:
             break;
         }

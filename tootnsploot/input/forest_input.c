@@ -7,7 +7,7 @@
 #include "common/util.h"
 #include "common/collision.h"
 
-void forest_input_handler(cr_app *app)
+void forest_input(cr_app *app)
 {
     // Pause the application.
     if (cr_consume_input(app, CR_KEYCODE_ESCAPE) || cr_consume_input(app, CR_KEYCODE_Q))
@@ -25,14 +25,14 @@ void forest_input_handler(cr_app *app)
         // Set the pause menu as the active menu.
         app->menus[app->menu_count++] = pause_menu;
 
-        cr_push_input_handler(app, pause_menu_input_handler);
+        cr_push_input_handler(app, pause_menu_input);
 
         app->pause = 1;
         return;
     }
 
     // Locate the player entity.
-    cr_entity *target = app->primary;
+    cr_entity *target = app->extension->entity_handles[TNS_HANDLE_CORGI];
     if (target == NULL)
     {
         return;
@@ -159,7 +159,7 @@ void forest_input_handler(cr_app *app)
     if (cr_consume_input(app, CR_KEYCODE_X) && !splooting)
     {
         // Limit the number of notes to 3 at any given time.
-        if (app->counters[TNS_COUNTER_BREATH] > 0)
+        if (app->extension->counters[TNS_COUNTER_BREATH] > 0)
         {
             cr_entity *f = tns_create_note(
                 app,
@@ -179,7 +179,7 @@ void forest_input_handler(cr_app *app)
                 }
             }
 
-            app->counters[TNS_COUNTER_BREATH]--;
+            app->extension->counters[TNS_COUNTER_BREATH]--;
         }
     }
 }

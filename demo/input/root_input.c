@@ -11,7 +11,7 @@
 #include "common/util.h"
 #include "common/collision.h"
 
-void root_input_handler(cr_app *app)
+void root_input(cr_app *app)
 {
     // Pause the application.
     if (cr_consume_input(app, CR_KEYCODE_Q))
@@ -29,7 +29,7 @@ void root_input_handler(cr_app *app)
         // Set the pause menu as the active menu.
         app->menus[app->menu_count++] = pause_menu;
 
-        cr_push_input_handler(app, pause_menu_input_handler);
+        cr_push_input_handler(app, pause_menu_input);
 
         app->pause = 1;
         return;
@@ -65,7 +65,7 @@ void root_input_handler(cr_app *app)
             // Set the pause menu as the active menu.
             app->menus[app->menu_count++] = debug_menu;
 
-            cr_push_input_handler(app, debug_menu_input_handler);
+            cr_push_input_handler(app, debug_menu_input);
 
             app->pause = 1;
             app->pause = 1;
@@ -88,7 +88,7 @@ void root_input_handler(cr_app *app)
     // BEGIN player controls
 
     // Locate the player entity.
-    cr_entity *target = app->primary;
+    cr_entity *target = app->extension->entity_handles[DEMO_HANDLE_PLAYER];
 
     int max_walk = 6;
     int min_walk = 1;

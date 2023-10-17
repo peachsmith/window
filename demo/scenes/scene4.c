@@ -21,6 +21,8 @@
 
 void load_scene_4(cr_app *app)
 {
+    cr_entity **handles = app->extension->entity_handles;
+
     app->scene = DEMO_SCENE_4;
 
     util_set_camera(app, CR_CAMERA_ALL);
@@ -44,11 +46,11 @@ void load_scene_4(cr_app *app)
 
     block_demo_row(app, 0, 120, 15);
 
-    transition_demo_create(app);
+    handles[DEMO_HANDLE_TRANSITION] = transition_demo_create(app);
 
     block_demo_create_moving(app, -60, 60, 0); // vertical before player
     block_demo_create_moving(app, 200, 75, 1); // horizontal before the player
-    app->primary = demo_create_player(app, 80, 50);
+    handles[DEMO_HANDLE_PLAYER] = demo_create_player(app, 80, 50);
     block_demo_create_moving(app, 100, 75, 1);  // horizontal after the player
     block_demo_create_moving(app, -140, 60, 0); // vertical after player
 }

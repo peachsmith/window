@@ -1,3 +1,4 @@
+#include "demo/demo.h"
 #include "demo/assets.h"
 #include "demo/util/sprite.h"
 

@@ -34,7 +34,6 @@ static int intersect(
         *tx = (1.0f - it1) * (line_r1e_x - line_r1s_x);
         *ty = (1.0f - it1) * (line_r1e_y - line_r1s_y);
         return 1;
-        // printf("[DEBUG] line intersection collision (%.2f, %.2f)\n", tx, ty);
     }
 
     return 0;

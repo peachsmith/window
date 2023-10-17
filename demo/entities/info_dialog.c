@@ -41,7 +41,7 @@ static void update_info_dialog(cr_app *app, cr_entity *dialog)
         // Set the pause menu as the active menu.
         app->menus[app->menu_count++] = info_menu;
 
-        cr_push_input_handler(app, info_menu_input_handler);
+        cr_push_input_handler(app, info_menu_input);
     }
 }
 

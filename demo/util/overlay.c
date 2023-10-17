@@ -18,7 +18,7 @@ void demo_draw_overlay(cr_app *app)
     // Documentation for snprintf:
     // https://cplusplus.com/reference/cstdio/snprintf
 
-    cr_entity *player = app->primary;
+    cr_entity *player = app->extension->entity_handles[DEMO_HANDLE_PLAYER];
 
     // The nul terminator is appended by the snprintf function.
     int res = snprintf(

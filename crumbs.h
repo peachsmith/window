@@ -59,6 +59,12 @@ typedef struct cr_impl cr_impl;
 typedef struct cr_debug cr_debug;
 
 /**
+ * The extension structure is defined by the consuming application, and allows
+ * it to add arbitrary contents to the app struct.
+ */
+typedef struct cr_extension cr_extension;
+
+/**
  * An entity is a thing that can interact with other things.
  */
 typedef struct cr_entity cr_entity;
@@ -168,7 +174,7 @@ typedef int (*cr_interaction)(
     cr_entity *);
 
 //----------------------------------------------------------------------------
-// Keycodes
+// Structure Definitions
 
 enum cr_keycode
 {
@@ -303,9 +309,6 @@ enum cr_keycode
     CR_MAX_KEYCODE
 };
 
-//----------------------------------------------------------------------------
-// Structure Definitions
-
 struct cr_point
 {
     int x;
@@ -351,6 +354,7 @@ struct cr_debug
 struct cr_app
 {
     cr_impl *impl;
+    cr_extension* extension;
 
     cr_debug debug;
 
@@ -365,56 +369,32 @@ struct cr_app
     int scene;
     float frame_check; // regulates framerate
     int entity_cap;    // maximum number of entities
-
-    // screen dimensions
     int screen_width;
     int screen_height;
-
     cr_camera cam;
-
     cr_func update;
     cr_func draw;
-
-    // entities
-    cr_entity *entities;
-    int entity_count;
-
-    // input handlers
-    cr_func *input;
-    int input_count;
-
-    // menus
-    cr_entity **menus;
-    int menu_count;
-
-    // dialogs
-    cr_entity **dialogs;
-    int dialog_count;
-
-    cr_entity **overlays;
-    int overlay_count;
-
-    // assets
-    cr_texture **textures;
-    int texture_count;
-
-    cr_font **fonts;
-    int font_count;
-
-    cr_sound **sounds;
-    int sound_count;
-
-    // entity type registry
-    cr_entity_type *entity_types;
-
-    // scene transition
     cr_func transition_loader;
-    cr_func transition_input_handler;
+    cr_func transition_input;
+    cr_entity_type *entity_types;
+    
+    cr_entity *entities;
+    cr_func *input;
+    cr_entity **menus;
+    cr_entity **dialogs;
+    cr_entity **overlays;
+    cr_texture **textures;
+    cr_font **fonts;
+    cr_sound **sounds;
 
-    // Generic values that can be used in any way.
-    // TODO: implement the extension system
-    cr_entity *primary; // an entity of significance
-    int *counters;      // generic counters
+    int entity_count;
+    int input_count;
+    int menu_count;
+    int dialog_count;
+    int overlay_count;
+    int texture_count;
+    int font_count;
+    int sound_count;
 };
 
 // definition of the cr_entity struct

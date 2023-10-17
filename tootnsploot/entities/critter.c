@@ -222,9 +222,6 @@ static void update_critter(cr_app *app, cr_entity *critter)
         }
     }
 
-    // TODO: pre fall animation
-    // TODO: expiration animation
-
     // healing and expiration animations
     if (critter->cursor_x && critter->cursor_x < 60)
     {
@@ -242,16 +239,16 @@ static void update_critter(cr_app *app, cr_entity *critter)
     if (critter->ticks >= 445 && !critter->result && critter->present)
     {
         critter->present = 0;
-        app->counters[TNS_COUNTER_CRITTERS]--;
-        app->counters[critter->data]--;
+        app->extension->counters[TNS_COUNTER_CRITTERS]--;
+        app->extension->counters[critter->data]--;
     }
 
     // If the critter runs off the screen, remove it from the scene.
     if ((critter->x_pos < -20 || critter->x_pos > 240) && critter->present)
     {
         critter->present = 0;
-        app->counters[TNS_COUNTER_CRITTERS]--;
-        app->counters[critter->data]--;
+        app->extension->counters[TNS_COUNTER_CRITTERS]--;
+        app->extension->counters[critter->data]--;
     }
 }
 
@@ -292,9 +289,9 @@ static void collide_critter(
     }
 
     // If a certain score is reached, the game ends.
-    if (app->counters[TNS_COUNTER_SCORE] < 100)
+    if (app->extension->counters[TNS_COUNTER_SCORE] < 100)
     {
-        app->counters[TNS_COUNTER_SCORE]++;
+        app->extension->counters[TNS_COUNTER_SCORE]++;
     }
     else
     {

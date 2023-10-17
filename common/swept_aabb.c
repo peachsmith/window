@@ -2,6 +2,7 @@
 #include "common/util.h"
 
 #include <float.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
 

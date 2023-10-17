@@ -214,7 +214,7 @@ static int interact_with_jimbo(cr_app *app, cr_entity *jimbo, cr_entity *actor)
 
     jimbo_dialog_demo_open(app, jimbo_dialog);
 
-    cr_push_input_handler(app, common_dialog_input_handler);
+    cr_push_input_handler(app, common_dialog_input);
 
     return 0;
 }

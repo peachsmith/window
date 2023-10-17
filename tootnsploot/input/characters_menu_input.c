@@ -3,7 +3,7 @@
 #include "tootnsploot/entities/entity_types.h"
 #include "tootnsploot/scenes/scenes.h"
 
-void characters_menu_input_handler(cr_app *app)
+void characters_menu_input(cr_app *app)
 {
     // Locate the characters menu.
     cr_entity *menu_entity = app->menus[app->menu_count - 1];

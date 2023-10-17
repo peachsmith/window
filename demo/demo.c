@@ -50,6 +50,9 @@ static cr_font *fonts[MAX_FONTS];
 static cr_sound *sounds[MAX_SOUNDS];
 static cr_entity_type entity_types[ENTITY_TYPE_MAX];
 
+static cr_entity *entity_handles[MAX_ENTITY_HANDLES];
+static cr_extension extension;
+
 static int default_get_x_vel(cr_entity *e)
 {
     return e->x_vel;
@@ -236,7 +239,7 @@ static void draw(cr_app *app)
 
 int init_app(cr_app *app)
 {
-    cr_set_title(app, "Toot n Sploot");
+    cr_set_title(app, "Demo");
 
     // default values for entity types
     for (int i = 0; i < ENTITY_TYPE_MAX; i++)
@@ -283,6 +286,8 @@ int init_app(cr_app *app)
         entities[i].result = 0;
         entities[i].cursor_x = 0;
         entities[i].cursor_y = 0;
+        entities[i].scroll_x = 0;
+        entities[i].scroll_y = 0;
     }
 
     app->entity_cap = MAX_ENTITIES;
@@ -298,49 +303,39 @@ int init_app(cr_app *app)
     app->update = update;
     app->draw = draw;
 
+    // asset loading
     if (!load_all_assets(app))
     {
         return 0;
     }
 
-    //====================================================================
-    // Demo entity types
+    // extension initialization
+    extension.entity_handles = entity_handles;
+    app->extension = &extension;
 
-    // the player avatar
+    // entity type registration
     demo_register_player(&(app->entity_types[ENTITY_TYPE_PLAYER]));
-
-    // platforms and other blocks
     block_demo_register(&(app->entity_types[ENTITY_TYPE_BLOCK]));
     block_demo_register_big(&(app->entity_types[ENTITY_TYPE_BLOCK_BIG]));
     block_demo_register_long(&(app->entity_types[ENTITY_TYPE_BLOCK_LONG]));
     throughblock_demo_register_long(&(app->entity_types[ENTITY_TYPE_THROUGHBLOCK_LONG]));
     block_demo_register_moving(&(app->entity_types[ENTITY_TYPE_BLOCK_MOVING]));
     block_demo_register_sloped(&(app->entity_types[ENTITY_TYPE_BLOCK_SLOPE]));
-
-    // interactables
-    sign_demo_register(&(app->entity_types[ENTITY_TYPE_SIGN]));   // npc dialog
-    jimbo_demo_register(&(app->entity_types[ENTITY_TYPE_JIMBO])); // npc dialog
-    billy_demo_register(&(app->entity_types[ENTITY_TYPE_BILLY])); // npc movement
-    henry_demo_register(&(app->entity_types[ENTITY_TYPE_HENRY])); // hostile
-
-    // scene transitions
+    sign_demo_register(&(app->entity_types[ENTITY_TYPE_SIGN]));
+    jimbo_demo_register(&(app->entity_types[ENTITY_TYPE_JIMBO]));
+    billy_demo_register(&(app->entity_types[ENTITY_TYPE_BILLY]));
+    henry_demo_register(&(app->entity_types[ENTITY_TYPE_HENRY]));
     transition_demo_register(&(app->entity_types[ENTITY_TYPE_TRANSITION]));
-
-    // menus
     pause_menu_demo_register(&(app->entity_types[ENTITY_TYPE_PAUSE_MENU]));
     fish_menu_demo_register(&(app->entity_types[ENTITY_TYPE_FISH_MENU]));
     info_menu_demo_register(&(app->entity_types[ENTITY_TYPE_INFO_MENU]));
     debug_menu_demo_register(&(app->entity_types[ENTITY_TYPE_DEBUG_MENU]));
     scene_menu_demo_register(&(app->entity_types[ENTITY_TYPE_SCENE_MENU]));
     input_menu_demo_register(&(app->entity_types[ENTITY_TYPE_INPUT_MENU]));
-
-    // dialogs
     demo_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_DEMO_DIALOG]));
     info_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_INFO_DIALOG]));
     jimbo_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_JIMBO_DIALOG]));
     sign_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_SIGN_DIALOG]));
-
-    // projectiles
     fireball_demo_register(&(app->entity_types[ENTITY_TYPE_FIREBALL]));
 
     // push the default input handler
@@ -348,7 +343,7 @@ int init_app(cr_app *app)
 
     // Load the initial scene.
     load_scene_0(app);
-    cr_push_input_handler(app, root_input_handler);
+    cr_push_input_handler(app, root_input);
 
     // Play music
     // cr_play_sound(app, app->sounds[DEMO_SONG_FIELD]);

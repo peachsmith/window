@@ -3,7 +3,7 @@
 #include "tootnsploot/entities/entity_types.h"
 #include "tootnsploot/scenes/scenes.h"
 
-void controls_menu_input_handler(cr_app *app)
+void controls_menu_input(cr_app *app)
 {
     // If either the escape key or the x key is pressed, return to the main menu.
     if (cr_consume_input(app, CR_KEYCODE_ESCAPE) || cr_consume_input(app, CR_KEYCODE_X))

@@ -186,9 +186,6 @@ cr_app *cr_create_app()
     // END arrays
     //------------------------------------------------------------------------
 
-    // generic values
-    app->primary = NULL;
-
     return app;
 }
 

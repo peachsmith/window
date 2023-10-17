@@ -11,6 +11,8 @@
 
 void load_title_screen(cr_app *app)
 {
+    cr_entity **handles = app->extension->entity_handles;
+    
     app->scene = TNS_SCENE_TITLE_SCREEN;
 
     util_set_camera(app, CR_CAMERA_NONE);
@@ -22,9 +24,9 @@ void load_title_screen(cr_app *app)
     app->menus[app->menu_count++] = main_menu;
     app->pause = 1;
 
-    tns_create_controls_menu(app);
-    tns_create_characters_menu(app);
+    handles[TNS_HANDLE_CONTROLS] = tns_create_controls_menu(app);
+    handles[TNS_HANDLE_CHARACTERS] = tns_create_characters_menu(app);
 
     // scene transition
-    tns_create_transition(app);
+    handles[TNS_HANDLE_TRANSITION] = tns_create_transition(app);
 }

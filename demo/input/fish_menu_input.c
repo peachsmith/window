@@ -3,7 +3,7 @@
 #include "demo/entities/entity_types.h"
 #include "demo/entities/player.h"
 
-void fish_menu_input_handler(cr_app *app)
+void fish_menu_input(cr_app *app)
 {
     if (cr_consume_input(app, CR_KEYCODE_X))
     {

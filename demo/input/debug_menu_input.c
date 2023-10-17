@@ -2,7 +2,7 @@
 #include "demo/input/input.h"
 #include "demo/entities/entity_types.h"
 
-void debug_menu_input_handler(cr_app *app)
+void debug_menu_input(cr_app *app)
 {
     if (cr_consume_input(app, CR_KEYCODE_X) ||
         cr_consume_input(app, CR_KEYCODE_Q) ||
@@ -53,7 +53,7 @@ void debug_menu_input_handler(cr_app *app)
                 }
             }
 
-            cr_push_input_handler(app, scene_menu_input_handler);
+            cr_push_input_handler(app, scene_menu_input);
 
             scene_menu->cursor_x = 0;
             scene_menu->cursor_y = 0;
@@ -73,7 +73,7 @@ void debug_menu_input_handler(cr_app *app)
                 }
             }
 
-            cr_push_input_handler(app, input_menu_input_handler);
+            cr_push_input_handler(app, input_menu_input);
 
             input_menu->cursor_x = 0;
             input_menu->cursor_y = 0;
@@ -92,7 +92,6 @@ void debug_menu_input_handler(cr_app *app)
         if (menu_entity->cursor_y == 1 && app->debug.frame_len > 1)
         {
             app->debug.frame_len /= 2;
-            printf("[DEBUG] frame length: %d\n", app->debug.frame_len);
         }
 
         if (menu_entity->cursor_y == 2 && app->debug.hitboxes)
@@ -111,7 +110,6 @@ void debug_menu_input_handler(cr_app *app)
         if (menu_entity->cursor_y == 1 && app->debug.frame_len < 8)
         {
             app->debug.frame_len *= 2;
-            printf("[DEBUG] frame length: %d\n", app->debug.frame_len);
         }
 
         if (menu_entity->cursor_y == 2 && !(app->debug.hitboxes))

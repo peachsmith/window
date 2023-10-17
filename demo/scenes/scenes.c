@@ -1,12 +1,16 @@
+#include "demo/demo.h"
 #include "demo/scenes/scenes.h"
-
-#include <stdlib.h>
 
 void clear_scene(cr_app *app)
 {
     for (int i = 0; i < app->entity_cap; i++)
     {
         app->entities[i].present = 0;
+    }
+
+    for (int i = 0; i < MAX_ENTITY_HANDLES; i++)
+    {
+        app->extension->entity_handles[i] = NULL;
     }
 
     app->entity_count = 0;

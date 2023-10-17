@@ -1,10 +1,63 @@
-#include "tootnsploot/entities/transition.h"
+#include "tootnsploot/tootnsploot.h"
 #include "tootnsploot/entities/entity_types.h"
+#include "tootnsploot/entities/transition.h"
+#include "demo/scenes/scenes.h"
 
 #include "common/util.h"
 #include "common/dialog.h"
 
-#include <stdlib.h>
+#define HANDOFF_THRESHOLD 30
+
+static void handoff(cr_app *app, cr_func next_scene)
+{
+    cr_entity payload;
+    cr_entity *handle;
+
+    // Get the transition entity from the current scene.
+    handle = app->extension->entity_handles[TNS_HANDLE_TRANSITION];
+    if (handle == NULL)
+    {
+        return;
+    }
+
+    // If the TX_RESUME flag is set on the transition's data field, set
+    // the update flag on the transition's flags field so the next scene
+    // doesn't start in a paused state.
+    if (handle->data & TX_RESUME)
+    {
+        cr_set_flag(handle, ENTITY_FLAG_UPDATE);
+    }
+
+    // Preserve the necessary information from the transition entity.
+    payload.ticks = handle->ticks;
+    payload.data = handle->data;
+    payload.flags = handle->flags;
+
+    // Clear the current scene and load the next scene.
+    clear_scene(app);
+    next_scene(app);
+
+    // Get the transition entity from the next scene.
+    handle = app->extension->entity_handles[TNS_HANDLE_TRANSITION];
+    if (handle == NULL)
+    {
+        return;
+    }
+
+    // Populate the transition entity of the new scene with the information
+    // from the previous scene.
+    // Increment the tick count of the new transition entity to
+    // prevent the update function from being called again.
+    handle->ticks = payload.ticks + 1;
+    handle->data = payload.data;
+    handle->flags = payload.flags;
+
+    // Add the new transition entity to the overlay slice.
+    app->overlays[app->overlay_count++] = handle;
+
+    // Let the new transition entity know that the handoff is complete.
+    handle->data |= TX_HANDOFF;
+}
 
 static void render_transition(cr_app *app, cr_entity *transition)
 {
@@ -57,12 +110,12 @@ static void update_transition(cr_app *app, cr_entity *transition)
     // The screen fades out for 30 frames, followed by 30 frames of blank
     // screen, followed by 30 frames of the next frame fading in.
     // During the second 30 frame period, we load the next scene.
-    if (transition->ticks < 90)
+    if (transition->ticks < transition->tick_limit)
     {
         // Load the next scene.
-        if (transition->ticks == 30)
+        if (transition->ticks == HANDOFF_THRESHOLD && !(transition->data & TX_HANDOFF))
         {
-            app->transition_loader(app);
+            handoff(app, app->transition_loader);
 
             // Once the next scene has been loaded, the memory for the
             // previous scene has been freed. This means the reference
@@ -77,13 +130,13 @@ static void update_transition(cr_app *app, cr_entity *transition)
         return;
     }
 
+    // Once this point has been reached, the transition is complete.
+
+    // Reset these fields so they can be used to transition to a new scene.
     transition->ticks = 0;
     transition->data = 0;
 
-    // Once the next scene has been fully loaded and the transition is
-    // complete, we push the input handler of the next scene to give control
-    // back to the user.
-    cr_push_input_handler(app, app->transition_input_handler);
+    cr_push_input_handler(app, app->transition_input);
 
     // If the update flag is set, unpause the application so the next scene
     // doesn't start in a paused state.
@@ -112,6 +165,7 @@ cr_entity *tns_create_transition(cr_app *app)
     }
 
     transition->type = ENTITY_TYPE_TRANSITION;
+    transition->tick_limit = 90;
     cr_set_flag(transition, ENTITY_FLAG_PAUSE);
     cr_set_flag(transition, ENTITY_FLAG_MENU);
 

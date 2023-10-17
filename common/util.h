@@ -3,7 +3,7 @@
 
 #include "crumbs.h"
 
-// flags
+// entity flags
 #define ENTITY_FLAG_GROUND 0
 #define ENTITY_FLAG_JUMP 1
 #define ENTITY_FLAG_DOWN 2
@@ -20,6 +20,10 @@
 #define ENTITY_FLAG_13 13
 #define ENTITY_FLAG_14 14
 #define ENTITY_FLAG_15 15
+
+// transition flags
+#define TX_RESUME 0x02
+#define TX_HANDOFF 0x04
 
 // Camera Boundary Configurations
 //

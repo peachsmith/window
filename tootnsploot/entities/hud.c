@@ -11,7 +11,7 @@ static void render_hud(cr_app *app, cr_entity *hud)
     char buffer[HUD_BUFSIZE];
     int n = HUD_BUFSIZE - 1;
 
-    cr_entity *corgi = app->primary;
+    cr_entity *corgi = app->extension->entity_handles[TNS_HANDLE_CORGI];
     if (corgi == NULL)
     {
         return;
@@ -31,7 +31,7 @@ static void render_hud(cr_app *app, cr_entity *hud)
         buffer,
         n,
         "SCORE %d",
-        app->counters[TNS_COUNTER_SCORE]);
+        app->extension->counters[TNS_COUNTER_SCORE]);
     if (res < 0 || res >= n)
     {
         return;
@@ -40,7 +40,7 @@ static void render_hud(cr_app *app, cr_entity *hud)
 
     // render the available music notes
     cr_draw_text(app, app->fonts[TNS_FONT_PRESS_START], "BREATH", 2, 12);
-    for (int i = 0; i < app->counters[TNS_COUNTER_BREATH]; i++)
+    for (int i = 0; i < app->extension->counters[TNS_COUNTER_BREATH]; i++)
     {
         sprite_draw_note(app, 55 + i * 13, 10);
     }

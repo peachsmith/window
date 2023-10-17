@@ -335,9 +335,9 @@ static void update_corgi(cr_app *app, cr_entity *corgi)
     // of breath recovery.
     if (splooting)
     {
-        if (corgi->cursor_x && !(corgi->cursor_x % 60) && app->counters[TNS_COUNTER_BREATH] < 3)
+        if (corgi->cursor_x && !(corgi->cursor_x % 60) && app->extension->counters[TNS_COUNTER_BREATH] < 3)
         {
-            app->counters[TNS_COUNTER_BREATH]++;
+            app->extension->counters[TNS_COUNTER_BREATH]++;
         }
 
         if (corgi->cursor_x < 181)

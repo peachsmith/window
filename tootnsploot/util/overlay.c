@@ -13,7 +13,7 @@ void tns_draw_overlay(cr_app *app)
     char buffer[DEBUG_BUFSIZE];
     int n = DEBUG_BUFSIZE - 1;
 
-    cr_entity *player = app->primary;
+    cr_entity *player = app->extension->entity_handles[TNS_HANDLE_CORGI];
 
     int res = snprintf(
         buffer,

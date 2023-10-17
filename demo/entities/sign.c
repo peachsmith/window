@@ -52,7 +52,7 @@ static int interact_with_sign(cr_app *app, cr_entity *sign, cr_entity *actor)
 
     sign_dialog_demo_open(app, sign_dialog);
 
-    cr_push_input_handler(app, common_dialog_input_handler);
+    cr_push_input_handler(app, common_dialog_input);
     return 0;
 }
 
