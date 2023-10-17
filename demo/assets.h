@@ -1,3 +1,5 @@
+#include "crumbs.h"
+
 #ifndef DEMO_ASSETS_H
 #define DEMO_ASSETS_H
 
@@ -17,5 +19,7 @@
 #define DEMO_SOUND_EFFECT_TOGGLE 2
 #define DEMO_SONG_FIELD 3
 #define DEMO_SONG_TRACK_4 4
+
+int load_all_assets(cr_app *app);
 
 #endif

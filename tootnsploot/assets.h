@@ -1,3 +1,5 @@
+#include "crumbs.h"
+
 #ifndef TNS_ASSETS_H
 #define TNS_ASSETS_H
 
@@ -13,5 +15,7 @@
 
 // audio assets
 #define TNS_SOUND_EFFECT_CONFIRMATION 0
+
+int load_all_assets(cr_app*);
 
 #endif

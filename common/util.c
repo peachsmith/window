@@ -5,6 +5,8 @@
 #define MAX_FONTS 10
 #define MAX_SOUNDS 10
 
+// TODO: move statically allocated data like this into the main.c files of
+// any applications.
 static cr_texture *textures[MAX_TEXTURES];
 static cr_font *fonts[MAX_FONTS];
 static cr_sound *sounds[MAX_SOUNDS];
