@@ -153,6 +153,20 @@ typedef void (*cr_collider)(
     cr_entity *,
     cr_collision *);
 
+/**
+ * An interaction is a function that provides the behavior of two entities
+ * when they interact with each other.
+ * 
+ * Params:
+ *   cr_app* - a pointer to an app struct
+ *   cr_entity* - the entity whose state may be updated
+ *   cr_entity* - the entity that affects the state of the first entity
+ */
+typedef int (*cr_interaction)(
+    cr_app *,
+    cr_entity *,
+    cr_entity *);
+
 //----------------------------------------------------------------------------
 // Keycodes
 
@@ -338,34 +352,19 @@ struct cr_app
 {
     cr_impl *impl;
 
-    // This is an array of flags to indicate that a key press has already been
-    // detected.
-    unsigned char key_captures[CR_MAX_KEYCODE];
+    cr_debug debug;
 
-    // Counters to indicate how long an input has been actuated.
+    unsigned char key_captures[CR_MAX_KEYCODE];
     unsigned char actuation_counters[CR_MAX_KEYCODE];
 
-    // For different sized windows.
-    int scale;
-
-    // 0 for delay, 1 for delta time
-    int time;
-
-    // This flag is used as a sentinel value by the main loop.
-    // As long as this value is 0, the main loop should continue to execute.
-    // Once this flag is set to a non 0 value, any resources allocated by the
-    // application should be freed and the application should terminate
-    // gracefully.
-    int done;
-
-    // The pause flag prevents the normal update cycle, allowing for using
-    // menus and dialogs.
+    int scale; // screen size scaling
+    int time;  // 0 for delay, 1 for delta time
+    int done;  // 0 while the application is running
     int pause;
-
-    // common tick counter
     int ticks;
-
     int scene;
+    float frame_check; // regulates framerate
+    int entity_cap;    // maximum number of entities
 
     // screen dimensions
     int screen_width;
@@ -376,23 +375,13 @@ struct cr_app
     cr_func update;
     cr_func draw;
 
-    // assets
-    cr_texture **textures;
-    int texture_count;
-
-    cr_font **fonts;
-    int font_count;
-
-    cr_sound **sounds;
-    int sound_count;
-
     // entities
     cr_entity *entities;
     int entity_count;
-    int entity_cap;
 
-    // entity type registry
-    cr_entity_type *entity_types;
+    // input handlers
+    cr_func *input;
+    int input_count;
 
     // menus
     cr_entity **menus;
@@ -405,19 +394,25 @@ struct cr_app
     cr_entity **overlays;
     int overlay_count;
 
-    // input handlers
-    cr_func *input;
-    int input_count;
+    // assets
+    cr_texture **textures;
+    int texture_count;
+
+    cr_font **fonts;
+    int font_count;
+
+    cr_sound **sounds;
+    int sound_count;
+
+    // entity type registry
+    cr_entity_type *entity_types;
 
     // scene transition
     cr_func transition_loader;
     cr_func transition_input_handler;
 
-    cr_debug debug;
-
-    float frame_check;
-
     // Generic values that can be used in any way.
+    // TODO: implement the extension system
     cr_entity *primary; // an entity of significance
     int *counters;      // generic counters
 };
@@ -425,60 +420,35 @@ struct cr_app
 // definition of the cr_entity struct
 struct cr_entity
 {
-    int present;
+    int present;    // whether entity is considered alive
+    int type;       // entity's location in the registry
+    uint16_t flags; // entity state
+    uint8_t data;   // generic data
 
-    int type; // identifies the entity type in the registry
-
-    // position
-    int x_pos;
+    int x_pos;      // position
     int y_pos;
 
-    // velocity
-    int x_vel;
+    int x_vel;      // velocity
     int y_vel;
 
-    // acceleration
-    int x_acc;
+    int x_acc;      // acceleration
     int y_acc;
-
-    // velocity correction factor
-    int x_t;
+    int x_t;        // velocity correction factor
     int y_t;
 
-    // bit flags
-    uint16_t flags;
-
-    // custom data that may have special meaning in each entity
-    uint8_t data;
-
-    // animation counter
     int animation_ticks;
-
-    // Used for actions that take multiple iterations of the main loop.
     int ticks;
-
-    // Counter for invincibility frames.
-    int iframes;
-
-    // The carrier is an entity that is modifying another entity's position
-    // and velocity.
-    cr_entity *carrier;
-
-    // A single string of text. (used for UI elements)
-    const char *text;
-    int text_len;
-
-    // Tick limit (currently used for dialogs, but may be used elsewhere or moved)
     int tick_limit;
 
-    // Result of a function call.
-    // Used by dialogs and menus to get the result of a menu interaction.
-    int result;
+    int iframes;        // invincibility frame counter
+    cr_entity *carrier; // a moving platform
 
-    // cursor position in a menu
-    int cursor_x;
+    const char *text;
+    int text_len;
+    int result;   // return value of a callback
+    int cursor_x; // cursor position in a menu
     int cursor_y;
-    int scroll_x;
+    int scroll_x; // scroll position
     int scroll_y;
 };
 
@@ -490,27 +460,17 @@ struct cr_entity_type
     cr_entity_func render;
     cr_entity_func update;
     cr_entity_func advance;
-    cr_collider collide;
-
     int (*get_x_vel)(cr_entity *); // calculates current x velocity.
     int (*get_y_vel)(cr_entity *); // calculates current y velocity.
 
-    // entity interaction
-    int interactable;
-    int (*interact)(cr_app *, cr_entity *, cr_entity *);
+    cr_collider collide;     // collision behavior
+    cr_interaction interact; // interaction behavior
 
-    // indicates whether this entity represents the user
-    int control;
-
-    // indicates that this entity shoudl override the spurious collision check.
-    int spur;
-
-    // indicates that an entity is a moving object that can carry another
-    // entity.
-    int move;
-
-    // indicates that an entity is a sloped platform
-    int slope;
+    int interactable; // entity can interact
+    int control;      // entity represents the user
+    int spur;         // entity override the spurious collision check
+    int move;         // entity can carry another entity
+    int slope;        // entity is a sloped platform
 };
 
 //----------------------------------------------------------------------------

@@ -2,8 +2,6 @@
 
 #include "demo/assets.h"
 
-#include "demo/input/input.h"
-
 #include "demo/entities/entity_types.h"
 #include "demo/entities/player.h"
 #include "demo/entities/block.h"
@@ -24,37 +22,33 @@
 #include "demo/entities/sign_dialog.h"
 #include "demo/entities/fireball.h"
 
+#include "demo/input/input.h"
 #include "demo/scenes/scenes.h"
-
 #include "demo/util/sprite.h"
 #include "demo/util/overlay.h"
 
 #include "common/util.h"
 #include "common/collision.h"
-#include "common/menu.h"
 #include "common/dialog.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <limits.h>
-
-// Capacity of entity array
-// This must match the value of the app->entity_cap field.
-#define ENTITY_MAX 256
-
-// array of entities that will replace the linked list.
-// TODO: determine a better time and place to allocate this.
-static cr_entity entities[ENTITY_MAX];
-
-// array of entity types
-static cr_entity_type entity_types[ENTITY_TYPE_MAX];
-
-// maximum number of overlays
+#define MAX_ENTITIES 256
+#define MAX_INPUT_HANDLERS 20
+#define MAX_MENUS 10
+#define MAX_DIALOGS 10
 #define MAX_OVERLAYS 10
+#define MAX_TEXTURES 10
+#define MAX_FONTS 10
+#define MAX_SOUNDS 10
 
-// list of active overlays entities
+static cr_entity entities[MAX_ENTITIES];
+static cr_func input_handlers[MAX_INPUT_HANDLERS];
+static cr_entity *menus[MAX_MENUS];
+static cr_entity *dialogs[MAX_DIALOGS];
 static cr_entity *overlays[MAX_OVERLAYS];
+static cr_texture *textures[MAX_TEXTURES];
+static cr_font *fonts[MAX_FONTS];
+static cr_sound *sounds[MAX_SOUNDS];
+static cr_entity_type entity_types[ENTITY_TYPE_MAX];
 
 static int default_get_x_vel(cr_entity *e)
 {
@@ -64,6 +58,10 @@ static int default_get_x_vel(cr_entity *e)
 static int default_get_y_vel(cr_entity *e)
 {
     return e->y_vel;
+}
+
+static void default_input_handler(cr_app *app)
+{
 }
 
 /**
@@ -236,7 +234,7 @@ static void draw(cr_app *app)
     }
 }
 
-int demo_prepare(cr_app *app)
+int init_app(cr_app *app)
 {
     cr_set_title(app, "Toot n Sploot");
 
@@ -261,7 +259,7 @@ int demo_prepare(cr_app *app)
     }
 
     // default values of entities
-    for (int i = 0; i < app->entity_cap; i++)
+    for (int i = 0; i < MAX_ENTITIES; i++)
     {
         entities[i].present = 0;
         entities[i].type = 0;
@@ -287,49 +285,23 @@ int demo_prepare(cr_app *app)
         entities[i].cursor_y = 0;
     }
 
-    // initialize overlays
-    app->overlays = &(overlays[0]);
-    app->overlay_count = 0;
-
+    app->entity_cap = MAX_ENTITIES;
     app->entities = entities;
+    app->input = &(input_handlers[0]);
+    app->menus = &(menus[0]);
+    app->dialogs = &(dialogs[0]);
+    app->overlays = &(overlays[0]);
+    app->textures = &(textures[0]);
+    app->fonts = &(fonts[0]);
+    app->sounds = &(sounds[0]);
     app->entity_types = entity_types;
     app->update = update;
     app->draw = draw;
-
-    // initialize tetxures
-    if (!common_init_textures(app))
-    {
-        return 0;
-    }
-    
-    // initialize fonts
-    if (!common_init_fonts(app))
-    {
-        return 0;
-    }
-
-    // initialize audio
-    if (!common_init_audio(app))
-    {
-        return 0;
-    }
 
     if (!load_all_assets(app))
     {
         return 0;
     }
-
-    // initialize menus
-    if (!common_init_menus(app))
-    {
-        return 0;
-    }
-
-    // Initialize dialogs.
-    common_init_dialogs(app);
-
-    // Initialize input.
-    demo_init_input(app);
 
     //====================================================================
     // Demo entity types

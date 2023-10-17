@@ -17,6 +17,6 @@
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-int demo_prepare(cr_app *);
+int init_app(cr_app *);
 
 #endif

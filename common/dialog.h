@@ -3,7 +3,7 @@
 
 #include "crumbs.h"
 
-#define COMMON_MAX_DIALOGS 10
+// #define COMMON_MAX_DIALOGS 10
 #define COMMON_DIALOG_BUFSIZE 256
 
 // common dialog text rendering speed
@@ -12,8 +12,6 @@
 // common dimensions of a dialog panel
 #define COMMON_DIALOG_WIDTH 224
 #define COMMON_DIALOG_HEIGHT 48
-
-void common_init_dialogs(cr_app *);
 
 void common_dialog_renderer(
     cr_app *,

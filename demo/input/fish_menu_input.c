@@ -2,7 +2,6 @@
 #include "demo/input/input.h"
 #include "demo/entities/entity_types.h"
 #include "demo/entities/player.h"
-#include "common/menu.h"
 
 void fish_menu_input_handler(cr_app *app)
 {

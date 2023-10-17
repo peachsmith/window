@@ -7,7 +7,6 @@
 
 #include "common/util.h"
 #include "common/dialog.h"
-#include "common/menu.h"
 
 static const char *info_dialog_panel_1 = "What kind of information would you like?";
 #define PANEL_1_LEN 40

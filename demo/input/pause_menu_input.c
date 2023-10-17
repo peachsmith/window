@@ -4,7 +4,6 @@
 #include "demo/entities/player.h"
 #include "demo/entities/info_dialog.h"
 #include "demo/entities/demo_dialog.h"
-#include "common/menu.h"
 
 void pause_menu_input_handler(cr_app *app)
 {

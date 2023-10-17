@@ -88,6 +88,7 @@ static void default_draw(cr_app *app)
 
 cr_app *cr_create_app()
 {
+    int default_scale = 3;
     cr_app *app = NULL;
 
     // Create the app struct.
@@ -97,10 +98,19 @@ cr_app *cr_create_app()
         return NULL;
     }
 
-    // Ensure that all pointers are NULL or have a default value.
-    app->impl = NULL;
+    // interface to the underlying implementation
+    app->impl = create_impl(
+        CR_DEFAULT_SCREEN_WIDTH,
+        CR_DEFAULT_SCREEN_HEIGHT,
+        default_scale);
+    if (app->impl == NULL)
+    {
+        printf("failed to create impl\n");
+        free(app);
+        return NULL;
+    }
 
-    // Populate the debug structure with the default values.
+    // debug configuration
     app->debug.overlay = 0;
     app->debug.hitboxes = 0;
     app->debug.camera = 0;
@@ -109,42 +119,27 @@ cr_app *cr_create_app()
     app->debug.frame_by_frame = 0;
     app->debug.fps = 0;
 
-    app->scale = 3;
+    // input actuation
+    for (int i = 0; i < CR_MAX_KEYCODE; i++)
+    {
+        app->key_captures[i] = 0;
+        app->actuation_counters[i] = 0;
+    }
 
+    app->scale = default_scale;
     app->time = TIMING_DELTA;
-
     app->done = 0;
     app->pause = 0;
     app->ticks = 0;
     app->scene = 0;
+    app->frame_check = 0;
+    app->entity_cap = 0;
 
-    app->update = default_update;
-    app->draw = default_draw;
-
-    app->entity_count = 0;
-    app->entity_cap = 256;
-
-    app->input = NULL;
-    app->input_count = 0;
-
-    app->fonts = NULL;
-    app->font_count = 0;
-
-    app->sounds = NULL;
-    app->sound_count = 0;
-
-    app->textures = NULL;
-    app->texture_count = 0;
-
-    app->menus = NULL;
-    app->menu_count = 0;
-
-    app->dialogs = NULL;
-    app->dialog_count = 0;
-
+    // screen dimensions
     app->screen_width = CR_DEFAULT_SCREEN_WIDTH;
     app->screen_height = CR_DEFAULT_SCREEN_HEIGHT;
 
+    // camera
     app->cam.x = 0;
     app->cam.y = 0;
     app->cam.cl = 50;
@@ -152,25 +147,44 @@ cr_app *cr_create_app()
     app->cam.ct = 20;
     app->cam.cb = 140;
 
-    // Create the implementation struct.
-    app->impl = create_impl(
-        CR_DEFAULT_SCREEN_WIDTH,
-        CR_DEFAULT_SCREEN_HEIGHT,
-        app->scale);
-    if (app->impl == NULL)
-    {
-        free(app);
-        return NULL;
-    }
+    app->update = default_update;
+    app->draw = default_draw;
 
-    // Initialize the key press flags and actuation counters to 0.
-    for (int i = 0; i < CR_MAX_KEYCODE; i++)
-    {
-        app->key_captures[i] = 0;
-        app->actuation_counters[i] = 0;
-    }
+    //------------------------------------------------------------------------
+    // BEGIN arrays
+    // entities
+    // input
+    // menus
+    // dialogs
+    // overlays
+    // textures
+    // fonts
+    // sounds
+    app->entities = NULL;
+    app->entity_count = 0;
 
-    app->frame_check = 0;
+    app->input = NULL;
+    app->input_count = 0;
+
+    app->menus = NULL;
+    app->menu_count = 0;
+
+    app->dialogs = NULL;
+    app->dialog_count = 0;
+
+    app->overlays = NULL;
+    app->overlay_count = 0;
+
+    app->textures = NULL;
+    app->texture_count = 0;
+
+    app->fonts = NULL;
+    app->font_count = 0;
+
+    app->sounds = NULL;
+    app->sound_count = 0;
+    // END arrays
+    //------------------------------------------------------------------------
 
     // generic values
     app->primary = NULL;

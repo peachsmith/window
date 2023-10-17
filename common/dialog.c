@@ -3,16 +3,6 @@
 
 #include <stdlib.h>
 
-// TODO: move statically allocated data like this into the main.c files of
-// any applications.
-static cr_entity *dialogs[COMMON_MAX_DIALOGS];
-
-void common_init_dialogs(cr_app *app)
-{
-    app->dialogs = &(dialogs[0]);
-    app->dialog_count = 0;
-}
-
 void common_dialog_renderer(
     cr_app *app,
     cr_entity *dialog,

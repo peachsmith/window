@@ -6,7 +6,6 @@
 
 #include "common/util.h"
 #include "common/collision.h"
-#include "common/menu.h"
 
 void forest_input_handler(cr_app *app)
 {

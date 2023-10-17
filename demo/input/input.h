@@ -5,12 +5,6 @@
 
 #include "crumbs.h"
 
-#define MAX_INPUT_HANDLERS 20
-
-void demo_init_input(cr_app *);
-
-void default_input_handler(cr_app *);
-
 void root_input_handler(cr_app *);
 void fish_menu_input_handler(cr_app *);
 void info_menu_input_handler(cr_app *);

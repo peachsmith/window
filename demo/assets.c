@@ -1,5 +1,5 @@
 #include "crumbs.h"
-#include "assets.h"
+#include "demo/assets.h"
 
 #include <stdio.h>
 #include <stdlib.h>

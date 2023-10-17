@@ -43,7 +43,7 @@ crumbs-release:
 # Demo
 
 D=..\..\demo
-DEMO_SRC=$(D)\main.c $(D)\demo.c ..\..\common\*.c $(D)\entities\*.c $(D)\input\*.c $(D)\scenes\*.c $(D)\util\*.c
+DEMO_SRC=$(D)\*.c ..\..\common\*.c $(D)\entities\*.c $(D)\input\*.c $(D)\scenes\*.c $(D)\util\*.c
 
 demo-debug:
 	$(CC) /JMC $(CFLAGS) /D"_DEBUG" /D"main=SDL_main" $(INCLUDE_DIR) $(DEMO_SRC) /link $(LIBS) "crumbs.lib" $(LINK_DIR) /SUBSYSTEM:CONSOLE -out:demo.exe
@@ -55,7 +55,7 @@ demo-release:
 # Toot n Sploot
 
 T=..\..\tootnsploot
-TNS_SRC=$(T)\main.c $(T)\tootnsploot.c ..\..\common\*.c $(T)\entities\*.c $(T)\input\*.c $(T)\scenes\*.c $(T)\util\*.c
+TNS_SRC=$(T)\*.c ..\..\common\*.c $(T)\entities\*.c $(T)\input\*.c $(T)\scenes\*.c $(T)\util\*.c
 
 tootnsploot-debug:
 	$(CC) /JMC $(CFLAGS) /D"_DEBUG" /D"main=SDL_main" $(INCLUDE_DIR) $(TNS_SRC) /link $(LIBS) "crumbs.lib" $(LINK_DIR) /SUBSYSTEM:CONSOLE -out:tootnsploot.exe

@@ -2,7 +2,6 @@
 #include "tootnsploot/input/input.h"
 #include "tootnsploot/entities/entity_types.h"
 #include "tootnsploot/scenes/scenes.h"
-#include "common/menu.h"
 
 void characters_menu_input_handler(cr_app *app)
 {

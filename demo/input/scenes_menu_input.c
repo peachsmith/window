@@ -4,7 +4,6 @@
 #include "demo/scenes/scenes.h"
 
 #include "common/util.h"
-#include "common/menu.h"
 
 static void do_transition(cr_app *app, cr_func load_next_scene)
 {

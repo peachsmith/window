@@ -15,7 +15,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    if (!tns_prepare(app))
+    if (!init_app(app))
     {
         cr_destroy_app(app);
         cr_terminate();
