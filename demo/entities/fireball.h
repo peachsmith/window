@@ -11,7 +11,7 @@
  * Params:
  *   cr_entity_type* - the fireball's entity type definition
  */
-void fireball_demo_register(cr_entity_type *);
+void demo_register_fireball(cr_entity_type *);
 
 /**
  * Creates a fireball entity.
@@ -23,6 +23,6 @@ void fireball_demo_register(cr_entity_type *);
  * Returns:
  *   cr_entity* - a pointer to the new fireball entity.
  */
-cr_entity *fireball_demo_create(cr_app *, int, int);
+cr_entity *demo_create_fireball(cr_app *, int, int);
 
 #endif

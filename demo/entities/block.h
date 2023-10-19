@@ -9,33 +9,29 @@
 #include "crumbs.h"
 
 // register and create functions for a small, square block.
-void block_demo_register(cr_entity_type *);
-cr_entity *block_demo_create(cr_app *, int, int);
+void demo_register_block(cr_entity_type *);
+cr_entity *demo_create_block(cr_app *, int, int);
 
 // register and create functions for a large, square block.
-void block_demo_register_big(cr_entity_type *);
-cr_entity *block_demo_create_big(cr_app *, int, int);
+void demo_register_big_block(cr_entity_type *);
+cr_entity *demo_create_big_block(cr_app *, int, int);
 
 // register and create functions for a long, rectangular block.
-void block_demo_register_long(cr_entity_type *);
-cr_entity *block_demo_create_long(cr_app *, int, int);
+void demo_register_long_block(cr_entity_type *);
+cr_entity *demo_create_long_block(cr_app *, int, int);
 
 // register and create functions for a long, rectangular block that can be
 // passed through with certain input.
-void throughblock_demo_register_long(cr_entity_type *);
-cr_entity *throughblock_demo_create_long(cr_app *, int, int);
+void demo_register_long_throughblock(cr_entity_type *);
+cr_entity *demo_create_long_throughblock(cr_app *, int, int);
 
 // register and create functions for a moving block.
-void block_demo_register_moving(cr_entity_type *);
-cr_entity *block_demo_create_moving(cr_app *, int, int, int);
+void demo_register_moving_block(cr_entity_type *);
+cr_entity *demo_create_moving_block(cr_app *, int, int, int);
 
 // register and create functions for a sloped block.
-void block_demo_register_sloped(cr_entity_type *);
-cr_entity *block_demo_create_sloped(cr_app *, int, int, int);
-
-// register and create functions for Toot n Sploot
-void tns_register_floor(cr_entity_type *);
-cr_entity *tns_create_floor(cr_app *, int, int);
+void demo_register_sloped_block(cr_entity_type *);
+cr_entity *demo_create_sloped_block(cr_app *, int, int, int);
 
 
 /**

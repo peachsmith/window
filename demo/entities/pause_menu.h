@@ -12,7 +12,7 @@
  * Params:
  *   cr_entity_type* - the pause menu entity type definition
  */
-void pause_menu_demo_register(cr_entity_type *);
+void demo_register_pause_menu(cr_entity_type *);
 
 /**
  * Creates a pause menu entity.
@@ -20,6 +20,6 @@ void pause_menu_demo_register(cr_entity_type *);
  * Returns:
  *   cr_entity* - a pointer to the new pause menu entity.
  */
-cr_entity *pause_menu_demo_create(cr_app *);
+cr_entity *demo_create_pause_menu(cr_app *);
 
 #endif

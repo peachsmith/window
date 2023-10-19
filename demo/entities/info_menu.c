@@ -68,7 +68,7 @@ static void update_info_menu(cr_app *app, cr_entity *menu)
 {
 }
 
-void info_menu_demo_register(cr_entity_type *t)
+void demo_register_info_menu(cr_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
@@ -78,7 +78,7 @@ void info_menu_demo_register(cr_entity_type *t)
     t->update = update_info_menu;
 }
 
-cr_entity *info_menu_demo_create(cr_app* app)
+cr_entity *demo_create_info_menu(cr_app* app)
 {
     cr_entity *menu = NULL;
 

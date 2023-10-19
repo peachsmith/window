@@ -9,7 +9,7 @@
 
 #include "common/util.h"
 
-void load_title_screen(cr_app *app)
+void tns_load_title_screen(cr_app *app)
 {
     cr_entity **handles = app->extension->entity_handles;
     

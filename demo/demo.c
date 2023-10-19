@@ -31,26 +31,17 @@
 #include "common/collision.h"
 #include "common/dialog.h"
 
-#define MAX_ENTITIES 256
-#define MAX_INPUT_HANDLERS 20
-#define MAX_MENUS 10
-#define MAX_DIALOGS 10
-#define MAX_OVERLAYS 10
-#define MAX_TEXTURES 10
-#define MAX_FONTS 10
-#define MAX_SOUNDS 10
-
-static cr_entity entities[MAX_ENTITIES];
-static cr_func input_handlers[MAX_INPUT_HANDLERS];
-static cr_entity *menus[MAX_MENUS];
-static cr_entity *dialogs[MAX_DIALOGS];
-static cr_entity *overlays[MAX_OVERLAYS];
-static cr_texture *textures[MAX_TEXTURES];
-static cr_font *fonts[MAX_FONTS];
-static cr_sound *sounds[MAX_SOUNDS];
+static cr_entity entities[DEMO_MAX_ENTITIES];
+static cr_func input_handlers[DEMO_MAX_INPUT_HANDLERS];
+static cr_entity *menus[DEMO_MAX_MENUS];
+static cr_entity *dialogs[DEMO_MAX_DIALOGS];
+static cr_entity *overlays[DEMO_MAX_OVERLAYS];
+static cr_texture *textures[DEMO_MAX_TEXTURES];
+static cr_font *fonts[DEMO_MAX_FONTS];
+static cr_sound *sounds[DEMO_MAX_SOUNDS];
 static cr_entity_type entity_types[ENTITY_TYPE_MAX];
 
-static cr_entity *entity_handles[MAX_ENTITY_HANDLES];
+static cr_entity *entity_handles[DEMO_MAX_ENTITY_HANDLES];
 static cr_extension extension;
 
 static int default_get_x_vel(cr_entity *e)
@@ -63,7 +54,7 @@ static int default_get_y_vel(cr_entity *e)
     return e->y_vel;
 }
 
-static void default_input_handler(cr_app *app)
+static void default_input(cr_app *app)
 {
 }
 
@@ -237,7 +228,7 @@ static void draw(cr_app *app)
     }
 }
 
-int init_app(cr_app *app)
+int demo_init_app(cr_app *app)
 {
     cr_set_title(app, "Demo");
 
@@ -262,7 +253,7 @@ int init_app(cr_app *app)
     }
 
     // default values of entities
-    for (int i = 0; i < MAX_ENTITIES; i++)
+    for (int i = 0; i < DEMO_MAX_ENTITIES; i++)
     {
         entities[i].present = 0;
         entities[i].type = 0;
@@ -290,7 +281,7 @@ int init_app(cr_app *app)
         entities[i].scroll_y = 0;
     }
 
-    app->entity_cap = MAX_ENTITIES;
+    app->entity_cap = DEMO_MAX_ENTITIES;
     app->entities = entities;
     app->input = &(input_handlers[0]);
     app->menus = &(menus[0]);
@@ -304,7 +295,7 @@ int init_app(cr_app *app)
     app->draw = draw;
 
     // asset loading
-    if (!load_all_assets(app))
+    if (!demo_load_all_assets(app))
     {
         return 0;
     }
@@ -315,35 +306,35 @@ int init_app(cr_app *app)
 
     // entity type registration
     demo_register_player(&(app->entity_types[ENTITY_TYPE_PLAYER]));
-    block_demo_register(&(app->entity_types[ENTITY_TYPE_BLOCK]));
-    block_demo_register_big(&(app->entity_types[ENTITY_TYPE_BLOCK_BIG]));
-    block_demo_register_long(&(app->entity_types[ENTITY_TYPE_BLOCK_LONG]));
-    throughblock_demo_register_long(&(app->entity_types[ENTITY_TYPE_THROUGHBLOCK_LONG]));
-    block_demo_register_moving(&(app->entity_types[ENTITY_TYPE_BLOCK_MOVING]));
-    block_demo_register_sloped(&(app->entity_types[ENTITY_TYPE_BLOCK_SLOPE]));
-    sign_demo_register(&(app->entity_types[ENTITY_TYPE_SIGN]));
-    jimbo_demo_register(&(app->entity_types[ENTITY_TYPE_JIMBO]));
-    billy_demo_register(&(app->entity_types[ENTITY_TYPE_BILLY]));
-    henry_demo_register(&(app->entity_types[ENTITY_TYPE_HENRY]));
-    transition_demo_register(&(app->entity_types[ENTITY_TYPE_TRANSITION]));
-    pause_menu_demo_register(&(app->entity_types[ENTITY_TYPE_PAUSE_MENU]));
-    fish_menu_demo_register(&(app->entity_types[ENTITY_TYPE_FISH_MENU]));
-    info_menu_demo_register(&(app->entity_types[ENTITY_TYPE_INFO_MENU]));
-    debug_menu_demo_register(&(app->entity_types[ENTITY_TYPE_DEBUG_MENU]));
-    scene_menu_demo_register(&(app->entity_types[ENTITY_TYPE_SCENE_MENU]));
-    input_menu_demo_register(&(app->entity_types[ENTITY_TYPE_INPUT_MENU]));
+    demo_register_block(&(app->entity_types[ENTITY_TYPE_BLOCK]));
+    demo_register_big_block(&(app->entity_types[ENTITY_TYPE_BLOCK_BIG]));
+    demo_register_long_block(&(app->entity_types[ENTITY_TYPE_BLOCK_LONG]));
+    demo_register_long_throughblock(&(app->entity_types[ENTITY_TYPE_THROUGHBLOCK_LONG]));
+    demo_register_moving_block(&(app->entity_types[ENTITY_TYPE_BLOCK_MOVING]));
+    demo_register_sloped_block(&(app->entity_types[ENTITY_TYPE_BLOCK_SLOPE]));
+    demo_register_sign(&(app->entity_types[ENTITY_TYPE_SIGN]));
+    demo_register_jimbo(&(app->entity_types[ENTITY_TYPE_JIMBO]));
+    demo_register_billy(&(app->entity_types[ENTITY_TYPE_BILLY]));
+    demo_register_henry(&(app->entity_types[ENTITY_TYPE_HENRY]));
+    demo_register_transition(&(app->entity_types[ENTITY_TYPE_TRANSITION]));
+    demo_register_pause_menu(&(app->entity_types[ENTITY_TYPE_PAUSE_MENU]));
+    demo_register_fish_menu(&(app->entity_types[ENTITY_TYPE_FISH_MENU]));
+    demo_register_info_menu(&(app->entity_types[ENTITY_TYPE_INFO_MENU]));
+    demo_register_debug_menu(&(app->entity_types[ENTITY_TYPE_DEBUG_MENU]));
+    demo_register_scene_menu(&(app->entity_types[ENTITY_TYPE_SCENE_MENU]));
+    demo_register_input_menu(&(app->entity_types[ENTITY_TYPE_INPUT_MENU]));
     demo_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_DEMO_DIALOG]));
-    info_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_INFO_DIALOG]));
-    jimbo_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_JIMBO_DIALOG]));
-    sign_dialog_demo_register(&(app->entity_types[ENTITY_TYPE_SIGN_DIALOG]));
-    fireball_demo_register(&(app->entity_types[ENTITY_TYPE_FIREBALL]));
+    demo_register_info_dialog(&(app->entity_types[ENTITY_TYPE_INFO_DIALOG]));
+    demo_register_jimbo_dialog(&(app->entity_types[ENTITY_TYPE_JIMBO_DIALOG]));
+    demo_register_sign_dialog(&(app->entity_types[ENTITY_TYPE_SIGN_DIALOG]));
+    demo_register_fireball(&(app->entity_types[ENTITY_TYPE_FIREBALL]));
 
     // push the default input handler
-    cr_push_input_handler(app, default_input_handler);
+    cr_push_input_handler(app, default_input);
 
     // Load the initial scene.
-    load_scene_0(app);
-    cr_push_input_handler(app, root_input);
+    demo_load_scene_0(app);
+    cr_push_input_handler(app, demo_root_input);
 
     // Play music
     // cr_play_sound(app, app->sounds[DEMO_SONG_FIELD]);

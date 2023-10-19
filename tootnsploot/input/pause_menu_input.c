@@ -30,7 +30,7 @@ static void begin_transition(cr_app *app, cr_func loader, cr_func input)
     }
 }
 
-void pause_menu_input(cr_app *app)
+void tns_pause_menu_input(cr_app *app)
 {
     // Locate the pause menu.
     cr_entity *menu_entity = app->menus[app->menu_count - 1];
@@ -75,7 +75,7 @@ void pause_menu_input(cr_app *app)
             // scene, then transition to the main menu.
             cr_pop_input_handler(app);
             cr_pop_input_handler(app);
-            begin_transition(app, load_title_screen, title_screen_input);
+            begin_transition(app, tns_load_title_screen, tns_title_screen_input);
             break;
         case 2:
             app->done = 1;

@@ -30,7 +30,7 @@ static void begin_transition(cr_app *app, cr_func loader, cr_func input)
     }
 }
 
-void title_screen_input(cr_app *app)
+void tns_title_screen_input(cr_app *app)
 {
     cr_entity *menu = app->menus[app->menu_count - 1];
     cr_entity **handles = app->extension->entity_handles;
@@ -63,14 +63,14 @@ void title_screen_input(cr_app *app)
         case 0:
             // Leave the title screen and load the forest scene.
             cr_pop_input_handler(app);
-            begin_transition(app, load_forest_scene, forest_input);
+            begin_transition(app, tns_load_forest_scene, tns_forest_input);
             break;
 
         case 1:
         {
             // Switch to the controls menu.
             app->menus[app->menu_count++] = handles[TNS_HANDLE_CONTROLS];
-            cr_push_input_handler(app, controls_menu_input);
+            cr_push_input_handler(app, tns_controls_menu_input);
         }
         break;
 
@@ -78,7 +78,7 @@ void title_screen_input(cr_app *app)
         {
             // Switch to the characters menu.
             app->menus[app->menu_count++] = handles[TNS_HANDLE_CHARACTERS];
-            cr_push_input_handler(app, characters_menu_input);
+            cr_push_input_handler(app, tns_characters_menu_input);
         }
         break;
 

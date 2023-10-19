@@ -212,14 +212,14 @@ static int interact_with_jimbo(cr_app *app, cr_entity *jimbo, cr_entity *actor)
         }
     }
 
-    jimbo_dialog_demo_open(app, jimbo_dialog);
+    demo_open_jimbo_dialog(app, jimbo_dialog);
 
-    cr_push_input_handler(app, common_dialog_input);
+    cr_push_input_handler(app, demo_common_dialog_input);
 
     return 0;
 }
 
-void jimbo_demo_register(cr_entity_type *t)
+void demo_register_jimbo(cr_entity_type *t)
 {
     t->width = 24;
     t->height = 24;
@@ -231,7 +231,7 @@ void jimbo_demo_register(cr_entity_type *t)
     t->interact = interact_with_jimbo;
 }
 
-cr_entity *jimbo_demo_create(cr_app *app, int x, int y)
+cr_entity *demo_create_jimbo(cr_app *app, int x, int y)
 {
     cr_entity *jimbo = NULL;
 

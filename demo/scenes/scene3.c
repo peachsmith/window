@@ -17,7 +17,7 @@
 
 #include "common/util.h"
 
-void load_scene_3(cr_app *app)
+void demo_load_scene_3(cr_app *app)
 {
     cr_entity **handles = app->extension->entity_handles;
 
@@ -32,52 +32,52 @@ void load_scene_3(cr_app *app)
     app->cam.y = 0;
 
     // menus
-    pause_menu_demo_create(app);
-    fish_menu_demo_create(app);
-    info_menu_demo_create(app);
-    debug_menu_demo_create(app);
-    scene_menu_demo_create(app);
-    input_menu_demo_create(app);
+    demo_create_pause_menu(app);
+    demo_create_fish_menu(app);
+    demo_create_info_menu(app);
+    demo_create_debug_menu(app);
+    demo_create_scene_menu(app);
+    demo_create_input_menu(app);
 
     // dialogs
-    demo_dialog_demo_create(app);
-    info_dialog_demo_create(app);
-    jimbo_dialog_demo_create(app);
+    demo_create_demo_dialog(app);
+    demo_create_info_dialog(app);
+    demo_create_jimbo_dialog(app);
 
-    block_demo_create(app, x_start - 27 + 18, 94);
-    block_demo_create(app, x_start - 27 + 36, 94);
-    block_demo_create(app, x_start - 27 + 54, 94);
-    block_demo_create(app, x_start - 27 + 72, 94);
-    block_demo_create(app, x_start - 27 + 90, 94);
+    demo_create_block(app, x_start - 27 + 18, 94);
+    demo_create_block(app, x_start - 27 + 36, 94);
+    demo_create_block(app, x_start - 27 + 54, 94);
+    demo_create_block(app, x_start - 27 + 72, 94);
+    demo_create_block(app, x_start - 27 + 90, 94);
 
     // player
     handles[DEMO_HANDLE_PLAYER] = demo_create_player(app, 100, 55);
 
     // Add the rest of the horizontal row.
-    block_demo_create(app, x_start - 27 + 108, 94);
-    block_demo_create(app, x_start - 27 + 126, 94);
-    block_demo_create(app, x_start - 27 + 144, 94);
-    block_demo_create(app, x_start - 27 + 162, 94);
-    block_demo_create(app, x_start - 27 + 180, 94);
-    block_demo_create(app, x_start - 27 + 198, 94);
-    block_demo_create(app, x_start - 27 + 216, 94);
-    block_demo_create(app, x_start - 27 + 234, 94);
-    block_demo_create(app, x_start - 27 + 252, 94);
+    demo_create_block(app, x_start - 27 + 108, 94);
+    demo_create_block(app, x_start - 27 + 126, 94);
+    demo_create_block(app, x_start - 27 + 144, 94);
+    demo_create_block(app, x_start - 27 + 162, 94);
+    demo_create_block(app, x_start - 27 + 180, 94);
+    demo_create_block(app, x_start - 27 + 198, 94);
+    demo_create_block(app, x_start - 27 + 216, 94);
+    demo_create_block(app, x_start - 27 + 234, 94);
+    demo_create_block(app, x_start - 27 + 252, 94);
 
     // Vertical column 1.
-    block_demo_create(app, x_start - 27 + 18, 76);
-    block_demo_create(app, x_start - 27 + 18, 58);
-    block_demo_create(app, x_start - 27 + 18, 40);
-    block_demo_create(app, x_start - 27 + 18, 22);
+    demo_create_block(app, x_start - 27 + 18, 76);
+    demo_create_block(app, x_start - 27 + 18, 58);
+    demo_create_block(app, x_start - 27 + 18, 40);
+    demo_create_block(app, x_start - 27 + 18, 22);
 
     // Vertical column 2
-    block_demo_create(app, x_start - 27 + 198, 76);
-    block_demo_create(app, x_start - 27 + 198, 58);
-    block_demo_create(app, x_start - 27 + 198, 40);
-    block_demo_create(app, x_start - 27 + 198, 22);
+    demo_create_block(app, x_start - 27 + 198, 76);
+    demo_create_block(app, x_start - 27 + 198, 58);
+    demo_create_block(app, x_start - 27 + 198, 40);
+    demo_create_block(app, x_start - 27 + 198, 22);
 
     // A hostile entity.
-    henry_demo_create(app, x_start - 27 + 150, 22);
+    demo_create_henry(app, x_start - 27 + 150, 22);
 
-    handles[DEMO_HANDLE_TRANSITION] = transition_demo_create(app);
+    handles[DEMO_HANDLE_TRANSITION] = demo_create_transition(app);
 }

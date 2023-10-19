@@ -2,7 +2,7 @@
 #include "demo/input/input.h"
 #include "demo/entities/entity_types.h"
 
-void info_menu_input(cr_app *app)
+void demo_info_menu_input(cr_app *app)
 {
     if (cr_consume_input(app, CR_KEYCODE_X))
     {

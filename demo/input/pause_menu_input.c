@@ -5,7 +5,7 @@
 #include "demo/entities/info_dialog.h"
 #include "demo/entities/demo_dialog.h"
 
-void pause_menu_input(cr_app *app)
+void demo_pause_menu_input(cr_app *app)
 {
     if (cr_consume_input(app, CR_KEYCODE_X) || cr_consume_input(app, CR_KEYCODE_Q))
     {
@@ -72,9 +72,9 @@ void pause_menu_input(cr_app *app)
                 }
             }
 
-            info_dialog_demo_open(app, info_dialog);
+            demo_open_info_dialog(app, info_dialog);
 
-            cr_push_input_handler(app, common_dialog_input);
+            cr_push_input_handler(app, demo_common_dialog_input);
         }
         break;
 
@@ -93,7 +93,7 @@ void pause_menu_input(cr_app *app)
             // Set the pause menu as the active menu.
             app->menus[app->menu_count++] = fish_menu;
 
-            cr_push_input_handler(app, fish_menu_input);
+            cr_push_input_handler(app, demo_fish_menu_input);
         }
         break;
 
@@ -113,9 +113,9 @@ void pause_menu_input(cr_app *app)
                 }
             }
 
-            demo_dialog_demo_open(app, demo_dialog);
+            demo_open_demo_dialog(app, demo_dialog);
 
-            cr_push_input_handler(app, common_dialog_input);
+            cr_push_input_handler(app, demo_common_dialog_input);
         }
         break;
 

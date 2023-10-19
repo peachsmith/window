@@ -7,14 +7,15 @@
 #include "tootnsploot/entities/forest.h"
 #include "tootnsploot/entities/corgi.h"
 #include "tootnsploot/entities/floor.h"
+#include "tootnsploot/entities/critter.h"
 #include "tootnsploot/entities/wall.h"
 
 #include "common/util.h"
 
-void load_forest_scene(cr_app *app)
+void tns_load_forest_scene(cr_app *app)
 {
     cr_entity **handles = app->extension->entity_handles;
-    
+
     app->scene = TNS_SCENE_FOREST;
 
     // Reset the counters.
@@ -49,4 +50,32 @@ void load_forest_scene(cr_app *app)
 
     // heads up display
     tns_create_hud(app, 0, 0);
+}
+
+void tns_perform_forest(cr_app *app)
+{
+    if (app->pause)
+    {
+        return;
+    }
+
+    int critter_count = app->extension->counters[TNS_COUNTER_CRITTERS];
+    if (!(app->ticks % 120) && critter_count < 4)
+    {
+        // Generate random number from 0 to 7. This is the critter slot.
+        // If the slot is unoccupied, then create a critter and mark the
+        // slot as occupied.
+        int slot = rand() % 8;
+        if (!app->extension->counters[slot + TNS_COUNTER_CRITTER_SLOT_OFFSET])
+        {
+            cr_entity *critter = tns_create_critter(app, 4 + slot * 20 + slot * 10, 25);
+            app->extension->counters[TNS_COUNTER_CRITTERS]++;
+            app->extension->counters[slot + TNS_COUNTER_CRITTER_SLOT_OFFSET] = 1;
+            critter->data = slot + TNS_COUNTER_CRITTER_SLOT_OFFSET;
+            if (slot > 3)
+            {
+                cr_set_flag(critter, ENTITY_FLAG_MIRROR);
+            }
+        }
+    }
 }

@@ -34,7 +34,7 @@ static void handoff(cr_app *app, cr_func next_scene)
     payload.flags = handle->flags;
 
     // Clear the current scene and load the next scene.
-    clear_scene(app);
+    demo_clear_scene(app);
     next_scene(app);
 
     // Get the transition entity from the next scene.
@@ -146,7 +146,7 @@ static void update_transition(cr_app *app, cr_entity *transition)
     }
 }
 
-void transition_demo_register(cr_entity_type *t)
+void demo_register_transition(cr_entity_type *t)
 {
     t->width = 50;
     t->height = 50;
@@ -154,7 +154,7 @@ void transition_demo_register(cr_entity_type *t)
     t->update = update_transition;
 }
 
-cr_entity *transition_demo_create(cr_app *app)
+cr_entity *demo_create_transition(cr_app *app)
 {
     cr_entity *transition = NULL;
 

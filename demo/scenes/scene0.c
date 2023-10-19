@@ -19,7 +19,7 @@
 
 #include "common/util.h"
 
-void load_scene_0(cr_app *app)
+void demo_load_scene_0(cr_app *app)
 {
     cr_entity **handles = app->extension->entity_handles;
 
@@ -30,52 +30,52 @@ void load_scene_0(cr_app *app)
     app->cam.y = 40;
 
     // menus
-    pause_menu_demo_create(app);
-    fish_menu_demo_create(app);
-    info_menu_demo_create(app);
-    debug_menu_demo_create(app);
-    scene_menu_demo_create(app);
-    input_menu_demo_create(app);
+    demo_create_pause_menu(app);
+    demo_create_fish_menu(app);
+    demo_create_info_menu(app);
+    demo_create_debug_menu(app);
+    demo_create_scene_menu(app);
+    demo_create_input_menu(app);
 
     // dialogs
-    demo_dialog_demo_create(app);
-    info_dialog_demo_create(app);
-    jimbo_dialog_demo_create(app);
-    sign_dialog_demo_create(app);
+    demo_create_demo_dialog(app);
+    demo_create_info_dialog(app);
+    demo_create_jimbo_dialog(app);
+    demo_create_sign_dialog(app);
 
-    block_demo_create(app, 1, 94);
-    block_demo_create(app, 19, 94);
-    block_demo_create(app, 37, 94);
-    block_demo_create(app, 55, 94);
-    block_demo_create(app, 73, 94);
+    demo_create_block(app, 1, 94);
+    demo_create_block(app, 19, 94);
+    demo_create_block(app, 37, 94);
+    demo_create_block(app, 55, 94);
+    demo_create_block(app, 73, 94);
 
     // Vertically moving platform (added before player).
-    jimbo_demo_create(app, 434, -60); // jimbo BEFORE vertically moving platform
-    block_demo_create_moving(app, 433, -2, 0);
-    jimbo_demo_create(app, 459, -60); // jimbo AFTER vertically moving platform
+    demo_create_jimbo(app, 434, -60); // jimbo BEFORE vertically moving platform
+    demo_create_moving_block(app, 433, -2, 0);
+    demo_create_jimbo(app, 459, -60); // jimbo AFTER vertically moving platform
 
     // Horizontally moving platform (added before player).
-    jimbo_demo_create(app, 635, -40); // jimbo BEFORE horizontally moving platform
-    block_demo_create_moving(app, 640, -2, 1);
-    jimbo_demo_create(app, 659, -40); // jimbo AFTER horizontally moving platform
+    demo_create_jimbo(app, 635, -40); // jimbo BEFORE horizontally moving platform
+    demo_create_moving_block(app, 640, -2, 1);
+    demo_create_jimbo(app, 659, -40); // jimbo AFTER horizontally moving platform
 
     // A sign that contains information.
-    sign_demo_create(app, 37, 76);
+    demo_create_sign(app, 37, 76);
 
     // player
     handles[DEMO_HANDLE_PLAYER] = demo_create_player(app, 150, 0);
 
     // scene transition
-    handles[DEMO_HANDLE_TRANSITION] = transition_demo_create(app);
+    handles[DEMO_HANDLE_TRANSITION] = demo_create_transition(app);
 
     // Add the rest of the horizontal row.
-    block_demo_create(app, 91, 94);
-    block_demo_create(app, 109, 94);
-    block_demo_create(app, 127, 94);
-    block_demo_create(app, 145, 94);
+    demo_create_block(app, 91, 94);
+    demo_create_block(app, 109, 94);
+    demo_create_block(app, 127, 94);
+    demo_create_block(app, 145, 94);
 
     // Horizontally moving platform (added after player).
-    block_demo_create_moving(app, 640, 62, 1);
+    demo_create_moving_block(app, 640, 62, 1);
 
     // Sloped platform inclined from left to right, followed by a flat
     // sloped platform (for dismounting) followed by a slope down, then up.
@@ -85,18 +85,18 @@ void load_scene_0(cr_app *app)
     //   /     \    /
     //  /       \  /
     // /         \/
-    block_demo_create_sloped(app, 145, 76, 1); // ramp up from left to right
-    block_demo_create_sloped(app, 217, 76, 2); // flat slope
-    block_demo_create_sloped(app, 289, 76, 0); // ramp down from left to right
-    block_demo_create_sloped(app, 361, 76, 1); // ramp up from left to right
-    block_demo_create(app, 355, 93);           // solid ground to allow transition between sloped blocks
+    demo_create_sloped_block(app, 145, 76, 1); // ramp up from left to right
+    demo_create_sloped_block(app, 217, 76, 2); // flat slope
+    demo_create_sloped_block(app, 289, 76, 0); // ramp down from left to right
+    demo_create_sloped_block(app, 361, 76, 1); // ramp up from left to right
+    demo_create_block(app, 355, 93);           // solid ground to allow transition between sloped blocks
 
     // Long slope built from several sloped platforms.
-    block_demo_create_sloped(app, -71, 94, 2);
-    block_demo_create_sloped(app, -143, 76, 0);
-    block_demo_create_sloped(app, -215, 58, 0);
-    block_demo_create(app, -85, 94); // solid ground to allow transition between sloped blocks
+    demo_create_sloped_block(app, -71, 94, 2);
+    demo_create_sloped_block(app, -143, 76, 0);
+    demo_create_sloped_block(app, -215, 58, 0);
+    demo_create_block(app, -85, 94); // solid ground to allow transition between sloped blocks
 
     // Vertically moving platform (after player).
-    block_demo_create_moving(app, 489, -2, 0);
+    demo_create_moving_block(app, 489, -2, 0);
 }

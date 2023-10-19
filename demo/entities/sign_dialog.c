@@ -62,7 +62,7 @@ static void render_dialog(cr_app *app, cr_entity *dialog)
         render_dialog_indicator);
 }
 
-void sign_dialog_demo_register(cr_entity_type *t)
+void demo_register_sign_dialog(cr_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
@@ -73,7 +73,7 @@ void sign_dialog_demo_register(cr_entity_type *t)
     t->advance = advance_sign_dialog;
 }
 
-cr_entity *sign_dialog_demo_create(cr_app *app)
+cr_entity *demo_create_sign_dialog(cr_app *app)
 {
     cr_entity *dialog = NULL;
 
@@ -93,7 +93,7 @@ cr_entity *sign_dialog_demo_create(cr_app *app)
     return dialog;
 }
 
-void sign_dialog_demo_open(cr_app *app, cr_entity *dialog)
+void demo_open_sign_dialog(cr_app *app, cr_entity *dialog)
 {
     // Reset the dialog.
     dialog->data = 0;

@@ -13,7 +13,7 @@
  * Params:
  *   cr_entity_type* - the sign's entity type definition
  */
-void sign_demo_register(cr_entity_type *);
+void demo_register_sign(cr_entity_type *);
 
 /**
  * Creates a sign entity.
@@ -25,6 +25,6 @@ void sign_demo_register(cr_entity_type *);
  * Returns:
  *   cr_entity* - a pointer to the new sign entity.
  */
-cr_entity *sign_demo_create(cr_app *, int, int);
+cr_entity *demo_create_sign(cr_app *, int, int);
 
 #endif

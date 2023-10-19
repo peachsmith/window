@@ -1,7 +1,5 @@
 #include "impl.h"
 
-#include <stdlib.h>
-
 // 95 printable ASCII characters [32:126]
 //  !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 
@@ -89,6 +87,8 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, cr_font *font)
     {
         Uint32 format;
         SDL_Texture *target;
+        SDL_Rect src;
+        SDL_Rect dest;
 
         int dest_x = 0;
 
@@ -127,9 +127,6 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, cr_font *font)
         // Copy each glyph texture into the target texture.
         for (int i = 32; i < 127; i++)
         {
-            SDL_Rect src;
-            SDL_Rect dest;
-
             src.x = 0;
             src.y = 0;
             src.w = font->sizes[i].w;
@@ -253,24 +250,54 @@ static void impl_draw_text_multi(
     const char *msg,
     int x,
     int y,
-    int line_width,
-    int line_height,
+    int line_w,
+    int line_h,
     int *result)
 {
-    cr_impl *impl = app->impl;
+    cr_impl *impl;
+    int x0, y0; // line origin
+    int dy;
+    int glyph_w, glyph_h; // glyph dimensions
+    int line_break;
+    int q; // texture query result
 
-    int w;
-    int h;
+    impl = app->impl;
+    x0 = x;
+    y0 = y;
+
+    // If the line height is 0, default to the line height of the
+    // 'A' character.
+    dy = line_h > 0 ? line_h : font->sizes[(int)'A'].h;
+
     for (int i = 0; msg[i] != '\0'; i++)
     {
+        line_break = 0;
         SDL_Texture *tex = font->glyphs[(int)msg[i]];
-        int q = SDL_QueryTexture(tex, NULL, NULL, &w, &h);
-        if (!q)
+        q = SDL_QueryTexture(tex, NULL, NULL, &glyph_w, &glyph_h);
+
+        // Detect line breaks.
+        // Line breaks can occur due to the text exceeding the specified
+        // line width, or the presence of a newline character.
+        if (!q && (line_w > 0 && x - x0 >= line_w) || msg[i] == '\n')
         {
-            SDL_Rect r = {.x = x, .y = y, .w = w, .h = h};
-            x += w;
-            SDL_RenderCopy(impl->renderer, tex, NULL, &r);
+            x = x0;
+            y += dy;
+            line_break = 1;
         }
+
+        // Only render printable characters to the screen.
+        // Only increase the x position if we have not performed a line break.
+        if (!q && msg[i] >= ' ' && msg[i] <= '~')
+        {
+            SDL_Rect r = {.x = x, .y = y, .w = glyph_w, .h = glyph_h};
+            SDL_RenderCopy(impl->renderer, tex, NULL, &r);
+            x += glyph_w * (line_break ^ 1);
+        }
+    }
+
+    if (result != NULL)
+    {
+        *result = (y - y0) + dy;
     }
 }
 
@@ -284,42 +311,45 @@ static void impl_draw_text_single(
     const char *msg,
     int x,
     int y,
-    int line_width,
-    int line_height,
+    int line_w,
+    int line_h,
     int *result)
 {
-    cr_impl *impl = app->impl;
+    cr_impl *impl;
+    int x0, y0; // line origin
+    int dy;
+    int glyph_w;
+    int line_break;
+    SDL_Rect src, dest;
 
-    int x0 = x;
-    int y0 = y;
+    impl = app->impl;
+    x0 = x;
+    y0 = y;
 
     // If the line height is 0, default to the line height of the
     // 'A' character.
-    int dy = line_height > 0 ? line_height
-                             : font->sizes[(int)'A'].h;
+    dy = line_h > 0 ? line_h : font->sizes[(int)'A'].h;
 
     for (int i = 0; msg[i] != '\0'; i++)
     {
-        SDL_Rect src = {
-            .x = font->sizes[(int)msg[i]].x,
-            .y = 0,
-            .w = font->sizes[(int)msg[i]].w,
-            .h = font->sizes[(int)msg[i]].h};
+        src.x = font->sizes[(int)msg[i]].x;
+        src.y = 0;
+        src.w = font->sizes[(int)msg[i]].w;
+        src.h = font->sizes[(int)msg[i]].h;
 
-        SDL_Rect dest = {
-            .x = x,
-            .y = y,
-            .w = font->sizes[(int)msg[i]].w,
-            .h = font->sizes[(int)msg[i]].h};
+        dest.x = x;
+        dest.y = y;
+        dest.w = font->sizes[(int)msg[i]].w;
+        dest.h = font->sizes[(int)msg[i]].h;
 
-        int glyph_width = font->sizes[(int)msg[i]].w;
+        glyph_w = font->sizes[(int)msg[i]].w;
 
-        int line_break = 0;
+        line_break = 0;
 
         // Detect line breaks.
         // Line breaks can occur due to the text exceeding the specified
         // line width, or the presence of a newline character.
-        if ((line_width > 0 && x - x0 >= line_width) || msg[i] == '\n')
+        if ((line_w > 0 && x - x0 >= line_w) || msg[i] == '\n')
         {
             x = x0;
             y += dy;
@@ -331,10 +361,7 @@ static void impl_draw_text_single(
         if (msg[i] >= ' ' && msg[i] <= '~')
         {
             SDL_RenderCopy(impl->renderer, font->atlas, &src, &dest);
-            if (!line_break)
-            {
-                x += glyph_width;
-            }
+            x += glyph_w * (line_break ^ 1);
         }
     }
 

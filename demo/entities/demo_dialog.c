@@ -83,7 +83,7 @@ void demo_dialog_demo_register(cr_entity_type *t)
     t->advance = advance_demo_dialog;
 }
 
-cr_entity *demo_dialog_demo_create(cr_app *app)
+cr_entity *demo_create_demo_dialog(cr_app *app)
 {
     cr_entity *dialog = NULL;
 
@@ -103,7 +103,7 @@ cr_entity *demo_dialog_demo_create(cr_app *app)
     return dialog;
 }
 
-void demo_dialog_demo_open(cr_app *app, cr_entity *dialog)
+void demo_open_demo_dialog(cr_app *app, cr_entity *dialog)
 {
     // Reset the dialog.
     dialog->data = 0;

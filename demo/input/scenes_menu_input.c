@@ -38,7 +38,7 @@ static void begin_transition(cr_app *app, cr_func loader, cr_func input)
     }
 }
 
-void scene_menu_input(cr_app *app)
+void demo_scene_menu_input(cr_app *app)
 {
     if (cr_consume_input(app, CR_KEYCODE_X) ||
         cr_consume_input(app, CR_KEYCODE_Q) ||
@@ -87,27 +87,27 @@ void scene_menu_input(cr_app *app)
         {
         case 0:
             clear_input(app);
-            begin_transition(app, load_scene_0, root_input);
+            begin_transition(app, demo_load_scene_0, demo_root_input);
             break;
 
         case 1:
             clear_input(app);
-            begin_transition(app, load_scene_1, root_input);
+            begin_transition(app, demo_load_scene_1, demo_root_input);
             break;
 
         case 2:
             clear_input(app);
-            begin_transition(app, load_scene_2, root_input);
+            begin_transition(app, demo_load_scene_2, demo_root_input);
             break;
 
         case 3:
             clear_input(app);
-            begin_transition(app, load_scene_3, root_input);
+            begin_transition(app, demo_load_scene_3, demo_root_input);
             break;
 
         case 4:
             clear_input(app);
-            begin_transition(app, load_scene_4, root_input);
+            begin_transition(app, demo_load_scene_4, demo_root_input);
             break;
 
         default:

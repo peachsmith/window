@@ -11,7 +11,7 @@
 #include "common/util.h"
 #include "common/collision.h"
 
-void root_input(cr_app *app)
+void demo_root_input(cr_app *app)
 {
     // Pause the application.
     if (cr_consume_input(app, CR_KEYCODE_Q))
@@ -29,7 +29,7 @@ void root_input(cr_app *app)
         // Set the pause menu as the active menu.
         app->menus[app->menu_count++] = pause_menu;
 
-        cr_push_input_handler(app, pause_menu_input);
+        cr_push_input_handler(app, demo_pause_menu_input);
 
         app->pause = 1;
         return;
@@ -65,7 +65,7 @@ void root_input(cr_app *app)
             // Set the pause menu as the active menu.
             app->menus[app->menu_count++] = debug_menu;
 
-            cr_push_input_handler(app, debug_menu_input);
+            cr_push_input_handler(app, demo_debug_menu_input);
 
             app->pause = 1;
             app->pause = 1;
@@ -249,7 +249,7 @@ void root_input(cr_app *app)
     // TEMP: add Billy.
     if (cr_consume_input(app, CR_KEYCODE_J))
     {
-        billy_demo_create(app,
+        demo_create_billy(app,
                           target->x_pos + 24 - app->cam.x,
                           target->y_pos - 24 - app->cam.y);
     }
@@ -276,7 +276,7 @@ void root_input(cr_app *app)
     // TEMP: add jimbo
     if (cr_consume_input(app, CR_KEYCODE_U))
     {
-        jimbo_demo_create(app,
+        demo_create_jimbo(app,
                           target->x_pos + 24 - app->cam.x,
                           target->y_pos - 24 - app->cam.y);
     }
@@ -303,7 +303,7 @@ void root_input(cr_app *app)
     // TEMP: add henry
     if (cr_consume_input(app, CR_KEYCODE_7))
     {
-        henry_demo_create(app,
+        demo_create_henry(app,
                           target->x_pos + 24 - app->cam.x,
                           target->y_pos - 24 - app->cam.y);
     }
@@ -330,7 +330,7 @@ void root_input(cr_app *app)
     // lanuch projectile
     if (cr_consume_input(app, CR_KEYCODE_X))
     {
-        cr_entity *f = fireball_demo_create(
+        cr_entity *f = demo_create_fireball(
             app,
             target->x_pos - app->cam.x,
             target->y_pos - app->cam.y + 4);

@@ -12,7 +12,7 @@
  * Params:
  *   cr_entity_type* - the info menu entity type definition
  */
-void info_menu_demo_register(cr_entity_type *);
+void demo_register_info_menu(cr_entity_type *);
 
 /**
  * Creates a info menu entity.
@@ -20,6 +20,6 @@ void info_menu_demo_register(cr_entity_type *);
  * Returns:
  *   cr_entity* - a pointer to the new info menu entity.
  */
-cr_entity *info_menu_demo_create(cr_app *);
+cr_entity *demo_create_info_menu(cr_app *);
 
 #endif

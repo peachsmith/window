@@ -11,7 +11,7 @@
  * Params:
  *   cr_entity_type* - the billy's entity type definition
  */
-void billy_demo_register(cr_entity_type *);
+void demo_register_billy(cr_entity_type *);
 
 /**
  * Creates a billy entity.
@@ -23,6 +23,6 @@ void billy_demo_register(cr_entity_type *);
  * Returns:
  *   cr_entity* - a pointer to the new billy entity.
  */
-cr_entity *billy_demo_create(cr_app *, int, int);
+cr_entity *demo_create_billy(cr_app *, int, int);
 
 #endif

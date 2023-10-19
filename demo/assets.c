@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int load_all_assets(cr_app *app)
+int demo_load_all_assets(cr_app *app)
 {
     // images
     if (cr_load_texture(app, "assets/images/ui.png") == NULL)

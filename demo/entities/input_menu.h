@@ -12,7 +12,7 @@
  * Params:
  *   cr_entity_type* - the input menu entity type definition
  */
-void input_menu_demo_register(cr_entity_type *);
+void demo_register_input_menu(cr_entity_type *);
 
 /**
  * Creates a input menu entity.
@@ -20,6 +20,6 @@ void input_menu_demo_register(cr_entity_type *);
  * Returns:
  *   cr_entity* - a pointer to the new input menu entity.
  */
-cr_entity *input_menu_demo_create(cr_app *);
+cr_entity *demo_create_input_menu(cr_app *);
 
 #endif

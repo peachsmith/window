@@ -59,11 +59,6 @@ static void render_controls_menu(cr_app *app, cr_entity *menu)
             &bounds,
             &dy);
         y_offset += dy + 10;
-
-        // For debugging text boundaries
-        // bounds.h = dy;
-        // cr_set_color(app, CR_COLOR_VINIK_SEA_GREEN);
-        // cr_draw_rect(app, &bounds, 0);
     }
 }
 

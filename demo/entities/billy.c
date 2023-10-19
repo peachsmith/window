@@ -300,7 +300,7 @@ static void update_billy(cr_app *app, cr_entity *billy)
     }
 }
 
-void billy_demo_register(cr_entity_type *t)
+void demo_register_billy(cr_entity_type *t)
 {
     t->width = 24;
     t->height = 24;
@@ -310,7 +310,7 @@ void billy_demo_register(cr_entity_type *t)
     t->get_y_vel = get_billy_y_vel;
 }
 
-cr_entity *billy_demo_create(cr_app *app, int x, int y)
+cr_entity *demo_create_billy(cr_app *app, int x, int y)
 {
     cr_entity *billy = NULL;
 

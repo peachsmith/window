@@ -12,7 +12,7 @@
  * Params:
  *   cr_entity_type* - the debug menu entity type definition
  */
-void debug_menu_demo_register(cr_entity_type *);
+void demo_register_debug_menu(cr_entity_type *);
 
 /**
  * Creates a debug menu entity.
@@ -20,6 +20,6 @@ void debug_menu_demo_register(cr_entity_type *);
  * Returns:
  *   cr_entity* - a pointer to the new debug menu entity.
  */
-cr_entity *debug_menu_demo_create(cr_app *);
+cr_entity *demo_create_debug_menu(cr_app *);
 
 #endif

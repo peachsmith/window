@@ -7,7 +7,7 @@
 #include "common/util.h"
 #include "common/collision.h"
 
-void forest_input(cr_app *app)
+void tns_forest_input(cr_app *app)
 {
     // Pause the application.
     if (cr_consume_input(app, CR_KEYCODE_ESCAPE) || cr_consume_input(app, CR_KEYCODE_Q))
@@ -25,7 +25,7 @@ void forest_input(cr_app *app)
         // Set the pause menu as the active menu.
         app->menus[app->menu_count++] = pause_menu;
 
-        cr_push_input_handler(app, pause_menu_input);
+        cr_push_input_handler(app, tns_pause_menu_input);
 
         app->pause = 1;
         return;

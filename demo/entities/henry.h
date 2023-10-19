@@ -11,7 +11,7 @@
  * Params:
  *   cr_entity_type* - the henry's entity type definition
  */
-void henry_demo_register(cr_entity_type *);
+void demo_register_henry(cr_entity_type *);
 
 /**
  * Creates a henry entity.
@@ -23,6 +23,6 @@ void henry_demo_register(cr_entity_type *);
  * Returns:
  *   cr_entity* - a pointer to the new henry entity.
  */
-cr_entity *henry_demo_create(cr_app *, int, int);
+cr_entity *demo_create_henry(cr_app *, int, int);
 
 #endif
