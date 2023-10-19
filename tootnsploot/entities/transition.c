@@ -1,7 +1,7 @@
 #include "tootnsploot/tootnsploot.h"
 #include "tootnsploot/entities/entity_types.h"
 #include "tootnsploot/entities/transition.h"
-#include "demo/scenes/scenes.h"
+#include "tootnsploot/scenes/scenes.h"
 
 #include "common/util.h"
 #include "common/dialog.h"
@@ -34,7 +34,7 @@ static void handoff(cr_app *app, cr_func next_scene)
     payload.flags = handle->flags;
 
     // Clear the current scene and load the next scene.
-    clear_scene(app);
+    tns_clear_scene(app);
     next_scene(app);
 
     // Get the transition entity from the next scene.

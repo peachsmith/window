@@ -11,7 +11,7 @@
  * Params:
  *   cr_entity_type* - the jimbo's entity type definition
  */
-void jimbo_demo_register(cr_entity_type *);
+void demo_register_jimbo(cr_entity_type *);
 
 /**
  * Creates a jimbo entity.
@@ -23,6 +23,6 @@ void jimbo_demo_register(cr_entity_type *);
  * Returns:
  *   cr_entity* - a pointer to the Jimbo.
  */
-cr_entity *jimbo_demo_create(cr_app *, int, int);
+cr_entity *demo_create_jimbo(cr_app *, int, int);
 
 #endif

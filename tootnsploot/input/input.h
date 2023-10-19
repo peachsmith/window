@@ -5,10 +5,10 @@
 
 #include "crumbs.h"
 
-void title_screen_input(cr_app *);
-void controls_menu_input(cr_app *);
-void characters_menu_input(cr_app *);
-void forest_input(cr_app *);
-void pause_menu_input(cr_app *);
+void tns_title_screen_input(cr_app *);
+void tns_controls_menu_input(cr_app *);
+void tns_characters_menu_input(cr_app *);
+void tns_forest_input(cr_app *);
+void tns_pause_menu_input(cr_app *);
 
 #endif

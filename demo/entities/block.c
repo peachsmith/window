@@ -260,7 +260,6 @@ static void collide_block(
         int avy = app->entity_types[other->type].get_y_vel(other);
 
         // Correct the correction factor.
-        // TODO: move this into the line.c file.
         if ((block->data & 3) == 2)
         {
             int ah = app->entity_types[other->type].height;
@@ -408,7 +407,7 @@ static void collide_block(
     }
 }
 
-void block_demo_register(cr_entity_type *t)
+void demo_register_block(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK;
     t->width = 18;
@@ -417,7 +416,7 @@ void block_demo_register(cr_entity_type *t)
     t->collide = collide_block;
 }
 
-cr_entity *block_demo_create(cr_app *app, int x, int y)
+cr_entity *demo_create_block(cr_app *app, int x, int y)
 {
     cr_entity *block = NULL;
 
@@ -434,7 +433,7 @@ cr_entity *block_demo_create(cr_app *app, int x, int y)
     return block;
 }
 
-void block_demo_register_big(cr_entity_type *t)
+void demo_register_big_block(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_BIG;
     t->width = 52;
@@ -443,7 +442,7 @@ void block_demo_register_big(cr_entity_type *t)
     t->collide = collide_block;
 }
 
-cr_entity *block_demo_create_big(cr_app *app, int x, int y)
+cr_entity *demo_create_big_block(cr_app *app, int x, int y)
 {
     cr_entity *block = NULL;
 
@@ -460,7 +459,7 @@ cr_entity *block_demo_create_big(cr_app *app, int x, int y)
     return block;
 }
 
-void block_demo_register_long(cr_entity_type *t)
+void demo_register_long_block(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_LONG;
     t->width = 100;
@@ -469,7 +468,7 @@ void block_demo_register_long(cr_entity_type *t)
     t->collide = collide_block;
 }
 
-cr_entity *block_demo_create_long(cr_app *app, int x, int y)
+cr_entity *demo_create_long_block(cr_app *app, int x, int y)
 {
     cr_entity *block = NULL;
 
@@ -486,7 +485,7 @@ cr_entity *block_demo_create_long(cr_app *app, int x, int y)
     return block;
 }
 
-void throughblock_demo_register_long(cr_entity_type *t)
+void demo_register_long_throughblock(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_THROUGHBLOCK_LONG;
     t->width = 100;
@@ -495,7 +494,7 @@ void throughblock_demo_register_long(cr_entity_type *t)
     t->collide = collide_block;
 }
 
-cr_entity *throughblock_demo_create_long(cr_app *app, int x, int y)
+cr_entity *demo_create_long_throughblock(cr_app *app, int x, int y)
 {
     cr_entity *block = NULL;
 
@@ -512,7 +511,7 @@ cr_entity *throughblock_demo_create_long(cr_app *app, int x, int y)
     return block;
 }
 
-void block_demo_register_moving(cr_entity_type *t)
+void demo_register_moving_block(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_MOVING;
     t->width = 54;
@@ -523,7 +522,7 @@ void block_demo_register_moving(cr_entity_type *t)
     t->move = 1;
 }
 
-cr_entity *block_demo_create_moving(cr_app *app, int x, int y, int type)
+cr_entity *demo_create_moving_block(cr_app *app, int x, int y, int type)
 {
     cr_entity *block = NULL;
 
@@ -541,7 +540,7 @@ cr_entity *block_demo_create_moving(cr_app *app, int x, int y, int type)
     return block;
 }
 
-void block_demo_register_sloped(cr_entity_type *t)
+void demo_register_sloped_block(cr_entity_type *t)
 {
     t->id = ENTITY_TYPE_BLOCK_SLOPE;
     t->width = 72;
@@ -551,7 +550,7 @@ void block_demo_register_sloped(cr_entity_type *t)
     t->slope = 1;
 }
 
-cr_entity *block_demo_create_sloped(cr_app *app, int x, int y, int dir)
+cr_entity *demo_create_sloped_block(cr_app *app, int x, int y, int dir)
 {
     cr_entity *block = NULL;
 
@@ -579,7 +578,7 @@ void block_demo_row(cr_app *app, int x, int y, int length)
 
     for (int i = 0; i < length; i++)
     {
-        block_demo_create(app, x + i * block_w, y);
+        demo_create_block(app, x + i * block_w, y);
     }
 }
 
@@ -589,6 +588,6 @@ void block_demo_col(cr_app *app, int x, int y, int length)
 
     for (int i = 0; i < length; i++)
     {
-        block_demo_create(app, x, y + i * block_h);
+        demo_create_block(app, x, y + i * block_h);
     }
 }

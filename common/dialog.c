@@ -41,7 +41,7 @@ void common_dialog_renderer(
         .h = 0};
     cr_draw_text_bounded(
         app,
-        font, // app->fonts[COMMON_FONT_POKEMON_FIRE_RED],
+        font,
         buffer,
         &bounds,
         NULL);

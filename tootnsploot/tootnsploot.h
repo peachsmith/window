@@ -34,17 +34,17 @@
 #define TNS_HANDLE_TRANSITION 1
 #define TNS_HANDLE_CONTROLS 2
 #define TNS_HANDLE_CHARACTERS 3
-#define MAX_ENTITY_HANDLES 10
+#define TNS_MAX_ENTITY_HANDLES 10
 
 // limits
-#define MAX_ENTITIES 256
-#define MAX_INPUT_HANDLERS 20
-#define MAX_MENUS 10
-#define MAX_DIALOGS 10
-#define MAX_OVERLAYS 10
-#define MAX_TEXTURES 10
-#define MAX_FONTS 10
-#define MAX_SOUNDS 10
+#define TNS_MAX_ENTITIES 256
+#define TNS_MAX_INPUT_HANDLERS 20
+#define TNS_MAX_MENUS 10
+#define TNS_MAX_DIALOGS 10
+#define TNS_MAX_OVERLAYS 10
+#define TNS_MAX_TEXTURES 10
+#define TNS_MAX_FONTS 10
+#define TNS_MAX_SOUNDS 10
 
 // extension structure definition
 struct cr_extension
@@ -62,6 +62,6 @@ struct cr_extension
  * Returns:
  *   int - 1 on success or 0 on failure
  */
-int init_app(cr_app *);
+int tns_init_app(cr_app *);
 
 #endif

@@ -7,7 +7,7 @@
 // the name of this file is "input_menu_input", which sounds confusing and
 // warrants this explanation.
 
-void input_menu_input(cr_app *app)
+void demo_input_menu_input(cr_app *app)
 {
     if (cr_consume_input(app, CR_KEYCODE_X) ||
         cr_consume_input(app, CR_KEYCODE_Q) ||

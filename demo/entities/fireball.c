@@ -155,7 +155,7 @@ static void collide_fireball(
     }
 }
 
-void fireball_demo_register(cr_entity_type *t)
+void demo_register_fireball(cr_entity_type *t)
 {
     t->width = 11;
     t->height = 11;
@@ -166,7 +166,7 @@ void fireball_demo_register(cr_entity_type *t)
     t->collide = collide_fireball;
 }
 
-cr_entity *fireball_demo_create(cr_app *app, int x, int y)
+cr_entity *demo_create_fireball(cr_app *app, int x, int y)
 {
     cr_entity *fireball = NULL;
 

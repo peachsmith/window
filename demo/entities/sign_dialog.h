@@ -12,7 +12,7 @@
  * Params:
  *   cr_entity_type* - the fish menu entity type definition
  */
-void sign_dialog_demo_register(cr_entity_type *);
+void demo_register_sign_dialog(cr_entity_type *);
 
 /**
  * Creates a fish menu entity.
@@ -20,8 +20,8 @@ void sign_dialog_demo_register(cr_entity_type *);
  * Returns:
  *   cr_entity* - a pointer to the new fish menu entity.
  */
-cr_entity *sign_dialog_demo_create();
+cr_entity *demo_create_sign_dialog(cr_app *);
 
-void sign_dialog_demo_open(cr_app *, cr_entity *);
+void demo_open_sign_dialog(cr_app *, cr_entity *);
 
 #endif

@@ -41,7 +41,7 @@ static void update_info_dialog(cr_app *app, cr_entity *dialog)
         // Set the pause menu as the active menu.
         app->menus[app->menu_count++] = info_menu;
 
-        cr_push_input_handler(app, info_menu_input);
+        cr_push_input_handler(app, demo_info_menu_input);
     }
 }
 
@@ -119,7 +119,7 @@ static void render_dialog(cr_app *app, cr_entity *dialog)
         render_dialog_indicator);
 }
 
-void info_dialog_demo_register(cr_entity_type *t)
+void demo_register_info_dialog(cr_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
@@ -130,7 +130,7 @@ void info_dialog_demo_register(cr_entity_type *t)
     t->advance = advance_info_dialog;
 }
 
-cr_entity *info_dialog_demo_create(cr_app* app)
+cr_entity *demo_create_info_dialog(cr_app* app)
 {
     cr_entity *dialog = NULL;
 
@@ -150,7 +150,7 @@ cr_entity *info_dialog_demo_create(cr_app* app)
     return dialog;
 }
 
-void info_dialog_demo_open(cr_app *app, cr_entity *dialog)
+void demo_open_info_dialog(cr_app *app, cr_entity *dialog)
 {
     // Reset the dialog.
     dialog->data = 0;

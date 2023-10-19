@@ -50,13 +50,13 @@ static int interact_with_sign(cr_app *app, cr_entity *sign, cr_entity *actor)
         }
     }
 
-    sign_dialog_demo_open(app, sign_dialog);
+    demo_open_sign_dialog(app, sign_dialog);
 
-    cr_push_input_handler(app, common_dialog_input);
+    cr_push_input_handler(app, demo_common_dialog_input);
     return 0;
 }
 
-void sign_demo_register(cr_entity_type *t)
+void demo_register_sign(cr_entity_type *t)
 {
     t->width = 18;
     t->height = 18;
@@ -66,7 +66,7 @@ void sign_demo_register(cr_entity_type *t)
     t->interact = interact_with_sign;
 }
 
-cr_entity *sign_demo_create(cr_app *app, int x, int y)
+cr_entity *demo_create_sign(cr_app *app, int x, int y)
 {
     cr_entity *sign = NULL;
 

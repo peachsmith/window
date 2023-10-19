@@ -179,7 +179,7 @@ typedef int (*cr_interaction)(
 enum cr_keycode
 {
     // dummy keycode
-    CR_KEYCODE_UNKNOWN,
+    CR_KEYCODE_UNKNOWN = 0,
 
     // alphabetic keys
     CR_KEYCODE_A,

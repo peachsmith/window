@@ -11,7 +11,7 @@
 #include "common/util.h"
 #include "common/collision.h"
 
-void common_dialog_input(cr_app *app)
+void demo_common_dialog_input(cr_app *app)
 {
     // Locate the active dialog.
     cr_entity *dialog = app->dialogs[app->dialog_count - 1];

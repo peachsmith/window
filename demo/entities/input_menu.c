@@ -219,7 +219,7 @@ static void update_input_menu(cr_app *app, cr_entity *menu)
 {
 }
 
-void input_menu_demo_register(cr_entity_type *t)
+void demo_register_input_menu(cr_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
@@ -229,7 +229,7 @@ void input_menu_demo_register(cr_entity_type *t)
     t->update = update_input_menu;
 }
 
-cr_entity *input_menu_demo_create(cr_app* app)
+cr_entity *demo_create_input_menu(cr_app* app)
 {
     cr_entity *menu = NULL;
 

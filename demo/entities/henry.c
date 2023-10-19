@@ -309,7 +309,7 @@ static void collide_henry(
     }
 }
 
-void henry_demo_register(cr_entity_type *t)
+void demo_register_henry(cr_entity_type *t)
 {
     t->width = 18;
     t->height = 18;
@@ -320,7 +320,7 @@ void henry_demo_register(cr_entity_type *t)
     t->collide = collide_henry;
 }
 
-cr_entity *henry_demo_create(cr_app *app, int x, int y)
+cr_entity *demo_create_henry(cr_app *app, int x, int y)
 {
     cr_entity *henry = NULL;
 

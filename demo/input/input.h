@@ -5,13 +5,13 @@
 
 #include "crumbs.h"
 
-void root_input(cr_app *);
-void fish_menu_input(cr_app *);
-void info_menu_input(cr_app *);
-void pause_menu_input(cr_app *);
-void common_dialog_input(cr_app *);
-void debug_menu_input(cr_app *);
-void scene_menu_input(cr_app *);
-void input_menu_input(cr_app *);
+void demo_root_input(cr_app *);
+void demo_fish_menu_input(cr_app *);
+void demo_info_menu_input(cr_app *);
+void demo_pause_menu_input(cr_app *);
+void demo_common_dialog_input(cr_app *);
+void demo_debug_menu_input(cr_app *);
+void demo_scene_menu_input(cr_app *);
+void demo_input_menu_input(cr_app *);
 
 #endif

@@ -19,7 +19,7 @@
 
 #include "common/util.h"
 
-void load_scene_4(cr_app *app)
+void demo_load_scene_4(cr_app *app)
 {
     cr_entity **handles = app->extension->entity_handles;
 
@@ -31,26 +31,26 @@ void load_scene_4(cr_app *app)
     app->cam.y = 0;
 
     // menus
-    pause_menu_demo_create(app);
-    fish_menu_demo_create(app);
-    info_menu_demo_create(app);
-    debug_menu_demo_create(app);
-    scene_menu_demo_create(app);
-    input_menu_demo_create(app);
+    demo_create_pause_menu(app);
+    demo_create_fish_menu(app);
+    demo_create_info_menu(app);
+    demo_create_debug_menu(app);
+    demo_create_scene_menu(app);
+    demo_create_input_menu(app);
 
     // dialogs
-    demo_dialog_demo_create(app);
-    info_dialog_demo_create(app);
-    jimbo_dialog_demo_create(app);
-    sign_dialog_demo_create(app);
+    demo_create_demo_dialog(app);
+    demo_create_info_dialog(app);
+    demo_create_jimbo_dialog(app);
+    demo_create_sign_dialog(app);
 
     block_demo_row(app, 0, 120, 15);
 
-    handles[DEMO_HANDLE_TRANSITION] = transition_demo_create(app);
+    handles[DEMO_HANDLE_TRANSITION] = demo_create_transition(app);
 
-    block_demo_create_moving(app, -60, 60, 0); // vertical before player
-    block_demo_create_moving(app, 200, 75, 1); // horizontal before the player
+    demo_create_moving_block(app, -60, 60, 0); // vertical before player
+    demo_create_moving_block(app, 200, 75, 1); // horizontal before the player
     handles[DEMO_HANDLE_PLAYER] = demo_create_player(app, 80, 50);
-    block_demo_create_moving(app, 100, 75, 1);  // horizontal after the player
-    block_demo_create_moving(app, -140, 60, 0); // vertical after player
+    demo_create_moving_block(app, 100, 75, 1);  // horizontal after the player
+    demo_create_moving_block(app, -140, 60, 0); // vertical after player
 }

@@ -133,7 +133,6 @@ static int ray_v_rect(
     // dz value of -1 indicates division of a negative dividend by 0.
     // When attempting to divide by 0, if the dividend of the t_far component
     // is 0, then we do not consider a collision to have occurred.
-    // TODO: figure out and explain why a far dividend of 0 means no collision.
     if (dx == 0)
     {
         near_x_dz = 1;

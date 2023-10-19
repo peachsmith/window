@@ -16,7 +16,7 @@
 
 #include "common/util.h"
 
-void load_scene_2(cr_app *app)
+void demo_load_scene_2(cr_app *app)
 {
     cr_entity **handles = app->extension->entity_handles;
 
@@ -31,45 +31,45 @@ void load_scene_2(cr_app *app)
     app->cam.y = 0;
 
     // menus
-    pause_menu_demo_create(app);
-    fish_menu_demo_create(app);
-    info_menu_demo_create(app);
-    debug_menu_demo_create(app);
-    scene_menu_demo_create(app);
-    input_menu_demo_create(app);
+    demo_create_pause_menu(app);
+    demo_create_fish_menu(app);
+    demo_create_info_menu(app);
+    demo_create_debug_menu(app);
+    demo_create_scene_menu(app);
+    demo_create_input_menu(app);
 
     // dialogs
-    demo_dialog_demo_create(app);
-    info_dialog_demo_create(app);
-    jimbo_dialog_demo_create(app);
+    demo_create_demo_dialog(app);
+    demo_create_info_dialog(app);
+    demo_create_jimbo_dialog(app);
 
     // moving platforms added before the player
-    block_demo_create_moving(app, x_start - 63, 54, 0);  // vertical
-    block_demo_create_moving(app, x_start + 253, 94, 1); // horizontal
+    demo_create_moving_block(app, x_start - 63, 54, 0);  // vertical
+    demo_create_moving_block(app, x_start + 253, 94, 1); // horizontal
 
     // scene transition
-    handles[DEMO_HANDLE_TRANSITION] = transition_demo_create(app);
+    handles[DEMO_HANDLE_TRANSITION] = demo_create_transition(app);
 
-    block_demo_create(app, x_start - 27 + 18, 94);
-    block_demo_create(app, x_start - 27 + 36, 94);
-    block_demo_create(app, x_start - 27 + 54, 94);
-    block_demo_create(app, x_start - 27 + 72, 94);
-    block_demo_create(app, x_start - 27 + 90, 94);
+    demo_create_block(app, x_start - 27 + 18, 94);
+    demo_create_block(app, x_start - 27 + 36, 94);
+    demo_create_block(app, x_start - 27 + 54, 94);
+    demo_create_block(app, x_start - 27 + 72, 94);
+    demo_create_block(app, x_start - 27 + 90, 94);
 
-    block_demo_create(app, x_start - 27 + 36, 76); // x = 59
-    block_demo_create(app, x_start - 27 + 36, 58); // x = 59
-    block_demo_create(app, x_start - 27 + 36, 40); // x = 59
+    demo_create_block(app, x_start - 27 + 36, 76); // x = 59
+    demo_create_block(app, x_start - 27 + 36, 58); // x = 59
+    demo_create_block(app, x_start - 27 + 36, 40); // x = 59
 
-    block_demo_create(app, x_start - 27 + 54, 40);
+    demo_create_block(app, x_start - 27 + 54, 40);
 
     // player
     handles[DEMO_HANDLE_PLAYER] = demo_create_player(app, 100, 55);
 
     // Add the rest of the horizontal row.
-    block_demo_create(app, x_start - 27 + 108, 94);
-    block_demo_create(app, x_start - 27 + 126, 94);
-    block_demo_create(app, x_start - 27 + 144, 94);
-    block_demo_create(app, x_start - 27 + 162, 94);
+    demo_create_block(app, x_start - 27 + 108, 94);
+    demo_create_block(app, x_start - 27 + 126, 94);
+    demo_create_block(app, x_start - 27 + 144, 94);
+    demo_create_block(app, x_start - 27 + 162, 94);
 
-    block_demo_create(app, x_start - 27 + 108, 76);
+    demo_create_block(app, x_start - 27 + 108, 76);
 }

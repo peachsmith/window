@@ -15,7 +15,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    if (!init_app(app))
+    if (!demo_init_app(app))
     {
         cr_destroy_app(app);
         cr_terminate();

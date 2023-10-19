@@ -25,14 +25,14 @@
 #include "common/collision.h"
 #include "common/dialog.h"
 
-static cr_entity entities[MAX_ENTITIES];
-static cr_func input_handlers[MAX_INPUT_HANDLERS];
-static cr_entity *menus[MAX_MENUS];
-static cr_entity *dialogs[MAX_DIALOGS];
-static cr_entity *overlays[MAX_OVERLAYS];
-static cr_texture *textures[MAX_TEXTURES];
-static cr_font *fonts[MAX_FONTS];
-static cr_sound *sounds[MAX_SOUNDS];
+static cr_entity entities[TNS_MAX_ENTITIES];
+static cr_func input_handlers[TNS_MAX_INPUT_HANDLERS];
+static cr_entity *menus[TNS_MAX_MENUS];
+static cr_entity *dialogs[TNS_MAX_DIALOGS];
+static cr_entity *overlays[TNS_MAX_OVERLAYS];
+static cr_texture *textures[TNS_MAX_TEXTURES];
+static cr_font *fonts[TNS_MAX_FONTS];
+static cr_sound *sounds[TNS_MAX_SOUNDS];
 static cr_entity_type entity_types[ENTITY_TYPE_MAX];
 
 // 0 notes
@@ -40,7 +40,7 @@ static cr_entity_type entity_types[ENTITY_TYPE_MAX];
 // 2 score
 // [3:10] critter slots (8 slots)
 static int counters[TNS_COUNTER_MAX];
-static cr_entity *entity_handles[MAX_ENTITY_HANDLES];
+static cr_entity *entity_handles[TNS_MAX_ENTITY_HANDLES];
 static cr_extension extension;
 
 static int default_get_x_vel(cr_entity *e)
@@ -132,28 +132,9 @@ static void update(cr_app *app)
     }
 
     // scene behavior
-    // TODO: move scene behavior functions into more appropriate locations.
-    if (!app->pause && app->scene == TNS_SCENE_FOREST)
+    if (app->scene == TNS_SCENE_FOREST)
     {
-        int critter_count = app->extension->counters[TNS_COUNTER_CRITTERS];
-        if (!(app->ticks % 120) && critter_count < 4)
-        {
-            // Generate random number from 0 to 7. This is the critter slot.
-            // If the slot is unoccupied, then create a critter and mark the
-            // slot as occupied.
-            int slot = rand() % 8;
-            if (!app->extension->counters[slot + TNS_COUNTER_CRITTER_SLOT_OFFSET])
-            {
-                cr_entity *critter = tns_create_critter(app, 4 + slot * 20 + slot * 10, 25);
-                app->extension->counters[TNS_COUNTER_CRITTERS]++;
-                app->extension->counters[slot + TNS_COUNTER_CRITTER_SLOT_OFFSET] = 1;
-                critter->data = slot + TNS_COUNTER_CRITTER_SLOT_OFFSET;
-                if (slot > 3)
-                {
-                    cr_set_flag(critter, ENTITY_FLAG_MIRROR);
-                }
-            }
-        }
+        tns_perform_forest(app);
     }
 }
 
@@ -249,7 +230,7 @@ static void draw(cr_app *app)
     }
 }
 
-int init_app(cr_app *app)
+int tns_init_app(cr_app *app)
 {
     cr_set_title(app, "Toot n Sploot");
 
@@ -273,7 +254,7 @@ int init_app(cr_app *app)
     }
 
     // default values of entities
-    for (int i = 0; i < MAX_ENTITIES; i++)
+    for (int i = 0; i < TNS_MAX_ENTITIES; i++)
     {
         entities[i].present = 0;
         entities[i].type = 0;
@@ -301,7 +282,7 @@ int init_app(cr_app *app)
         entities[i].scroll_y = 0;
     }
 
-    app->entity_cap = MAX_ENTITIES;
+    app->entity_cap = TNS_MAX_ENTITIES;
     app->entities = entities;
     app->input = &(input_handlers[0]);
     app->menus = &(menus[0]);
@@ -315,7 +296,7 @@ int init_app(cr_app *app)
     app->draw = draw;
 
     // asset loading
-    if (!load_all_assets(app))
+    if (!tns_load_all_assets(app))
     {
         return 0;
     }
@@ -347,8 +328,8 @@ int init_app(cr_app *app)
     cr_push_input_handler(app, default_input_handler);
 
     // Load the initial scene.
-    load_title_screen(app);
-    cr_push_input_handler(app, title_screen_input);
+    tns_load_title_screen(app);
+    cr_push_input_handler(app, tns_title_screen_input);
 
     // Seed random number generation.
     time_t t;

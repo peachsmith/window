@@ -1,14 +1,14 @@
 #include "tootnsploot/tootnsploot.h"
 #include "tootnsploot/scenes/scenes.h"
 
-void clear_scene(cr_app *app)
+void tns_clear_scene(cr_app *app)
 {
     for (int i = 0; i < app->entity_cap; i++)
     {
         app->entities[i].present = 0;
     }
 
-    for (int i = 0; i < MAX_ENTITY_HANDLES; i++)
+    for (int i = 0; i < TNS_MAX_ENTITY_HANDLES; i++)
     {
         app->extension->entity_handles[i] = NULL;
     }

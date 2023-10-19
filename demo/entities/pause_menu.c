@@ -94,7 +94,7 @@ static void update_pause_menu(cr_app *app, cr_entity *menu)
 {
 }
 
-void pause_menu_demo_register(cr_entity_type *t)
+void demo_register_pause_menu(cr_entity_type *t)
 {
     t->width = 172;
     t->height = 77;
@@ -102,7 +102,7 @@ void pause_menu_demo_register(cr_entity_type *t)
     t->update = update_pause_menu;
 }
 
-cr_entity *pause_menu_demo_create(cr_app* app)
+cr_entity *demo_create_pause_menu(cr_app* app)
 {
     cr_entity *menu = NULL;
 

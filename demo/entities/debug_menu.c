@@ -230,7 +230,7 @@ static void update_debug_menu(cr_app *app, cr_entity *menu)
     }
 }
 
-void debug_menu_demo_register(cr_entity_type *t)
+void demo_register_debug_menu(cr_entity_type *t)
 {
     // The width and height will be determined in the render function.
     t->width = 10;
@@ -240,7 +240,7 @@ void debug_menu_demo_register(cr_entity_type *t)
     t->update = update_debug_menu;
 }
 
-cr_entity *debug_menu_demo_create(cr_app *app)
+cr_entity *demo_create_debug_menu(cr_app *app)
 {
     cr_entity *menu = NULL;
 
