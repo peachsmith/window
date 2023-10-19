@@ -278,7 +278,7 @@ static void impl_draw_text_multi(
         // Detect line breaks.
         // Line breaks can occur due to the text exceeding the specified
         // line width, or the presence of a newline character.
-        if (!q && (line_w > 0 && x - x0 >= line_w) || msg[i] == '\n')
+        if (!q && ((line_w > 0 && x - x0 >= line_w) || msg[i] == '\n'))
         {
             x = x0;
             y += dy;
