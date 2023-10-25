@@ -63,6 +63,11 @@ static int get_henry_y_vel(cr_entity *henry)
 
 static void render_henry(cr_app *app, cr_entity *henry)
 {
+    if (!util_is_on_screen(app, henry))
+    {
+        return;
+    }
+
     int tile = 0;
     int grounded = cr_check_flag(henry, ENTITY_FLAG_GROUND);
 

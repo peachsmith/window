@@ -64,6 +64,11 @@ static int get_jimbo_y_vel(cr_entity *jimbo)
 
 static void render_jimbo(cr_app *app, cr_entity *jimbo)
 {
+    if (!util_is_on_screen(app, jimbo))
+    {
+        return;
+    }
+
     int tile = 0;
     int grounded = cr_check_flag(jimbo, ENTITY_FLAG_GROUND);
 

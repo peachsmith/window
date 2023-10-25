@@ -9,6 +9,11 @@
 // Renders a standard block
 static void render_block(cr_app *app, cr_entity *block)
 {
+    if (!util_is_on_screen(app, block))
+    {
+        return;
+    }
+    
     sprite_draw_brick(
         app,
         block->x_pos + app->cam.x,
@@ -31,6 +36,11 @@ static void render_block(cr_app *app, cr_entity *block)
 // Renders a throughblock
 static void render_throughblock(cr_app *app, cr_entity *block)
 {
+    if (!util_is_on_screen(app, block))
+    {
+        return;
+    }
+
     cr_rect r;
     r.x = block->x_pos + app->cam.x;
     r.y = block->y_pos + app->cam.y;
@@ -57,6 +67,11 @@ static void render_throughblock(cr_app *app, cr_entity *block)
 // Renders a moving block
 static void render_moving_block(cr_app *app, cr_entity *block)
 {
+    if (!util_is_on_screen(app, block))
+    {
+        return;
+    }
+
     sprite_draw_grass_block(
         app,
         block->x_pos + app->cam.x,
@@ -81,6 +96,11 @@ static void render_moving_block(cr_app *app, cr_entity *block)
 // Renders a sloped block
 static void render_sloped_block(cr_app *app, cr_entity *block)
 {
+    if (!util_is_on_screen(app, block))
+    {
+        return;
+    }
+
     int dir = block->data & 3;
 
     if (dir < 2)

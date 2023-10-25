@@ -94,4 +94,16 @@ void util_draw_camera(cr_app *);
  */
 void util_set_camera(cr_app *, int);
 
+/**
+ * Verifies that an entity is actually within the visibile boundary.
+ * 
+ * Params:
+ *   cr_app* - a pointer to an app struct
+ *   cr_entity* - the entity whose position will be verified
+ * 
+ * Returns:
+ *   int - 1 if the entity is on screen, otherwise 0
+ */
+int util_is_on_screen(cr_app *, cr_entity *);
+
 #endif

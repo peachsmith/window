@@ -62,6 +62,11 @@ static int get_billy_y_vel(cr_entity *billy)
 
 static void render_billy(cr_app *app, cr_entity *billy)
 {
+    if (!util_is_on_screen(app, billy))
+    {
+        return;
+    }
+
     int tile = 0;
     int grounded = cr_check_flag(billy, ENTITY_FLAG_GROUND);
 

@@ -99,6 +99,11 @@ static int get_player_y_vel(cr_entity *player)
 
 static void render_player(cr_app *app, cr_entity *player)
 {
+    if (!util_is_on_screen(app, player))
+    {
+        return;
+    }
+
     int tile = 0;
     int left_pressed = cr_peek_input(app, CR_KEYCODE_LEFT);
     int right_pressed = cr_peek_input(app, CR_KEYCODE_RIGHT);

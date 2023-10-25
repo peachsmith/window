@@ -5,12 +5,18 @@
 #include "demo/util/sprite.h"
 
 #include "common/dialog.h"
+#include "common/util.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
 static void render_sign(cr_app *app, cr_entity *sign)
 {
+    if (!util_is_on_screen(app, sign))
+    {
+        return;
+    }
+    
     // Render the sign sprite.
     sprite_draw_sign(
         app,
