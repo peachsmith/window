@@ -63,6 +63,7 @@ struct cr_impl
     Uint64 ticks;
     Uint64 frame_len;
     cr_timing timing;
+    int render_reset;
 };
 
 //----------------------------------------------------------------------------
@@ -158,18 +159,6 @@ cr_font *cr_impl_load_font(cr_app *, const char *, int);
 void cr_impl_destroy_font(cr_font *);
 
 /**
- * Reads a sprite sheet from a PNG file.
- *
- * Params:
- *   cr_app* - a pointer to an app struct
- *   const char* - the path to the PNG file
- *
- * Returns:
- *   int - 1 on success, or 0 on failure
- */
-int cr_impl_load_sprite_sheet(cr_app *, const char *);
-
-/**
  * Renders a string of text to the screen.
  *
  * Params:
@@ -192,6 +181,19 @@ void cr_impl_draw_text(cr_app *, cr_font *, const char *, int, int);
  *   cr_rect* - a pointer to a rectangular area of the screen to hold the text
  */
 void cr_impl_draw_text_bounded(cr_app *, cr_font *, const char *, cr_rect *, int *);
+
+/**
+ * Rebuilds the font atlas textures.
+ * This should be triggered by the SDL_RENDER_TARGETS_RESET event, because
+ * the font atlases are render targets.
+ * 
+ * Params:
+ *   cr_app* - a pointer to an app struct
+ * 
+ * Returns:
+ *   int - 1 on success or 0 on failure
+ */
+int cr_impl_rebuild_font_atlases(cr_app *);
 
 //----------------------------------------------------------------------------
 // audio

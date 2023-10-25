@@ -361,6 +361,8 @@ struct cr_app
     unsigned char key_captures[CR_MAX_KEYCODE];
     unsigned char actuation_counters[CR_MAX_KEYCODE];
 
+    int origin_x; // screen origin coordinates
+    int origin_y;
     int scale; // screen size scaling
     int time;  // 0 for delay, 1 for delta time
     int done;  // 0 while the application is running

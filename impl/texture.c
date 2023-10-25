@@ -47,7 +47,11 @@ void cr_impl_draw_texture(cr_app *app, cr_texture *texture, cr_rect *src, cr_rec
     SDL_Renderer *r = app->impl->renderer;
     SDL_Texture *sheet = texture->img;
     SDL_Rect s = {.x = src->x, .y = src->y, .w = src->w, .h = src->h};
-    SDL_Rect d = {.x = dest->x, .y = dest->y, .w = dest->w, .h = dest->h};
+    SDL_Rect d = {
+        .x = app->origin_x + dest->x,
+        .y = app->origin_y + dest->y,
+        .w = dest->w,
+        .h = dest->h};
 
     if (mirror)
     {

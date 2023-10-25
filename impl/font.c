@@ -3,6 +3,74 @@
 // 95 printable ASCII characters [32:126]
 //  !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 
+static int build_atlas_texture(SDL_Renderer *r, cr_font *font)
+{
+    SDL_Rect src;
+    SDL_Rect dest;
+    int dest_x = 0;
+    SDL_BlendMode blend_mode;
+
+    // Only rebuild the atlas for single texture fonts.
+    // They are the ones that use a texture that is a render target.
+    if (font->mode != FONT_MODE_SINGLE)
+    {
+        return 1;
+    }
+
+    // Get the current renderer blend mode.
+    SDL_GetRenderDrawBlendMode(r, &blend_mode);
+
+    // Set the blend mode for the atlas texture to allow for alpha values.
+    SDL_SetTextureBlendMode(font->atlas, SDL_BLENDMODE_BLEND);
+
+    // Set the font atlas texture as the current render target.
+    if (SDL_SetRenderTarget(r, font->atlas))
+    {
+        fprintf(stderr,
+                "failed to set render target for font atlas: %s\n",
+                SDL_GetError());
+        return 0;
+    }
+
+    // Copy each glyph texture into the target texture.
+    for (int i = 32; i < 127; i++)
+    {
+        src.x = 0;
+        src.y = 0;
+        src.w = font->sizes[i].w;
+        src.h = font->sizes[i].h;
+
+        dest.x = dest_x;
+        dest.y = 0;
+        dest.w = font->sizes[i].w;
+        dest.h = font->sizes[i].h;
+
+        // Set the glyph texture blending mode to none to prevent
+        // loss of quality when copying it into the target texture.
+        // Someone else had the same problem with quality loss when
+        // copying glyph textures into an atlas texture.
+        // Forum post: https://discourse.libsdl.org/t/solved-sdl-ttf-low-quality-glyphs/27089/5
+        SDL_SetTextureBlendMode(font->glyphs[i], SDL_BLENDMODE_NONE);
+
+        if (SDL_RenderCopy(r, font->glyphs[i], &src, &dest))
+        {
+            fprintf(
+                stderr,
+                "error copying glyph texture to atlas %s\n",
+                SDL_GetError());
+            return 0;
+        }
+
+        dest_x += font->sizes[i].w;
+    }
+
+    // Reset the renderer target and blend mode.
+    SDL_SetRenderTarget(r, NULL);
+    SDL_SetRenderDrawBlendMode(r, blend_mode);
+
+    return 1;
+}
+
 static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, cr_font *font)
 {
     SDL_RendererInfo ri;
@@ -86,9 +154,6 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, cr_font *font)
     if (ri.flags & SDL_RENDERER_TARGETTEXTURE)
     {
         Uint32 format;
-        SDL_Texture *target;
-        SDL_Rect src;
-        SDL_Rect dest;
 
         int dest_x = 0;
 
@@ -100,76 +165,27 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, cr_font *font)
         }
 
         // Create the font atlas texture.
-        target = SDL_CreateTexture(
+        // Since we use the SDL_TEXTUREACCESS_TARGET format, the font atlas
+        // will need to be rebuilt when the SDL_RENDER_TARGETS_RESET event
+        // occurs.
+        font->atlas = SDL_CreateTexture(
             r,
             format,
             SDL_TEXTUREACCESS_TARGET,
             2048,
             24);
-        if (target == NULL)
+        if (font->atlas == NULL)
         {
             fprintf(stderr, "failed to create font atlas texture\n");
             return 0;
         }
 
-        // Set the blend mode for the atlas texture to allow for alpha values.
-        SDL_SetTextureBlendMode(target, SDL_BLENDMODE_BLEND);
-
-        // Set the font atlas texture as the current render target.
-        if (SDL_SetRenderTarget(r, target))
-        {
-            fprintf(stderr,
-                    "failed to set render target for font atlas: %s\n",
-                    SDL_GetError());
-            return 0;
-        }
-
-        // Copy each glyph texture into the target texture.
-        for (int i = 32; i < 127; i++)
-        {
-            src.x = 0;
-            src.y = 0;
-            src.w = font->sizes[i].w;
-            src.h = font->sizes[i].h;
-
-            dest.x = dest_x;
-            dest.y = 0;
-            dest.w = font->sizes[i].w;
-            dest.h = font->sizes[i].h;
-
-            // Set the glyph texture blending mode to none to prevent
-            // loss of quality when copying it into the target texture.
-            // Someone else had the same problem with quality loss when
-            // copying glyph textures into an atlas texture.
-            // Forum post: https://discourse.libsdl.org/t/solved-sdl-ttf-low-quality-glyphs/27089/5
-            SDL_SetTextureBlendMode(font->glyphs[i], SDL_BLENDMODE_NONE);
-
-            if (SDL_RenderCopy(r, font->glyphs[i], &src, &dest))
-            {
-                fprintf(
-                    stderr,
-                    "error copying glyph texture to atlas %s\n",
-                    SDL_GetError());
-                return 0;
-            }
-
-            dest_x += font->sizes[i].w;
-        }
-
-        font->atlas = target;
         font->mode = FONT_MODE_SINGLE;
 
-        // Destroy the individual glyph textures since they are
-        // no longer needed.
-        for (int i = 32; i < 127; i++)
+        if (!build_atlas_texture(r, font))
         {
-            SDL_DestroyTexture(font->glyphs[i]);
-            font->glyphs[i] = NULL;
+            return 0;
         }
-
-        // Reset the renderer target and blend mode.
-        SDL_SetRenderTarget(r, NULL);
-        SDL_SetRenderDrawBlendMode(r, blend_mode);
     }
 
     font->loaded = 1;
@@ -402,8 +418,8 @@ void cr_impl_draw_text_bounded(
             app,
             font,
             msg,
-            bounds->x,
-            bounds->y,
+            app->origin_x + bounds->x,
+            app->origin_y + bounds->y,
             bounds->w,
             bounds->h,
             result);
@@ -415,10 +431,21 @@ void cr_impl_draw_text_bounded(
             app,
             font,
             msg,
-            bounds->x,
-            bounds->y,
+            app->origin_x + bounds->x,
+            app->origin_y + bounds->y,
             bounds->w,
             bounds->h,
             result);
     }
+}
+
+int cr_impl_rebuild_font_atlases(cr_app *app)
+{
+    int res = 1;
+    for (int i = 0; i < app->font_count && res; i++)
+    {
+        res = build_atlas_texture(app->impl->renderer, app->fonts[i]);
+    }
+
+    return res;
 }

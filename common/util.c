@@ -1,5 +1,6 @@
 #include "common/util.h"
 #include "common/collision.h"
+#include "demo/entities/entity_types.h"
 
 void util_draw_collision(
     cr_app *app,
@@ -166,4 +167,29 @@ void util_set_camera(cr_app *app, int config)
         app->cam.cb = 0;
         return;
     }
+}
+
+int util_is_on_screen(cr_app *app, cr_entity *entity)
+{
+    cr_overlap o;
+    int cam_x = 0, cam_y = 0;
+    if (!app->entity_types[entity->type].control)
+    {
+        cam_x = app->cam.x;
+        cam_y = app->cam.y;
+    }
+
+    cr_rect screen_rect = {
+        .x = 0,
+        .y = 0,
+        .w = app->screen_width,
+        .h = app->screen_height};
+
+    cr_rect entity_rect = {
+        .x = entity->x_pos + cam_x,
+        .y = entity->y_pos + cam_y,
+        .w = app->entity_types[entity->type].width,
+        .h = app->entity_types[entity->type].height};
+
+    return common_is_overlapped(&screen_rect, &entity_rect, &o);
 }

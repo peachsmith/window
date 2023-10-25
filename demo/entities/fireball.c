@@ -62,6 +62,11 @@ static int get_fireball_y_vel(cr_entity *fireball)
 
 static void render_fireball(cr_app *app, cr_entity *fireball)
 {
+    if (!util_is_on_screen(app, fireball))
+    {
+        return;
+    }
+
     int tile = 0;
 
     // Animation logic for walking to the right

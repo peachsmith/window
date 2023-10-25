@@ -126,6 +126,8 @@ cr_app *cr_create_app()
         app->actuation_counters[i] = 0;
     }
 
+    app->origin_x = 0;
+    app->origin_y = 0;
     app->scale = default_scale;
     app->time = TIMING_DELTA;
     app->done = 0;
@@ -254,6 +256,9 @@ void cr_begin_frame(cr_app *app)
     impl->timing.delta = (float)(count - impl->timing.count) / impl->timing.frequency;
     impl->timing.count = count;
 
+    int dsx = 0, dsy = 0;
+    int shrink_x = 0, shrink_y = 0;
+
     // According to the wiki, it is common practice to process all events in
     // the event queue at the beginning of each iteration of the main loop.
     // The SDL_PollEvent function also calls SDL_PumpEvents, which updates the
@@ -264,6 +269,39 @@ void cr_begin_frame(cr_app *app)
         if (impl->event.type == SDL_QUIT)
         {
             app->done = 1;
+        }
+
+        // Reposition the screen when the window is resized.
+        if (impl->event.type == SDL_WINDOWEVENT &&
+            impl->event.window.event == SDL_WINDOWEVENT_RESIZED)
+        {
+            Sint32 d1 = impl->event.window.data1;
+            Sint32 d2 = impl->event.window.data2;
+
+            dsx = d1 / app->screen_width ? d1 / app->screen_width : -(app->screen_width / d1);
+            dsy = d2 / app->screen_height ? d2 / app->screen_height : -(app->screen_height / d2);
+
+            // Determine if we should change the scale.
+            if (dsx && dsy)
+            {
+                int grow_factor = dsx < dsy ? dsx : dsy;
+                grow_factor = grow_factor >= 0 ? grow_factor : 1;
+                SDL_RenderSetScale(impl->renderer, (float)(grow_factor), (float)(grow_factor));
+                app->scale = grow_factor;
+
+                // Attempt to center the screen.
+                // If the whole screen cannot fit within the window, set the
+                // origin to (0, 0).
+                app->origin_x = d1 < app->screen_width ? 0 : ((d1 - (app->screen_width * app->scale)) / app->scale) / 2;
+                app->origin_y = d2 < app->screen_height ? 0 : ((d2 - (app->screen_height * app->scale)) / app->scale) / 2;
+            }
+        }
+
+        // If we have any textures that are render targets, they will
+        // need to be refreshed.
+        if (impl->event.type == SDL_RENDER_TARGETS_RESET)
+        {
+            app->impl->render_reset = 1;
         }
 
         // If a key was released, convert the SDL_Scancode into an cr_keycode
@@ -287,9 +325,19 @@ void cr_begin_frame(cr_app *app)
         }
     }
 
-    // SDL_SetRenderDrawColor(impl->renderer, 0X04, 0X35, 0X8D, 255);
     SDL_SetRenderDrawColor(impl->renderer, 0, 0, 0, 255);
     SDL_RenderClear(impl->renderer);
+
+    if (app->impl->render_reset)
+    {
+        if (!cr_impl_rebuild_font_atlases(app))
+        {
+            fprintf(stderr, "failed to rebuild all font atlases\n");
+            app->done = 1;
+            return;
+        }
+        app->impl->render_reset = 0;
+    }
 }
 
 void cr_end_frame(cr_app *app)
@@ -375,10 +423,10 @@ void cr_draw_line(cr_app *app, cr_point *a, cr_point *b)
     cr_impl *impl = app->impl;
     SDL_RenderDrawLine(
         impl->renderer,
-        a->x,
-        a->y,
-        b->x,
-        b->y);
+        app->origin_x + a->x,
+        app->origin_y + a->y,
+        app->origin_x + b->x,
+        app->origin_y + b->y);
 }
 
 void cr_draw_rect(cr_app *app, cr_rect *r, int filled)
@@ -391,8 +439,8 @@ void cr_draw_rect(cr_app *app, cr_rect *r, int filled)
     cr_impl *impl = app->impl;
 
     SDL_Rect sr = {
-        .x = r->x,
-        .y = r->y,
+        .x = app->origin_x + r->x,
+        .y = app->origin_y + r->y,
         .w = r->w,
         .h = r->h};
 
@@ -630,7 +678,7 @@ cr_font *cr_load_font(cr_app *app, const char *path, int p)
 
 void cr_draw_text(cr_app *app, cr_font *font, const char *msg, int x, int y)
 {
-    cr_impl_draw_text(app, font, msg, x, y);
+    cr_impl_draw_text(app, font, msg, app->origin_x + x, app->origin_y + y);
 }
 
 void cr_draw_text_bounded(cr_app *app, cr_font *font, const char *msg, cr_rect *bounds, int *result)
@@ -686,7 +734,7 @@ static cr_impl *create_impl(int screen_width, int screen_height, int scale)
         SDL_WINDOWPOS_CENTERED,
         screen_width * scale,
         screen_height * scale,
-        SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
+        SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
     if (window == NULL)
     {
         free(impl);
