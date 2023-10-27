@@ -293,6 +293,22 @@ void cr_begin_frame(cr_app *app)
                 // origin to (0, 0).
                 app->origin_x = d1 < app->screen_width ? 0 : ((d1 - (app->screen_width * app->scale)) / app->scale) / 2;
                 app->origin_y = d2 < app->screen_height ? 0 : ((d2 - (app->screen_height * app->scale)) / app->scale) / 2;
+
+                // Correct the scale for high DPI monitors.
+                int ww, wh;
+                int rw, rh;
+                SDL_GetWindowSize(app->impl->window, &ww, &wh);
+                SDL_GetRendererOutputSize(app->impl->renderer, &rw, &rh);
+                if (rw > ww)
+                {
+                    int scale_correction_x = rw / ww;
+                    int scale_correction_y = rh / wh;
+                    SDL_RenderSetScale(app->impl->renderer, (float)scale_correction_x * app->scale, (float)scale_correction_y * app->scale);
+                }
+                else if (app->scale > 0)
+                {
+                    SDL_RenderSetScale(app->impl->renderer, (float)app->scale, (float)app->scale);
+                }
             }
         }
 
@@ -760,7 +776,7 @@ static cr_impl *create_impl(int screen_width, int screen_height, int scale)
     // SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-    // TEMP: get window and screen info for scaling on mac.
+    // Correct the scale for high DPI monitors.
     int ww, wh;
     int rw, rh;
     SDL_GetWindowSize(window, &ww, &wh);
