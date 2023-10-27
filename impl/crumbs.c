@@ -257,7 +257,6 @@ void cr_begin_frame(cr_app *app)
     impl->timing.count = count;
 
     int dsx = 0, dsy = 0;
-    int shrink_x = 0, shrink_y = 0;
 
     // According to the wiki, it is common practice to process all events in
     // the event queue at the beginning of each iteration of the main loop.

@@ -155,8 +155,6 @@ static int init_font_atlas(SDL_Renderer *r, TTF_Font *ttf, cr_font *font)
     {
         Uint32 format;
 
-        int dest_x = 0;
-
         // Get the format of the first glyph texture.
         if (SDL_QueryTexture(font->glyphs[32], &format, NULL, NULL, NULL))
         {
