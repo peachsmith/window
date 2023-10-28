@@ -131,6 +131,16 @@ void cr_impl_destroy_texture(cr_texture *);
  */
 void cr_impl_draw_texture(cr_app *, cr_texture *, cr_rect *, cr_rect *, int);
 
+/**
+ * Fills the empty space surrounding the screen.
+ * This is useful when the window is resized to be larger than the visible
+ * screen area.
+ *
+ * Params:
+ *   cr_app* - a pointer to an app struct
+ */
+void cr_impl_pad_window(cr_app *app);
+
 //----------------------------------------------------------------------------
 // font
 
@@ -186,10 +196,10 @@ void cr_impl_draw_text_bounded(cr_app *, cr_font *, const char *, cr_rect *, int
  * Rebuilds the font atlas textures.
  * This should be triggered by the SDL_RENDER_TARGETS_RESET event, because
  * the font atlases are render targets.
- * 
+ *
  * Params:
  *   cr_app* - a pointer to an app struct
- * 
+ *
  * Returns:
  *   int - 1 on success or 0 on failure
  */

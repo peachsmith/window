@@ -160,7 +160,7 @@ void demo_draw_overlay(cr_app *app)
 
     er.x = 55;
     er.y = 83;
-    er.w = 32;
+    er.w = 34;
     er.h = 7;
     cr_set_color(app, 0xffedece8);
     cr_draw_rect(app, &er, 0);

@@ -370,13 +370,15 @@ void cr_end_frame(cr_app *app)
     if ((app->time == TIMING_DELTA && app->frame_check >= 1) ||
         app->time == TIMING_WAIT)
     {
+        // Fill in the padding around the screen.
+        cr_impl_pad_window(app);
+
         SDL_RenderPresent(impl->renderer);
     }
 
     //------------------------------------------------------------------------
     // regulate framerate
 
-    // cr_impl_delay(app);
     if (app->time == TIMING_DELTA)
     {
         if (app->frame_check >= 1)
